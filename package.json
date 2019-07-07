@@ -1,0 +1,10 @@
+{
+  "name": "kairos",
+  "version": "1.0.0",
+  "main": "index.js",
+  "author": "lucatrazzi <lucax88x@gmail.com>",
+  "license": "MIT",
+  "scripts": {
+    "be:generate-project": "bash src/generate.sh"
+  }
+}

@@ -1,0 +1,23 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# 
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Kairos.Web.App", "Kairos.Web.App\Kairos.Web.App.csproj", "{489C5FF2-5DFD-4884-8351-6161D689CC8D}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Kairos.Domain", "Kairos.Domain\Kairos.Domain.csproj", "{46345229-B06B-4F6C-9557-AC191A3BD3F3}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{489C5FF2-5DFD-4884-8351-6161D689CC8D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{489C5FF2-5DFD-4884-8351-6161D689CC8D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{489C5FF2-5DFD-4884-8351-6161D689CC8D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{489C5FF2-5DFD-4884-8351-6161D689CC8D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{46345229-B06B-4F6C-9557-AC191A3BD3F3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{46345229-B06B-4F6C-9557-AC191A3BD3F3}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{46345229-B06B-4F6C-9557-AC191A3BD3F3}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{46345229-B06B-4F6C-9557-AC191A3BD3F3}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+EndGlobal
