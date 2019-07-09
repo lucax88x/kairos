@@ -1,10 +1,12 @@
 using System;
 using Autofac;
 using Autofac.Extras.DynamicProxy;
+using Kairos.Config.Ioc;
 using Kairos.Test.Common.Infra.FluentAssertion;
 using Kairos.Test.Common.Infra.Mediator;
 using Kairos.Test.Common.Infra.Scenario;
 using MediatR;
+using Module = Autofac.Module;
 
 namespace Kairos.Test.Common.Infra
 {
@@ -77,15 +79,26 @@ namespace Kairos.Test.Common.Infra
 
         private void RegisterFluentAssertions(ContainerBuilder builder)
         {
+            // needed for Assertions
+            builder.RegisterModule(new Kairos.Config.Ioc.Module(
+                new ConfigBuilder().Build(),
+                new ModuleOptions
+                {
+                    HasReadRepository = true, HasWriteRepository = true
+                }));
+
+            builder.RegisterModule(new Kairos.Infra.Read.Ioc.Module());
+            builder.RegisterModule(new Kairos.Infra.Write.Ioc.Module());
+
             builder.RegisterType<FluentSandboxAssertion>().AsSelf().SingleInstance()
                 .PropertiesAutowired(PropertyWiringOptions.AllowCircularDependencies);
 
             builder.RegisterType<FluentMediatorAssertion>().AsSelf().SingleInstance()
                 .PropertiesAutowired(PropertyWiringOptions.AllowCircularDependencies);
-            
+
             builder.RegisterType<FluentRedisAssertion>().AsSelf().SingleInstance()
                 .PropertiesAutowired(PropertyWiringOptions.AllowCircularDependencies);
-            
+
             builder.RegisterType<FluentRedisExistsAssertion>().AsSelf().SingleInstance()
                 .PropertiesAutowired(PropertyWiringOptions.AllowCircularDependencies);
         }

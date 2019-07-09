@@ -13,6 +13,8 @@
 
     <ItemGroup>
       <ProjectReference Include="..\Kairos.Infra.Read\Kairos.Infra.Read.csproj" />
+      <ProjectReference Include="..\Kairos.Infra.Write\Kairos.Infra.Write.csproj" />
+      <ProjectReference Include="..\Kairos.Test.Common\Kairos.Test.Common.csproj" />
     </ItemGroup>
 
 </Project>

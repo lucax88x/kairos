@@ -20,6 +20,7 @@ namespace Kairos.Application.Tests.Ioc
                 new Module(configBuilder.Build(), new ModuleOptions
                 {
                     HasWriteRepository = true,
+                    HasReadRepository = true,
                 }),
                 new Kairos.Application.Ioc.Module());
         }

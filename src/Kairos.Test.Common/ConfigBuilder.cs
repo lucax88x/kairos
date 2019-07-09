@@ -13,7 +13,7 @@ namespace Kairos.Test.Common
 
             var defaultConfig = new Dictionary<string, string>
             {
-                {"WriteRepository:Connection", "todo"},
+                {"WriteRepository:Connection", "localhost"},
                 {"ReadRepository:Endpoints:0", "localhost"}
             };
 

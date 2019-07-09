@@ -3,6 +3,7 @@ using System.ComponentModel.DataAnnotations;
 using System.Threading.Tasks;
 using FluentAssertions;
 using Kairos.Application.TimeEntry.Commands;
+using Kairos.Config.Ioc;
 using Kairos.Domain;
 using Kairos.Infra.Read.TimeEntry;
 using Kairos.Test.Common;
@@ -21,7 +22,10 @@ namespace Kairos.Application.Tests.TimeEntry
         {
             var configBuilder = new ConfigBuilder();
 
-            _sandbox = new Sandbox(new SandboxOptions(true), configBuilder.BuildModule(),
+            _sandbox = new Sandbox(new SandboxOptions(true),
+                new Config.Ioc.Module(
+                    configBuilder.Build(),
+                    new ModuleOptions {HasReadRepository = true, HasWriteRepository = true}),
                 new Application.Ioc.Module());
         }
 

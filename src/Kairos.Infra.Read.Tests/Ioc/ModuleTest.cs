@@ -1,5 +1,6 @@
 ﻿using System;
 using Kairos.Config.Ioc;
+using Kairos.Infra.Read.TimeEntry;
 using Kairos.Test.Common;
 using Xunit;
 
@@ -30,6 +31,12 @@ namespace Kairos.Infra.Read.Tests.Ioc
         public void should_resolve_ReadRepositoryFactory()
         {
             _scopeResolver.IsSingleInstance<ReadRepositoryFactory>();
+        }
+
+        [Fact]
+        public void should_resolve_ITimeEntryReadRepository()
+        {
+            _scopeResolver.IsSingleInstance<ITimeEntryReadRepository, TimeEntryReadRepository>();
         }
 
         public void Dispose()

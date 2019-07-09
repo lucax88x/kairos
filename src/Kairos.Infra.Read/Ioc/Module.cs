@@ -1,4 +1,5 @@
 ﻿using Autofac;
+using Kairos.Infra.Read.TimeEntry;
 
 namespace Kairos.Infra.Read.Ioc
 {
@@ -14,6 +15,10 @@ namespace Kairos.Infra.Read.Ioc
 
             builder.RegisterType<ReadRepositoryFactory>()
                 .AsSelf()
+                .SingleInstance();
+            
+            builder.RegisterType<TimeEntryReadRepository>()
+                .As<ITimeEntryReadRepository>()
                 .SingleInstance();
         }
     }

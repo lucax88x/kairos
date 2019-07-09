@@ -29,7 +29,7 @@ namespace Kairos.Config.Tests.Ioc
         {
             _scopeResolver.IsSingleInstance<WriteRepositoryConfig>();
             var resolved = _scopeResolver.Resolve<WriteRepositoryConfig>();
-            resolved.Connection.Should().Be("todo");
+            resolved.Connection.Should().Be("localhost");
         }
 
         [Fact]

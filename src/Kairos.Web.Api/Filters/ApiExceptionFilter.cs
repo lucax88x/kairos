@@ -1,9 +1,8 @@
+using Kairos.Common.Exceptions.Technical;
 using Microsoft.AspNetCore.Http;
 using Serilog;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;
-using Serilog;
 
 namespace Kairos.Web.Api.Filters
 {

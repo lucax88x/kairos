@@ -18,6 +18,7 @@
     <ProjectReference Include="..\Kairos.Config\Kairos.Config.csproj" />
     <ProjectReference Include="..\Kairos.Domain\Kairos.Domain.csproj" />
     <ProjectReference Include="..\Kairos.Infra.Read\Kairos.Infra.Read.csproj" />
+    <ProjectReference Include="..\Kairos.Infra.Write\Kairos.Infra.Write.csproj" />
   </ItemGroup>
 
 </Project>

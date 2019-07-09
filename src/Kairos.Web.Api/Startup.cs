@@ -2,6 +2,7 @@
 using Kairos.Web.Api.Filters;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Serilog;
@@ -21,7 +22,7 @@ namespace Kairos.Web.Api
 
         public void ConfigureContainer(ContainerBuilder builder)
         {
-            builder.RegisterModule(new Module(Configuration));
+            builder.RegisterModule(new Ioc.Module(Configuration));
         }
 
         public void ConfigureServices(IServiceCollection services)

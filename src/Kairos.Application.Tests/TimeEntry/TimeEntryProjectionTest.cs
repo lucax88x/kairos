@@ -2,6 +2,7 @@ using System;
 using System.Threading.Tasks;
 using FluentAssertions;
 using Kairos.Application.TimeEntry.Queries;
+using Kairos.Config.Ioc;
 using Kairos.Test.Common;
 using Kairos.Test.Common.Infra;
 using Xunit;
@@ -18,8 +19,7 @@ namespace Kairos.Application.Tests.TimeEntry
         {
             var configBuilder = new ConfigBuilder();
 
-            _sandbox = new Sandbox(new SandboxOptions(true), configBuilder.BuildModule(),
-                new Application.Ioc.Module());
+            _sandbox = new Sandbox(new SandboxOptions(true), new Application.Ioc.Module());
         }
 
         [Fact]

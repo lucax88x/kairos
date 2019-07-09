@@ -16,6 +16,7 @@ namespace Kairos.Application.Ioc
             builder.RegisterLogger();
 
             builder.RegisterModule(new Infra.Read.Ioc.Module());
+            builder.RegisterModule(new Infra.Write.Ioc.Module());
             
             RegisterMediatr(builder);
         }
