@@ -1,32 +1,24 @@
 using System;
-using System.ComponentModel.DataAnnotations;
 using System.Threading.Tasks;
 using FluentAssertions;
 using Kairos.Application.TimeEntry.Commands;
-using Kairos.Config.Ioc;
 using Kairos.Domain;
 using Kairos.Infra.Read.TimeEntry;
-using Kairos.Test.Common;
 using Kairos.Test.Common.Infra;
 using Xunit;
+using FluentValidation;
 
 namespace Kairos.Application.Tests.TimeEntry
 {
     [Trait("Type", "Integration")]
     [Trait("Category", "Database")]
-    public class TimeEntryServiceTest : IDisposable
+    public class TimeEntryTest : IDisposable
     {
         private readonly Sandbox _sandbox;
 
-        public TimeEntryServiceTest()
+        public TimeEntryTest()
         {
-            var configBuilder = new ConfigBuilder();
-
-            _sandbox = new Sandbox(new SandboxOptions(true),
-                new Config.Ioc.Module(
-                    configBuilder.Build(),
-                    new ModuleOptions {HasReadRepository = true, HasWriteRepository = true}),
-                new Application.Ioc.Module());
+            _sandbox = new Sandbox(new SandboxOptions(true), new Application.Ioc.Module());
         }
 
         [Fact]
@@ -44,7 +36,7 @@ namespace Kairos.Application.Tests.TimeEntry
         }
 
         [Fact]
-        public async Task should_track_time()
+        public async Task should_create_time_entry()
         {
             // GIVEN
             var command = new CreateTimeEntry(DateTimeOffset.UtcNow, (int) TimeEntryType.In);
@@ -54,9 +46,11 @@ namespace Kairos.Application.Tests.TimeEntry
 
             // THEN
             _sandbox.Should.Mediator.Be("CreateTimeEntry -> TimeEntryAdded");
+
+            // TODO: check if event store has event
 //            await _sandbox.Should.Cassandra.Exists(id);
-            await _sandbox.Should.Redis.Exists.Set("TimeEntry", id);
-            await _sandbox.Should.Redis.Exists.SortedSet<TimeEntryReadDto>("TimeEntry", "by-when", 1);
+            await _sandbox.Should.Redis.Exists.Set("time-entry", id);
+            await _sandbox.Should.Redis.Exists.SortedSet<TimeEntryReadDto>("time-entry", "by-when", 1);
         }
 
         public void Dispose()

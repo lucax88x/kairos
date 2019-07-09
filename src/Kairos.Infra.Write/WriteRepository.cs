@@ -5,6 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using EventStore.ClientAPI;
+using EventStore.ClientAPI.Exceptions;
 using Kairos.Common;
 using Kairos.Common.Exceptions.Technical;
 
@@ -13,6 +14,7 @@ namespace Kairos.Infra.Write
     public interface IWriteRepository
     {
         Task<ImmutableList<Event>> Save<T>(T aggregate) where T : AggregateRoot;
+        Task<T> Get<T>(Guid id) where T : AggregateRoot, new();
     }
 
     public class WriteRepository : IWriteRepository
@@ -28,32 +30,94 @@ namespace Kairos.Infra.Write
 
         public async Task<ImmutableList<Event>> Save<T>(T aggregate) where T : AggregateRoot
         {
-            using (var connection = await _writeConnectionFactory.Connect())
+            try
             {
-                var events = aggregate.GetUncommittedChanges();
+                using (var connection = await _writeConnectionFactory.Connect())
+                {
+                    var events = aggregate.GetUncommittedChanges();
 
-                if (!events.Any()) throw new ConcurrencyException();
+                    if (!events.Any()) throw new ConcurrencyException();
 
-                var eventDatas = ToEvents(events);
+                    var streamEvents = ToStreamEvents(events);
 
-                await connection.AppendToStreamAsync("test-stream", aggregate.Version, eventDatas);
+                    await connection.AppendToStreamAsync(BuildStreamName<T>(aggregate.Id), aggregate.Version,
+                        streamEvents);
 
-                aggregate.MarkChangesAsCommitted();
+                    aggregate.MarkChangesAsCommitted();
 
-                return events;
+                    return events;
+                }
+            }
+            catch (WrongExpectedVersionException ex)
+            {
+                throw new ConcurrencyException();
             }
         }
 
-        private IEnumerable<EventData> ToEvents(ImmutableList<Event> events)
+
+        public async Task<T> Get<T>(Guid id) where T : AggregateRoot, new()
         {
-            foreach (var evt in events)
+            using (var connection = await _writeConnectionFactory.Connect())
             {
-                yield return new EventData(
+                var streamEvents = new List<ResolvedEvent>();
+
+                StreamEventsSlice currentSlice;
+                long nextSliceStart = StreamPosition.Start;
+                do
+                {
+                    currentSlice =
+                        await connection.ReadStreamEventsForwardAsync(BuildStreamName<T>(id), nextSliceStart, 20,
+                            false);
+
+                    nextSliceStart = currentSlice.NextEventNumber;
+
+                    streamEvents.AddRange(currentSlice.Events);
+                } while (!currentSlice.IsEndOfStream);
+
+                var events = ToEvents(streamEvents);
+
+                var aggregateRoot = new T();
+
+                // TODO: version?
+                aggregateRoot.LoadsFromHistory(events, streamEvents.Max(se => se.Event.EventNumber));
+
+                return aggregateRoot;
+            }
+        }
+
+        private static string BuildStreamName<T>(Guid id) where T : AggregateRoot
+        {
+            return $"${typeof(T).Name}-${id}";
+        }
+
+        private IEnumerable<EventData> ToStreamEvents(IEnumerable<Event> events)
+        {
+            return events.Select(evt =>
+            {
+                var eventType = evt.GetType();
+
+                return new EventData(
                     Guid.NewGuid(),
-                    nameof(evt),
+                    eventType.Name,
                     true,
                     Encoding.UTF8.GetBytes(_serializer.Serialize(evt)),
-                    Encoding.UTF8.GetBytes(""));
+                    Encoding.UTF8.GetBytes(
+                        _serializer.Serialize(new EventMetadata(eventType.AssemblyQualifiedName,
+                            1))));
+            });
+        }
+
+        private IEnumerable<Event> ToEvents(IEnumerable<ResolvedEvent> streamEvents)
+        {
+            foreach (var streamEvent in streamEvents)
+            {
+                var metadata =
+                    _serializer.Deserialize<EventMetadata>(Encoding.Default.GetString(streamEvent.Event.Metadata));
+
+                var deserialized = _serializer.Deserialize(Type.GetType(metadata.TypeName),
+                    Encoding.Default.GetString(streamEvent.Event.Data));
+
+                if (deserialized is Event evt) yield return evt;
             }
         }
     }

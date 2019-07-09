@@ -17,7 +17,7 @@ namespace Kairos.Infra.Read.TimeEntry
 
         public TimeEntryReadRepository(ReadRepositoryFactory readRepositoryFactory)
         {
-            _repository = readRepositoryFactory.Build("timeentry");
+            _repository = readRepositoryFactory.Build("time-entry");
         }
 
         public async Task Add(Guid id, DateTimeOffset when, int type)

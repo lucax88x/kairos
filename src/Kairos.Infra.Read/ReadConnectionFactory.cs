@@ -7,9 +7,10 @@ using StackExchange.Redis;
 
 namespace Kairos.Infra.Read
 {
-    public interface IReadConnectionFactory: IDisposable
+    public interface IReadConnectionFactory : IDisposable
     {
         IConnectionMultiplexer Connection { get; }
+        int Database { get; }
         void FlushDatabase(int database);
     }
 
@@ -18,15 +19,17 @@ namespace Kairos.Infra.Read
         private IConnectionMultiplexer _connection;
         private readonly ReadRepositoryConfig _readRepositoryConfig;
 
+        public int Database => _readRepositoryConfig.Database;
+
         public IConnectionMultiplexer Connection
         {
             get
             {
                 if (_connection != null) return _connection;
-                
+
                 var redisConfigurationOptions = new ConfigurationOptions();
                 _readRepositoryConfig.Endpoints.ForEach(endpoint =>
-                { 
+                {
                     var isIp = IsIpAddress(endpoint);
                     if (!isIp)
                     {
@@ -62,11 +65,11 @@ namespace Kairos.Infra.Read
         public void Dispose()
         {
             if (_connection == null) return;
-            
+
             _connection.Close();
             _connection.Dispose();
         }
-        
+
         private bool IsIpAddress(string host)
         {
             return Regex.IsMatch(host, @"\b\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}\b");

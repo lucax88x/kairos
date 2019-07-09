@@ -2,6 +2,6 @@
 {
     public class WriteRepositoryConfig
     {
-        public string Connection { get; set; }
+        public string ConnectionString { get; set; }
     }
 }

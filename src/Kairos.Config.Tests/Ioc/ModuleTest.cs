@@ -29,7 +29,7 @@ namespace Kairos.Config.Tests.Ioc
         {
             _scopeResolver.IsSingleInstance<WriteRepositoryConfig>();
             var resolved = _scopeResolver.Resolve<WriteRepositoryConfig>();
-            resolved.Connection.Should().Be("localhost");
+            resolved.ConnectionString.Should().Be("ConnectTo=tcp://admin:changeit@localhost:1113; HeartBeatTimeout=500");
         }
 
         [Fact]

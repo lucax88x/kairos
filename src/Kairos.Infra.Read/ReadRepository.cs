@@ -35,18 +35,14 @@ namespace Kairos.Infra.Read
 
     public class ReadRepository : IReadRepository
     {
-        private readonly IConnectionMultiplexer _connection;
         private readonly ISerializer _serializer;
         private readonly IDatabase _database;
-        private readonly string _prefix;
 
         public ReadRepository(IConnectionMultiplexer connection, ISerializer serializer, int database, string prefix)
         {
-            _connection = connection;
             _serializer = serializer;
-            _prefix = prefix;
 
-            _database = _connection.GetDatabase(database).WithKeyPrefix(_prefix);
+            _database = connection.GetDatabase(database).WithKeyPrefix(prefix);
         }
 
         public async Task Set<T>(Guid id, T obj, string path = ".", CommandFlags flags = CommandFlags.None)

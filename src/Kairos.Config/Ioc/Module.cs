@@ -24,7 +24,7 @@ namespace Kairos.Config.Ioc
                 builder.RegisterInstance(
                         new WriteRepositoryConfig
                         {
-                            Connection = GetValueOrThrow("WriteRepository:Connection")
+                            ConnectionString = GetValueOrThrow("WriteRepository:ConnectionString")
                         })
                     .SingleInstance();
             }
@@ -33,6 +33,7 @@ namespace Kairos.Config.Ioc
             {
                 builder.RegisterInstance(new ReadRepositoryConfig
                     {
+                        Database = int.Parse(GetValueOrThrow("ReadRepository:Database")),
                         Endpoints = GetValuesOrThrow("ReadRepository:Endpoints").ToList()
                     })
                     .SingleInstance();

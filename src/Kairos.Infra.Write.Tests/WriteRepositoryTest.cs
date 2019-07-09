@@ -22,13 +22,50 @@ namespace Kairos.Infra.Write.Tests
         }
 
         [Fact]
-        public async Task should_get_not_found_when_no_item_found()
+        public async Task should_successfully_create_a_aggregate_root()
         {
             // GIVEN
             var obj = TestDomainObject.Create();
 
+            obj.Increase();
+
             // WHEN            
             var events = await _sut.Save(obj);
+
+            // THEN
+            events.Should().HaveCount(2);
+        }
+
+        [Fact]
+        public async Task should_successfully_read_an_aggregate_root()
+        {
+            // GIVEN
+            var obj = TestDomainObject.Create();
+            obj.Increase();
+            obj.Increase();
+            obj.Increase();
+            await _sut.Save(obj);
+
+            // WHEN          
+            var loaded = await _sut.Get<TestDomainObject>(obj.Id);
+
+            // THEN
+            loaded.Counter.Should().Be(3);
+        }
+
+        [Fact]
+        public async Task should_successfully_update_an_aggregate_root()
+        {
+            // GIVEN
+            var obj = TestDomainObject.Create();
+            obj.Increase();
+            await _sut.Save(obj);
+
+            var loaded = await _sut.Get<TestDomainObject>(obj.Id);
+            loaded.Increase();
+
+            // WHEN          
+            var events = await _sut.Save(loaded);
 
             // THEN
             events.Should().HaveCount(1);

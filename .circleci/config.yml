@@ -30,3 +30,6 @@ jobs:
           key: v1-dependencies-{{ checksum "package.json" }}
 
       - run: yarn frontend:lint
+      - run: yarn frontend:prettier
+      - run: yarn frontend:test
+      - run: yarn backend:test

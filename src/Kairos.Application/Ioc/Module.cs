@@ -2,6 +2,7 @@ using System.Reflection;
 using Autofac;
 using Autofac.Extras.DynamicProxy;
 using AutofacSerilogIntegration;
+using FluentValidation;
 using Kairos.Application.Behaviors;
 using Kairos.Common.Interceptors;
 using MediatR;
@@ -44,6 +45,8 @@ namespace Kairos.Application.Ioc
             builder.RegisterGeneric(typeof(RequestPostProcessorBehavior<,>)).As(typeof(IPipelineBehavior<,>));
             builder.RegisterGeneric(typeof(RequestPreProcessorBehavior<,>)).As(typeof(IPipelineBehavior<,>));
             builder.RegisterGeneric(typeof(ValidationBehavior<,>)).As(typeof(IPipelineBehavior<,>));
+            
+            builder.RegisterAssemblyTypes(assembly).AsClosedTypesOf(typeof(IValidator<>));
 
             builder.Register<ServiceFactory>(ctx =>
             {

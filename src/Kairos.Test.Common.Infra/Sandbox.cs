@@ -2,6 +2,7 @@ using System;
 using Autofac;
 using Autofac.Extras.DynamicProxy;
 using Kairos.Config.Ioc;
+using Kairos.Infra.Read;
 using Kairos.Test.Common.Infra.FluentAssertion;
 using Kairos.Test.Common.Infra.Mediator;
 using Kairos.Test.Common.Infra.Scenario;
@@ -19,6 +20,7 @@ namespace Kairos.Test.Common.Infra
         public FluentSandboxAssertion Should { get; private set; }
         public IMediator Mediator { get; private set; }
         public ScenarioBuilder Scenario { get; private set; }
+        public IReadConnectionFactory ReadConnectionFactory { get; private set; }
 
         public Sandbox(SandboxOptions sandboxOptions, params Module[] modules)
         {
@@ -38,6 +40,7 @@ namespace Kairos.Test.Common.Infra
             ResolveMediator();
             ResolveFluentAssertions();
             ResolveScenarioBuilder();
+            ResolveReadConnectionFactory();
 
             SetupRedis();
         }
@@ -124,11 +127,17 @@ namespace Kairos.Test.Common.Infra
         {
             Scenario = _container.Resolve<ScenarioBuilder>();
         }
+        
+        private void ResolveReadConnectionFactory()
+        {
+            ReadConnectionFactory = _container.Resolve<IReadConnectionFactory>();
+        }
 
         private void SetupRedis()
         {
             if (_sandboxOptions.SetupRedis)
             {
+                ReadConnectionFactory.FlushDatabase(5);
             }
         }
     }

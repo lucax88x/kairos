@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Collections.Immutable;
 
 namespace Kairos.Common
@@ -7,8 +8,8 @@ namespace Kairos.Common
     {
         private ImmutableList<Event> _changes = ImmutableList.Create<Event>();
 
-        public Guid Id { get; protected set; }
-        public int Version { get; protected set; } = -1;
+        public Guid Id { get; protected set; } = Guid.NewGuid();
+        public long Version { get; private set; } = -1;
         public bool HasChanges => !_changes.IsEmpty;
 
         public ImmutableList<Event> GetUncommittedChanges()
@@ -24,7 +25,7 @@ namespace Kairos.Common
             }
         }
 
-        public void LoadsFromHistory(ImmutableList<Event> history, int finalVersion)
+        public void LoadsFromHistory(IEnumerable<Event> history, long finalVersion)
         {
             foreach (var e in history) ApplyChange(e, false);
 
