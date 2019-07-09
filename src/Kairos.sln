@@ -1,9 +1,35 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# 
+#
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Kairos.Web.App", "Kairos.Web.App\Kairos.Web.App.csproj", "{489C5FF2-5DFD-4884-8351-6161D689CC8D}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Kairos.Domain", "Kairos.Domain\Kairos.Domain.csproj", "{46345229-B06B-4F6C-9557-AC191A3BD3F3}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Kairos.Application", "Kairos.Application\Kairos.Application.csproj", "{4325F11E-3135-4A5B-9DBC-EAC7555E4E59}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Kairos.Application.Tests", "Kairos.Application.Tests\Kairos.Application.Tests.csproj", "{72749755-55ED-4727-8B69-D819B2AD4C84}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Kairos.Config", "Kairos.Config\Kairos.Config.csproj", "{9F455A97-3B78-4698-838C-FA93F1B638AC}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Kairos.Config.Tests", "Kairos.Config.Tests\Kairos.Config.Tests.csproj", "{F895615C-20D3-4EA8-94C2-E162440294F9}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Kairos.Infra.Write", "Kairos.Infra.Write\Kairos.Infra.Write.csproj", "{1242FCA3-67A6-4EF0-A8F3-E0B74F302BA1}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Kairos.Infra.Write.Tests", "Kairos.Infra.Write.Tests\Kairos.Infra.Write.Tests.csproj", "{DEEBA7EB-E37E-4029-A340-38919C94A3AC}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Kairos.Infra.Read", "Kairos.Infra.Read\Kairos.Infra.Read.csproj", "{7EE7EB16-4865-47BA-8435-5829EE890D66}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Kairos.Infra.Read.Tests", "Kairos.Infra.Read.Tests\Kairos.Infra.Read.Tests.csproj", "{2B2F7ACE-E9E9-422C-9259-8743D5C549B3}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Kairos.Test.Common", "Kairos.Test.Common\Kairos.Test.Common.csproj", "{0144AC4F-85AE-4C0A-A07C-B94276A23AC9}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Kairos.Test.Common.Infra", "Kairos.Test.Common.Infra\Kairos.Test.Common.Infra.csproj", "{144B20FD-2371-4CF5-BDDB-72F67BB78AA9}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Kairos.Common", "Kairos.Common\Kairos.Common.csproj", "{6112A6EB-2AFB-455A-B08D-D09153F92CB6}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Kairos.Common.Tests", "Kairos.Common.Tests\Kairos.Common.Tests.csproj", "{36A7EF80-AADE-4B19-9E0B-D13C03166A55}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Kairos.Web.Api", "Kairos.Web.Api\Kairos.Web.Api.csproj", "{885FAEA5-8E9F-413F-8B3E-692EE93C4CCB}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -19,5 +45,57 @@ Global
 		{46345229-B06B-4F6C-9557-AC191A3BD3F3}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{46345229-B06B-4F6C-9557-AC191A3BD3F3}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{46345229-B06B-4F6C-9557-AC191A3BD3F3}.Release|Any CPU.Build.0 = Release|Any CPU
+		{4325F11E-3135-4A5B-9DBC-EAC7555E4E59}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{4325F11E-3135-4A5B-9DBC-EAC7555E4E59}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{4325F11E-3135-4A5B-9DBC-EAC7555E4E59}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{4325F11E-3135-4A5B-9DBC-EAC7555E4E59}.Release|Any CPU.Build.0 = Release|Any CPU
+		{72749755-55ED-4727-8B69-D819B2AD4C84}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{72749755-55ED-4727-8B69-D819B2AD4C84}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{72749755-55ED-4727-8B69-D819B2AD4C84}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{72749755-55ED-4727-8B69-D819B2AD4C84}.Release|Any CPU.Build.0 = Release|Any CPU
+		{9F455A97-3B78-4698-838C-FA93F1B638AC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{9F455A97-3B78-4698-838C-FA93F1B638AC}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{9F455A97-3B78-4698-838C-FA93F1B638AC}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{9F455A97-3B78-4698-838C-FA93F1B638AC}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F895615C-20D3-4EA8-94C2-E162440294F9}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F895615C-20D3-4EA8-94C2-E162440294F9}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F895615C-20D3-4EA8-94C2-E162440294F9}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F895615C-20D3-4EA8-94C2-E162440294F9}.Release|Any CPU.Build.0 = Release|Any CPU
+		{1242FCA3-67A6-4EF0-A8F3-E0B74F302BA1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1242FCA3-67A6-4EF0-A8F3-E0B74F302BA1}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1242FCA3-67A6-4EF0-A8F3-E0B74F302BA1}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1242FCA3-67A6-4EF0-A8F3-E0B74F302BA1}.Release|Any CPU.Build.0 = Release|Any CPU
+		{DEEBA7EB-E37E-4029-A340-38919C94A3AC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{DEEBA7EB-E37E-4029-A340-38919C94A3AC}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{DEEBA7EB-E37E-4029-A340-38919C94A3AC}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{DEEBA7EB-E37E-4029-A340-38919C94A3AC}.Release|Any CPU.Build.0 = Release|Any CPU
+		{7EE7EB16-4865-47BA-8435-5829EE890D66}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7EE7EB16-4865-47BA-8435-5829EE890D66}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7EE7EB16-4865-47BA-8435-5829EE890D66}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{7EE7EB16-4865-47BA-8435-5829EE890D66}.Release|Any CPU.Build.0 = Release|Any CPU
+		{2B2F7ACE-E9E9-422C-9259-8743D5C549B3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2B2F7ACE-E9E9-422C-9259-8743D5C549B3}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2B2F7ACE-E9E9-422C-9259-8743D5C549B3}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2B2F7ACE-E9E9-422C-9259-8743D5C549B3}.Release|Any CPU.Build.0 = Release|Any CPU
+		{0144AC4F-85AE-4C0A-A07C-B94276A23AC9}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0144AC4F-85AE-4C0A-A07C-B94276A23AC9}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0144AC4F-85AE-4C0A-A07C-B94276A23AC9}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0144AC4F-85AE-4C0A-A07C-B94276A23AC9}.Release|Any CPU.Build.0 = Release|Any CPU
+		{144B20FD-2371-4CF5-BDDB-72F67BB78AA9}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{144B20FD-2371-4CF5-BDDB-72F67BB78AA9}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{144B20FD-2371-4CF5-BDDB-72F67BB78AA9}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{144B20FD-2371-4CF5-BDDB-72F67BB78AA9}.Release|Any CPU.Build.0 = Release|Any CPU
+		{6112A6EB-2AFB-455A-B08D-D09153F92CB6}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6112A6EB-2AFB-455A-B08D-D09153F92CB6}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6112A6EB-2AFB-455A-B08D-D09153F92CB6}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6112A6EB-2AFB-455A-B08D-D09153F92CB6}.Release|Any CPU.Build.0 = Release|Any CPU
+		{36A7EF80-AADE-4B19-9E0B-D13C03166A55}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{36A7EF80-AADE-4B19-9E0B-D13C03166A55}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{36A7EF80-AADE-4B19-9E0B-D13C03166A55}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{36A7EF80-AADE-4B19-9E0B-D13C03166A55}.Release|Any CPU.Build.0 = Release|Any CPU
+		{885FAEA5-8E9F-413F-8B3E-692EE93C4CCB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{885FAEA5-8E9F-413F-8B3E-692EE93C4CCB}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{885FAEA5-8E9F-413F-8B3E-692EE93C4CCB}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{885FAEA5-8E9F-413F-8B3E-692EE93C4CCB}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal

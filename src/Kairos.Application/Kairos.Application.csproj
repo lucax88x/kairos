@@ -1,0 +1,23 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netstandard2.0</TargetFramework>
+    <LangVersion>7.3</LangVersion>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Autofac" Version="4.9.2" />
+    <PackageReference Include="Autofac.Extras.DynamicProxy" Version="4.5.0" />
+    <PackageReference Include="AutofacSerilogIntegration" Version="2.0.0" />
+    <PackageReference Include="FluentValidation" Version="8.4.0" />
+    <PackageReference Include="MediatR" Version="7.0.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Kairos.Common\Kairos.Common.csproj" />
+    <ProjectReference Include="..\Kairos.Config\Kairos.Config.csproj" />
+    <ProjectReference Include="..\Kairos.Domain\Kairos.Domain.csproj" />
+    <ProjectReference Include="..\Kairos.Infra.Read\Kairos.Infra.Read.csproj" />
+  </ItemGroup>
+
+</Project>

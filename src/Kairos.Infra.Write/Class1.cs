@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Kairos.Domain
+namespace Kairos.Infra.Write
 {
     public class Class1
     {

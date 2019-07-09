@@ -1,10 +1,11 @@
 ﻿using System;
+using Autofac.Extensions.DependencyInjection;
 using Microsoft.AspNetCore;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Serilog;
 
-namespace Kairos.Web.App
+namespace Kairos.Web.Api
 {
     public class Program
     {
@@ -12,20 +13,20 @@ namespace Kairos.Web.App
         {
             Log.Logger = new LoggerConfiguration()
                 .Enrich.FromLogContext()
-                .WriteTo.File("logs/app-{Hour}.txt", rollingInterval: RollingInterval.Hour)
+                .WriteTo.File("logs/api-{Hour}.log", rollingInterval: RollingInterval.Hour)
                 .WriteTo.Console()
                 .CreateLogger();
 
             try
             {
-                Log.Information("Starting App Host");
+                Log.Information("Starting Api Host");
                 CreateWebHostBuilder(args).Build().Run();
 
                 return 0;
             }
             catch (Exception ex)
             {
-                Log.Fatal(ex, "App Host terminated unexpectedly");
+                Log.Fatal(ex, "Api Host terminated unexpectedly");
                 return 1;
             }
             finally
@@ -46,6 +47,7 @@ namespace Kairos.Web.App
                         .AddEnvironmentVariables("Kairos_");
                 })
                 .UseStartup<Startup>()
+                .ConfigureServices(services => services.AddAutofac())
                 .UseSerilog();
     }
 }

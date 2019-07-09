@@ -11,12 +11,17 @@ dotnet new classlib \
 -f netstandard2.0 \
 --langVersion 7.3 \
 -o src/Kairos.$PROJECT_NAME \
--i Autofac::4.9.2
+
+dotnet add src/Kairos.$PROJECT_NAME package Autofac -v 4.9.2
 
 dotnet new xunit \
 -n "Kairos.$PROJECT_NAME.Tests" \
--f netcoreapp2.2 --langVersion 7.3 \
+-f netcoreapp2.2 \
 -o src/Kairos.$PROJECT_NAME.Tests
+
+dotnet add src/Kairos.$PROJECT_NAME.Tests package Autofac -v 4.9.2
+dotnet add src/Kairos.$PROJECT_NAME.Tests package NSubstitute -v 4.2.0
+dotnet add src/Kairos.$PROJECT_NAME.Tests package FluentAssertions -v 5.7.0
 
 dotnet sln src/Kairos.sln add src/Kairos.$PROJECT_NAME/Kairos.$PROJECT_NAME.csproj
 dotnet sln src/Kairos.sln add src/Kairos.$PROJECT_NAME.Tests/Kairos.$PROJECT_NAME.Tests.csproj

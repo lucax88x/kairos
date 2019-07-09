@@ -1,0 +1,16 @@
+version: '3'
+
+services:
+  redis:
+    image: 'redislabs/rejson'
+    restart: always
+    container_name: redis
+    ports:
+      - '6379:6379'
+  eventstore:
+    image: 'eventstore/eventstore'
+    restart: always
+    container_name: redis
+    ports:
+      - '2113:2113'
+      - '1113:1113'
