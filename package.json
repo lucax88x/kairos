@@ -7,18 +7,17 @@
   "scripts": {
     "postinstall": "cd src/kairos.app && yarn install",
     "build": "yarn frontend:build && yarn backend:build",
-    "frontend:prettier": "cd src/karios.app && yarn prettier",
-    "frontend:lint": "cd src/karios.app && yarn lint",
-    "frontend:test": "cd src/karios.app && yarn test --no-watch",
-    "frontend:build": "cd src/karios.app && yarn build",
-    "frontend:publish": "rm -rf src/Karios.Web.App/wwwroot && cd src/karios.app && yarn build && cp -r build ../Karios.Web.App/wwwroot",
+    "frontend:prettier": "cd src/kairos.app && yarn prettier",
+    "frontend:lint": "cd src/kairos.app && yarn lint",
+    "frontend:test": "cd src/kairos.app && yarn test --no-watch",
+    "frontend:build": "cd src/kairos.app && yarn build",
+    "frontend:publish": "rm -rf src/Karios.Web.App/wwwroot && cd src/kairos.app && yarn build && cp -r build ../Karios.Web.App/wwwroot",
     "backend:generate-project": "bash src/generate.sh",
     "backend:test": "dotnet test src/Kairos.sln --logger trx",
     "backend:build": "dotnet build src/Kairos.sln",
     "docker:start": "docker-compose -f docker-compose.dev.yml up -d",
     "docker:stop": "docker-compose -f docker-compose.dev.yml down",
     "docker:logs": "docker-compose -f docker-compose.dev.yml logs",
-    "docker:logs:watch": "docker-compose -f docker-compose.dev.yml logs -f -t",
-    "eventstore:dashboard": "docker inspect -f '{{ .NetworkSettings.IPAddress }}' eventstore > http://192.168.99.100:2113/"
+    "docker:logs:watch": "docker-compose -f docker-compose.dev.yml logs -f -t"
   }
 }
