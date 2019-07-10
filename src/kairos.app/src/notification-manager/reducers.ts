@@ -1,6 +1,6 @@
 import { reduce } from 'ramda';
 
-import { NotificationManagerActions } from '.';
+import { NotificationManagerActions } from '../actions';
 import { enqueueSnackbarReducer } from './enqueue-snackbar';
 import { removeSnackbarReducer } from './remove-snackbar';
 import { INotificationManagerState, notificationManagerInitialState } from './state';

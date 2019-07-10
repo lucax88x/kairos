@@ -1,1 +1,1 @@
-export { refreshTimeEntries } from './refresh-time-entries';
+export { getTimeEntriesSaga } from './get-time-entries';

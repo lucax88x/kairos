@@ -2,7 +2,7 @@ import { produce } from 'immer';
 import { findIndex } from 'ramda';
 import { action } from 'typesafe-actions';
 
-import { NotificationManagerActions } from '.';
+import { NotificationManagerActions } from '../actions';
 import { UUID } from '../models/uuid.model';
 import { REMOVE_SNACKBAR } from './constants';
 import { INotificationManagerState } from './state';

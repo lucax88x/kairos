@@ -2,7 +2,7 @@ import { produce } from 'immer';
 import { OptionsObject } from 'notistack';
 import { action } from 'typesafe-actions';
 
-import { NotificationManagerActions } from '.';
+import { NotificationManagerActions } from '../actions';
 import { NotificationModel } from '../models/notification.model';
 import { ENQUEUE_SNACKBAR } from './constants';
 import { INotificationManagerState } from './state';
@@ -17,7 +17,6 @@ export const enqueueSnackbarReducer = (
   produce(state, draft => {
     switch (action.type) {
       case ENQUEUE_SNACKBAR:
-        console.log('in');
         draft.notifications.push(action.payload);
         break;
     }

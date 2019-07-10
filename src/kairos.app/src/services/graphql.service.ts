@@ -10,7 +10,7 @@ export interface GraphQlResponse<T> {
   errors: GraphQLError[];
 }
 
-export function query<R, D>(query: string, data?: D): Promise<R> {
+function call<R, P>(query: string, data?: P): Promise<R> {
   return new Promise(async (resolve, reject) => {
     try {
       const result = await axios.post<GraphQlResponse<R>>('/graphql', {
@@ -28,4 +28,12 @@ export function query<R, D>(query: string, data?: D): Promise<R> {
       reject({ message: err });
     }
   });
+}
+
+export function query<R, P>(query: string, data?: P): Promise<R> {
+  return call<R, P>(query, data);
+}
+
+export function mutation<R, P>(mutation: string, data?: P): Promise<R> {
+  return call<R, P>(mutation, data);
 }

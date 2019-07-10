@@ -11,10 +11,11 @@ import { Provider } from 'react-redux';
 import { Route } from 'react-router-dom';
 import { AnimatedSwitch, IAnimatedSwitchTransition } from 'react-router-transition';
 
+import { App } from './App';
 import { history, store } from './createStore';
 import { Dashboard } from './dashboard/Dashboard';
 import { enqueueSnackbarAction } from './notification-manager/enqueue-snackbar';
-import { NotificationManager } from './notification-manager/NotificationManager.connect';
+import { NotificationManager } from './notification-manager/NotificationManager.container';
 import { Routes } from './routes';
 import * as serviceWorker from './serviceWorker';
 
@@ -67,11 +68,13 @@ ReactDOM.render(
         <NotificationManager />
       </SnackbarProvider>
 
-      <ConnectedRouter history={history}>
-        <AnimatedSwitch {...pageTransitions} mapStyles={mapStyles} className="switch-wrapper">
-          <Route exact={true} path={Routes.Dashboard} component={Dashboard} />
-        </AnimatedSwitch>
-      </ConnectedRouter>
+      <App>
+        <ConnectedRouter history={history}>
+          <AnimatedSwitch {...pageTransitions} mapStyles={mapStyles} className="switch-wrapper">
+            <Route exact={true} path={Routes.Dashboard} component={Dashboard} />
+          </AnimatedSwitch>
+        </ConnectedRouter>
+      </App>
     </ThemeProvider>
   </Provider>,
   document.getElementById('root'),

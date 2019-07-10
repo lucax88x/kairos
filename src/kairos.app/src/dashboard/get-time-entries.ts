@@ -9,11 +9,11 @@ export const getTimeEntriesAction = () => action(GET_TIME_ENTRIES);
 export const getTimeEntriesSuccessAction = () => action(GET_TIME_ENTRIES_SUCCESS);
 export const getTimeEntriesErrorAction = (error: string) => action(GET_TIME_ENTRIES_ERROR, error);
 
-function* doRefreshTimeEntriesOnLocationChange() {
+function* doGetTimeEntriesOnLocationChange() {
   yield put(getTimeEntriesAction());
 }
 
-function* doRefreshTimeEntries() {
+function* doGetTimeEntries() {
   try {
     yield call(getTimeEntries);
 
@@ -23,7 +23,7 @@ function* doRefreshTimeEntries() {
   }
 }
 
-export function* refreshTimeEntries() {
-  yield takeLatest(LOCATION_CHANGE, doRefreshTimeEntriesOnLocationChange);
-  yield takeLatest(GET_TIME_ENTRIES, doRefreshTimeEntries);
+export function* getTimeEntriesSaga() {
+  yield takeLatest(LOCATION_CHANGE, doGetTimeEntriesOnLocationChange);
+  yield takeLatest(GET_TIME_ENTRIES, doGetTimeEntries);
 }
