@@ -5,7 +5,6 @@
   "author": "lucatrazzi <lucax88x@gmail.com>",
   "license": "MIT",
   "scripts": {
-    "postinstall": "cd src/kairos.app && yarn install",
     "build": "yarn frontend:build && yarn backend:build",
     "frontend:prettier": "cd src/kairos.app && yarn prettier",
     "frontend:lint": "cd src/kairos.app && yarn lint",

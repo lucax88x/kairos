@@ -1,41 +1,56 @@
 version: 2
 jobs:
-  build:
+  backend:
     docker:
-      # specify the version you desire here
       - image: mcr.microsoft.com/dotnet/core/sdk:2.2
       - image: redislabs/rejson
       - image: eventstore/eventstore
 
-      # Specify service dependencies here if necessary
-      # CircleCI maintains a library of pre-built images
-      # documented at https://circleci.com/docs/2.0/circleci-images/
-      # - image: circleci/mongo:3.4.4
-
-    working_directory: ~/src
-
     steps:
-      - run: curl -sS https://dl.yarnpkg.com/debian/pubkey.gpg | sudo apt-key add -
-      - run: echo "deb https://dl.yarnpkg.com/debian/ stable main" | sudo tee /etc/apt/sources.list.d/yarn.list
-      - run: sudo apt-get update && sudo apt-get install yarn
-
       - checkout
 
       # Download and cache dependencies
       - restore_cache:
           keys:
-            - v1-dependencies-{{ checksum "package.json" }}
+            - root-node_modules-{{ checksum "package.json" }}
             # fallback to using the latest cache if no exact match is found
-            - v1-dependencies-
+            - root-node_modules-
 
       - run: yarn
 
       - save_cache:
           paths:
             - node_modules
-          key: v1-dependencies-{{ checksum "package.json" }}
+          key: root-node_modules-{{ checksum "package.json" }}
 
       - run: yarn backend:test
+
+  frontend:
+    docker:
+      - image: circleci/node:10.15
+
+    steps:
+      - checkout
+
+      - restore_cache:
+          keys:
+            - root-node_modules-{{ checksum "package.json" }}
+            - root-node_modules-
+
+      - run: cd src/kairos.app
+      - run: yarn
+
+      - save_cache:
+          paths:
+            - src/kairos.app/node_modules
+          key: root-node_modules-{{ checksum "package.json" }}
+
       - run: yarn frontend:lint
       - run: yarn frontend:prettier
       - run: yarn frontend:test
+workflows:
+  version: 2
+  test:
+    jobs:
+      - backend
+      - frontend

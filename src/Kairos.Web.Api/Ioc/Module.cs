@@ -3,6 +3,7 @@ using Autofac;
 using GraphQL;
 using GraphQL.Http;
 using GraphQL.Types;
+using Kairos.Config.Ioc;
 using Kairos.Web.Api.GraphQL;
 using Kairos.Web.Api.GraphQL.Types;
 using Microsoft.Extensions.Configuration;
@@ -20,12 +21,13 @@ namespace Kairos.Web.Api.Ioc
 
         protected override void Load(ContainerBuilder builder)
         {
-            builder.RegisterModule(new Config.Ioc.Module(_configuration));
+            builder.RegisterModule(new Config.Ioc.Module(_configuration,
+                new ModuleOptions {HasReadRepository = true, HasWriteRepository = true}));
             builder.RegisterModule(new Kairos.Application.Ioc.Module());
 
             RegisterGraphQL(builder);
         }
-        
+
         private void RegisterGraphQL(ContainerBuilder builder)
         {
             builder.RegisterInstance(new DocumentExecuter()).As<IDocumentExecuter>();
