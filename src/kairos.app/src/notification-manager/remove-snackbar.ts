@@ -9,7 +9,7 @@ import { INotificationManagerState } from './state';
 
 export const removeSnackbarAction = (key: UUID) => action(REMOVE_SNACKBAR, key);
 
-export const enqueueSnackbarReducer = (
+export const removeSnackbarReducer = (
   state: INotificationManagerState,
   action: NotificationManagerActions,
 ): INotificationManagerState =>

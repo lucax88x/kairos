@@ -1,9 +1,14 @@
-import { produce } from 'immer';
+import { reduce } from 'ramda';
 
 import { NotificationManagerActions } from '.';
+import { enqueueSnackbarReducer } from './enqueue-snackbar';
+import { removeSnackbarReducer } from './remove-snackbar';
 import { INotificationManagerState, notificationManagerInitialState } from './state';
+
+const reducers = [enqueueSnackbarReducer, removeSnackbarReducer];
 
 export const notificationManagerReducers = (
   state = notificationManagerInitialState,
   action: NotificationManagerActions,
-): INotificationManagerState => produce(state, draft => {});
+): INotificationManagerState =>
+  reduce((updatingState, reducer) => reducer(updatingState, action), state, reducers);

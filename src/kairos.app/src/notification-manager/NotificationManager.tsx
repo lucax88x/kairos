@@ -1,4 +1,4 @@
-import { OptionsObject, WithSnackbarProps } from 'notistack';
+import { OptionsObject, withSnackbar, WithSnackbarProps } from 'notistack';
 import { forEach, merge } from 'ramda';
 import React from 'react';
 
@@ -17,7 +17,7 @@ type NotificationManagerProps = NotificationManagerInputs &
   NotificationManagerDispatches &
   WithSnackbarProps;
 
-export class NotificationManagerComponent extends React.PureComponent<NotificationManagerProps> {
+class NotificationManager extends React.PureComponent<NotificationManagerProps> {
   private optionDefaults: OptionsObject;
 
   /**
@@ -54,3 +54,5 @@ export class NotificationManagerComponent extends React.PureComponent<Notificati
     this.props.removeNotification(key);
   }
 }
+
+export const NotificationManagerComponent = withSnackbar(NotificationManager);

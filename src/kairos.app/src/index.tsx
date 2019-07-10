@@ -12,7 +12,7 @@ import { Route } from 'react-router-dom';
 import { AnimatedSwitch, IAnimatedSwitchTransition } from 'react-router-transition';
 
 import { history, store } from './createStore';
-import { Dashboard } from './Dashboard';
+import { Dashboard } from './dashboard/Dashboard';
 import { enqueueSnackbarAction } from './notification-manager/enqueue-snackbar';
 import { NotificationManager } from './notification-manager/NotificationManager.connect';
 import { Routes } from './routes';
@@ -60,11 +60,11 @@ ReactDOM.render(
       <SnackbarProvider
         maxSnack={3}
         anchorOrigin={{
-          vertical: 'bottom',
+          vertical: 'top',
           horizontal: 'right',
         }}
       >
-        {/* <NotificationManager /> */}
+        <NotificationManager />
       </SnackbarProvider>
 
       <ConnectedRouter history={history}>
