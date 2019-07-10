@@ -4,6 +4,8 @@ jobs:
     docker:
       # specify the version you desire here
       - image: mcr.microsoft.com/dotnet/core/sdk:2.2
+      - image: redislabs/rejson
+      - image: eventstore/eventstore
 
       # Specify service dependencies here if necessary
       # CircleCI maintains a library of pre-built images
@@ -13,6 +15,10 @@ jobs:
     working_directory: ~/src
 
     steps:
+      - run: curl -sS https://dl.yarnpkg.com/debian/pubkey.gpg | sudo apt-key add -
+      - run: echo "deb https://dl.yarnpkg.com/debian/ stable main" | sudo tee /etc/apt/sources.list.d/yarn.list
+      - run: sudo apt-get update && sudo apt-get install yarn
+
       - checkout
 
       # Download and cache dependencies

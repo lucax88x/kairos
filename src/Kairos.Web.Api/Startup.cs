@@ -1,4 +1,7 @@
 ﻿using Autofac;
+using GraphQL.Server;
+using GraphQL.Server.Ui.Playground;
+using GraphQL.Types;
 using Kairos.Web.Api.Filters;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -7,7 +10,6 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Serilog;
 using Serilog.Events;
-using Module = Kairos.Application.Ioc.Module;
 
 namespace Kairos.Web.Api
 {
@@ -32,6 +34,12 @@ namespace Kairos.Web.Api
                 .SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
 
             services.AddScoped<ApiExceptionFilter>();
+
+            services.AddGraphQL(_ =>
+            {
+                _.EnableMetrics = true;
+                _.ExposeExceptions = true;
+            });
         }
 
         public void Configure(IApplicationBuilder app, IHostingEnvironment env)
@@ -44,6 +52,16 @@ namespace Kairos.Web.Api
             ConfigureLogger();
 
             app.UseMvc();
+
+            app.UseGraphQL<ISchema>();
+
+            if (env.IsDevelopment())
+            {
+                app.UseGraphQLPlayground(new GraphQLPlaygroundOptions
+                {
+                    Path = "/ui/playground"
+                });
+            }
         }
 
         private void ConfigureLogger()
