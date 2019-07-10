@@ -3,7 +3,7 @@ jobs:
   build:
     docker:
       # specify the version you desire here
-      - image: circleci/node:10.15
+      - image: mcr.microsoft.com/dotnet/core/sdk:2.2
 
       # Specify service dependencies here if necessary
       # CircleCI maintains a library of pre-built images
@@ -29,7 +29,7 @@ jobs:
             - node_modules
           key: v1-dependencies-{{ checksum "package.json" }}
 
+      - run: yarn backend:test
       - run: yarn frontend:lint
       - run: yarn frontend:prettier
       - run: yarn frontend:test
-      - run: yarn backend:test
