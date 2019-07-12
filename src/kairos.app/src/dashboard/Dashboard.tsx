@@ -1,9 +1,9 @@
 import { Grid, Paper } from '@material-ui/core';
 import React from 'react';
 
-import { TimeEntries } from './TimeEntries';
+import { TimeEntries } from './TimeEntries.container';
 
-export const Dashboard: React.FC = props => {
+export const Dashboard: React.FC = () => {
   return (
     <Grid container spacing={3}>
       <Grid item xs={12} md={12} lg={12}>

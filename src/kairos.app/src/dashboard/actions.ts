@@ -1,5 +1,5 @@
 export {
-  getTimeEntriesSaga as getTimeEntries,
+  getTimeEntriesAction,
   getTimeEntriesErrorAction,
   getTimeEntriesSuccessAction,
 } from './get-time-entries';

@@ -3,7 +3,6 @@ import { action } from 'typesafe-actions';
 
 import { createTimeEntry } from '../services/time-entry/time-entry.service';
 import { CREATE_TIME_ENTRY, CREATE_TIME_ENTRY_ERROR, CREATE_TIME_ENTRY_SUCCESS } from './constants';
-import { format } from 'date-fns';
 import { UUID } from '../models/uuid.model';
 import { TimeEntryTypes } from '../models/time-entry.model';
 

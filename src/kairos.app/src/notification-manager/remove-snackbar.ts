@@ -5,14 +5,14 @@ import { action } from 'typesafe-actions';
 import { NotificationManagerActions } from '../actions';
 import { UUID } from '../models/uuid.model';
 import { REMOVE_SNACKBAR } from './constants';
-import { INotificationManagerState } from './state';
+import { NotificationManagerState } from './state';
 
 export const removeSnackbarAction = (key: UUID) => action(REMOVE_SNACKBAR, key);
 
 export const removeSnackbarReducer = (
-  state: INotificationManagerState,
+  state: NotificationManagerState,
   action: NotificationManagerActions,
-): INotificationManagerState =>
+): NotificationManagerState =>
   produce(state, draft => {
     switch (action.type) {
       case REMOVE_SNACKBAR:

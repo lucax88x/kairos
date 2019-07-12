@@ -1,33 +1,36 @@
 import { Table, TableBody, TableCell, TableHead, TableRow, Typography } from '@material-ui/core';
+import { map } from 'ramda';
 import React from 'react';
+import { formatAsDate } from '../code/constants';
 
-export const TimeEntries: React.FC = props => {
+import { TimeEntryModel } from '../models/time-entry.model';
+import { format } from 'date-fns';
+
+const modelToCells = map<TimeEntryModel, JSX.Element>(model => (
+  <TableRow key={model.id.value}>
+    <TableCell>{format(model.when, formatAsDate)}</TableCell>
+    <TableCell>{model.type}</TableCell>
+  </TableRow>
+));
+
+export interface TimeEntriesInputs {
+  timeEntries: TimeEntryModel[];
+}
+
+export const TimeEntriesComponent: React.FC<TimeEntriesInputs> = ({ timeEntries }) => {
   return (
     <React.Fragment>
       <Typography component="h2" variant="h6" color="primary" gutterBottom>
-        {props.children}
+        Time Entries
       </Typography>
       <Table size="small">
         <TableHead>
           <TableRow>
-            <TableCell>Date</TableCell>
-            <TableCell>Name</TableCell>
-            <TableCell>Ship To</TableCell>
-            <TableCell>Payment Method</TableCell>
-            <TableCell align="right">Sale Amount</TableCell>
+            <TableCell>When</TableCell>
+            <TableCell>Type</TableCell>
           </TableRow>
         </TableHead>
-        <TableBody>
-          {/* {rows.map(row => (
-            <TableRow key={row.id}>
-              <TableCell>{row.date}</TableCell>
-              <TableCell>{row.name}</TableCell>
-              <TableCell>{row.shipTo}</TableCell>
-              <TableCell>{row.paymentMethod}</TableCell>
-              <TableCell align="right">{row.amount}</TableCell>
-            </TableRow>
-          ))} */}
-        </TableBody>
+        <TableBody>{modelToCells(timeEntries)}</TableBody>
       </Table>
     </React.Fragment>
   );

@@ -1,9 +1,9 @@
 import { NotificationModel } from '../models/notification.model';
 
-export interface INotificationManagerState {
+export interface NotificationManagerState {
   notifications: NotificationModel[];
 }
 
-export const notificationManagerInitialState: INotificationManagerState = {
+export const notificationManagerInitialState: NotificationManagerState = {
   notifications: [],
 };

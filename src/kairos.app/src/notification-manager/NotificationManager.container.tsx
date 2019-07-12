@@ -3,7 +3,6 @@ import { Dispatch } from 'redux';
 
 import { Actions } from '../actions';
 import { UUID } from '../models/uuid.model';
-import { selectNotifications } from '../selectors/notification-manager.selectors';
 import { State } from '../state';
 import {
   NotificationManagerComponent,
@@ -11,6 +10,7 @@ import {
   NotificationManagerInputs,
 } from './NotificationManager';
 import { removeSnackbarAction } from './remove-snackbar';
+import { selectNotifications } from './selectors';
 
 const mapStateToProps = (state: State): NotificationManagerInputs => ({
   notifications: selectNotifications(state),

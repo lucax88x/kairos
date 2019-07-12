@@ -41,4 +41,8 @@ export class UUID {
   public toString = (): string => {
     return this.value;
   };
+
+  public toJSON = (): string => {
+    return this.value;
+  };
 }
