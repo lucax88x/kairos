@@ -1,5 +1,3 @@
 export {
-  createTimeEntryAction,
-  createTimeEntryErrorAction,
-  createTimeEntrySuccessAction,
+  createTimeEntryAsync
 } from './create-time-entry';

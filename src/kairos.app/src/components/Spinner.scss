@@ -1,0 +1,16 @@
+@import '../../node_modules/spinkit/scss/spinners/11-folding-cube.scss';
+
+.sk-folding-cube {
+  .sk-cube::before {
+    background-color: #3f51b5;
+  }
+}
+
+@keyframes blurry {
+  0% {
+    filter: grayscale(0) blur(0px);
+  }
+  100% {
+    filter: grayscale(1) blur(2px);
+  }
+}

@@ -1,5 +1,1 @@
-export {
-  getTimeEntriesAction,
-  getTimeEntriesErrorAction,
-  getTimeEntriesSuccessAction,
-} from './get-time-entries';
+export { getTimeEntriesAsync } from './get-time-entries';

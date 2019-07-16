@@ -2,12 +2,7 @@ import { createSelector } from 'reselect';
 
 import { State } from '../state';
 
-const selectState = (state: State) => state.dashboard;
-
-export const selectTimeEntries = createSelector(
-  selectState,
-  state => state.timeEntries,
-);
+const selectState = (state: State) => state.shared;
 
 export const selectUi = createSelector(
   selectState,
@@ -19,7 +14,7 @@ export const selectBusy = createSelector(
   ui => ui.busy,
 );
 
-export const selectIsTimeEntriesBusy = createSelector(
+export const selectIsCreateTimeEntryBusy = createSelector(
   selectBusy,
-  busy => busy.timeEntries,
+  busy => busy.createTimeEntry,
 );

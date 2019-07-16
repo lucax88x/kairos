@@ -14,6 +14,7 @@ import {
 } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
 import ChevronLeftIcon from '@material-ui/icons/ChevronLeft';
+import ChevronRightIcon from '@material-ui/icons/ChevronRight';
 import DashboardIcon from '@material-ui/icons/Dashboard';
 import MenuIcon from '@material-ui/icons/Menu';
 import TimerIcon from '@material-ui/icons/Timer';
@@ -31,10 +32,17 @@ const useStyles = makeStyles(theme => ({
   toolbar: {
     paddingRight: 24, // keep right padding when drawer closed
   },
-  toolbarIcon: {
-    display: 'flex',
+  toolbarLeftIcon: {
+    display: 'grid',
     alignItems: 'center',
     justifyContent: 'flex-end',
+    padding: '0 8px',
+    ...theme.mixins.toolbar,
+  },
+  toolbarRightIcon: {
+    display: 'grid',
+    alignItems: 'center',
+    justifyContent: 'flex-start',
     padding: '0 8px',
     ...theme.mixins.toolbar,
   },
@@ -92,35 +100,41 @@ const useStyles = makeStyles(theme => ({
     paddingTop: theme.spacing(4),
     paddingBottom: theme.spacing(4),
   },
-  paper: {
-    padding: theme.spacing(2),
-    display: 'flex',
-    overflow: 'auto',
-    flexDirection: 'column',
-  },
   fixedHeight: {
     height: 240,
   },
 }));
 
-export interface AppProps {
-  children: Node;
+export interface AppInputs {
+  isLeftDrawerOpen: boolean;
+  isRightDrawerOpen: boolean;
 }
 
-export const App: React.FC = props => {
-  const { children } = props;
+export interface AppDispatches {
+  openLeftDrawer: () => void;
+  closeLeftDrawer: () => void;
+  openRightDrawer: () => void;
+  closeRightDrawer: () => void;
+}
+
+export type AppProps = AppInputs & AppDispatches;
+
+export const AppComponent: React.FC<AppProps> = props => {
+  const {
+    children,
+    isLeftDrawerOpen,
+    openLeftDrawer,
+    closeLeftDrawer,
+    isRightDrawerOpen,
+    openRightDrawer,
+    closeRightDrawer,
+  } = props;
+
   const classes = useStyles(props);
 
-  const [leftOpen, setLeftOpen] = useState(false);
-  const [rightOpen, setRightOpen] = useState(false);
+  const handleLeftDrawerOpen = useCallback(() => openLeftDrawer(), [openLeftDrawer]);
 
-  const handleLeftDrawerOpen = useCallback(() => {
-    setLeftOpen(true);
-  }, [setLeftOpen]);
-
-  const handleLeftDrawerClose = useCallback(() => {
-    setLeftOpen(false);
-  }, [setLeftOpen]);
+  const handleLeftDrawerClose = useCallback(() => closeLeftDrawer(), [closeLeftDrawer]);
 
   const shouldSkipSwipe = useCallback(
     (event: React.KeyboardEvent | React.MouseEvent) =>
@@ -136,9 +150,9 @@ export const App: React.FC = props => {
       if (shouldSkipSwipe(event)) {
         return;
       }
-      setRightOpen(true);
+      openRightDrawer();
     },
-    [setRightOpen, shouldSkipSwipe],
+    [openRightDrawer, shouldSkipSwipe],
   );
 
   const handleRightDrawerClose = useCallback(
@@ -146,21 +160,24 @@ export const App: React.FC = props => {
       if (shouldSkipSwipe(event)) {
         return;
       }
-      setRightOpen(false);
+      closeRightDrawer();
     },
-    [setRightOpen, shouldSkipSwipe],
+    [closeRightDrawer, shouldSkipSwipe],
   );
 
   return (
     <div className={classes.root}>
-      <AppBar position="absolute" className={clsx(classes.appBar, leftOpen && classes.appBarShift)}>
+      <AppBar
+        position="absolute"
+        className={clsx(classes.appBar, isLeftDrawerOpen && classes.appBarShift)}
+      >
         <Toolbar className={classes.toolbar}>
           <IconButton
             edge="start"
             color="inherit"
             aria-label="Open menu"
             onClick={handleLeftDrawerOpen}
-            className={clsx(classes.menuButton, leftOpen && classes.menuButtonHidden)}
+            className={clsx(classes.menuButton, isLeftDrawerOpen && classes.menuButtonHidden)}
           >
             <MenuIcon />
           </IconButton>
@@ -175,11 +192,11 @@ export const App: React.FC = props => {
       <Drawer
         variant="permanent"
         classes={{
-          paper: clsx(classes.drawerPaper, !leftOpen && classes.drawerPaperClose),
+          paper: clsx(classes.drawerPaper, !isLeftDrawerOpen && classes.drawerPaperClose),
         }}
-        open={leftOpen}
+        open={isLeftDrawerOpen}
       >
-        <div className={classes.toolbarIcon}>
+        <div className={classes.toolbarLeftIcon}>
           <IconButton onClick={handleLeftDrawerClose}>
             <ChevronLeftIcon />
           </IconButton>
@@ -198,10 +215,16 @@ export const App: React.FC = props => {
       </Drawer>
       <SwipeableDrawer
         anchor="right"
-        open={rightOpen}
+        open={isRightDrawerOpen}
         onClose={handleRightDrawerClose}
         onOpen={handleRightDrawerOpen}
       >
+        <div className={classes.toolbarRightIcon}>
+          <IconButton onClick={handleRightDrawerClose}>
+            <ChevronRightIcon />
+          </IconButton>
+        </div>
+        <Divider />
         <CreateTimeEntry />
       </SwipeableDrawer>
       <main className={classes.content}>

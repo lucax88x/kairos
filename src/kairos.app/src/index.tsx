@@ -11,7 +11,7 @@ import { Provider } from 'react-redux';
 import { Route } from 'react-router-dom';
 import { AnimatedSwitch, IAnimatedSwitchTransition } from 'react-router-transition';
 
-import { App } from './App';
+import { App } from './App.container';
 import { history, store } from './createStore';
 import { Dashboard } from './dashboard/Dashboard';
 import { enqueueSnackbarAction } from './notification-manager/enqueue-snackbar';

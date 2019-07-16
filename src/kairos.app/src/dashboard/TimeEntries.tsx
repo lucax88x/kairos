@@ -1,25 +1,25 @@
 import { Table, TableBody, TableCell, TableHead, TableRow, Typography } from '@material-ui/core';
 import { map } from 'ramda';
-import React from 'react';
-import { formatAsDate } from '../code/constants';
+import React, { memo } from 'react';
 
+import Spinner from '../components/Spinner';
 import { TimeEntryModel } from '../models/time-entry.model';
-import { format } from 'date-fns';
+import { TimeEntry } from './TimeEntry';
 
 const modelToCells = map<TimeEntryModel, JSX.Element>(model => (
-  <TableRow key={model.id.value}>
-    <TableCell>{format(model.when, formatAsDate)}</TableCell>
-    <TableCell>{model.type}</TableCell>
-  </TableRow>
+  <TimeEntry key={model.id.value} timeEntry={model} />
 ));
 
 export interface TimeEntriesInputs {
   timeEntries: TimeEntryModel[];
+  isBusy: boolean;
 }
 
-export const TimeEntriesComponent: React.FC<TimeEntriesInputs> = ({ timeEntries }) => {
+export const TimeEntriesComponent: React.FC<TimeEntriesInputs> = memo(props => {
+  const { timeEntries, isBusy } = props;
+
   return (
-    <React.Fragment>
+    <Spinner show={isBusy}>
       <Typography component="h2" variant="h6" color="primary" gutterBottom>
         Time Entries
       </Typography>
@@ -32,6 +32,6 @@ export const TimeEntriesComponent: React.FC<TimeEntriesInputs> = ({ timeEntries 
         </TableHead>
         <TableBody>{modelToCells(timeEntries)}</TableBody>
       </Table>
-    </React.Fragment>
+    </Spinner>
   );
-};
+});

@@ -1,70 +1,118 @@
 import DateFnsUtils from '@date-io/date-fns';
 import {
-  Button,
+  Divider,
   FormControl,
   FormControlLabel,
-  FormLabel,
   Grid,
+  makeStyles,
   Radio,
   RadioGroup,
 } from '@material-ui/core';
 import {
   KeyboardDatePicker,
   KeyboardTimePicker,
+  MaterialUiPickersDate,
   MuiPickersUtilsProvider,
 } from '@material-ui/pickers';
 import React, { useCallback, useState } from 'react';
 
+import { mergeDateAndTime } from './code/mergeDateAndTime';
+import ButtonSpinner from './components/ButtonSpinner';
 import { TimeEntryTypes } from './models/time-entry.model';
 
-export interface CreateTimeEntryDispatches {
-  createTimeEntry: () => void;
+const useStyles = makeStyles(theme => ({
+  hasPadding: {
+    padding: theme.spacing(3),
+  },
+}));
+
+export interface CreateTimeEntryInputs {
+  isBusy: boolean;
 }
 
-export const CreateTimeEntryComponent: React.FC<CreateTimeEntryDispatches> = ({
-  createTimeEntry,
-}) => {
-  const [date, setDate] = useState();
-  const [time, setTime] = useState();
+export interface CreateTimeEntryDispatches {
+  createTimeEntry: (type: TimeEntryTypes, when: Date) => void;
+}
 
-  const onCreateTimeEntry = useCallback(() => createTimeEntry(), [createTimeEntry]);
+type CreateTimeEntryProps = CreateTimeEntryInputs & CreateTimeEntryDispatches;
+
+export const CreateTimeEntryComponent: React.FC<CreateTimeEntryProps> = props => {
+  const classes = useStyles(props);
+
+  const { createTimeEntry, isBusy } = props;
+
+  const [type, setType] = useState(TimeEntryTypes.IN);
+  const [date, setDate] = useState<Date | null>(new Date());
+  const [time, setTime] = useState<Date | null>(new Date());
+
+  const handleCreateTimeEntry = useCallback(() => {
+    if (!!date && !!time) {
+      createTimeEntry(type, mergeDateAndTime(date, time));
+    }
+  }, [createTimeEntry, type, date, time]);
+  const handleTypeChange = useCallback((_, value: string) => setType(value as TimeEntryTypes), [
+    setType,
+  ]);
+  const handleDateChange = useCallback((date: MaterialUiPickersDate) => setDate(date), [setDate]);
+  const handleTimeChange = useCallback((date: MaterialUiPickersDate) => setTime(date), [setTime]);
 
   return (
-    <Grid>
-      <Grid>
+    <Grid container direction="column">
+      <Grid
+        className={classes.hasPadding}
+        container
+        direction="column"
+        justify="center"
+        alignItems="center"
+      >
         <FormControl component="fieldset">
-          <FormLabel component="legend">In / Out</FormLabel>
-          <RadioGroup aria-label="timeEntryType" name="timeEntryType" row>
+          <RadioGroup
+            aria-label="timeEntryType"
+            name="timeEntryType"
+            row
+            value={type}
+            onChange={handleTypeChange}
+          >
             <FormControlLabel value={TimeEntryTypes.IN} control={<Radio />} label="In" />
             <FormControlLabel value={TimeEntryTypes.OUT} control={<Radio />} label="Out" />
           </RadioGroup>
         </FormControl>
-      </Grid>
-      <Grid container justify="space-around">
         <MuiPickersUtilsProvider utils={DateFnsUtils}>
           <KeyboardDatePicker
             margin="normal"
-            label="Date"
             value={date}
-            onChange={setDate}
+            onChange={handleDateChange}
             KeyboardButtonProps={{
               'aria-label': 'change date',
             }}
           />
           <KeyboardTimePicker
             margin="normal"
-            label="Time"
             value={time}
-            onChange={setTime}
+            ampm={false}
+            onChange={handleTimeChange}
             KeyboardButtonProps={{
               'aria-label': 'change time',
             }}
           />
         </MuiPickersUtilsProvider>
       </Grid>
-      <Button variant="contained" onClick={onCreateTimeEntry}>
-        Confirm
-      </Button>
+      <Divider />
+      <Grid
+        container
+        direction="column"
+        justify="center"
+        alignItems="center"
+        className={classes.hasPadding}
+      >
+        <ButtonSpinner
+          onClick={handleCreateTimeEntry}
+          isBusy={isBusy}
+          disabled={!date || !time || isBusy}
+        >
+          {type}
+        </ButtonSpinner>
+      </Grid>
     </Grid>
   );
 };
