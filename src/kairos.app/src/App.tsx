@@ -19,9 +19,11 @@ import DashboardIcon from '@material-ui/icons/Dashboard';
 import MenuIcon from '@material-ui/icons/Menu';
 import TimerIcon from '@material-ui/icons/Timer';
 import clsx from 'clsx';
-import React, { useCallback, useState } from 'react';
+import React, { useCallback } from 'react';
+import { Link } from 'react-router-dom';
 
 import { CreateTimeEntry } from './CreateTimeEntry.container';
+import { Routes } from './routes';
 
 const drawerWidth = 240;
 
@@ -103,6 +105,10 @@ const useStyles = makeStyles(theme => ({
   fixedHeight: {
     height: 240,
   },
+  link: {
+    color: 'inherit',
+    textDecoration: 'none',
+  },
 }));
 
 export interface AppInputs {
@@ -182,7 +188,9 @@ export const AppComponent: React.FC<AppProps> = props => {
             <MenuIcon />
           </IconButton>
           <Typography component="h1" variant="h6" color="inherit" noWrap className={classes.title}>
-            Dashboard
+            <Link to={Routes.Dashboard} className={classes.link}>
+              kairos
+            </Link>
           </Typography>
           <IconButton color="inherit" aria-label="Open time" onClick={handleRightDrawerOpen}>
             <TimerIcon />
@@ -203,14 +211,12 @@ export const AppComponent: React.FC<AppProps> = props => {
         </div>
         <Divider />
         <List>
-          <div>
-            <ListItem button>
-              <ListItemIcon>
-                <DashboardIcon />
-              </ListItemIcon>
-              <ListItemText primary="Dashboard" />
-            </ListItem>
-          </div>
+          <ListItem button to={Routes.Dashboard} component={Link}>
+            <ListItemIcon>
+              <DashboardIcon />
+            </ListItemIcon>
+            <ListItemText primary="Dashboard" />
+          </ListItem>
         </List>
       </Drawer>
       <SwipeableDrawer

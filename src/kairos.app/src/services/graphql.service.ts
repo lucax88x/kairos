@@ -30,7 +30,7 @@ function call<R, P = null>(query: string, data?: P): Promise<R> {
   });
 }
 
-export function query<R, P = null>(query: string, data?: P): Promise<R> {
+export function query<R, P = {}>(query: string, data?: P): Promise<R> {
   return call<R, P>(query, data);
 }
 

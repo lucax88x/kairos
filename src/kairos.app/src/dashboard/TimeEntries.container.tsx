@@ -1,12 +1,27 @@
+import { push } from 'connected-react-router';
 import { connect } from 'react-redux';
+import { Dispatch } from 'redux';
 
+import { Actions } from '../actions';
+import { TimeEntryModel } from '../models/time-entry.model';
+import { deleteTimeEntryAsync } from '../shared/delete-time-entry';
+import { selectIsDeleteTimeEntryBusy } from '../shared/selectors';
 import { State } from '../state';
-import { selectTimeEntries, selectIsTimeEntriesBusy } from './selectors';
-import { TimeEntriesComponent, TimeEntriesInputs } from './TimeEntries';
+import { selectIsGetTimeEntriesBusy, selectTimeEntries } from './selectors';
+import { TimeEntriesComponent, TimeEntriesDispatches, TimeEntriesInputs } from './TimeEntries';
 
 const mapStateToProps = (state: State): TimeEntriesInputs => ({
   timeEntries: selectTimeEntries(state),
-  isBusy: selectIsTimeEntriesBusy(state),
+  isGetTimeEntriesBusy: selectIsGetTimeEntriesBusy(state),
+  isDeleteTimeEntryBusy: selectIsDeleteTimeEntryBusy(state),
 });
 
-export const TimeEntries = connect(mapStateToProps)(TimeEntriesComponent);
+const mapDispatchToProps = (dispatch: Dispatch<Actions>): TimeEntriesDispatches => ({
+  onUpdate: (model: TimeEntryModel) => dispatch(push(`/entry/${model.id}`)),
+  onDelete: (model: TimeEntryModel) => dispatch(deleteTimeEntryAsync.request({ model })),
+});
+
+export const TimeEntries = connect(
+  mapStateToProps,
+  mapDispatchToProps,
+)(TimeEntriesComponent);

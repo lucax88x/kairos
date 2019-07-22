@@ -4,8 +4,7 @@ import { createAsyncAction } from 'typesafe-actions';
 
 import { SharedActions } from '../actions';
 import { closeRightDrawerAction } from '../layout/actions';
-import { TimeEntryTypes } from '../models/time-entry.model';
-import { UUID } from '../models/uuid.model';
+import { TimeEntryModel } from '../models/time-entry.model';
 import { createTimeEntry } from '../services/time-entry/time-entry.service';
 import {
   CREATE_TIME_ENTRY,
@@ -18,17 +17,11 @@ export const createTimeEntryAsync = createAsyncAction(
   CREATE_TIME_ENTRY,
   CREATE_TIME_ENTRY_SUCCESS,
   CREATE_TIME_ENTRY_FAILURE,
-)<{ type: TimeEntryTypes; when: Date }, void, string>();
+)<TimeEntryModel, void, string>();
 
-function* doCreateTimeEntry({
-  payload: { type, when },
-}: ReturnType<typeof createTimeEntryAsync.request>) {
+function* doCreateTimeEntry({ payload }: ReturnType<typeof createTimeEntryAsync.request>) {
   try {
-    yield call(createTimeEntry, {
-      id: UUID.Generate(),
-      type: type,
-      when: when,
-    });
+    yield call(createTimeEntry, payload);
 
     yield put(createTimeEntryAsync.success());
   } catch (error) {

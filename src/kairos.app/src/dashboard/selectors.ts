@@ -19,7 +19,7 @@ export const selectBusy = createSelector(
   ui => ui.busy,
 );
 
-export const selectIsTimeEntriesBusy = createSelector(
+export const selectIsGetTimeEntriesBusy = createSelector(
   selectBusy,
-  busy => busy.timeEntries,
+  busy => busy.getTimeEntries,
 );

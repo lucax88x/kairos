@@ -2,12 +2,12 @@
 {
     public class FluentRedisAssertion
     {
-        public FluentRedisAssertion(FluentRedisExistsAssertion fluentRedisExistsAssertion)
+        public FluentRedisAssertion(FluentRedisExistsAssertion fluentRedisExistsAssertion, FluentRedisNotExistsAssertion notExists)
         {
             Exists = fluentRedisExistsAssertion;
+            NotExists = notExists;
         }
-
-        public FluentRedisAssertion Redis { get; set; }
-        public FluentRedisExistsAssertion Exists { get; }
+        public FluentRedisExistsAssertion Exists { get; } 
+        public FluentRedisNotExistsAssertion NotExists { get; }
     }
 }

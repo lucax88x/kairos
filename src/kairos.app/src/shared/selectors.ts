@@ -18,3 +18,8 @@ export const selectIsCreateTimeEntryBusy = createSelector(
   selectBusy,
   busy => busy.createTimeEntry,
 );
+
+export const selectIsDeleteTimeEntryBusy = createSelector(
+  selectBusy,
+  busy => busy.deleteTimeEntry,
+);

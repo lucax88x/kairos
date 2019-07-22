@@ -1,3 +1,4 @@
 export class Routes {
-  static Dashboard = '/';
+  static Dashboard = '/dashboard';
+  static EditTimeEntry = '/entry/:id';
 }

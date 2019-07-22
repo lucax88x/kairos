@@ -8,7 +8,7 @@ using MediatR;
 
 namespace Kairos.Application.TimeEntry
 {
-    public class TimeEntryService : IRequestHandler<CreateTimeEntry, Guid>
+    public class TimeEntryService : IRequestHandler<CreateTimeEntry, Guid>, IRequestHandler<DeleteTimeEntry, Guid>
     {
         private readonly IWriteRepository _writeRepository;
         private readonly IMediator _mediator;
@@ -28,6 +28,19 @@ namespace Kairos.Application.TimeEntry
             foreach (var evt in events) await _mediator.Publish(evt, cancellationToken);
 
             return timeEntry.Id;
+        }
+        
+        public async Task<Guid> Handle(DeleteTimeEntry request, CancellationToken cancellationToken)
+        {
+            var timeEntry = await _writeRepository.Get<Domain.TimeEntry>(request.Id);
+
+            timeEntry.Delete();
+
+            var events = await _writeRepository.Save(timeEntry);
+
+            foreach (var evt in events) await _mediator.Publish(evt, cancellationToken);
+
+            return request.Id;
         }
     }
 }

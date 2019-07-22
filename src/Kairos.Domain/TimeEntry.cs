@@ -19,14 +19,25 @@ namespace Kairos.Domain
         {
             switch (@event)
             {
-                case TimeEntryAdded timeTracked:
+                case TimeEntryAdded added:
                 {
-                    Id = timeTracked.Id;
-                    When = timeTracked.When;
-                    Type = timeTracked.Type;
+                    Id = added.Id;
+                    When = added.When;
+                    Type = added.Type;
+                    return;
+                }
+
+                case TimeEntryDeleted _:
+                {
+                    IsDeleted = true;
                     return;
                 }
             }
+        }
+
+        public void Delete()
+        {
+            ApplyChange(new TimeEntryDeleted(Id));
         }
 
         public static TimeEntry Create(Guid id, DateTimeOffset when, TimeEntryType type)

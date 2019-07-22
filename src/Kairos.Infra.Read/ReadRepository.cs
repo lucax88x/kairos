@@ -1,10 +1,14 @@
 ﻿using System;
+using System.Collections;
+using System.Collections.Generic;
 using System.Collections.Immutable;
+using System.ComponentModel.Design;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Kairos.Common;
 using Kairos.Common.Exceptions.Technical;
+using Newtonsoft.Json;
 using StackExchange.Redis;
 using StackExchange.Redis.KeyspaceIsolation;
 
@@ -13,17 +17,30 @@ namespace Kairos.Infra.Read
     public interface IReadRepository
     {
         Task Set<T>(Guid id, T obj, string path = ".", CommandFlags flags = CommandFlags.None);
-        Task Set<T>(RedisKey key, T obj, string path = ".", CommandFlags flags = CommandFlags.None);
+        Task Set<T>(string key, T obj, string path = ".", CommandFlags flags = CommandFlags.None);
+
+        Task SetRemove(Guid id, string path = ".", CommandFlags flags = CommandFlags.None);
+        Task SetRemove(string key, string path = ".", CommandFlags flags = CommandFlags.None);
 
         Task<bool> Exists(Guid id, string path = ".", CommandFlags flags = CommandFlags.None);
-        Task<bool> Exists(RedisKey key, string path = ".", CommandFlags flags = CommandFlags.None);
+        Task<bool> Exists(string key, string path = ".", CommandFlags flags = CommandFlags.None);
 
         Task<T> Get<T>(Guid id, string path = ".", CommandFlags flags = CommandFlags.None);
-        Task<T> Get<T>(RedisKey key, string path = ".", CommandFlags flags = CommandFlags.None);
+        Task<T> Get<T>(string key, string path = ".", CommandFlags flags = CommandFlags.None);
 
-        Task SortedSetAdd<T>(RedisKey key, double score, T obj, CommandFlags flags = CommandFlags.None);
+        Task<ImmutableArray<T>> GetMultiple<T>(IEnumerable<Guid> ids, string path = ".",
+            CommandFlags flags = CommandFlags.None);
 
-        Task<ImmutableArray<T>> SortedSetRangeByScore<T>(RedisKey key,
+        Task<ImmutableArray<T>> GetMultiple<T>(IEnumerable<string> ids, string path = ".",
+            CommandFlags flags = CommandFlags.None);
+
+        Task SortedSetAdd(string key, double score, Guid id, CommandFlags flags = CommandFlags.None);
+        Task SortedSetAdd(string key, double score, string id, CommandFlags flags = CommandFlags.None);
+
+        Task SortedSetRemove(string key, Guid id, CommandFlags flags = CommandFlags.None);
+        Task SortedSetRemove(string key, string id, CommandFlags flags = CommandFlags.None);
+
+        Task<ImmutableArray<string>> SortedSetRangeByScore(string key,
             double start = double.NegativeInfinity,
             double stop = double.PositiveInfinity,
             Exclude exclude = Exclude.None,
@@ -50,11 +67,23 @@ namespace Kairos.Infra.Read
             await Set(id.ToString(), obj, path, flags);
         }
 
-        public async Task Set<T>(RedisKey key, T obj, string path = ".", CommandFlags flags = CommandFlags.None)
+        public async Task Set<T>(string key, T obj, string path = ".", CommandFlags flags = CommandFlags.None)
         {
             var json = _serializer.Serialize(obj);
 
             var value = await _database.ExecuteAsync("JSON.SET", new object[] {key, path, json}, flags);
+
+            if (value.IsNull) throw new NotFoundItemException();
+        }
+
+        public async Task SetRemove(Guid id, string path = ".", CommandFlags flags = CommandFlags.None)
+        {
+            await SetRemove(id.ToString(), path, flags);
+        }
+
+        public async Task SetRemove(string key, string path = ".", CommandFlags flags = CommandFlags.None)
+        {
+            var value = await _database.ExecuteAsync("JSON.DEL", new object[] {key, path}, flags);
 
             if (value.IsNull) throw new NotFoundItemException();
         }
@@ -64,7 +93,7 @@ namespace Kairos.Infra.Read
             return await Exists(id.ToString(), path, flags);
         }
 
-        public async Task<bool> Exists(RedisKey key, string path = ".", CommandFlags flags = CommandFlags.None)
+        public async Task<bool> Exists(string key, string path = ".", CommandFlags flags = CommandFlags.None)
         {
             var value = await _database.ExecuteAsync("JSON.GET", new object[] {key, path}, flags);
 
@@ -76,7 +105,7 @@ namespace Kairos.Infra.Read
             return await Get<T>(id.ToString(), path, flags);
         }
 
-        public async Task<T> Get<T>(RedisKey key, string path = ".", CommandFlags flags = CommandFlags.None)
+        public async Task<T> Get<T>(string key, string path = ".", CommandFlags flags = CommandFlags.None)
         {
             var value = await _database.ExecuteAsync("JSON.GET", new object[] {key, path}, flags);
 
@@ -85,14 +114,60 @@ namespace Kairos.Infra.Read
             return _serializer.Deserialize<T>(Encoding.UTF8.GetString((byte[]) value));
         }
 
-        public async Task SortedSetAdd<T>(RedisKey key, double score, T obj, CommandFlags flags = CommandFlags.None)
+        public async Task<ImmutableArray<T>> GetMultiple<T>(IEnumerable<Guid> ids, string path = ".",
+            CommandFlags flags = CommandFlags.None)
         {
-            var json = _serializer.Serialize(obj);
-
-            await _database.SortedSetAddAsync(key, json, score, flags);
+            return await GetMultiple<T>(ids.Select(id => id.ToString()), path, flags);
         }
 
-        public async Task<ImmutableArray<T>> SortedSetRangeByScore<T>(RedisKey key,
+        public async Task<ImmutableArray<T>> GetMultiple<T>(IEnumerable<string> ids, string path = ".",
+            CommandFlags flags = CommandFlags.None)
+        {
+            var keys = ids.ToList();
+
+            var parameters = new object[keys.Count + 1];
+            
+            for (var i = 0; i < keys.Count; i++)
+            {
+                parameters[i] = keys[i];
+            }
+            parameters[keys.Count] = path;
+            
+            var values = await _database.ExecuteAsync("JSON.MGET",  parameters, flags);
+
+            var array = (byte[][])values;
+            
+            var result = array
+                .Select(value => _serializer.Deserialize<T>(Encoding.UTF8.GetString(value))).ToList();
+
+            return result.ToImmutableArray();
+        }
+
+        public async Task SortedSetAdd(string key, double score, Guid id,
+            CommandFlags flags = CommandFlags.None)
+        {
+            await SortedSetAdd(key, score, id.ToString(), flags);
+        }
+
+        public async Task SortedSetAdd(string key, double score, string id,
+            CommandFlags flags = CommandFlags.None)
+        {
+            await _database.SortedSetAddAsync(key, id, score, flags);
+        }
+
+        public async Task SortedSetRemove(string key, Guid id,
+            CommandFlags flags = CommandFlags.None)
+        {
+            await SortedSetRemove(key, id.ToString(), flags);
+        }
+
+        public async Task SortedSetRemove(string key, string id,
+            CommandFlags flags = CommandFlags.None)
+        {
+            await _database.SortedSetRemoveAsync(key, id, flags);
+        }
+
+        public async Task<ImmutableArray<string>> SortedSetRangeByScore(string key,
             double start = double.NegativeInfinity,
             double stop = double.PositiveInfinity,
             Exclude exclude = Exclude.None,
@@ -104,7 +179,7 @@ namespace Kairos.Infra.Read
             var result =
                 await _database.SortedSetRangeByScoreAsync(key, start, stop, exclude, order, skip, take, flags);
 
-            return result.Select(m => m == RedisValue.Null ? default(T) : _serializer.Deserialize<T>(m))
+            return result.Select(m => m == RedisValue.Null ? default : m.ToString())
                 .ToImmutableArray();
         }
     }

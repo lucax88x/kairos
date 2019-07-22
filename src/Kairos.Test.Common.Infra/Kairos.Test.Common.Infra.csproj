@@ -12,6 +12,8 @@
     </ItemGroup>
 
     <ItemGroup>
+      <ProjectReference Include="..\Kairos.Application\Kairos.Application.csproj" />
+      <ProjectReference Include="..\Kairos.Domain\Kairos.Domain.csproj" />
       <ProjectReference Include="..\Kairos.Infra.Read\Kairos.Infra.Read.csproj" />
       <ProjectReference Include="..\Kairos.Infra.Write\Kairos.Infra.Write.csproj" />
       <ProjectReference Include="..\Kairos.Test.Common\Kairos.Test.Common.csproj" />

@@ -3,7 +3,6 @@ using System.Threading.Tasks;
 using FluentAssertions;
 using Kairos.Application.TimeEntry.Commands;
 using Kairos.Domain;
-using Kairos.Infra.Read.TimeEntry;
 using Kairos.Test.Common.Infra;
 using Xunit;
 using FluentValidation;
@@ -50,7 +49,26 @@ namespace Kairos.Application.Tests.TimeEntry
             // TODO: check if event store has event
 //            await _sandbox.Should.Cassandra.Exists(id);
             await _sandbox.Should.Redis.Exists.Set("time-entry", id);
-            await _sandbox.Should.Redis.Exists.SortedSet<TimeEntryReadDto>("time-entry", "by-when", 1);
+            await _sandbox.Should.Redis.Exists.SortedSet("time-entry", "by-when", 1);
+        }
+        
+        [Fact]
+        public async Task should_delete_time_entry()
+        {
+            // GIVEN
+            var existingId = await _sandbox.Scenario.TimeEntry.With("2019/01/01", TimeEntryType.In);
+            _sandbox.ClearMediator();
+            
+            var command = new DeleteTimeEntry(existingId);
+
+            // WHEN           
+            await _sandbox.Mediator.Send(command);
+
+            // THEN
+            _sandbox.Should.Mediator.Be("DeleteTimeEntry -> TimeEntryDeleted");
+
+            await _sandbox.Should.Redis.NotExists.Set("time-entry", existingId);
+            await _sandbox.Should.Redis.NotExists.SortedSet("time-entry", "by-when");
         }
 
         public void Dispose()

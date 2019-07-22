@@ -10,6 +10,7 @@ namespace Kairos.Application.TimeEntry
 {
     public class TimeEntryProjection :
         INotificationHandler<TimeEntryAdded>,
+        INotificationHandler<TimeEntryDeleted>,
         IRequestHandler<GetTimeEntryById, TimeEntryReadDto>,
         IRequestHandler<GetTimeEntries, ImmutableArray<TimeEntryReadDto>>
     {
@@ -23,6 +24,11 @@ namespace Kairos.Application.TimeEntry
         public async Task Handle(TimeEntryAdded notification, CancellationToken cancellationToken)
         {
             await _timeEntryReadRepository.Add(notification.Id, notification.When, (int) notification.Type);
+        }
+        
+        public async Task Handle(TimeEntryDeleted notification, CancellationToken cancellationToken)
+        {
+            await _timeEntryReadRepository.Delete(notification.Id);
         }
 
         public async Task<TimeEntryReadDto> Handle(GetTimeEntryById request, CancellationToken cancellationToken)

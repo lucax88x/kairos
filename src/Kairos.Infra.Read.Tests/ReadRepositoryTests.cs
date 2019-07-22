@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using FluentAssertions;
@@ -11,12 +12,12 @@ using Module = Kairos.Infra.Read.Ioc.Module;
 
 namespace Kairos.Infra.Read.Tests
 {
-    public class ReadRepositoryTest : IDisposable
+    public class ReadRepositoryTests : IDisposable
     {
         private readonly Sandbox _sandbox;
         private readonly IReadRepository _sut;
 
-        public ReadRepositoryTest()
+        public ReadRepositoryTests()
         {
             var configBuilder = new ConfigBuilder();
 
@@ -73,18 +74,64 @@ namespace Kairos.Infra.Read.Tests
         }
 
         [Fact]
+        public async Task should_get_multiple_values()
+        {
+            // GIVEN
+            await _sut.Set("id1", new SampleObject("sample-text-1"));
+            await _sut.Set("id2", new SampleObject("sample-text-2"));
+            await _sut.Set("id3", new SampleObject("sample-text-3"));
+
+            // WHEN
+            var collection = await _sut.GetMultiple<SampleObject>(new List<string> {"id1", "id3"});
+
+            collection.Select(obj => obj.Text)
+                .Should().Equal("sample-text-1", "sample-text-3");
+        }
+
+        [Fact]
+        public async Task should_set_remove_value()
+        {
+            // GIVEN
+            await _sut.Set("key", new SampleObject("sample-text"));
+
+            // WHEN   
+            await _sut.SetRemove("key");
+
+            // THEN            
+            var result = await _sut.Exists("key");
+            result.Should().BeFalse();
+        }
+
+        [Fact]
         public async Task should_add_values_to_sorted_set_and_return_ordered()
         {
             // WHEN            
-            await _sut.SortedSetAdd("sorted-set", 1, new SampleObject("sample-text-1"));
-            await _sut.SortedSetAdd("sorted-set", 3, new SampleObject("sample-text-3"));
-            await _sut.SortedSetAdd("sorted-set", 2, new SampleObject("sample-text-2"));
+            await _sut.SortedSetAdd("sorted-set", 1, "id1");
+            await _sut.SortedSetAdd("sorted-set", 3, "id2");
+            await _sut.SortedSetAdd("sorted-set", 2, "id3");
 
             // THEN            
-            var collection = await _sut.SortedSetRangeByScore<SampleObject>("sorted-set");
+            var collection = await _sut.SortedSetRangeByScore("sorted-set");
             collection
-                .Select(s => s.Text)
-                .Should().Equal("sample-text-1", "sample-text-2", "sample-text-3");
+                .Should().Equal("id1", "id3", "id2");
+        }
+
+        [Fact]
+        public async Task should_remove_values_from_sorted_set_and_return_not_deleted_and_ordered()
+        {
+            // GIVEN
+            await _sut.SortedSetAdd("sorted-set", 1, "id1");
+            await _sut.SortedSetAdd("sorted-set", 3, "id2");
+            await _sut.SortedSetAdd("sorted-set", 2, "id3");
+
+            // WHEN            
+            await _sut.SortedSetRemove("sorted-set", "id2");
+
+
+            // THEN
+            var collection = await _sut.SortedSetRangeByScore("sorted-set");
+            collection
+                .Should().Equal("id1", "id3");
         }
 
         public void Dispose()

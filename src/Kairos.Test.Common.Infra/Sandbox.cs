@@ -104,11 +104,17 @@ namespace Kairos.Test.Common.Infra
 
             builder.RegisterType<FluentRedisExistsAssertion>().AsSelf().SingleInstance()
                 .PropertiesAutowired(PropertyWiringOptions.AllowCircularDependencies);
+
+            builder.RegisterType<FluentRedisNotExistsAssertion>().AsSelf().SingleInstance()
+                .PropertiesAutowired(PropertyWiringOptions.AllowCircularDependencies);
         }
 
         private void RegisterScenarioBuilder(ContainerBuilder builder)
         {
             builder.RegisterType<ScenarioBuilder>().AsSelf().SingleInstance()
+                .PropertiesAutowired(PropertyWiringOptions.AllowCircularDependencies);
+            
+            builder.RegisterType<TimeEntryScenarioBuilder>().AsSelf().SingleInstance()
                 .PropertiesAutowired(PropertyWiringOptions.AllowCircularDependencies);
         }
 

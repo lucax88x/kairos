@@ -8,12 +8,14 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import { spring } from 'react-motion';
 import { Provider } from 'react-redux';
-import { Route } from 'react-router-dom';
+import { Redirect, Route } from 'react-router-dom';
 import { AnimatedSwitch, IAnimatedSwitchTransition } from 'react-router-transition';
 
 import { App } from './App.container';
 import { history, store } from './createStore';
 import { Dashboard } from './dashboard/Dashboard';
+import { EditTimeEntry } from './edit-time-entry/EditTimeEntry.container';
+import { NotFound } from './NotFound';
 import { enqueueSnackbarAction } from './notification-manager/enqueue-snackbar';
 import { NotificationManager } from './notification-manager/NotificationManager.container';
 import { Routes } from './routes';
@@ -60,6 +62,7 @@ ReactDOM.render(
       <CssBaseline />
       <SnackbarProvider
         maxSnack={3}
+        preventDuplicate={true}
         anchorOrigin={{
           vertical: 'top',
           horizontal: 'right',
@@ -68,13 +71,16 @@ ReactDOM.render(
         <NotificationManager />
       </SnackbarProvider>
 
-      <App>
-        <ConnectedRouter history={history}>
+      <ConnectedRouter history={history}>
+        <App>
           <AnimatedSwitch {...pageTransitions} mapStyles={mapStyles} className="switch-wrapper">
             <Route exact={true} path={Routes.Dashboard} component={Dashboard} />
+            <Route path={Routes.EditTimeEntry} component={EditTimeEntry} />
+            <Redirect exact={true} from="/" to={Routes.Dashboard} />
+            <Route component={NotFound} />
           </AnimatedSwitch>
-        </ConnectedRouter>
-      </App>
+        </App>
+      </ConnectedRouter>
     </ThemeProvider>
   </Provider>,
   document.getElementById('root'),

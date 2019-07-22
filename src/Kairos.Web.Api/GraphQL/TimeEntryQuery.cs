@@ -16,7 +16,7 @@ namespace Kairos.Web.Api.GraphQL
                 "TimeEntry",
                 "The time entry",
                 new QueryArguments(
-                    new QueryArgument<NonNullGraphType<StringGraphType>>
+                    new QueryArgument<IdGraphType>
                         {Name = "id", Description = "id of the time entry"}
                 ),
                 async context => await mediator.Send(new GetTimeEntryById(context.GetArgument<Guid>("id"))));

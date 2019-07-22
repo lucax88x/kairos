@@ -1,15 +1,15 @@
-﻿using System;
+using System;
 using System.Threading.Tasks;
 using FluentAssertions;
 using Kairos.Infra.Read;
 
 namespace Kairos.Test.Common.Infra.FluentAssertion
 {
-    public class FluentRedisExistsAssertion
+    public class FluentRedisNotExistsAssertion
     {
         private readonly ReadRepositoryFactory _readRepositoryFactory;
 
-        public FluentRedisExistsAssertion(ReadRepositoryFactory readRepositoryFactory)
+        public FluentRedisNotExistsAssertion(ReadRepositoryFactory readRepositoryFactory)
         {
             _readRepositoryFactory = readRepositoryFactory;
         }
@@ -20,18 +20,18 @@ namespace Kairos.Test.Common.Infra.FluentAssertion
 
             var result = await readRepository.Exists(id);
 
-            if (!result) true.Should().BeFalse($"does not exist with {id}!");
+            if (result) true.Should().BeFalse($"does exists with {id}!");
 
             true.Should().BeTrue();
         }
         
-        public async Task SortedSet(string prefix, string key, int count)
+        public async Task SortedSet(string prefix, string key)
         {
             var readRepository = _readRepositoryFactory.Build(prefix);
 
             var ids = await readRepository.SortedSetRangeByScore(key);
 
-            ids.Should().HaveCount(count);
+            ids.Should().HaveCount(0);
         }
     }
 }

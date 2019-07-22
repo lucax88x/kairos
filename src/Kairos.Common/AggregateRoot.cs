@@ -11,6 +11,7 @@ namespace Kairos.Common
         public Guid Id { get; protected set; } = Guid.NewGuid();
         public long Version { get; private set; } = -1;
         public bool HasChanges => !_changes.IsEmpty;
+        public bool IsDeleted { get; protected set; }
 
         public ImmutableList<Event> GetUncommittedChanges()
         {

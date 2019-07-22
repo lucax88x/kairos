@@ -5,7 +5,7 @@ export interface DashboardState {
 
   ui: {
     busy: {
-      timeEntries: boolean;
+      getTimeEntries: boolean;
     };
   };
 }
@@ -15,7 +15,7 @@ export const dashboardInitialState: DashboardState = {
 
   ui: {
     busy: {
-      timeEntries: false,
+      getTimeEntries: false,
     },
   },
 };
