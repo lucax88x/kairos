@@ -1,6 +1,6 @@
 import { Avatar, Button, Container, makeStyles, Typography } from '@material-ui/core';
 import LockOutlinedIcon from '@material-ui/icons/LockOutlined';
-import React, { useCallback } from 'react';
+import React from 'react';
 
 const useStyles = makeStyles(theme => ({
   paper: {

@@ -30,12 +30,16 @@ import { Dashboard } from './dashboard/Dashboard';
 import { EditTimeEntry } from './edit-time-entry/EditTimeEntry.container';
 import { UserModel } from './models/user.model';
 import { Routes } from './routes';
+import { ReactComponent as LogoIcon } from './assets/images/logo.svg';
 
 const drawerWidth = 240;
 
 const useStyles = makeStyles(theme => ({
   root: {
     display: 'flex',
+  },
+  logo: {
+    width: 40,
   },
   toolbar: {
     paddingRight: 24, // keep right padding when drawer closed
@@ -77,6 +81,7 @@ const useStyles = makeStyles(theme => ({
   },
   title: {
     flexGrow: 1,
+    marginLeft: theme.spacing(2),
   },
   drawerPaper: {
     position: 'relative',
@@ -212,6 +217,11 @@ export const AppComponent: React.FC<AppProps> = props => {
           >
             <MenuIcon />
           </IconButton>
+
+          <Link to={Routes.Dashboard}>
+            <LogoIcon className={classes.logo} />
+          </Link>
+
           <Typography component="h1" variant="h6" color="inherit" noWrap className={classes.title}>
             <Link to={Routes.Dashboard} className={classes.link}>
               kairos

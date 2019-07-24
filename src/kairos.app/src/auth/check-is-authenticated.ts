@@ -17,8 +17,6 @@ export const isAnonymous = () => action(IS_ANONYMOUS);
 function* initAuth0() {
   const user: UserModel = yield call([authService, authService.init]);
 
-  console.log(user)
-
   if (!user.isEmpty()) {
     yield put(isAuthenticated(user));
   } else {
