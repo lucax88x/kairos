@@ -1,5 +1,6 @@
 import {
   AppBar,
+  Avatar,
   Container,
   Divider,
   Drawer,
@@ -8,6 +9,8 @@ import {
   ListItem,
   ListItemIcon,
   ListItemText,
+  Menu,
+  MenuItem,
   SwipeableDrawer,
   Toolbar,
   Typography,
@@ -19,10 +22,13 @@ import DashboardIcon from '@material-ui/icons/Dashboard';
 import MenuIcon from '@material-ui/icons/Menu';
 import TimerIcon from '@material-ui/icons/Timer';
 import clsx from 'clsx';
-import React, { useCallback } from 'react';
-import { Link } from 'react-router-dom';
+import React, { useCallback, useState } from 'react';
+import { Link, Route } from 'react-router-dom';
 
 import { CreateTimeEntry } from './CreateTimeEntry.container';
+import { Dashboard } from './dashboard/Dashboard';
+import { EditTimeEntry } from './edit-time-entry/EditTimeEntry.container';
+import { UserModel } from './models/user.model';
 import { Routes } from './routes';
 
 const drawerWidth = 240;
@@ -109,11 +115,16 @@ const useStyles = makeStyles(theme => ({
     color: 'inherit',
     textDecoration: 'none',
   },
+  avatar: {
+    margin: 10,
+    cursor: 'pointer',
+  },
 }));
 
 export interface AppInputs {
   isLeftDrawerOpen: boolean;
   isRightDrawerOpen: boolean;
+  user: UserModel;
 }
 
 export interface AppDispatches {
@@ -121,19 +132,21 @@ export interface AppDispatches {
   closeLeftDrawer: () => void;
   openRightDrawer: () => void;
   closeRightDrawer: () => void;
+  logout: () => void;
 }
 
 export type AppProps = AppInputs & AppDispatches;
 
 export const AppComponent: React.FC<AppProps> = props => {
   const {
-    children,
+    user,
     isLeftDrawerOpen,
     openLeftDrawer,
     closeLeftDrawer,
     isRightDrawerOpen,
     openRightDrawer,
     closeRightDrawer,
+    logout,
   } = props;
 
   const classes = useStyles(props);
@@ -141,6 +154,8 @@ export const AppComponent: React.FC<AppProps> = props => {
   const handleLeftDrawerOpen = useCallback(() => openLeftDrawer(), [openLeftDrawer]);
 
   const handleLeftDrawerClose = useCallback(() => closeLeftDrawer(), [closeLeftDrawer]);
+
+  const [userMenuEl, setUserMenuEl] = useState<Element | null>(null);
 
   const shouldSkipSwipe = useCallback(
     (event: React.KeyboardEvent | React.MouseEvent) =>
@@ -171,6 +186,16 @@ export const AppComponent: React.FC<AppProps> = props => {
     [closeRightDrawer, shouldSkipSwipe],
   );
 
+  const handleUserMenuOpen = useCallback(
+    (event: React.KeyboardEvent | React.MouseEvent) => setUserMenuEl(event.currentTarget),
+    [setUserMenuEl],
+  );
+
+  const handleUserMenuClose = useCallback(
+    (event: React.KeyboardEvent | React.MouseEvent) => setUserMenuEl(null),
+    [setUserMenuEl],
+  );
+
   return (
     <div className={classes.root}>
       <AppBar
@@ -195,6 +220,23 @@ export const AppComponent: React.FC<AppProps> = props => {
           <IconButton color="inherit" aria-label="Open time" onClick={handleRightDrawerOpen}>
             <TimerIcon />
           </IconButton>
+
+          <Avatar
+            alt={user.given_name}
+            src={user.picture}
+            className={classes.avatar}
+            onClick={handleUserMenuOpen}
+          />
+
+          <Menu
+            anchorEl={userMenuEl}
+            keepMounted
+            open={Boolean(userMenuEl)}
+            onClose={handleUserMenuClose}
+          >
+            <MenuItem onClick={handleUserMenuClose}>Profile</MenuItem>
+            <MenuItem onClick={logout}>Logout</MenuItem>
+          </Menu>
         </Toolbar>
       </AppBar>
       <Drawer
@@ -236,7 +278,8 @@ export const AppComponent: React.FC<AppProps> = props => {
       <main className={classes.content}>
         <div className={classes.appBarSpacer} />
         <Container maxWidth="lg" className={classes.container}>
-          {children}
+          <Route exact={true} path={Routes.Dashboard} component={Dashboard} />
+          <Route path={Routes.EditTimeEntry} component={EditTimeEntry} />
         </Container>
       </main>
     </div>

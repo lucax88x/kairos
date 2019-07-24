@@ -3,9 +3,11 @@ using Autofac;
 using GraphQL;
 using GraphQL.Http;
 using GraphQL.Types;
+using Kairos.Application;
 using Kairos.Config.Ioc;
 using Kairos.Web.Api.GraphQL;
 using Kairos.Web.Api.GraphQL.Types;
+using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Configuration;
 
 namespace Kairos.Web.Api.Ioc
@@ -23,7 +25,14 @@ namespace Kairos.Web.Api.Ioc
         {
             builder.RegisterModule(new Config.Ioc.Module(_configuration,
                 new ModuleOptions {HasReadRepository = true, HasWriteRepository = true}));
-            builder.RegisterModule(new Kairos.Application.Ioc.Module());
+
+            builder.RegisterModule(new Application.Ioc.Module());
+            
+            builder.RegisterType<HttpContextAccessor>()
+                .As<IHttpContextAccessor>()
+                .SingleInstance();
+            
+            builder.RegisterType<AuthProvider>().As<IAuthProvider>().InstancePerLifetimeScope();
 
             RegisterGraphQL(builder);
         }

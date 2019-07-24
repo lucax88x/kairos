@@ -12,8 +12,8 @@ import { Redirect, Route } from 'react-router-dom';
 import { AnimatedSwitch, IAnimatedSwitchTransition } from 'react-router-transition';
 
 import { App } from './App.container';
+import { Login } from './auth/Login.container';
 import { history, store } from './createStore';
-import { Dashboard } from './dashboard/Dashboard';
 import { EditTimeEntry } from './edit-time-entry/EditTimeEntry.container';
 import { NotFound } from './NotFound';
 import { enqueueSnackbarAction } from './notification-manager/enqueue-snackbar';
@@ -72,14 +72,12 @@ ReactDOM.render(
       </SnackbarProvider>
 
       <ConnectedRouter history={history}>
-        <App>
-          <AnimatedSwitch {...pageTransitions} mapStyles={mapStyles} className="switch-wrapper">
-            <Route exact={true} path={Routes.Dashboard} component={Dashboard} />
-            <Route path={Routes.EditTimeEntry} component={EditTimeEntry} />
-            <Redirect exact={true} from="/" to={Routes.Dashboard} />
-            <Route component={NotFound} />
-          </AnimatedSwitch>
-        </App>
+        <AnimatedSwitch {...pageTransitions} mapStyles={mapStyles} className="switch-wrapper">
+          <Route path={Routes.Login} component={Login} />
+          <Route path="" component={App} />
+          <Route component={NotFound} />
+          {/* <Redirect exact={true} from="/" to={Routes.Dashboard} /> */}
+        </AnimatedSwitch>
       </ConnectedRouter>
     </ThemeProvider>
   </Provider>,

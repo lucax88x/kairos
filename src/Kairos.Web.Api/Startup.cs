@@ -1,8 +1,11 @@
-﻿using Autofac;
+﻿using System.Text;
+using Autofac;
 using GraphQL.Server;
 using GraphQL.Server.Ui.Playground;
 using GraphQL.Types;
 using Kairos.Web.Api.Filters;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
@@ -29,6 +32,11 @@ namespace Kairos.Web.Api
 
         public void ConfigureServices(IServiceCollection services)
         {
+//            var domain = Configuration["Auth:Domain"];
+//            var audience = Configuration["Auth:Audience"];
+            var domain = "https://kairos.eu.auth0.com/";
+            var audience = "http://localhost:3000";
+
             services.AddMvc(options =>
                     options.Filters.AddService(typeof(ApiExceptionFilter)))
                 .SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
@@ -40,6 +48,16 @@ namespace Kairos.Web.Api
                 _.EnableMetrics = true;
                 _.ExposeExceptions = true;
             });
+
+            services.AddAuthentication(options =>
+            {
+                options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+                options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+            }).AddJwtBearer(options =>
+            {
+                options.Authority = domain;
+                options.Audience = audience;
+            });
         }
 
         public void Configure(IApplicationBuilder app, IHostingEnvironment env)
@@ -50,6 +68,9 @@ namespace Kairos.Web.Api
             }
 
             ConfigureLogger();
+
+            app.UseAuthentication();
+            app.UseMiddleware<GraphQlAuthMiddleware>();
 
             app.UseMvc();
 

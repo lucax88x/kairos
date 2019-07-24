@@ -25,7 +25,7 @@ export class TimeEntryModel {
   static empty: TimeEntryModel = new TimeEntryModel(new UUID(), new Date(0));
 
   isEmpty() {
-    return this.id !== TimeEntryModel.empty.id && this.when !== TimeEntryModel.empty.when;
+    return this.id === TimeEntryModel.empty.id && this.when === TimeEntryModel.empty.when;
   }
 }
 

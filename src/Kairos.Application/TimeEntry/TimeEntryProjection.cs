@@ -23,12 +23,12 @@ namespace Kairos.Application.TimeEntry
 
         public async Task Handle(TimeEntryAdded notification, CancellationToken cancellationToken)
         {
-            await _timeEntryReadRepository.Add(notification.Id, notification.When, (int) notification.Type);
+            await _timeEntryReadRepository.Add(notification.Id, notification.User, notification.When, (int) notification.Type);
         }
         
         public async Task Handle(TimeEntryDeleted notification, CancellationToken cancellationToken)
         {
-            await _timeEntryReadRepository.Delete(notification.Id);
+            await _timeEntryReadRepository.Delete(notification.Id, notification.User);
         }
 
         public async Task<TimeEntryReadDto> Handle(GetTimeEntryById request, CancellationToken cancellationToken)
@@ -39,7 +39,7 @@ namespace Kairos.Application.TimeEntry
         public async Task<ImmutableArray<TimeEntryReadDto>> Handle(GetTimeEntries request,
             CancellationToken cancellationToken)
         {
-            return await _timeEntryReadRepository.Get();
+            return await _timeEntryReadRepository.Get(request.Id);
         }
     }
 }
