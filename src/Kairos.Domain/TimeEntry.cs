@@ -1,6 +1,7 @@
 ﻿using System;
 using Kairos.Common;
 using Kairos.Domain.Events;
+using Kairos.Domain.Events.TimeEntry;
 
 namespace Kairos.Domain
 {

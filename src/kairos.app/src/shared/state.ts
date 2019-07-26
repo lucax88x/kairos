@@ -3,6 +3,8 @@ export interface SharedState {
     busy: {
       createTimeEntry: boolean;
       deleteTimeEntry: boolean;
+      createTimeAbsenceEntry: boolean;
+      deleteTimeAbsenceEntry: boolean;
     };
   };
 }
@@ -12,6 +14,8 @@ export const sharedInitialState: SharedState = {
     busy: {
       createTimeEntry: false,
       deleteTimeEntry: false,
+      createTimeAbsenceEntry: false,
+      deleteTimeAbsenceEntry: false,
     },
   },
 };

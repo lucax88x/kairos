@@ -23,3 +23,13 @@ export const selectIsDeleteTimeEntryBusy = createSelector(
   selectBusy,
   busy => busy.deleteTimeEntry,
 );
+
+export const selectIsCreateTimeAbsenceEntryBusy = createSelector(
+  selectBusy,
+  busy => busy.createTimeAbsenceEntry,
+);
+
+export const selectIsDeleteTimeAbsenceEntryBusy = createSelector(
+  selectBusy,
+  busy => busy.deleteTimeAbsenceEntry,
+);

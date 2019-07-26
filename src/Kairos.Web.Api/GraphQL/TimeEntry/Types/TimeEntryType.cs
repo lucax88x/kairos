@@ -1,7 +1,7 @@
 using GraphQL.Types;
 using Kairos.Infra.Read.TimeEntry;
 
-namespace Kairos.Web.Api.GraphQL.Types
+namespace Kairos.Web.Api.GraphQL.TimeEntry.Types
 {
     public class TimeEntryType : ObjectGraphType<TimeEntryReadDto>
     {

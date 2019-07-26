@@ -4,6 +4,7 @@ import { combineReducers } from 'redux';
 
 import { authReducers } from './auth/reducers';
 import { dashboardReducers } from './dashboard/reducers';
+import { EditTimeAbsenceEntryReducers } from './edit-time-absence-entry/reducers';
 import { EditTimeEntryReducers } from './edit-time-entry/reducers';
 import { layoutReducers } from './layout/reducers';
 import { notificationManagerReducers } from './notification-manager/reducers';
@@ -20,4 +21,5 @@ export const rootReducers = (history: History<any>) =>
     notificationManager: notificationManagerReducers,
     dashboard: dashboardReducers,
     editTimeEntry: EditTimeEntryReducers,
+    editTimeAbsenceEntry: EditTimeAbsenceEntryReducers,
   });

@@ -1,7 +1,7 @@
 using System;
 using Kairos.Common;
 
-namespace Kairos.Domain.Events
+namespace Kairos.Domain.Events.TimeEntry
 {
     public class TimeEntryAdded : Event
     {

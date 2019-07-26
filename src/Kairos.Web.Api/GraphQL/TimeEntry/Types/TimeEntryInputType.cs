@@ -1,7 +1,7 @@
 using GraphQL.Types;
-using Kairos.Web.Api.GraphQL.Types.Inputs;
+using Kairos.Web.Api.GraphQL.TimeEntry.Types.Inputs;
 
-namespace Kairos.Web.Api.GraphQL.Types
+namespace Kairos.Web.Api.GraphQL.TimeEntry.Types
 {
     public class TimeEntryInputType : InputObjectGraphType<TimeEntryInput>
     {

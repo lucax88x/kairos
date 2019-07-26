@@ -9,6 +9,11 @@ export const selectTimeEntries = createSelector(
   state => state.timeEntries,
 );
 
+export const selectTimeAbsenceEntries = createSelector(
+  selectState,
+  state => state.timeAbsenceEntries,
+);
+
 export const selectUi = createSelector(
   selectState,
   state => state.ui,
@@ -22,4 +27,9 @@ export const selectBusy = createSelector(
 export const selectIsGetTimeEntriesBusy = createSelector(
   selectBusy,
   busy => busy.getTimeEntries,
+);
+
+export const selectIsGetTimeAbsenceEntriesBusy = createSelector(
+  selectBusy,
+  busy => busy.getTimeAbsenceEntries,
 );

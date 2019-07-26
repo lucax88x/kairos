@@ -21,16 +21,19 @@ import ChevronRightIcon from '@material-ui/icons/ChevronRight';
 import DashboardIcon from '@material-ui/icons/Dashboard';
 import MenuIcon from '@material-ui/icons/Menu';
 import TimerIcon from '@material-ui/icons/Timer';
+import WeekendIcon from '@material-ui/icons/Weekend';
 import clsx from 'clsx';
 import React, { useCallback, useState } from 'react';
 import { Link, Route } from 'react-router-dom';
 
+import { ReactComponent as LogoIcon } from './assets/images/logo.svg';
+import { CreateTimeAbsenceEntry } from './CreateTimeAbsenceEntry.container';
 import { CreateTimeEntry } from './CreateTimeEntry.container';
 import { Dashboard } from './dashboard/Dashboard';
+import { EditTimeAbsenceEntry } from './edit-time-absence-entry/EditTimeAbsenceEntry.container';
 import { EditTimeEntry } from './edit-time-entry/EditTimeEntry.container';
 import { UserModel } from './models/user.model';
 import { Routes } from './routes';
-import { ReactComponent as LogoIcon } from './assets/images/logo.svg';
 
 const drawerWidth = 240;
 
@@ -128,15 +131,18 @@ const useStyles = makeStyles(theme => ({
 
 export interface AppInputs {
   isLeftDrawerOpen: boolean;
-  isRightDrawerOpen: boolean;
+  isTimeEntryDrawerOpen: boolean;
+  isTimeAbsenceEntryDrawerOpen: boolean;
   user: UserModel;
 }
 
 export interface AppDispatches {
   openLeftDrawer: () => void;
   closeLeftDrawer: () => void;
-  openRightDrawer: () => void;
-  closeRightDrawer: () => void;
+  openTimeEntryDrawer: () => void;
+  closeTimeEntryDrawer: () => void;
+  openTimeAbsenceEntryDrawer: () => void;
+  closeTimeAbsenceEntryDrawer: () => void;
   logout: () => void;
 }
 
@@ -148,9 +154,12 @@ export const AppComponent: React.FC<AppProps> = props => {
     isLeftDrawerOpen,
     openLeftDrawer,
     closeLeftDrawer,
-    isRightDrawerOpen,
-    openRightDrawer,
-    closeRightDrawer,
+    isTimeEntryDrawerOpen,
+    isTimeAbsenceEntryDrawerOpen,
+    openTimeEntryDrawer,
+    closeTimeEntryDrawer,
+    openTimeAbsenceEntryDrawer,
+    closeTimeAbsenceEntryDrawer,
     logout,
   } = props;
 
@@ -171,24 +180,44 @@ export const AppComponent: React.FC<AppProps> = props => {
     [],
   );
 
-  const handleRightDrawerOpen = useCallback(
+  const handleTimeEntryDrawerOpen = useCallback(
     (event: React.KeyboardEvent | React.MouseEvent) => {
       if (shouldSkipSwipe(event)) {
         return;
       }
-      openRightDrawer();
+      openTimeEntryDrawer();
     },
-    [openRightDrawer, shouldSkipSwipe],
+    [openTimeEntryDrawer, shouldSkipSwipe],
   );
 
-  const handleRightDrawerClose = useCallback(
+  const handleTimeEntryDrawerClose = useCallback(
     (event: React.KeyboardEvent | React.MouseEvent) => {
       if (shouldSkipSwipe(event)) {
         return;
       }
-      closeRightDrawer();
+      closeTimeEntryDrawer();
     },
-    [closeRightDrawer, shouldSkipSwipe],
+    [closeTimeEntryDrawer, shouldSkipSwipe],
+  );
+
+  const handleTimeAbsenceEntryDrawerOpen = useCallback(
+    (event: React.KeyboardEvent | React.MouseEvent) => {
+      if (shouldSkipSwipe(event)) {
+        return;
+      }
+      openTimeAbsenceEntryDrawer();
+    },
+    [openTimeAbsenceEntryDrawer, shouldSkipSwipe],
+  );
+
+  const handleTimeAbsenceEntryDrawerClose = useCallback(
+    (event: React.KeyboardEvent | React.MouseEvent) => {
+      if (shouldSkipSwipe(event)) {
+        return;
+      }
+      closeTimeAbsenceEntryDrawer();
+    },
+    [closeTimeAbsenceEntryDrawer, shouldSkipSwipe],
   );
 
   const handleUserMenuOpen = useCallback(
@@ -227,7 +256,18 @@ export const AppComponent: React.FC<AppProps> = props => {
               kairos
             </Link>
           </Typography>
-          <IconButton color="inherit" aria-label="Open time" onClick={handleRightDrawerOpen}>
+          <IconButton
+            color="inherit"
+            aria-label="Open time absence entry"
+            onClick={handleTimeAbsenceEntryDrawerOpen}
+          >
+            <WeekendIcon />
+          </IconButton>
+          <IconButton
+            color="inherit"
+            aria-label="Open time entry"
+            onClick={handleTimeEntryDrawerOpen}
+          >
             <TimerIcon />
           </IconButton>
 
@@ -273,23 +313,38 @@ export const AppComponent: React.FC<AppProps> = props => {
       </Drawer>
       <SwipeableDrawer
         anchor="right"
-        open={isRightDrawerOpen}
-        onClose={handleRightDrawerClose}
-        onOpen={handleRightDrawerOpen}
+        open={isTimeEntryDrawerOpen}
+        onClose={handleTimeEntryDrawerClose}
+        onOpen={handleTimeEntryDrawerOpen}
       >
         <div className={classes.toolbarRightIcon}>
-          <IconButton onClick={handleRightDrawerClose}>
+          <IconButton onClick={handleTimeEntryDrawerClose}>
             <ChevronRightIcon />
           </IconButton>
         </div>
         <Divider />
         <CreateTimeEntry />
       </SwipeableDrawer>
+      <SwipeableDrawer
+        anchor="right"
+        open={isTimeAbsenceEntryDrawerOpen}
+        onClose={handleTimeAbsenceEntryDrawerClose}
+        onOpen={handleTimeAbsenceEntryDrawerOpen}
+      >
+        <div className={classes.toolbarRightIcon}>
+          <IconButton onClick={handleTimeAbsenceEntryDrawerClose}>
+            <ChevronRightIcon />
+          </IconButton>
+        </div>
+        <Divider />
+        <CreateTimeAbsenceEntry />
+      </SwipeableDrawer>
       <main className={classes.content}>
         <div className={classes.appBarSpacer} />
         <Container maxWidth="lg" className={classes.container}>
           <Route exact={true} path={Routes.Dashboard} component={Dashboard} />
           <Route path={Routes.EditTimeEntry} component={EditTimeEntry} />
+          <Route path={Routes.EditTimeAbsenceEntry} component={EditTimeAbsenceEntry} />
         </Container>
       </main>
     </div>

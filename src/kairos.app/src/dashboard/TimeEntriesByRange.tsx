@@ -10,14 +10,20 @@ import { TimeEntryModel } from '../models/time-entry.model';
 const useStyles = makeStyles(theme => ({
   grid: {
     display: 'grid',
-    gridTemplateRows: '1fr 1fr',
-    // gridGap: theme.spacing(2),
     justifyItems: 'center',
-    // alignItems: 'center',
+    borderLeft: `1px solid ${theme.palette.primary.main}`,
   },
   headerCell: {
-    borderBottom: `1px solid ${theme.palette.primary.main}`,
-    // padding: theme.spacing(1)
+    textAlign: 'center',
+    borderRight: `1px solid ${theme.palette.primary.main}`,
+    width: '100%',
+    padding: theme.spacing(1)
+  },
+  line: {
+    gridColumn: '1 / -1',
+    height: 1,
+    width: '100%',
+    background: theme.palette.primary.main,
   },
 }));
 
@@ -81,9 +87,10 @@ export const TimeEntriesByRangeComponent: React.FC<TimeEntriesByRangeProps> = me
       </Typography>
       <div
         className={classes.grid}
-        style={{ gridTemplateColumns: `repeat(${headerCells.length}, auto)` }}
+        style={{ gridTemplateColumns: `repeat(${headerCells.length}, 1fr)` }}
       >
         {headerCells}
+        <div className={classes.line} />
         {bodyCells}
       </div>
     </Spinner>

@@ -3,7 +3,7 @@ import { call, put, takeLatest } from 'redux-saga/effects';
 import { createAsyncAction } from 'typesafe-actions';
 
 import { SharedActions } from '../actions';
-import { closeRightDrawerAction } from '../layout/actions';
+import { closeTimeEntryDrawerAction } from '../layout/actions';
 import { TimeEntryModel } from '../models/time-entry.model';
 import { createTimeEntry } from '../services/time-entry/time-entry.service';
 import {
@@ -30,7 +30,7 @@ function* doCreateTimeEntry({ payload }: ReturnType<typeof createTimeEntryAsync.
 }
 
 function* doCloseDrawer() {
-  yield put(closeRightDrawerAction());
+  yield put(closeTimeEntryDrawerAction());
 }
 
 export function* createTimeEntrySaga() {

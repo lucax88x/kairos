@@ -2,6 +2,7 @@ import { RouterState } from 'connected-react-router';
 
 import { AuthState } from '../auth/state';
 import { DashboardState } from '../dashboard/state';
+import { EditTimeAbsenceEntryState } from '../edit-time-absence-entry/state';
 import { EditTimeEntryState } from '../edit-time-entry/state';
 import { LayoutState } from '../layout/state';
 import { NotificationManagerState } from '../notification-manager/state';
@@ -15,6 +16,7 @@ export interface State {
   notificationManager: NotificationManagerState;
   dashboard: DashboardState;
   editTimeEntry: EditTimeEntryState;
+  editTimeAbsenceEntry: EditTimeAbsenceEntryState;
 }
 
 export type States =
@@ -24,4 +26,5 @@ export type States =
   | AuthState
   | NotificationManagerState
   | DashboardState
-  | EditTimeEntryState;
+  | EditTimeEntryState
+  | EditTimeAbsenceEntryState;

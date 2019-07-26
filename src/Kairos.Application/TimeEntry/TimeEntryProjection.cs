@@ -3,6 +3,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using Kairos.Application.TimeEntry.Queries;
 using Kairos.Domain.Events;
+using Kairos.Domain.Events.TimeEntry;
 using Kairos.Infra.Read.TimeEntry;
 using MediatR;
 

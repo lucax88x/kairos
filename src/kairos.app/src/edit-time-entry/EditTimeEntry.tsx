@@ -33,7 +33,7 @@ export const EditTimeEntryComponent: React.FC<EditTimeEntryProps> = props => {
 
   return (
     <Grid container spacing={3}>
-      <Grid item xs={12} md={12} lg={12}>
+      <Grid item xs={12}>
         <Paper className={classes.paper}>
           <Spinner show={isGetBusy}>
             <TimeEntryForm isBusy={isUpdateBusy} model={timeEntry} save={update} />

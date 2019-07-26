@@ -7,24 +7,33 @@ import { logout } from './auth/logout';
 import { selectUser } from './auth/selectors';
 import {
   closeLeftDrawerAction,
-  closeRightDrawerAction,
+  closeTimeAbsenceEntryDrawerAction,
+  closeTimeEntryDrawerAction,
   openLeftDrawerAction,
-  openRightDrawerAction,
+  openTimeAbsenceEntryDrawerAction,
+  openTimeEntryDrawerAction,
 } from './layout/actions';
-import { selectIsLeftDrawerOpen, selectIsRightDrawerOpen } from './layout/selectors';
+import {
+  selectIsLeftDrawerOpen,
+  selectIsTimeAbsenceEntryDrawerOpen,
+  selectIsTimeEntryDrawerOpen,
+} from './layout/selectors';
 import { State } from './state';
 
 const mapStateToProps = (state: State): AppInputs => ({
   isLeftDrawerOpen: selectIsLeftDrawerOpen(state),
-  isRightDrawerOpen: selectIsRightDrawerOpen(state),
+  isTimeEntryDrawerOpen: selectIsTimeEntryDrawerOpen(state),
+  isTimeAbsenceEntryDrawerOpen: selectIsTimeAbsenceEntryDrawerOpen(state),
   user: selectUser(state),
 });
 
 const mapDispatchToProps = (dispatch: Dispatch<Actions>): AppDispatches => ({
   openLeftDrawer: () => dispatch(openLeftDrawerAction()),
   closeLeftDrawer: () => dispatch(closeLeftDrawerAction()),
-  openRightDrawer: () => dispatch(openRightDrawerAction()),
-  closeRightDrawer: () => dispatch(closeRightDrawerAction()),
+  openTimeEntryDrawer: () => dispatch(openTimeEntryDrawerAction()),
+  closeTimeEntryDrawer: () => dispatch(closeTimeEntryDrawerAction()),
+  openTimeAbsenceEntryDrawer: () => dispatch(openTimeAbsenceEntryDrawerAction()),
+  closeTimeAbsenceEntryDrawer: () => dispatch(closeTimeAbsenceEntryDrawerAction()),
   logout: () => dispatch(logout()),
 });
 

@@ -72,5 +72,11 @@ export const humanDifference = (left: Date, right: Date) => {
 
   result.push(join(':', time));
 
-  return join(' ', result); //1 years 4 months 13 days
+  const str = join(' ', result);
+
+  if (str === '00:00:00') {
+    return '-';
+  }
+
+  return str;
 };

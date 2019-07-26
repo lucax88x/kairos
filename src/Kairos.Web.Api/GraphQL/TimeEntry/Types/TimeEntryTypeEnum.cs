@@ -1,6 +1,6 @@
 using GraphQL.Types;
 
-namespace Kairos.Web.Api.GraphQL.Types
+namespace Kairos.Web.Api.GraphQL.TimeEntry.Types
 {
     public class TimeEntryTypeEnum : EnumerationGraphType
     {

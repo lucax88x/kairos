@@ -4,7 +4,7 @@ import CreateIcon from '@material-ui/icons/Create';
 import { format } from 'date-fns';
 import React, { memo, useCallback } from 'react';
 
-import { formatAsDate } from '../code/constants';
+import { formatAsDateTime } from '../code/constants';
 import { TimeEntryModel } from '../models/time-entry.model';
 
 export interface TimeEntryProps {
@@ -21,7 +21,7 @@ export const TimeEntry: React.FC<TimeEntryProps> = memo(props => {
 
   return (
     <TableRow>
-      <TableCell>{format(timeEntry.when, formatAsDate)}</TableCell>
+      <TableCell>{format(timeEntry.when, formatAsDateTime)}</TableCell>
       <TableCell>{timeEntry.type}</TableCell>
       <TableCell>
         <IconButton color="inherit" aria-label="Update entry" onClick={handleUpdate}>

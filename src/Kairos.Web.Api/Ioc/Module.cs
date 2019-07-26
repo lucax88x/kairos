@@ -6,6 +6,10 @@ using GraphQL.Types;
 using Kairos.Application;
 using Kairos.Config.Ioc;
 using Kairos.Web.Api.GraphQL;
+using Kairos.Web.Api.GraphQL.TimeAbsenceEntry;
+using Kairos.Web.Api.GraphQL.TimeAbsenceEntry.Types;
+using Kairos.Web.Api.GraphQL.TimeEntry;
+using Kairos.Web.Api.GraphQL.TimeEntry.Types;
 using Kairos.Web.Api.GraphQL.Types;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Configuration;
@@ -42,21 +46,10 @@ namespace Kairos.Web.Api.Ioc
             builder.RegisterInstance(new DocumentExecuter()).As<IDocumentExecuter>();
             builder.RegisterInstance(new DocumentWriter()).As<IDocumentWriter>();
 
-            builder.RegisterType<TimeEntryType>()
-                .AsSelf();
-            builder.RegisterType<TimeEntryTypeEnum>()
-                .AsSelf();
-            builder.RegisterType<TimeEntryInputType>()
-                .AsSelf();
             builder.RegisterType<CreateOrUpdateType>()
                 .AsSelf();
-
-            builder.RegisterType<TimeEntryQuery>()
-                .AsSelf();
-            builder.RegisterType<TimeEntryMutation>()
-                .AsSelf();
-            builder.RegisterType<TimeEntrySchema>()
-                .As<ISchema>();
+            
+            RegisterTypes(builder);
 
             builder.Register<Func<Type, GraphType>>(c =>
             {
@@ -73,6 +66,29 @@ namespace Kairos.Web.Api.Ioc
                 var context = c.Resolve<IComponentContext>();
                 return new FuncDependencyResolver(type => context.Resolve(type));
             });
+        }
+
+        private static void RegisterTypes(ContainerBuilder builder)
+        {
+            builder.RegisterType<TimeEntryType>()
+                .AsSelf();
+            builder.RegisterType<TimeEntryTypeEnum>()
+                .AsSelf();
+            builder.RegisterType<TimeEntryInputType>()
+                .AsSelf();
+            
+            builder.RegisterType<TimeAbsenceEntryType>()
+                .AsSelf();
+            builder.RegisterType<TimeAbsenceEntryTypeEnum>()
+                .AsSelf();
+            builder.RegisterType<TimeAbsenceEntryInputType>();
+
+            builder.RegisterType<KairosQuery>()
+                .AsSelf();
+            builder.RegisterType<KairosMutation>()
+                .AsSelf();
+            builder.RegisterType<KairosSchema>()
+                .As<ISchema>();
         }
     }
 }

@@ -1,0 +1,26 @@
+import { connect } from 'react-redux';
+import { Dispatch } from 'redux';
+
+import { Actions } from './actions';
+import {
+  CreateTimeAbsenceEntryComponent,
+  CreateTimeAbsenceEntryDispatches,
+  CreateTimeAbsenceEntryInputs,
+} from './CreateTimeAbsenceEntry';
+import { TimeAbsenceEntryModel } from './models/time-absence-entry.model';
+import { createTimeAbsenceEntryAsync } from './shared/create-time-absence-entry';
+import { selectIsCreateTimeAbsenceEntryBusy } from './shared/selectors';
+import { State } from './state';
+
+const mapStateToProps = (state: State): CreateTimeAbsenceEntryInputs => ({
+  isBusy: selectIsCreateTimeAbsenceEntryBusy(state),
+});
+
+const mapDispatchToProps = (dispatch: Dispatch<Actions>): CreateTimeAbsenceEntryDispatches => ({
+  create: (model: TimeAbsenceEntryModel) => dispatch(createTimeAbsenceEntryAsync.request(model)),
+});
+
+export const CreateTimeAbsenceEntry = connect(
+  mapStateToProps,
+  mapDispatchToProps,
+)(CreateTimeAbsenceEntryComponent);
