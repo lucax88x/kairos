@@ -4,8 +4,8 @@ import { Dispatch } from 'redux';
 
 import { Actions } from '../actions';
 import { TimeEntryModel } from '../models/time-entry.model';
+import { selectIsGetTimeEntriesBusy, selectTimeEntries } from '../shared/selectors';
 import { State } from '../state';
-import { selectIsGetTimeEntriesBusy, selectTimeEntries } from './selectors';
 import {
   TimeEntriesByRangeComponent,
   TimeEntriesByRangeDispatches,

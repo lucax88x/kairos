@@ -1,6 +1,8 @@
 using System;
+using System.Linq;
 using System.Threading.Tasks;
 using Kairos.Application.TimeEntry.Commands;
+using Kairos.Application.TimeEntry.Dtos;
 using Kairos.Domain;
 using MediatR;
 
@@ -21,8 +23,11 @@ namespace Kairos.Test.Common.Infra.Scenario
             {
                 id = Guid.NewGuid();
             }
-            
-            return await _mediator.Send(new CreateTimeEntry(DateTimeOffset.Parse(when), (int)type, id));
+
+            var ids = await _mediator.Send(
+                new CreateTimeEntries(new TimeEntryModel(DateTimeOffset.Parse(when), (int) type, id)));
+
+            return ids.First();
         }
     }
 }

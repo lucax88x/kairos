@@ -1,4 +1,5 @@
 using System;
+using System.Linq;
 using System.Threading.Tasks;
 using FluentAssertions;
 using Kairos.Application.TimeEntry.Commands;
@@ -6,6 +7,7 @@ using Kairos.Domain;
 using Kairos.Test.Common.Infra;
 using Xunit;
 using FluentValidation;
+using Kairos.Application.TimeEntry.Dtos;
 
 namespace Kairos.Application.Tests.TimeEntry
 {
@@ -24,7 +26,7 @@ namespace Kairos.Application.Tests.TimeEntry
         public async Task should_not_allow_to_track_with_invalid_type()
         {
             // GIVEN
-            var command = new CreateTimeEntry(DateTimeOffset.UtcNow, 0);
+            var command = new CreateTimeEntries(new TimeEntryModel(DateTimeOffset.UtcNow, 0));
 
             // WHEN           
             Func<Task> action = async () => await _sandbox.Mediator.Send(command);
@@ -38,17 +40,17 @@ namespace Kairos.Application.Tests.TimeEntry
         public async Task should_create_time_entry()
         {
             // GIVEN
-            var command = new CreateTimeEntry(DateTimeOffset.UtcNow, (int) TimeEntryType.In);
+            var command = new CreateTimeEntries(new TimeEntryModel(DateTimeOffset.UtcNow, (int) TimeEntryType.In));
 
             // WHEN           
-            var id = await _sandbox.Mediator.Send(command);
+            var ids = await _sandbox.Mediator.Send(command);
 
             // THEN
             _sandbox.Should.Mediator.Be("CreateTimeEntry -> TimeEntryAdded");
 
             // TODO: check if event store has event
 //            await _sandbox.Should.Cassandra.Exists(id);
-            await _sandbox.Should.Redis.Exists.Set("time-entry", id);
+            await _sandbox.Should.Redis.Exists.Set("time-entry", ids.First());
             await _sandbox.Should.Redis.Exists.SortedSet("time-entry", "by-when", 1);
         }
         

@@ -1,9 +1,7 @@
 import { Grid, makeStyles, Paper } from '@material-ui/core';
 import React from 'react';
 
-import { TimeAbsenceEntries } from './TimeAbsenceEntries.container';
-import { TimeEntries } from './TimeEntries.container';
-import { TimeEntriesByRange } from './TimeEntriesByRange.container';
+import { TimeEntriesByRange } from '../time-entries/TimeEntriesByRange.container';
 
 const useStyles = makeStyles(theme => ({
   paper: {
@@ -19,17 +17,7 @@ export const Dashboard: React.FC = props => {
 
   return (
     <Grid container spacing={3}>
-      <Grid item xs={6}>
-        <Paper className={classes.paper}>
-          <TimeEntries />
-        </Paper>
-      </Grid>
-      <Grid item xs={6}>
-        <Paper className={classes.paper}>
-          <TimeAbsenceEntries />
-        </Paper>
-      </Grid>
-      <Grid item xs={12}>
+      <Grid item xs>
         <Paper className={classes.paper}>
           <TimeEntriesByRange />
         </Paper>

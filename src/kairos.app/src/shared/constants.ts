@@ -1,3 +1,11 @@
+export const GET_TIME_ENTRIES = '[SHARED] Get Time Entries';
+export const GET_TIME_ENTRIES_SUCCESS = '[SHARED] Get Time Entries Success';
+export const GET_TIME_ENTRIES_FAILURE = '[SHARED] Get Time Entries Failure';
+
+export const GET_TIME_ABSENCE_ENTRIES = '[SHARED] Get Time Absence Entries';
+export const GET_TIME_ABSENCE_ENTRIES_SUCCESS = '[SHARED] Get Time Absence Entries Success';
+export const GET_TIME_ABSENCE_ENTRIES_FAILURE = '[SHARED] Get Time Absence Entries Failure';
+
 export const CREATE_TIME_ENTRY = '[SHARED] Create Time Entry';
 export const CREATE_TIME_ENTRY_SUCCESS = '[SHARED] Create Time Entry Success';
 export const CREATE_TIME_ENTRY_FAILURE = '[SHARED] Create Time Entry Failure';

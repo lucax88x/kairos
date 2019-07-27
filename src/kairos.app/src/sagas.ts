@@ -2,7 +2,7 @@ import { all } from '@redux-saga/core/effects';
 import { map, values } from 'ramda';
 
 import * as authSagas from './auth/sagas';
-import * as dashboardSagas from './dashboard/sagas';
+import * as bulkInsertSagas from './bulk-insert/sagas';
 import * as editTimeAbsenceEntrySagas from './edit-time-absence-entry/sagas';
 import * as editTimeEntrySagas from './edit-time-entry/sagas';
 import * as sharedSagas from './shared/sagas';
@@ -11,9 +11,9 @@ import * as sharedSagas from './shared/sagas';
 export const featureSagas: any[] = [
   sharedSagas,
   authSagas,
-  dashboardSagas,
   editTimeEntrySagas,
   editTimeAbsenceEntrySagas,
+  bulkInsertSagas,
 ];
 
 const sagas = map(module => values(module), featureSagas);

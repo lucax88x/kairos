@@ -17,7 +17,7 @@ import {
 import React, { useCallback, useEffect, useState } from 'react';
 
 import { mergeDateAndTime } from '../code/mergeDateAndTime';
-import ButtonSpinner from '../components/ButtonSpinner';
+import FabButtonSpinner from '../components/FabButtonSpinner';
 import { TimeEntryModel, TimeEntryTypes } from '../models/time-entry.model';
 import { UUID } from '../models/uuid.model';
 
@@ -108,9 +108,9 @@ export const TimeEntryForm: React.FC<TimeEntryFormProps> = props => {
         alignItems="center"
         className={classes.hasPadding}
       >
-        <ButtonSpinner onClick={handleSave} isBusy={isBusy} disabled={!date || !time || isBusy}>
+        <FabButtonSpinner onClick={handleSave} isBusy={isBusy} disabled={!date || !time || isBusy}>
           {type}
-        </ButtonSpinner>
+        </FabButtonSpinner>
       </Grid>
     </Grid>
   );

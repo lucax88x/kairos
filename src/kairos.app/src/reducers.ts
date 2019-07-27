@@ -3,9 +3,9 @@ import { History } from 'history';
 import { combineReducers } from 'redux';
 
 import { authReducers } from './auth/reducers';
-import { dashboardReducers } from './dashboard/reducers';
-import { EditTimeAbsenceEntryReducers } from './edit-time-absence-entry/reducers';
-import { EditTimeEntryReducers } from './edit-time-entry/reducers';
+import { bulkInsertReducers } from './bulk-insert/reducers';
+import { editTimeAbsenceEntryReducers } from './edit-time-absence-entry/reducers';
+import { editTimeEntryReducers } from './edit-time-entry/reducers';
 import { layoutReducers } from './layout/reducers';
 import { notificationManagerReducers } from './notification-manager/reducers';
 import { sharedReducers } from './shared/reducers';
@@ -19,7 +19,7 @@ export const rootReducers = (history: History<any>) =>
     shared: sharedReducers,
     auth: authReducers,
     notificationManager: notificationManagerReducers,
-    dashboard: dashboardReducers,
-    editTimeEntry: EditTimeEntryReducers,
-    editTimeAbsenceEntry: EditTimeAbsenceEntryReducers,
+    editTimeEntry: editTimeEntryReducers,
+    editTimeAbsenceEntry: editTimeAbsenceEntryReducers,
+    bulkInsert: bulkInsertReducers,
   });

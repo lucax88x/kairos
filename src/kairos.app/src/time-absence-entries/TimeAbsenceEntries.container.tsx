@@ -5,9 +5,12 @@ import { Dispatch } from 'redux';
 import { Actions } from '../actions';
 import { TimeAbsenceEntryModel } from '../models/time-absence-entry.model';
 import { deleteTimeAbsenceEntryAsync } from '../shared/delete-time-absence-entry';
-import { selectIsDeleteTimeAbsenceEntryBusy } from '../shared/selectors';
+import {
+  selectIsDeleteTimeAbsenceEntryBusy,
+  selectIsGetTimeAbsenceEntriesBusy,
+  selectTimeAbsenceEntries,
+} from '../shared/selectors';
 import { State } from '../state';
-import { selectIsGetTimeAbsenceEntriesBusy, selectTimeAbsenceEntries } from './selectors';
 import {
   TimeAbsenceEntriesComponent,
   TimeAbsenceEntriesDispatches,

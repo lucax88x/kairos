@@ -17,7 +17,7 @@ const useStyles = makeStyles(theme => ({
     textAlign: 'center',
     borderRight: `1px solid ${theme.palette.primary.main}`,
     width: '100%',
-    padding: theme.spacing(1)
+    padding: theme.spacing(1),
   },
   line: {
     gridColumn: '1 / -1',

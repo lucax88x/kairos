@@ -3,7 +3,7 @@ import produce from 'immer';
 import { call, put, select, takeLatest } from 'redux-saga/effects';
 import { createAsyncAction } from 'typesafe-actions';
 
-import { DashboardActions } from '../actions';
+import { SharedActions } from '../actions';
 import { Route } from '../models/route.model';
 import { TimeAbsenceEntryModel } from '../models/time-absence-entry.model';
 import { getTimeAbsenceEntries } from '../services/time-absence-entry/time-absence-entry.service';
@@ -11,13 +11,13 @@ import {
   CREATE_TIME_ABSENCE_ENTRY_SUCCESS,
   DELETE_TIME_ABSENCE_ENTRY_SUCCESS,
 } from '../shared/constants';
-import { selectDashboardRoute } from '../shared/router.selectors';
+import { selectTimeAbsenceEntriesRoute } from '../shared/router.selectors';
 import {
   GET_TIME_ABSENCE_ENTRIES,
   GET_TIME_ABSENCE_ENTRIES_FAILURE,
   GET_TIME_ABSENCE_ENTRIES_SUCCESS,
 } from './constants';
-import { DashboardState } from './state';
+import { SharedState } from './state';
 
 export const getTimeAbsenceEntriesAsync = createAsyncAction(
   GET_TIME_ABSENCE_ENTRIES,
@@ -26,7 +26,7 @@ export const getTimeAbsenceEntriesAsync = createAsyncAction(
 )<void, TimeAbsenceEntryModel[], string>();
 
 function* doGetTimeAbsenceEntriesOnOtherActions() {
-  const route: Route = yield select(selectDashboardRoute);
+  const route: Route = yield select(selectTimeAbsenceEntriesRoute);
 
   if (!!route) {
     yield put(getTimeAbsenceEntriesAsync.request());
@@ -52,9 +52,9 @@ export function* getTimeAbsenceEntriesSaga() {
 }
 
 export const getTimeAbsenceEntriesReducer = (
-  state: DashboardState,
-  action: DashboardActions,
-): DashboardState =>
+  state: SharedState,
+  action: SharedActions,
+): SharedState =>
   produce(state, draft => {
     switch (action.type) {
       case GET_TIME_ABSENCE_ENTRIES:

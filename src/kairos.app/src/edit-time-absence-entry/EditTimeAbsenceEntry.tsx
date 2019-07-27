@@ -33,7 +33,7 @@ export const EditTimeAbsenceEntryComponent: React.FC<EditTimeAbsenceEntryProps> 
 
   return (
     <Grid container spacing={3}>
-      <Grid item xs={12}>
+      <Grid item xs>
         <Paper className={classes.paper}>
           <Spinner show={isGetBusy}>
             <TimeAbsenceEntryForm isBusy={isUpdateBusy} model={timeAbsenceEntry} save={update} />

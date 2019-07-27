@@ -28,14 +28,9 @@ function* redirectIfAnonymous() {
   yield put(push(Routes.Login));
 }
 
-function* redirectIfAuthenticated() {
-  yield put(push(Routes.Dashboard));
-}
-
 export function* checkIsAuthenticatedSaga() {
   yield takeLatest(CHECK_IS_AUTHENTICATED, initAuth0);
   yield takeLatest(IS_ANONYMOUS, redirectIfAnonymous);
-  yield takeLatest(IS_AUTHENTICATED, redirectIfAuthenticated);
   yield put(checkIsAuthenticated());
 }
 

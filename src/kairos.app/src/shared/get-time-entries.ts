@@ -3,14 +3,14 @@ import produce from 'immer';
 import { call, put, select, takeLatest } from 'redux-saga/effects';
 import { createAsyncAction } from 'typesafe-actions';
 
-import { DashboardActions } from '../actions';
+import { SharedActions } from '../actions';
 import { Route } from '../models/route.model';
 import { TimeEntryModel } from '../models/time-entry.model';
 import { getTimeEntries } from '../services/time-entry/time-entry.service';
 import { CREATE_TIME_ENTRY_SUCCESS, DELETE_TIME_ENTRY_SUCCESS } from '../shared/constants';
-import { selectDashboardRoute } from '../shared/router.selectors';
+import { selectTimeEntriesRoute } from '../shared/router.selectors';
 import { GET_TIME_ENTRIES, GET_TIME_ENTRIES_FAILURE, GET_TIME_ENTRIES_SUCCESS } from './constants';
-import { DashboardState } from './state';
+import { SharedState } from './state';
 
 export const getTimeEntriesAsync = createAsyncAction(
   GET_TIME_ENTRIES,
@@ -19,7 +19,7 @@ export const getTimeEntriesAsync = createAsyncAction(
 )<void, TimeEntryModel[], string>();
 
 function* doGetTimeEntriesOnOtherActions() {
-  const route: Route = yield select(selectDashboardRoute);
+  const route: Route = yield select(selectTimeEntriesRoute);
 
   if (!!route) {
     yield put(getTimeEntriesAsync.request());
@@ -45,9 +45,9 @@ export function* getTimeEntriesSaga() {
 }
 
 export const getTimeEntriesReducer = (
-  state: DashboardState,
-  action: DashboardActions,
-): DashboardState =>
+  state: SharedState,
+  action: SharedActions,
+): SharedState =>
   produce(state, draft => {
     switch (action.type) {
       case GET_TIME_ENTRIES:

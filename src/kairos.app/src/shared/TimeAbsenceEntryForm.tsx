@@ -65,11 +65,11 @@ export const TimeAbsenceEntryForm: React.FC<TimeAbsenceEntryFormProps> = props =
 
   const handleDateChange = useCallback((date: MaterialUiPickersDate) => setDate(date), [setDate]);
   const handleHoursChange = useCallback(
-    (event: ChangeEvent<HTMLInputElement>) => setHours(parseInt(event.currentTarget.value, 10)),
+    (event: ChangeEvent<HTMLInputElement>) => setHours(event.currentTarget.valueAsNumber),
     [setHours],
   );
   const handleMinutesChange = useCallback(
-    (event: ChangeEvent<HTMLInputElement>) => setMinutes(parseInt(event.currentTarget.value, 10)),
+    (event: ChangeEvent<HTMLInputElement>) => setMinutes(event.currentTarget.valueAsNumber),
     [setMinutes],
   );
 

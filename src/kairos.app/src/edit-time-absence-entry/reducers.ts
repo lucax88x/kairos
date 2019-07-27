@@ -7,7 +7,7 @@ import { updateTimeAbsenceEntryReducer } from './update-time-absence-entry';
 
 const reducers = [getTimeAbsenceEntryReducer, updateTimeAbsenceEntryReducer];
 
-export const EditTimeAbsenceEntryReducers = (
+export const editTimeAbsenceEntryReducers = (
   state = editTimeAbsenceEntryInitialState,
   action: EditTimeAbsenceEntryActions,
 ): EditTimeAbsenceEntryState =>

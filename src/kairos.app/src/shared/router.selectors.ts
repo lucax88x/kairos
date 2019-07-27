@@ -4,9 +4,14 @@ import { createSelector } from 'reselect';
 import { Routes } from '../routes';
 import { State } from '../state';
 
-export const selectDashboardRoute = createSelector(
+export const selectTimeEntriesRoute = createSelector(
   (state: State) => state,
-  createMatchSelector(Routes.Dashboard),
+  createMatchSelector(Routes.TimeEntries),
+);
+
+export const selectTimeAbsenceEntriesRoute = createSelector(
+  (state: State) => state,
+  createMatchSelector(Routes.TimeAbsenceEntries),
 );
 
 export const selectEditTimeEntryRoute = createSelector(

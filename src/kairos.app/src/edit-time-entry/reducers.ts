@@ -7,7 +7,7 @@ import { updateTimeEntryReducer } from './update-time-entry';
 
 const reducers = [getTimeEntryReducer, updateTimeEntryReducer];
 
-export const EditTimeEntryReducers = (
+export const editTimeEntryReducers = (
   state = editTimeEntryInitialState,
   action: EditTimeEntryActions,
 ): EditTimeEntryState =>

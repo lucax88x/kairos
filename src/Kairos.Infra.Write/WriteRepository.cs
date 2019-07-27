@@ -13,7 +13,7 @@ namespace Kairos.Infra.Write
 {
     public interface IWriteRepository
     {
-        Task<ImmutableList<Event>> Save<T>(T aggregate) where T : AggregateRoot;
+        Task<ImmutableList<Event>> Save<T>(params T[] aggregates) where T : AggregateRoot;
         Task<T> Get<T>(Guid id) where T : AggregateRoot, new();
     }
 
@@ -28,27 +28,35 @@ namespace Kairos.Infra.Write
             _serializer = serializer;
         }
 
-        public async Task<ImmutableList<Event>> Save<T>(T aggregate) where T : AggregateRoot
+        
+        public async Task<ImmutableList<Event>> Save<T>(params T[] aggregates) where T : AggregateRoot
         {
             try
             {
                 using (var connection = await _writeConnectionFactory.Connect())
                 {
-                    var events = aggregate.GetUncommittedChanges();
+                    var result = new List<Event>();
+                    foreach (var aggregate in aggregates)
+                    {
+                        var events = aggregate.GetUncommittedChanges();
 
-                    if (!events.Any()) throw new ConcurrencyException();
+                        if (!events.Any()) throw new ConcurrencyException();
 
-                    var streamEvents = ToStreamEvents(events);
+                        var streamEvents = ToStreamEvents(events);
 
-                    await connection.AppendToStreamAsync(BuildStreamName<T>(aggregate.Id), aggregate.Version,
-                        streamEvents);
+                        await connection.AppendToStreamAsync(BuildStreamName<T>(aggregate.Id), aggregate.Version,
+                            streamEvents);
 
-                    aggregate.MarkChangesAsCommitted();
+                        aggregate.MarkChangesAsCommitted();
+                        
+                        result.AddRange(events);
 
-                    return events;
+                    }
+
+                    return result.ToImmutableList();
                 }
             }
-            catch (WrongExpectedVersionException ex)
+            catch (WrongExpectedVersionException)
             {
                 throw new ConcurrencyException();
             }

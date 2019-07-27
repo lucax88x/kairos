@@ -1,6 +1,6 @@
 import './Spinner.scss';
 
-import { Button, CircularProgress, makeStyles } from '@material-ui/core';
+import { CircularProgress, Fab, makeStyles } from '@material-ui/core';
 import { green } from '@material-ui/core/colors';
 import React from 'react';
 
@@ -17,34 +17,33 @@ const useStyles = makeStyles(theme => ({
   wrapper: {
     position: 'relative',
   },
-  buttonProgress: {
+  fabProgress: {
     color: green[500],
     position: 'absolute',
-    top: '50%',
-    left: '50%',
-    marginTop: -12,
-    marginLeft: -12,
+    top: -6,
+    left: -6,
+    zIndex: 1,
   },
 }));
 
-const ButtonSpinner: React.FC<ButtonSpinnerProps> = props => {
+const FabButtonSpinner: React.FC<ButtonSpinnerProps> = props => {
   const classes = useStyles(props);
 
   const { children, disabled, isBusy, onClick } = props;
 
   return (
     <div className={classes.wrapper}>
-      <Button variant="contained" color="primary" disabled={isBusy || disabled} onClick={onClick}>
+      <Fab color="primary" onClick={onClick} disabled={isBusy || disabled}>
         {children}
-      </Button>
-      {isBusy && <CircularProgress size={24} className={classes.buttonProgress} />}
+      </Fab>
+      {isBusy && <CircularProgress size={68} className={classes.fabProgress} />}
     </div>
   );
 };
 
-ButtonSpinner.defaultProps = {
+FabButtonSpinner.defaultProps = {
   isBusy: false,
   disabled: false,
 };
 
-export default ButtonSpinner;
+export default FabButtonSpinner;

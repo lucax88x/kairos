@@ -40,15 +40,15 @@ export const TimeEntriesComponent: React.FC<TimeEntriesProps> = memo(props => {
       </Typography>
       <Table>
         <colgroup>
-          <col width="45%" />
           <col width="35%" />
+          <col width="45%" />
           <col width="10%" />
           <col width="10%" />
         </colgroup>
         <TableHead>
           <TableRow>
-            <TableCell>When</TableCell>
             <TableCell>Type</TableCell>
+            <TableCell>When</TableCell>
             <TableCell />
             <TableCell />
           </TableRow>

@@ -1,6 +1,6 @@
 import { IconButton, TableCell, TableRow } from '@material-ui/core';
-import DeleteIcon from '@material-ui/icons/Delete';
 import CreateIcon from '@material-ui/icons/Create';
+import DeleteIcon from '@material-ui/icons/Delete';
 import { format } from 'date-fns';
 import React, { memo, useCallback } from 'react';
 

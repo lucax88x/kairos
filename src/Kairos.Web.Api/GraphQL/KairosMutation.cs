@@ -1,7 +1,10 @@
 using System;
+using System.Collections.Generic;
+using System.Linq;
 using GraphQL.Types;
 using Kairos.Application.TimeAbsenceEntry.Commands;
 using Kairos.Application.TimeEntry.Commands;
+using Kairos.Application.TimeEntry.Dtos;
 using Kairos.Web.Api.GraphQL.TimeAbsenceEntry.Types;
 using Kairos.Web.Api.GraphQL.TimeAbsenceEntry.Types.Inputs;
 using Kairos.Web.Api.GraphQL.TimeEntry.Types;
@@ -27,7 +30,7 @@ namespace Kairos.Web.Api.GraphQL
 
         private void SetTimeEntry()
         {
-            FieldAsync<CreateOrUpdateType>(
+            FieldAsync<CreateOrUpdateOutputType>(
                 "createTimeEntry",
                 arguments: new QueryArguments(
                     new QueryArgument<NonNullGraphType<TimeEntryInputType>> {Name = "timeEntry"}
@@ -35,11 +38,30 @@ namespace Kairos.Web.Api.GraphQL
                 resolve: async context =>
                 {
                     var input = context.GetArgument<TimeEntryInput>("timeEntry");
-                    var id = await _mediator.Send(new CreateTimeEntry(input.When, input.Type, input.Id));
-                    return new CreateOrUpdateOutput(id);
+
+                    var ids = await _mediator.Send(
+                        new CreateTimeEntries(new TimeEntryModel(input.When, input.Type, input.Id)));
+
+                    return new CreateOrUpdateOutput(ids.First());
                 });
 
-            FieldAsync<CreateOrUpdateType>(
+            FieldAsync<CreateOrUpdateOutputsType>(
+                "createTimeEntries",
+                arguments: new QueryArguments(
+                    new QueryArgument<ListGraphType<NonNullGraphType<TimeEntryInputType>>> {Name = "timeEntries"}
+                ),
+                resolve: async context =>
+                {
+                    var inputs = context.GetArgument<IEnumerable<TimeEntryInput>>("timeEntries");
+                    
+                    var ids = await _mediator.Send(new CreateTimeEntries(
+                        inputs.Select(input =>
+                            new TimeEntryModel(input.When, input.Type, input.Id)).ToArray()));
+                    
+                    return new CreateOrUpdateOutputs(ids);
+                });
+
+            FieldAsync<CreateOrUpdateOutputType>(
                 "deleteTimeEntry",
                 arguments: new QueryArguments(
                     new QueryArgument<IdGraphType> {Name = "id"}
@@ -54,7 +76,7 @@ namespace Kairos.Web.Api.GraphQL
 
         private void SetTimeAbsenceEntry()
         {
-            FieldAsync<CreateOrUpdateType>(
+            FieldAsync<CreateOrUpdateOutputType>(
                 "createTimeAbsenceEntry",
                 arguments: new QueryArguments(
                     new QueryArgument<NonNullGraphType<TimeAbsenceEntryInputType>> {Name = "timeAbsenceEntry"}
@@ -67,7 +89,7 @@ namespace Kairos.Web.Api.GraphQL
                     return new CreateOrUpdateOutput(id);
                 });
 
-            FieldAsync<CreateOrUpdateType>(
+            FieldAsync<CreateOrUpdateOutputType>(
                 "deleteTimeAbsenceEntry",
                 arguments: new QueryArguments(
                     new QueryArgument<IdGraphType> {Name = "id"}

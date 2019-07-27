@@ -16,9 +16,11 @@ import {
   Typography,
 } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
+import BeachAccessIcon from '@material-ui/icons/BeachAccess';
 import ChevronLeftIcon from '@material-ui/icons/ChevronLeft';
 import ChevronRightIcon from '@material-ui/icons/ChevronRight';
 import DashboardIcon from '@material-ui/icons/Dashboard';
+import FastForwardIcon from '@material-ui/icons/FastForward';
 import MenuIcon from '@material-ui/icons/Menu';
 import TimerIcon from '@material-ui/icons/Timer';
 import WeekendIcon from '@material-ui/icons/Weekend';
@@ -27,6 +29,7 @@ import React, { useCallback, useState } from 'react';
 import { Link, Route } from 'react-router-dom';
 
 import { ReactComponent as LogoIcon } from './assets/images/logo.svg';
+import { BulkInsert } from './bulk-insert/BulkInsert';
 import { CreateTimeAbsenceEntry } from './CreateTimeAbsenceEntry.container';
 import { CreateTimeEntry } from './CreateTimeEntry.container';
 import { Dashboard } from './dashboard/Dashboard';
@@ -34,6 +37,8 @@ import { EditTimeAbsenceEntry } from './edit-time-absence-entry/EditTimeAbsenceE
 import { EditTimeEntry } from './edit-time-entry/EditTimeEntry.container';
 import { UserModel } from './models/user.model';
 import { Routes } from './routes';
+import { TimeAbsenceEntries } from './time-absence-entries/TimeAbsenceEntries.container';
+import { TimeEntries } from './time-entries/TimeEntries.container';
 
 const drawerWidth = 240;
 
@@ -309,6 +314,32 @@ export const AppComponent: React.FC<AppProps> = props => {
             </ListItemIcon>
             <ListItemText primary="Dashboard" />
           </ListItem>
+          <Divider />
+          <ListItem button to={Routes.TimeEntries} component={Link}>
+            <ListItemIcon>
+              <TimerIcon />
+            </ListItemIcon>
+            <ListItemText primary="Time Entries" />
+          </ListItem>
+          <ListItem button to={Routes.TimeAbsenceEntries} component={Link}>
+            <ListItemIcon>
+              <WeekendIcon />
+            </ListItemIcon>
+            <ListItemText primary="Absences" />
+          </ListItem>
+          <ListItem button to={Routes.TimeAbsenceEntries} component={Link}>
+            <ListItemIcon>
+              <BeachAccessIcon />
+            </ListItemIcon>
+            <ListItemText primary="Holidays" />
+          </ListItem>
+          <Divider />
+          <ListItem button to={Routes.BulkInsert} component={Link}>
+            <ListItemIcon>
+              <FastForwardIcon />
+            </ListItemIcon>
+            <ListItemText primary="Bulk Insert" />
+          </ListItem>
         </List>
       </Drawer>
       <SwipeableDrawer
@@ -343,8 +374,11 @@ export const AppComponent: React.FC<AppProps> = props => {
         <div className={classes.appBarSpacer} />
         <Container maxWidth="lg" className={classes.container}>
           <Route exact={true} path={Routes.Dashboard} component={Dashboard} />
+          <Route path={Routes.TimeEntries} component={TimeEntries} />
+          <Route path={Routes.TimeAbsenceEntries} component={TimeAbsenceEntries} />
           <Route path={Routes.EditTimeEntry} component={EditTimeEntry} />
           <Route path={Routes.EditTimeAbsenceEntry} component={EditTimeAbsenceEntry} />
+          <Route path={Routes.BulkInsert} component={BulkInsert} />
         </Container>
       </main>
     </div>

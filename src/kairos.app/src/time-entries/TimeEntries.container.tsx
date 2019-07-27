@@ -5,9 +5,12 @@ import { Dispatch } from 'redux';
 import { Actions } from '../actions';
 import { TimeEntryModel } from '../models/time-entry.model';
 import { deleteTimeEntryAsync } from '../shared/delete-time-entry';
-import { selectIsDeleteTimeEntryBusy } from '../shared/selectors';
+import {
+  selectIsDeleteTimeEntryBusy,
+  selectIsGetTimeEntriesBusy,
+  selectTimeEntries,
+} from '../shared/selectors';
 import { State } from '../state';
-import { selectIsGetTimeEntriesBusy, selectTimeEntries } from './selectors';
 import { TimeEntriesComponent, TimeEntriesDispatches, TimeEntriesInputs } from './TimeEntries';
 
 const mapStateToProps = (state: State): TimeEntriesInputs => ({

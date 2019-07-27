@@ -1,7 +1,7 @@
 import { RouterState } from 'connected-react-router';
 
 import { AuthState } from '../auth/state';
-import { DashboardState } from '../dashboard/state';
+import { BulkInsertState } from '../bulk-insert/state';
 import { EditTimeAbsenceEntryState } from '../edit-time-absence-entry/state';
 import { EditTimeEntryState } from '../edit-time-entry/state';
 import { LayoutState } from '../layout/state';
@@ -14,9 +14,9 @@ export interface State {
   shared: SharedState;
   auth: AuthState;
   notificationManager: NotificationManagerState;
-  dashboard: DashboardState;
   editTimeEntry: EditTimeEntryState;
   editTimeAbsenceEntry: EditTimeAbsenceEntryState;
+  bulkInsert: BulkInsertState;
 }
 
 export type States =
@@ -25,6 +25,6 @@ export type States =
   | SharedState
   | AuthState
   | NotificationManagerState
-  | DashboardState
   | EditTimeEntryState
-  | EditTimeAbsenceEntryState;
+  | EditTimeAbsenceEntryState
+  | BulkInsertState;

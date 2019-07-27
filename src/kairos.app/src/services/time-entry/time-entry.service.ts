@@ -3,6 +3,7 @@ import { map } from 'ramda';
 import { TimeEntryModel, TimeEntryOutModel } from '../../models/time-entry.model';
 import { UUID } from '../../models/uuid.model';
 import { mutation, query } from '../graphql.service';
+import { createTimeEntriesMutation } from './mutations/create-time-entries';
 import { createTimeEntryMutation } from './mutations/create-time-entry';
 import { deleteTimeEntryMutation } from './mutations/delete-time-entry';
 import { updateTimeEntryMutation } from './mutations/update-time-entry';
@@ -31,4 +32,8 @@ export async function deleteTimeEntry(id: UUID) {
 
 export async function updateTimeEntry(model: TimeEntryModel) {
   await mutation(updateTimeEntryMutation, { timeEntry: model });
+}
+
+export async function bulkInsertTimeEntries(models: TimeEntryModel[]) {
+  await mutation(createTimeEntriesMutation, { timeEntries: models });
 }

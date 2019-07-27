@@ -46,9 +46,6 @@ namespace Kairos.Web.Api.Ioc
             builder.RegisterInstance(new DocumentExecuter()).As<IDocumentExecuter>();
             builder.RegisterInstance(new DocumentWriter()).As<IDocumentWriter>();
 
-            builder.RegisterType<CreateOrUpdateType>()
-                .AsSelf();
-            
             RegisterTypes(builder);
 
             builder.Register<Func<Type, GraphType>>(c =>
@@ -70,6 +67,11 @@ namespace Kairos.Web.Api.Ioc
 
         private static void RegisterTypes(ContainerBuilder builder)
         {
+            builder.RegisterType<CreateOrUpdateOutputType>()
+                .AsSelf();
+            builder.RegisterType<CreateOrUpdateOutputsType>()
+                .AsSelf();
+
             builder.RegisterType<TimeEntryType>()
                 .AsSelf();
             builder.RegisterType<TimeEntryTypeEnum>()
