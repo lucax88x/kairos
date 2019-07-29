@@ -14,6 +14,11 @@ export const selectTimeAbsenceEntriesRoute = createSelector(
   createMatchSelector(Routes.TimeAbsenceEntries),
 );
 
+export const selectTimeHolidayEntriesRoute = createSelector(
+  (state: State) => state,
+  createMatchSelector(Routes.TimeHolidayEntries),
+);
+
 export const selectEditTimeEntryRoute = createSelector(
   (state: State) => state,
   createMatchSelector(Routes.EditTimeEntry),

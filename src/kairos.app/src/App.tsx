@@ -38,6 +38,7 @@ import { EditTimeEntry } from './edit-time-entry/EditTimeEntry.container';
 import { UserModel } from './models/user.model';
 import { Routes } from './routes';
 import { TimeAbsenceEntries } from './time-absence-entries/TimeAbsenceEntries.container';
+import { TimeHolidayEntries } from './time-holiday-entries/TimeHolidayEntries.container';
 import { TimeEntries } from './time-entries/TimeEntries.container';
 
 const drawerWidth = 240;
@@ -327,7 +328,7 @@ export const AppComponent: React.FC<AppProps> = props => {
             </ListItemIcon>
             <ListItemText primary="Absences" />
           </ListItem>
-          <ListItem button to={Routes.TimeAbsenceEntries} component={Link}>
+          <ListItem button to={Routes.TimeHolidayEntries} component={Link}>
             <ListItemIcon>
               <BeachAccessIcon />
             </ListItemIcon>
@@ -376,6 +377,7 @@ export const AppComponent: React.FC<AppProps> = props => {
           <Route exact={true} path={Routes.Dashboard} component={Dashboard} />
           <Route path={Routes.TimeEntries} component={TimeEntries} />
           <Route path={Routes.TimeAbsenceEntries} component={TimeAbsenceEntries} />
+          <Route path={Routes.TimeHolidayEntries} component={TimeHolidayEntries} />
           <Route path={Routes.EditTimeEntry} component={EditTimeEntry} />
           <Route path={Routes.EditTimeAbsenceEntry} component={EditTimeAbsenceEntry} />
           <Route path={Routes.BulkInsert} component={BulkInsert} />

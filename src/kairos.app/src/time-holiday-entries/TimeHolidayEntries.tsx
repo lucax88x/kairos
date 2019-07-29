@@ -8,7 +8,7 @@ import { Index } from 'react-virtualized';
 import { formatAsDateTime } from '../code/constants';
 import Spinner from '../components/Spinner';
 import { VirtualizedTable } from '../components/VirtualizedTable';
-import { TimeEntryModel } from '../models/time-entry.model';
+import { TimeHolidayEntryModel } from '../models/time-holiday-entry.model';
 
 const useStyles = makeStyles(theme => ({
   container: {
@@ -17,29 +17,29 @@ const useStyles = makeStyles(theme => ({
   },
 }));
 
-export interface TimeEntriesInputs {
-  timeEntries: TimeEntryModel[];
-  isGetTimeEntriesBusy: boolean;
-  isDeleteTimeEntryBusy: boolean;
+export interface TimeHolidayEntriesInputs {
+  timeHolidayEntries: TimeHolidayEntryModel[];
+  isGetTimeHolidayEntriesBusy: boolean;
+  isDeleteTimeHolidayEntryBusy: boolean;
 }
 
-export interface TimeEntriesDispatches {
-  onUpdate: (item: TimeEntryModel) => void;
-  onDelete: (item: TimeEntryModel) => void;
+export interface TimeHolidayEntriesDispatches {
+  onUpdate: (item: TimeHolidayEntryModel) => void;
+  onDelete: (item: TimeHolidayEntryModel) => void;
 }
 
-type TimeEntriesProps = TimeEntriesInputs & TimeEntriesDispatches;
+type TimeHolidayEntriesProps = TimeHolidayEntriesInputs & TimeHolidayEntriesDispatches;
 
-export const TimeEntriesComponent: React.FC<TimeEntriesProps> = props => {
-  const { timeEntries, isGetTimeEntriesBusy, isDeleteTimeEntryBusy, onUpdate, onDelete } = props;
+export const TimeHolidayEntriesComponent: React.FC<TimeHolidayEntriesProps> = props => {
+  const { timeHolidayEntries, isGetTimeHolidayEntriesBusy, isDeleteTimeHolidayEntryBusy, onUpdate, onDelete } = props;
 
   const classes = useStyles(props);
 
-  const handleUpdate = useCallback((model: TimeEntryModel) => onUpdate(model), [onUpdate]);
-  const handleDelete = useCallback((model: TimeEntryModel) => onDelete(model), [onDelete]);
+  const handleUpdate = useCallback((model: TimeHolidayEntryModel) => onUpdate(model), [onUpdate]);
+  const handleDelete = useCallback((model: TimeHolidayEntryModel) => onDelete(model), [onDelete]);
 
   const noRowsRenderer = useCallback(() => <p>No time entries</p>, []);
-  const rowGetter = useCallback(({ index }: Index) => timeEntries[index], [timeEntries]);
+  const rowGetter = useCallback(({ index }: Index) => timeHolidayEntries[index], [timeHolidayEntries]);
   const dateFormatter = useCallback((data: Date) => format(data, formatAsDateTime), []);
   const updateCellRenderer = useCallback(
     model => (
@@ -59,27 +59,27 @@ export const TimeEntriesComponent: React.FC<TimeEntriesProps> = props => {
   );
 
   return (
-    <Spinner show={isGetTimeEntriesBusy || isDeleteTimeEntryBusy}>
+    <Spinner show={isGetTimeHolidayEntriesBusy || isDeleteTimeHolidayEntryBusy}>
       <Typography component="h2" variant="h6" color="primary" gutterBottom>
-        Time Entries
+        Holidays
       </Typography>
       <div className={classes.container}>
         <VirtualizedTable
-          rowCount={timeEntries.length}
+          rowCount={timeHolidayEntries.length}
           noRowsRenderer={noRowsRenderer}
           rowGetter={rowGetter}
           columns={[
             {
-              width: 100,
-              label: 'Type',
-              dataKey: 'type',
+              width: 200,
+              label: 'Description',
+              dataKey: 'description',
+              flexGrow: 1,
             },
             {
               width: 200,
               label: 'When',
               dataKey: 'when',
               flexGrow: 1,
-              formatter: dateFormatter,
             },
             {
               width: 100,

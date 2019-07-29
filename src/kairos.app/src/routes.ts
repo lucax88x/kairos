@@ -3,6 +3,7 @@ export class Routes {
   static Dashboard = '/dashboard';
   static TimeEntries = '/time-entries';
   static TimeAbsenceEntries = '/time-absence-entries';
+  static TimeHolidayEntries = '/time-holiday-entries';
   static EditTimeEntry = '/entry/:id';
   static EditTimeAbsenceEntry = '/absence/:id';
   static BulkInsert = '/bulk-insert';
