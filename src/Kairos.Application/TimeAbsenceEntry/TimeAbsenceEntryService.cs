@@ -3,6 +3,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using Kairos.Application.TimeAbsenceEntry.Commands;
 using Kairos.Domain;
+using Kairos.Domain.Events.TimeAbsenceEntry.EventDtos;
 using Kairos.Infra.Write;
 using MediatR;
 
@@ -26,10 +27,11 @@ namespace Kairos.Application.TimeAbsenceEntry
         {
             var user = _authProvider.GetUser();
 
-            var timeAbsenceEntry = Domain.TimeAbsenceEntry.Create(request.Id, user, request.When, request.Minutes,
-                (TimeAbsenceEntryType) request.Type);
+            var timeAbsenceEntry = Domain.TimeAbsenceEntry.Create(new TimeAbsenceEntryEventDto(request.TimeAbsenceEntry.Id, user, request.TimeAbsenceEntry.Description, request.TimeAbsenceEntry.Start,
+                request.TimeAbsenceEntry.End,
+                (TimeAbsenceEntryType) request.TimeAbsenceEntry.Type));
 
-            var events = await _writeRepository.Save(timeAbsenceEntry);
+            var events = await _writeRepository.Save(WriteRepository.DefaultKeyTaker, timeAbsenceEntry);
 
             foreach (var evt in events) await _mediator.Publish(evt, cancellationToken);
 
@@ -38,11 +40,11 @@ namespace Kairos.Application.TimeAbsenceEntry
 
         public async Task<Guid> Handle(DeleteTimeAbsenceEntry request, CancellationToken cancellationToken)
         {
-            var timeAbsenceEntry = await _writeRepository.Get<Domain.TimeAbsenceEntry>(request.Id);
+            var timeAbsenceEntry = await _writeRepository.GetOrDefault<Domain.TimeAbsenceEntry>(request.Id.ToString());
 
             timeAbsenceEntry.Delete();
 
-            var events = await _writeRepository.Save(timeAbsenceEntry);
+            var events = await _writeRepository.Save(WriteRepository.DefaultKeyTaker, timeAbsenceEntry);
 
             foreach (var evt in events) await _mediator.Publish(evt, cancellationToken);
 

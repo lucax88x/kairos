@@ -1,4 +1,4 @@
-import { IconButton, makeStyles, Typography } from '@material-ui/core';
+import { Button, IconButton, makeStyles, Typography } from '@material-ui/core';
 import CreateIcon from '@material-ui/icons/Create';
 import DeleteIcon from '@material-ui/icons/Delete';
 import { format } from 'date-fns';
@@ -14,6 +14,7 @@ const useStyles = makeStyles(theme => ({
   container: {
     height: '70vh',
     width: '100%',
+    marginBottom: theme.spacing(1),
   },
 }));
 
@@ -24,6 +25,7 @@ export interface TimeAbsenceEntriesInputs {
 }
 
 export interface TimeAbsenceEntriesDispatches {
+  onCreate: () => void;
   onUpdate: (item: TimeAbsenceEntryModel) => void;
   onDelete: (item: TimeAbsenceEntryModel) => void;
 }
@@ -31,15 +33,24 @@ export interface TimeAbsenceEntriesDispatches {
 type TimeAbsenceEntriesProps = TimeAbsenceEntriesInputs & TimeAbsenceEntriesDispatches;
 
 export const TimeAbsenceEntriesComponent: React.FC<TimeAbsenceEntriesProps> = props => {
-  const { timeAbsenceEntries, isGetTimeAbsenceEntriesBusy, isDeleteTimeAbsenceEntryBusy, onUpdate, onDelete } = props;
+  const {
+    timeAbsenceEntries,
+    isGetTimeAbsenceEntriesBusy,
+    isDeleteTimeAbsenceEntryBusy,
+    onCreate,
+    onUpdate,
+    onDelete,
+  } = props;
 
   const classes = useStyles(props);
 
   const handleUpdate = useCallback((model: TimeAbsenceEntryModel) => onUpdate(model), [onUpdate]);
   const handleDelete = useCallback((model: TimeAbsenceEntryModel) => onDelete(model), [onDelete]);
 
-  const noRowsRenderer = useCallback(() => <p>No time entries</p>, []);
-  const rowGetter = useCallback(({ index }: Index) => timeAbsenceEntries[index], [timeAbsenceEntries]);
+  const noRowsRenderer = useCallback(() => <p>No absences</p>, []);
+  const rowGetter = useCallback(({ index }: Index) => timeAbsenceEntries[index], [
+    timeAbsenceEntries,
+  ]);
   const dateFormatter = useCallback((data: Date) => format(data, formatAsDateTime), []);
   const updateCellRenderer = useCallback(
     model => (
@@ -76,15 +87,22 @@ export const TimeAbsenceEntriesComponent: React.FC<TimeAbsenceEntriesProps> = pr
             },
             {
               width: 200,
-              label: 'When',
-              dataKey: 'when',
+              label: 'Start',
+              dataKey: 'start',
               flexGrow: 1,
               formatter: dateFormatter,
             },
             {
               width: 200,
-              label: 'Time',
-              dataKey: 'minutes',
+              label: 'end',
+              dataKey: 'end',
+              flexGrow: 1,
+              formatter: dateFormatter,
+            },
+            {
+              width: 200,
+              label: 'Description',
+              dataKey: 'description',
             },
             {
               width: 100,
@@ -101,6 +119,9 @@ export const TimeAbsenceEntriesComponent: React.FC<TimeAbsenceEntriesProps> = pr
           ]}
         />
       </div>
+      <Button variant="contained" color="primary" onClick={onCreate}>
+        Create
+      </Button>
     </Spinner>
   );
 };

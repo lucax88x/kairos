@@ -1,4 +1,4 @@
-import { IconButton, makeStyles, Typography } from '@material-ui/core';
+import { Button, IconButton, makeStyles, Typography } from '@material-ui/core';
 import CreateIcon from '@material-ui/icons/Create';
 import DeleteIcon from '@material-ui/icons/Delete';
 import { format } from 'date-fns';
@@ -14,6 +14,7 @@ const useStyles = makeStyles(theme => ({
   container: {
     height: '70vh',
     width: '100%',
+    marginBottom: theme.spacing(1),
   },
 }));
 
@@ -24,6 +25,7 @@ export interface TimeHolidayEntriesInputs {
 }
 
 export interface TimeHolidayEntriesDispatches {
+  onCreate: () => void;
   onUpdate: (item: TimeHolidayEntryModel) => void;
   onDelete: (item: TimeHolidayEntryModel) => void;
 }
@@ -31,15 +33,24 @@ export interface TimeHolidayEntriesDispatches {
 type TimeHolidayEntriesProps = TimeHolidayEntriesInputs & TimeHolidayEntriesDispatches;
 
 export const TimeHolidayEntriesComponent: React.FC<TimeHolidayEntriesProps> = props => {
-  const { timeHolidayEntries, isGetTimeHolidayEntriesBusy, isDeleteTimeHolidayEntryBusy, onUpdate, onDelete } = props;
+  const {
+    timeHolidayEntries,
+    isGetTimeHolidayEntriesBusy,
+    isDeleteTimeHolidayEntryBusy,
+    onCreate,
+    onUpdate,
+    onDelete,
+  } = props;
 
   const classes = useStyles(props);
 
   const handleUpdate = useCallback((model: TimeHolidayEntryModel) => onUpdate(model), [onUpdate]);
   const handleDelete = useCallback((model: TimeHolidayEntryModel) => onDelete(model), [onDelete]);
 
-  const noRowsRenderer = useCallback(() => <p>No time entries</p>, []);
-  const rowGetter = useCallback(({ index }: Index) => timeHolidayEntries[index], [timeHolidayEntries]);
+  const noRowsRenderer = useCallback(() => <p>No holidays</p>, []);
+  const rowGetter = useCallback(({ index }: Index) => timeHolidayEntries[index], [
+    timeHolidayEntries,
+  ]);
   const dateFormatter = useCallback((data: Date) => format(data, formatAsDateTime), []);
   const updateCellRenderer = useCallback(
     model => (
@@ -71,15 +82,22 @@ export const TimeHolidayEntriesComponent: React.FC<TimeHolidayEntriesProps> = pr
           columns={[
             {
               width: 200,
-              label: 'Description',
-              dataKey: 'description',
+              label: 'Start',
+              dataKey: 'start',
               flexGrow: 1,
+              formatter: dateFormatter,
             },
             {
               width: 200,
-              label: 'When',
-              dataKey: 'when',
+              label: 'End',
+              dataKey: 'end',
               flexGrow: 1,
+              formatter: dateFormatter,
+            },
+            {
+              width: 200,
+              label: 'Description',
+              dataKey: 'description',
             },
             {
               width: 100,
@@ -96,6 +114,9 @@ export const TimeHolidayEntriesComponent: React.FC<TimeHolidayEntriesProps> = pr
           ]}
         />
       </div>
+      <Button variant="contained" color="primary" onClick={onCreate}>
+        Create
+      </Button>
     </Spinner>
   );
 };

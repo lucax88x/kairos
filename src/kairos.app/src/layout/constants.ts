@@ -6,3 +6,6 @@ export const CLOSE_TIME_ENTRY_DRAWER = '[LAYOUT] Close time entry drawer';
 
 export const OPEN_TIME_ABSENCE_ENTRY_DRAWER = '[LAYOUT] Open time absence entry drawer';
 export const CLOSE_TIME_ABSENCE_ENTRY_DRAWER = '[LAYOUT] Close time absence entry drawer';
+
+export const OPEN_TIME_HOLIDAY_ENTRY_MODAL = '[LAYOUT] Open time holiday entry modal';
+export const CLOSE_TIME_HOLIDAY_ENTRY_MODAL = '[LAYOUT] Close time holiday entry modal';

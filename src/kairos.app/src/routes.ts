@@ -1,5 +1,6 @@
 export class Routes {
   static Login = '/login';
+  static Profile = '/profile';
   static Dashboard = '/dashboard';
   static TimeEntries = '/time-entries';
   static TimeAbsenceEntries = '/time-absence-entries';

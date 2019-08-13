@@ -9,6 +9,7 @@ import { deleteTimeEntryMutation } from './mutations/delete-time-entry';
 import { updateTimeEntryMutation } from './mutations/update-time-entry';
 import { getTimeEntriesQuery } from './queries/get-time-entries';
 import { getTimeEntryQuery } from './queries/get-time-entry';
+import { TimeEntryListModel, TimeEntryListOutModel } from '../../models/time-entry-list.model';
 
 export async function getTimeEntry(id: UUID) {
   const result = await query<{ timeEntry: TimeEntryOutModel }>(getTimeEntryQuery, { id });
@@ -17,9 +18,9 @@ export async function getTimeEntry(id: UUID) {
 }
 
 export async function getTimeEntries() {
-  const result = await query<{ timeEntries: TimeEntryOutModel[] }>(getTimeEntriesQuery);
+  const result = await query<{ timeEntries: TimeEntryListOutModel[] }>(getTimeEntriesQuery);
 
-  return map(out => TimeEntryModel.fromOutModel(out), result.timeEntries);
+  return map(out => TimeEntryListModel.fromOutModel(out), result.timeEntries);
 }
 
 export async function createTimeEntry(model: TimeEntryModel) {

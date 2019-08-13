@@ -1,16 +1,17 @@
 using GraphQL.Types;
-using Kairos.Web.Api.GraphQL.TimeAbsenceEntry.Types.Inputs;
+using Kairos.Application.TimeAbsenceEntry.Dtos;
 
 namespace Kairos.Web.Api.GraphQL.TimeAbsenceEntry.Types
 {
-    public class TimeAbsenceEntryInputType : InputObjectGraphType<TimeAbsenceEntryInput>
+    public class TimeAbsenceEntryInputType : InputObjectGraphType<TimeAbsenceEntryModel>
     {
         public TimeAbsenceEntryInputType()
         {
-            Name = nameof(TimeAbsenceEntryInput);
+            Name = nameof(TimeAbsenceEntryModel);
             Field(x => x.Id, type: typeof(IdGraphType));
-            Field(x => x.When);
-            Field(x => x.Minutes);
+            Field(x => x.Description);
+            Field(x => x.Start);
+            Field(x => x.End);
             Field(x => x.Type, type: typeof(TimeAbsenceEntryTypeEnum));
         }
     }

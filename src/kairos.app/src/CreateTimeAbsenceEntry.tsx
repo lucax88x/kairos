@@ -8,13 +8,13 @@ export interface CreateTimeAbsenceEntryInputs {
 }
 
 export interface CreateTimeAbsenceEntryDispatches {
-  create: (model: TimeAbsenceEntryModel) => void;
+  onCreate: (model: TimeAbsenceEntryModel) => void;
 }
 
 type CreateTimeAbsenceEntryProps = CreateTimeAbsenceEntryInputs & CreateTimeAbsenceEntryDispatches;
 
 export const CreateTimeAbsenceEntryComponent: React.FC<CreateTimeAbsenceEntryProps> = props => {
-  const { create, isBusy } = props;
+  const { onCreate, isBusy } = props;
 
-  return <TimeAbsenceEntryForm isBusy={isBusy} model={new TimeAbsenceEntryModel()} save={create} />;
+  return <TimeAbsenceEntryForm isBusy={isBusy} model={new TimeAbsenceEntryModel()} save={onCreate} />;
 };

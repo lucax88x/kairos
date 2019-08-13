@@ -2,12 +2,7 @@ import { createSelector } from 'reselect';
 
 import { State } from '../state';
 
-const selectState = (state: State) => state.editTimeEntry;
-
-export const selectTimeEntry = createSelector(
-  selectState,
-  state => state.timeEntry,
-);
+const selectState = (state: State) => state.editTimeAbsenceEntry;
 
 export const selectTimeAbsenceEntry = createSelector(
   selectState,
@@ -22,16 +17,6 @@ export const selectUi = createSelector(
 export const selectBusy = createSelector(
   selectUi,
   ui => ui.busy,
-);
-
-export const selectIsGetTimeEntryBusy = createSelector(
-  selectBusy,
-  busy => busy.getTimeEntry,
-);
-
-export const selectIsUpdateTimeEntryBusy = createSelector(
-  selectBusy,
-  busy => busy.updateTimeEntry,
 );
 
 export const selectIsGetTimeAbsenceEntryBusy = createSelector(

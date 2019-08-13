@@ -30,7 +30,7 @@ namespace Kairos.Infra.Write.Tests
             obj.Increase();
 
             // WHEN            
-            var events = await _sut.Save(obj);
+            var events = await _sut.Save(WriteRepository.DefaultKeyTaker, obj);
 
             // THEN
             events.Should().HaveCount(2);
@@ -44,10 +44,10 @@ namespace Kairos.Infra.Write.Tests
             obj.Increase();
             obj.Increase();
             obj.Increase();
-            await _sut.Save(obj);
+            await _sut.Save(WriteRepository.DefaultKeyTaker, obj);
 
             // WHEN          
-            var loaded = await _sut.Get<TestDomainObject>(obj.Id);
+            var loaded = await _sut.GetOrDefault<TestDomainObject>(obj.Id.ToString());
 
             // THEN
             loaded.Counter.Should().Be(3);
@@ -59,13 +59,13 @@ namespace Kairos.Infra.Write.Tests
             // GIVEN
             var obj = TestDomainObject.Create();
             obj.Increase();
-            await _sut.Save(obj);
+            await _sut.Save(WriteRepository.DefaultKeyTaker, obj);
 
-            var loaded = await _sut.Get<TestDomainObject>(obj.Id);
+            var loaded = await _sut.GetOrDefault<TestDomainObject>(obj.Id.ToString());
             loaded.Increase();
 
             // WHEN          
-            var events = await _sut.Save(loaded);
+            var events = await _sut.Save(WriteRepository.DefaultKeyTaker, loaded);
 
             // THEN
             events.Should().HaveCount(1);

@@ -5,7 +5,7 @@ import React, { memo, useCallback, useMemo } from 'react';
 
 import { getDifferencesByRange } from '../code/calculator';
 import Spinner from '../components/Spinner';
-import { TimeEntryModel } from '../models/time-entry.model';
+import { TimeEntryListModel } from '../models/time-entry-list.model';
 
 const useStyles = makeStyles(theme => ({
   grid: {
@@ -28,12 +28,12 @@ const useStyles = makeStyles(theme => ({
 }));
 
 export interface TimeEntriesByRangeInputs {
-  timeEntries: TimeEntryModel[];
+  timeEntries: TimeEntryListModel[];
   isGetTimeEntriesBusy: boolean;
 }
 
 export interface TimeEntriesByRangeDispatches {
-  onUpdate: (item: TimeEntryModel) => void;
+  onUpdate: (item: TimeEntryListModel) => void;
 }
 
 type TimeEntriesByRangeProps = TimeEntriesByRangeInputs & TimeEntriesByRangeDispatches;

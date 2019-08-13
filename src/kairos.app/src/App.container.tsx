@@ -1,3 +1,4 @@
+import { push } from 'connected-react-router';
 import { connect } from 'react-redux';
 import { Dispatch } from 'redux';
 
@@ -18,6 +19,7 @@ import {
   selectIsTimeAbsenceEntryDrawerOpen,
   selectIsTimeEntryDrawerOpen,
 } from './layout/selectors';
+import { Routes } from './routes';
 import { State } from './state';
 
 const mapStateToProps = (state: State): AppInputs => ({
@@ -34,7 +36,8 @@ const mapDispatchToProps = (dispatch: Dispatch<Actions>): AppDispatches => ({
   closeTimeEntryDrawer: () => dispatch(closeTimeEntryDrawerAction()),
   openTimeAbsenceEntryDrawer: () => dispatch(openTimeAbsenceEntryDrawerAction()),
   closeTimeAbsenceEntryDrawer: () => dispatch(closeTimeAbsenceEntryDrawerAction()),
-  logout: () => dispatch(logout()),
+  onLogout: () => dispatch(logout()),
+  onNavigateToProfile: () => dispatch(push(Routes.Profile)),
 });
 
 export const App = connect(

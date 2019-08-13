@@ -1,6 +1,6 @@
-import { parseISO } from 'date-fns';
-
+import { endOfDay, parseISO, startOfDay } from 'date-fns';
 import { UUID } from './uuid.model';
+
 
 export enum TimeAbsenceEntryTypes {
   VACATION = 'VACATION',
@@ -10,30 +10,43 @@ export enum TimeAbsenceEntryTypes {
 export class TimeAbsenceEntryModel {
   constructor(
     public id = UUID.Generate(),
-    public when = new Date(),
-    public minutes = 0,
+    public description = '',
+    public start = startOfDay(new Date()),
+    public end = endOfDay(new Date()),
     public type = TimeAbsenceEntryTypes.VACATION,
   ) {}
 
   static fromOutModel(outModel: TimeAbsenceEntryOutModel) {
     return new TimeAbsenceEntryModel(
       new UUID(outModel.id),
-      parseISO(outModel.when),
-      outModel.minutes,
+      outModel.description,
+      parseISO(outModel.start),
+      parseISO(outModel.end),
       TimeAbsenceEntryTypes[outModel.type],
     );
   }
 
-  static empty: TimeAbsenceEntryModel = new TimeAbsenceEntryModel(new UUID(), new Date(0));
+  static empty: TimeAbsenceEntryModel = new TimeAbsenceEntryModel(
+    new UUID(),
+    '',
+    new Date(0),
+    new Date(0),
+  );
 
   isEmpty() {
-    return this.id === TimeAbsenceEntryModel.empty.id && this.when === TimeAbsenceEntryModel.empty.when;
+    return (
+      this.id.equals(TimeAbsenceEntryModel.empty.id) &&
+      this.description === TimeAbsenceEntryModel.empty.description &&
+      this.start === TimeAbsenceEntryModel.empty.start &&
+      this.end === TimeAbsenceEntryModel.empty.end
+    );
   }
 }
 
 export interface TimeAbsenceEntryOutModel {
   id: string;
-  when: string;
-  minutes: number;
+  description: string;
+  start: string;
+  end: string;
   type: TimeAbsenceEntryTypes;
 }

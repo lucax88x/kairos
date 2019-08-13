@@ -1,12 +1,13 @@
 using System;
 using System.Collections.Immutable;
 using System.Threading.Tasks;
+using Kairos.Domain.Events.TimeAbsenceEntry.EventDtos;
 
 namespace Kairos.Infra.Read.TimeAbsenceEntry
 {
     public interface ITimeAbsenceEntryReadRepository
     {
-        Task Add(Guid id, string user, DateTimeOffset when, int minutes, int type);
+        Task AddOrUpdate(TimeAbsenceEntryEventDto timeAbsenceEntry);
         Task Delete(Guid id, string user);
         Task<ImmutableArray<TimeAbsenceEntryReadDto>> Get(string user);
         Task<TimeAbsenceEntryReadDto> GetById(Guid id);
@@ -21,12 +22,12 @@ namespace Kairos.Infra.Read.TimeAbsenceEntry
             _repository = readRepositoryFactory.Build("time-absence-entry");
         }
 
-        public async Task Add(Guid id, string user, DateTimeOffset when, int minutes, int type)
+        public async Task AddOrUpdate(TimeAbsenceEntryEventDto timeAbsenceEntry)
         {
-            var dto = new TimeAbsenceEntryReadDto(id, when, minutes, type);
+            var dto = new TimeAbsenceEntryReadDto(timeAbsenceEntry.Id, timeAbsenceEntry.Description, timeAbsenceEntry.Start, timeAbsenceEntry.End, (int)timeAbsenceEntry.Type);
 
-            await _repository.Set(id, dto);
-            await _repository.SortedSetAdd($"by-when|by-user|{user}", dto.When.UtcTicks, id);
+            await _repository.Set(timeAbsenceEntry.Id, dto);
+            await _repository.SortedSetAdd($"by-when|by-user|{timeAbsenceEntry.User}", dto.Start.UtcTicks, timeAbsenceEntry.Id);
         }
 
         public async Task Delete(Guid id, string user)

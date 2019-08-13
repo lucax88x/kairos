@@ -3,8 +3,12 @@ using GraphQL.Types;
 using Kairos.Application;
 using Kairos.Application.TimeAbsenceEntry.Queries;
 using Kairos.Application.TimeEntry.Queries;
+using Kairos.Application.TimeHolidayEntry.Queries;
+using Kairos.Application.UserProfile.Queries;
 using Kairos.Web.Api.GraphQL.TimeAbsenceEntry.Types;
 using Kairos.Web.Api.GraphQL.TimeEntry.Types;
+using Kairos.Web.Api.GraphQL.TimeHolidayEntry.Types;
+using Kairos.Web.Api.GraphQL.UserProfile.Types;
 using MediatR;
 
 namespace Kairos.Web.Api.GraphQL
@@ -22,6 +26,25 @@ namespace Kairos.Web.Api.GraphQL
 
             SetTimeEntry();
             SetTimeAbsenceEntry();
+            SetTimeHolidayEntry();
+            SetUserProfile();
+        }
+
+        private void SetTimeEntry()
+        {
+            FieldAsync<TimeEntryType>(
+                "timeEntry",
+                "The time entry",
+                new QueryArguments(
+                    new QueryArgument<IdGraphType>
+                        {Name = "id", Description = "id of the time entry"}
+                ),
+                async context => await _mediator.Send(new GetTimeEntryById(context.GetArgument<Guid>("id"))));
+
+            FieldAsync<ListGraphType<TimeEntryType>>(
+                "timeEntries",
+                "The time entries of user",
+                resolve: async context => await _mediator.Send(new GetTimeEntries(_authProvider.GetUser())));
         }
 
         private void SetTimeAbsenceEntry()
@@ -41,21 +64,29 @@ namespace Kairos.Web.Api.GraphQL
                 resolve: async context => await _mediator.Send(new GetTimeAbsenceEntries(_authProvider.GetUser())));
         }
 
-        private void SetTimeEntry()
+        private void SetTimeHolidayEntry()
         {
-            FieldAsync<TimeEntryType>(
-                "timeEntry",
-                "The time entry",
+            FieldAsync<TimeHolidayEntryType>(
+                "timeHolidayEntry",
+                "The time holiday entry",
                 new QueryArguments(
                     new QueryArgument<IdGraphType>
-                        {Name = "id", Description = "id of the time entry"}
+                        {Name = "id", Description = "id of the time holiday entry"}
                 ),
-                async context => await _mediator.Send(new GetTimeEntryById(context.GetArgument<Guid>("id"))));
+                async context => await _mediator.Send(new GetTimeHolidayEntryById(context.GetArgument<Guid>("id"))));
 
-            FieldAsync<ListGraphType<TimeEntryType>>(
-                "timeEntries",
-                "The time entries of user",
-                resolve: async context => await _mediator.Send(new GetTimeEntries(_authProvider.GetUser())));
+            FieldAsync<ListGraphType<TimeHolidayEntryType>>(
+                "timeHolidayEntries",
+                "The time holiday entries of user",
+                resolve: async context => await _mediator.Send(new GetTimeHolidayEntries(_authProvider.GetUser())));
+        }
+
+        private void SetUserProfile()
+        {
+            FieldAsync<UserProfileType>(
+                "userProfile",
+                "The profile of user",
+                resolve: async context => await _mediator.Send(new GetUserProfileByUser()));
         }
     }
 }

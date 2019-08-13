@@ -1,9 +1,10 @@
 import { TimeAbsenceEntryModel } from '../models/time-absence-entry.model';
 import { TimeHolidayEntryModel } from '../models/time-holiday-entry.model';
 import { TimeEntryModel } from '../models/time-entry.model';
+import { TimeEntryListModel } from '../models/time-entry-list.model';
 
 export interface SharedState {
-  timeEntries: TimeEntryModel[];
+  timeEntries: TimeEntryListModel[];
   timeAbsenceEntries: TimeAbsenceEntryModel[];
   timeHolidayEntries: TimeHolidayEntryModel[];
 

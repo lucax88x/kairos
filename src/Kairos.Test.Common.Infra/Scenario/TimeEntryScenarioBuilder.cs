@@ -25,7 +25,11 @@ namespace Kairos.Test.Common.Infra.Scenario
             }
 
             var ids = await _mediator.Send(
-                new CreateTimeEntries(new TimeEntryModel(DateTimeOffset.Parse(when), (int) type, id)));
+                new CreateTimeEntries(new TimeEntryModel(
+                    DateTimeOffset.Parse(when),
+                    (int) type,
+                    UserProfileScenarioBuilder.Job1, UserProfileScenarioBuilder.Project1,
+                    id)));
 
             return ids.First();
         }

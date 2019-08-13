@@ -1,8 +1,11 @@
 using System;
 using Autofac;
 using Autofac.Extras.DynamicProxy;
+using Kairos.Application;
 using Kairos.Config.Ioc;
 using Kairos.Infra.Read;
+using Kairos.Infra.Write;
+using Kairos.Test.Common.Infra.Builders;
 using Kairos.Test.Common.Infra.FluentAssertion;
 using Kairos.Test.Common.Infra.Mediator;
 using Kairos.Test.Common.Infra.Scenario;
@@ -20,6 +23,7 @@ namespace Kairos.Test.Common.Infra
         public FluentSandboxAssertion Should { get; private set; }
         public IMediator Mediator { get; private set; }
         public ScenarioBuilder Scenario { get; private set; }
+        public ModelBuilder Model { get; private set; }
         public IReadConnectionFactory ReadConnectionFactory { get; private set; }
 
         public Sandbox(SandboxOptions sandboxOptions, params Module[] modules)
@@ -34,12 +38,16 @@ namespace Kairos.Test.Common.Infra
             RegisterMediatorSniffers(builder);
             RegisterFluentAssertions(builder);
             RegisterScenarioBuilder(builder);
+            RegisterModelBuilder(builder);
+            RegisterAuthProvider(builder);
+            RegisterEventStore(builder);
 
             _container = builder.Build();
 
             ResolveMediator();
             ResolveFluentAssertions();
             ResolveScenarioBuilder();
+            ResolveModelBuilder();
             ResolveReadConnectionFactory();
 
             SetupRedis();
@@ -83,7 +91,7 @@ namespace Kairos.Test.Common.Infra
         private void RegisterFluentAssertions(ContainerBuilder builder)
         {
             // needed for Assertions
-            builder.RegisterModule(new Kairos.Config.Ioc.Module(
+            builder.RegisterModule(new Config.Ioc.Module(
                 new ConfigBuilder().Build(),
                 new ModuleOptions
                 {
@@ -116,6 +124,30 @@ namespace Kairos.Test.Common.Infra
             
             builder.RegisterType<TimeEntryScenarioBuilder>().AsSelf().SingleInstance()
                 .PropertiesAutowired(PropertyWiringOptions.AllowCircularDependencies);
+            
+            builder.RegisterType<UserProfileScenarioBuilder>().AsSelf().SingleInstance()
+                .PropertiesAutowired(PropertyWiringOptions.AllowCircularDependencies);
+        }
+        
+        private void RegisterModelBuilder(ContainerBuilder builder)
+        {
+            builder.RegisterType<ModelBuilder>().AsSelf().SingleInstance()
+                .PropertiesAutowired(PropertyWiringOptions.AllowCircularDependencies);
+            
+            builder.RegisterType<UserJobModelBuilder>().AsSelf().SingleInstance()
+                .PropertiesAutowired(PropertyWiringOptions.AllowCircularDependencies);
+        }
+        
+        private void RegisterAuthProvider(ContainerBuilder builder)
+        {
+            builder.RegisterType<FakeAuthProvider>().As<IAuthProvider>().SingleInstance();
+        }
+
+        private void RegisterEventStore(ContainerBuilder builder)
+        {
+            builder
+                .RegisterInstance(new FakeWriteSchemaBuilder(DateTime.UtcNow.Ticks.ToString()))
+                .As<IWriteSchemaBuilder>().SingleInstance();
         }
 
         private void ResolveMediator()
@@ -132,6 +164,11 @@ namespace Kairos.Test.Common.Infra
         private void ResolveScenarioBuilder()
         {
             Scenario = _container.Resolve<ScenarioBuilder>();
+        }
+        
+        private void ResolveModelBuilder()
+        {
+            Model = _container.Resolve<ModelBuilder>();
         }
         
         private void ResolveReadConnectionFactory()

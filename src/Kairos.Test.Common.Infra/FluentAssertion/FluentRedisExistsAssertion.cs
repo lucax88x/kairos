@@ -16,6 +16,11 @@ namespace Kairos.Test.Common.Infra.FluentAssertion
 
         public async Task Set(string prefix, Guid id)
         {
+            await Set(prefix, id.ToString());
+        }
+
+        public async Task Set(string prefix, string id)
+        {
             var readRepository = _readRepositoryFactory.Build(prefix);
 
             var result = await readRepository.Exists(id);
@@ -24,7 +29,7 @@ namespace Kairos.Test.Common.Infra.FluentAssertion
 
             true.Should().BeTrue();
         }
-        
+
         public async Task SortedSet(string prefix, string key, int count)
         {
             var readRepository = _readRepositoryFactory.Build(prefix);

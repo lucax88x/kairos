@@ -18,3 +18,8 @@ export const selectIsTimeAbsenceEntryDrawerOpen = createSelector(
   selectState,
   state => state.isTimeAbsenceEntryDrawerOpen,
 );
+
+export const selectIsTimeHolidayEntryModalOpen = createSelector(
+  selectState,
+  state => state.isTimeHolidayEntryModalOpen,
+);

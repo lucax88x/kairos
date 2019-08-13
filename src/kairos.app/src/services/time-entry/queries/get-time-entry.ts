@@ -1,7 +1,13 @@
 export const getTimeEntryQuery = `query ($id: ID!) {
   timeEntry(id: $id) {
-    id,
-    when,
+    id
+    when
     type
+    job {
+      name
+    }
+    project {
+      name
+    }
   }
 }`;

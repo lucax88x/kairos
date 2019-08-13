@@ -11,7 +11,7 @@ import {
   CREATE_TIME_ABSENCE_ENTRY_SUCCESS,
   DELETE_TIME_ABSENCE_ENTRY_SUCCESS,
 } from '../shared/constants';
-import { selectTimeAbsenceEntriesRoute } from '../shared/router.selectors';
+import { selectTimeAbsenceEntriesRoute, selectDashboardRoute } from '../shared/router.selectors';
 import {
   GET_TIME_ABSENCE_ENTRIES,
   GET_TIME_ABSENCE_ENTRIES_FAILURE,
@@ -26,9 +26,10 @@ export const getTimeAbsenceEntriesAsync = createAsyncAction(
 )<void, TimeAbsenceEntryModel[], string>();
 
 function* doGetTimeAbsenceEntriesOnOtherActions() {
-  const route: Route = yield select(selectTimeAbsenceEntriesRoute);
+  const dashboardRoute: Route = yield select(selectDashboardRoute);
+  const timeAbsenceEntriesRoute: Route = yield select(selectTimeAbsenceEntriesRoute);
 
-  if (!!route) {
+  if (!!dashboardRoute || !!timeAbsenceEntriesRoute) {
     yield put(getTimeAbsenceEntriesAsync.request());
   }
 }

@@ -4,7 +4,7 @@ using Kairos.Infra.Read.TimeEntry;
 
 namespace Kairos.Application.TimeEntry.Queries
 {
-    public class GetTimeEntries : Query<ImmutableArray<TimeEntryReadDto>>
+    public class GetTimeEntries : Query<ImmutableList<TimeEntryAggregationReadDto>>
     {
         public GetTimeEntries(string id)
         {

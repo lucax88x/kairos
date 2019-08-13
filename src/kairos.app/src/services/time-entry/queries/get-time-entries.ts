@@ -3,5 +3,11 @@ export const getTimeEntriesQuery = `{
     id
     when
     type
+    job {
+      name
+    }
+    project {
+      name
+    }
   }
 }`;

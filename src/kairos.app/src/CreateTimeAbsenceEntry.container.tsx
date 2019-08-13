@@ -17,7 +17,7 @@ const mapStateToProps = (state: State): CreateTimeAbsenceEntryInputs => ({
 });
 
 const mapDispatchToProps = (dispatch: Dispatch<Actions>): CreateTimeAbsenceEntryDispatches => ({
-  create: (model: TimeAbsenceEntryModel) => dispatch(createTimeAbsenceEntryAsync.request(model)),
+  onCreate: (model: TimeAbsenceEntryModel) => dispatch(createTimeAbsenceEntryAsync.request(model)),
 });
 
 export const CreateTimeAbsenceEntry = connect(

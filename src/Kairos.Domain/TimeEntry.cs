@@ -1,7 +1,7 @@
 ﻿using System;
 using Kairos.Common;
-using Kairos.Domain.Events;
 using Kairos.Domain.Events.TimeEntry;
+using Kairos.Domain.Events.TimeEntry.EventDtos;
 
 namespace Kairos.Domain
 {
@@ -13,7 +13,7 @@ namespace Kairos.Domain
 
     public class TimeEntry : AggregateRoot
     {
-        public string User{ get; private set; }
+        public string User { get; private set; }
         public DateTimeOffset When { get; private set; }
         public TimeEntryType Type { get; private set; }
 
@@ -23,10 +23,10 @@ namespace Kairos.Domain
             {
                 case TimeEntryAdded added:
                 {
-                    Id = added.Id;
-                    User = added.User;
-                    When = added.When;
-                    Type = added.Type;
+                    Id = added.TimeEntry.Id;
+                    User = added.TimeEntry.User;
+                    When = added.TimeEntry.When;
+                    Type = added.TimeEntry.Type;
                     return;
                 }
 
@@ -43,11 +43,11 @@ namespace Kairos.Domain
             ApplyChange(new TimeEntryDeleted(Id, User));
         }
 
-        public static TimeEntry Create(Guid id, string user, DateTimeOffset when, TimeEntryType type)
+        public static TimeEntry Create(TimeEntryEventDto timeEntry)
         {
             var instance = new TimeEntry();
 
-            instance.ApplyChange(new TimeEntryAdded(id, user, when, type));
+            instance.ApplyChange(new TimeEntryAdded(timeEntry));
 
             return instance;
         }

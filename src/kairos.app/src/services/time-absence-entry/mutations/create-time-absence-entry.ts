@@ -1,5 +1,5 @@
 export const createTimeAbsenceEntryMutation = `
-    mutation ($timeAbsenceEntry: TimeAbsenceEntryInput!) {
+    mutation ($timeAbsenceEntry: TimeAbsenceEntryModel!) {
         createTimeAbsenceEntry(timeAbsenceEntry: $timeAbsenceEntry) {
             id
         }

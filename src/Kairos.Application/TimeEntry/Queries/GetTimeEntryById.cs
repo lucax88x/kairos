@@ -4,7 +4,7 @@ using Kairos.Infra.Read.TimeEntry;
 
 namespace Kairos.Application.TimeEntry.Queries
 {
-    public class GetTimeEntryById : Query<TimeEntryReadDto>
+    public class GetTimeEntryById : Query<TimeEntryAggregationReadDto>
     {
         public GetTimeEntryById(Guid id)
         {

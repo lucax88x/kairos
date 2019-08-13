@@ -1,13 +1,14 @@
-import { eachDayOfInterval, getDate } from 'date-fns';
+import { eachDayOfInterval, endOfDay, getDate } from 'date-fns';
 import { ascend, sortWith } from 'ramda';
-
-import { TimeEntryModel, TimeEntryTypes } from '../models/time-entry.model';
+import { TimeEntryListModel } from '../models/time-entry-list.model';
+import { TimeEntryTypes } from '../models/time-entry.model';
 import { filterByInterval, humanDifference } from './functions';
 
-export function getDifferencesByRange(timeEntries: TimeEntryModel[], interval: Interval) {
+export function getEnterExitPairs(timeEntries: TimeEntryListModel[], interval: Interval) {
   const filteredByInterval = filterByInterval(interval)(timeEntries);
   const orderedByDate = sortWith([ascend(te => te.when)], filteredByInterval);
   const differencesByDate: { [date: number]: number } = {};
+  const pairs: { enter: Date; exit: Date }[] = [];
 
   for (let i = 0; i < orderedByDate.length; i++) {
     const enter = orderedByDate[i];
@@ -16,15 +17,27 @@ export function getDifferencesByRange(timeEntries: TimeEntryModel[], interval: I
       const [exit, toSkip] = getNearestExit(i, orderedByDate);
       i += toSkip;
 
-      const date = getDate(enter.when);
       if (!exit.isEmpty()) {
-        const diff = Math.abs(enter.when.getTime() - exit.when.getTime());
-
-        differencesByDate[date] = !!differencesByDate[date] ? differencesByDate[date] + diff : diff;
+        pairs.push({ enter: enter.when, exit: exit.when });
       } else {
-        differencesByDate[date] = 86399999; // 23:59:59
+        pairs.push({ enter: enter.when, exit: endOfDay(enter.when) });
       }
     }
+  }
+  return pairs;
+}
+
+export function getDifferencesByRange(timeEntries: TimeEntryListModel[], interval: Interval) {
+  const pairs = getEnterExitPairs(timeEntries, interval);
+
+  const differencesByDate: { [date: number]: number } = {};
+
+  for (const { enter, exit } of pairs) {
+    const date = getDate(enter);
+
+    const diff = Math.abs(enter.getTime() - exit.getTime());
+
+    differencesByDate[date] = !!differencesByDate[date] ? differencesByDate[date] + diff : diff;
   }
 
   const days = eachDayOfInterval(interval);
@@ -44,8 +57,8 @@ export function getDifferencesByRange(timeEntries: TimeEntryModel[], interval: I
 
 function getNearestExit(
   startingIndex: number,
-  timeEntries: TimeEntryModel[],
-): [TimeEntryModel, number] {
+  timeEntries: TimeEntryListModel[],
+): [TimeEntryListModel, number] {
   let toSkip = 0;
   for (let i = startingIndex + 1; i < timeEntries.length; i++) {
     const nextTimeEntry = timeEntries[i];
@@ -55,5 +68,5 @@ function getNearestExit(
     }
     toSkip++;
   }
-  return [TimeEntryModel.empty, toSkip];
+  return [TimeEntryListModel.empty, toSkip];
 }

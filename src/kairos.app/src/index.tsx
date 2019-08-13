@@ -12,8 +12,9 @@ import { Route } from 'react-router-dom';
 import { AnimatedSwitch, IAnimatedSwitchTransition } from 'react-router-transition';
 
 import { App } from './App.container';
-import { ErrorBoundary } from './components/ErrorBoundary';
 import { Login } from './auth/Login.container';
+import { Colors } from './code/variables';
+import { ErrorBoundary } from './components/ErrorBoundary';
 import { history, store } from './createStore';
 import { NotFound } from './NotFound';
 import { enqueueSnackbarAction } from './notification-manager/enqueue-snackbar';
@@ -25,7 +26,7 @@ const theme = createMuiTheme({
   palette: {
     type: 'dark',
     primary: {
-      main: '#00A9A2',
+      main: Colors.Main,
       contrastText: 'white',
     },
     secondary: { main: '#11cb5f' },
@@ -82,7 +83,6 @@ ReactDOM.render(
             <Route path={Routes.Login} component={Login} />
             <Route path="" component={App} />
             <Route component={NotFound} />
-            {/* <Redirect exact={true} from="/" to={Routes.Dashboard} /> */}
           </AnimatedSwitch>
         </ConnectedRouter>
       </ThemeProvider>

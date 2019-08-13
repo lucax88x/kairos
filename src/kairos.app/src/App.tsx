@@ -32,14 +32,16 @@ import { ReactComponent as LogoIcon } from './assets/images/logo.svg';
 import { BulkInsert } from './bulk-insert/BulkInsert';
 import { CreateTimeAbsenceEntry } from './CreateTimeAbsenceEntry.container';
 import { CreateTimeEntry } from './CreateTimeEntry.container';
+import { CreateTimeHolidayEntryModal } from './CreateTimeHolidayEntryModal.container';
 import { Dashboard } from './dashboard/Dashboard';
+import { Profile } from './profile/Profile.container';
 import { EditTimeAbsenceEntry } from './edit-time-absence-entry/EditTimeAbsenceEntry.container';
 import { EditTimeEntry } from './edit-time-entry/EditTimeEntry.container';
 import { UserModel } from './models/user.model';
 import { Routes } from './routes';
 import { TimeAbsenceEntries } from './time-absence-entries/TimeAbsenceEntries.container';
-import { TimeHolidayEntries } from './time-holiday-entries/TimeHolidayEntries.container';
 import { TimeEntries } from './time-entries/TimeEntries.container';
+import { TimeHolidayEntries } from './time-holiday-entries/TimeHolidayEntries.container';
 
 const drawerWidth = 240;
 
@@ -149,7 +151,8 @@ export interface AppDispatches {
   closeTimeEntryDrawer: () => void;
   openTimeAbsenceEntryDrawer: () => void;
   closeTimeAbsenceEntryDrawer: () => void;
-  logout: () => void;
+  onLogout: () => void;
+  onNavigateToProfile: () => void;
 }
 
 export type AppProps = AppInputs & AppDispatches;
@@ -166,7 +169,8 @@ export const AppComponent: React.FC<AppProps> = props => {
     closeTimeEntryDrawer,
     openTimeAbsenceEntryDrawer,
     closeTimeAbsenceEntryDrawer,
-    logout,
+    onLogout,
+    onNavigateToProfile,
   } = props;
 
   const classes = useStyles(props);
@@ -278,7 +282,7 @@ export const AppComponent: React.FC<AppProps> = props => {
           </IconButton>
 
           <Avatar
-            alt={user.given_name}
+            alt={user.name}
             src={user.picture}
             className={classes.avatar}
             onClick={handleUserMenuOpen}
@@ -290,8 +294,8 @@ export const AppComponent: React.FC<AppProps> = props => {
             open={Boolean(userMenuEl)}
             onClose={handleUserMenuClose}
           >
-            <MenuItem onClick={handleUserMenuClose}>Profile</MenuItem>
-            <MenuItem onClick={logout}>Logout</MenuItem>
+            <MenuItem onClick={onNavigateToProfile}>Profile</MenuItem>
+            <MenuItem onClick={onLogout}>Logout</MenuItem>
           </Menu>
         </Toolbar>
       </AppBar>
@@ -371,10 +375,13 @@ export const AppComponent: React.FC<AppProps> = props => {
         <Divider />
         <CreateTimeAbsenceEntry />
       </SwipeableDrawer>
+      <CreateTimeHolidayEntryModal />
       <main className={classes.content}>
         <div className={classes.appBarSpacer} />
         <Container maxWidth="lg" className={classes.container}>
+          {/* <Redirect exact={true} from="/" to={Routes.Dashboard} /> */}
           <Route exact={true} path={Routes.Dashboard} component={Dashboard} />
+          <Route path={Routes.Profile} component={Profile} />
           <Route path={Routes.TimeEntries} component={TimeEntries} />
           <Route path={Routes.TimeAbsenceEntries} component={TimeAbsenceEntries} />
           <Route path={Routes.TimeHolidayEntries} component={TimeHolidayEntries} />

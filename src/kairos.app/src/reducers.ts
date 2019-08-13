@@ -8,6 +8,7 @@ import { editTimeAbsenceEntryReducers } from './edit-time-absence-entry/reducers
 import { editTimeEntryReducers } from './edit-time-entry/reducers';
 import { layoutReducers } from './layout/reducers';
 import { notificationManagerReducers } from './notification-manager/reducers';
+import { profileReducers } from './profile/reducers';
 import { sharedReducers } from './shared/reducers';
 import { State } from './state';
 
@@ -18,6 +19,7 @@ export const rootReducers = (history: History<any>) =>
     layout: layoutReducers,
     shared: sharedReducers,
     auth: authReducers,
+    profile: profileReducers,
     notificationManager: notificationManagerReducers,
     editTimeEntry: editTimeEntryReducers,
     editTimeAbsenceEntry: editTimeAbsenceEntryReducers,

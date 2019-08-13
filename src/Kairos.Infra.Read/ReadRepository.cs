@@ -53,11 +53,13 @@ namespace Kairos.Infra.Read
     public class ReadRepository : IReadRepository
     {
         private readonly ISerializer _serializer;
+        private readonly string _prefix;
         private readonly IDatabase _database;
 
         public ReadRepository(IConnectionMultiplexer connection, ISerializer serializer, int database, string prefix)
         {
             _serializer = serializer;
+            _prefix = prefix;
 
             _database = connection.GetDatabase(database).WithKeyPrefix(prefix);
         }
@@ -71,7 +73,7 @@ namespace Kairos.Infra.Read
         {
             var json = _serializer.Serialize(obj);
 
-            var value = await _database.ExecuteAsync("JSON.SET", new object[] {key, path, json}, flags);
+            var value = await _database.ExecuteAsync("JSON.SET", new object[] {WithPrefix(key), path, json}, flags);
 
             if (value.IsNull) throw new NotFoundItemException();
         }
@@ -83,7 +85,7 @@ namespace Kairos.Infra.Read
 
         public async Task SetRemove(string key, string path = ".", CommandFlags flags = CommandFlags.None)
         {
-            var value = await _database.ExecuteAsync("JSON.DEL", new object[] {key, path}, flags);
+            var value = await _database.ExecuteAsync("JSON.DEL", new object[] {WithPrefix(key), path}, flags);
 
             if (value.IsNull) throw new NotFoundItemException();
         }
@@ -95,7 +97,7 @@ namespace Kairos.Infra.Read
 
         public async Task<bool> Exists(string key, string path = ".", CommandFlags flags = CommandFlags.None)
         {
-            var value = await _database.ExecuteAsync("JSON.GET", new object[] {key, path}, flags);
+            var value = await _database.ExecuteAsync("JSON.GET", new object[] {WithPrefix(key), path}, flags);
 
             return !value.IsNull;
         }
@@ -107,7 +109,7 @@ namespace Kairos.Infra.Read
 
         public async Task<T> Get<T>(string key, string path = ".", CommandFlags flags = CommandFlags.None)
         {
-            var value = await _database.ExecuteAsync("JSON.GET", new object[] {key, path}, flags);
+            var value = await _database.ExecuteAsync("JSON.GET", new object[] {WithPrefix(key), path}, flags);
 
             if (value.IsNull) throw new NotFoundItemException();
 
@@ -126,17 +128,18 @@ namespace Kairos.Infra.Read
             var keys = ids.ToList();
 
             var parameters = new object[keys.Count + 1];
-            
+
             for (var i = 0; i < keys.Count; i++)
             {
-                parameters[i] = keys[i];
+                parameters[i] = WithPrefix(keys[i]);
             }
-            parameters[keys.Count] = path;
-            
-            var values = await _database.ExecuteAsync("JSON.MGET",  parameters, flags);
 
-            var array = (byte[][])values;
-            
+            parameters[keys.Count] = path;
+
+            var values = await _database.ExecuteAsync("JSON.MGET", parameters, flags);
+
+            var array = (byte[][]) values;
+
             var result = array
                 .Select(value => _serializer.Deserialize<T>(Encoding.UTF8.GetString(value))).ToList();
 
@@ -181,6 +184,11 @@ namespace Kairos.Infra.Read
 
             return result.Select(m => m == RedisValue.Null ? default : m.ToString())
                 .ToImmutableArray();
+        }
+
+        private string WithPrefix(string key)
+        {
+            return $"{_prefix}{key}";
         }
     }
 }

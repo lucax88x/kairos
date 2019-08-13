@@ -3,6 +3,7 @@ import { connect } from 'react-redux';
 import { Dispatch } from 'redux';
 
 import { Actions } from '../actions';
+import { openTimeHolidayEntryModalAction } from '../layout/actions';
 import { TimeHolidayEntryModel } from '../models/time-holiday-entry.model';
 import { deleteTimeHolidayEntryAsync } from '../shared/delete-time-holiday-entry';
 import {
@@ -24,6 +25,7 @@ const mapStateToProps = (state: State): TimeHolidayEntriesInputs => ({
 });
 
 const mapDispatchToProps = (dispatch: Dispatch<Actions>): TimeHolidayEntriesDispatches => ({
+  onCreate: () => dispatch(openTimeHolidayEntryModalAction()),
   onUpdate: (model: TimeHolidayEntryModel) => dispatch(push(`/holiday/${model.id}`)),
   onDelete: (model: TimeHolidayEntryModel) =>
     dispatch(deleteTimeHolidayEntryAsync.request({ model })),

@@ -4,22 +4,37 @@ import {
   FormControl,
   FormControlLabel,
   Grid,
+  InputLabel,
   makeStyles,
+  MenuItem,
   Radio,
   RadioGroup,
+  Select,
+  Typography,
 } from '@material-ui/core';
 import {
-  KeyboardDatePicker,
-  KeyboardTimePicker,
+  KeyboardDateTimePicker,
   MaterialUiPickersDate,
   MuiPickersUtilsProvider,
 } from '@material-ui/pickers';
-import React, { useCallback, useEffect, useState } from 'react';
+import { map } from 'ramda';
+import React, { ChangeEvent, useCallback, useEffect, useState } from 'react';
+import { Link } from 'react-router-dom';
 
-import { mergeDateAndTime } from '../code/mergeDateAndTime';
+import { isString } from '../code/is';
 import FabButtonSpinner from '../components/FabButtonSpinner';
+import { ProfileModel } from '../models/profile.model';
 import { TimeEntryModel, TimeEntryTypes } from '../models/time-entry.model';
 import { UUID } from '../models/uuid.model';
+import { Routes } from '../routes';
+import {
+  RefreshSelectsTimeEntryAction,
+  SetTimeEntrySelectedJobAction,
+  SetTimeEntrySelectedProjectAction,
+  SetTimeEntryTypeAction,
+  SetTimeEntryWhenAction,
+  useTimeEntryFormReducer,
+} from './TimeEntryForm.store';
 
 const useStyles = makeStyles(theme => ({
   hasPadding: {
@@ -28,36 +43,75 @@ const useStyles = makeStyles(theme => ({
 }));
 
 export interface TimeEntryFormProps {
+  profile: ProfileModel;
   model: TimeEntryModel;
   isBusy: boolean;
-  save: (model: TimeEntryModel) => void;
+  onSave: (model: TimeEntryModel) => void;
 }
 
 export const TimeEntryForm: React.FC<TimeEntryFormProps> = props => {
   const classes = useStyles(props);
 
-  const { model, isBusy, save } = props;
+  const { isBusy, profile, onSave } = props;
 
-  const [type, setType] = useState(model.type);
-  const [date, setDate] = useState<Date | null>(model.when);
-  const [time, setTime] = useState<Date | null>(model.when);
+  const [state, dispatch] = useTimeEntryFormReducer();
+  const { when, type, jobs, selectedJobId, projects, selectedProjectId } = state;
 
   useEffect(() => {
-    setType(model.type);
-    setDate(model.when);
-    setTime(model.when);
-  }, [model]);
+    dispatch(RefreshSelectsTimeEntryAction(profile));
+  }, [profile]);
 
   const handleSave = useCallback(() => {
-    if (!!date && !!time) {
-      save(new TimeEntryModel(UUID.Generate(), mergeDateAndTime(date, time), type));
+    if (!!when) {
+      onSave(
+        new TimeEntryModel(
+          UUID.Generate(),
+          when,
+          type,
+          new UUID(selectedJobId),
+          new UUID(selectedProjectId),
+        ),
+      );
     }
-  }, [save, type, date, time]);
-  const handleTypeChange = useCallback((_, value: string) => setType(value as TimeEntryTypes), [
-    setType,
-  ]);
-  const handleDateChange = useCallback((date: MaterialUiPickersDate) => setDate(date), [setDate]);
-  const handleTimeChange = useCallback((date: MaterialUiPickersDate) => setTime(date), [setTime]);
+  }, [onSave, type, when, selectedJobId, selectedProjectId]);
+
+  const handleTypeChange = useCallback(
+    (_, value: string) => dispatch(SetTimeEntryTypeAction(value as TimeEntryTypes)),
+    [],
+  );
+
+  const handleWhenChange = useCallback(
+    (when: MaterialUiPickersDate) => {
+      dispatch(SetTimeEntryWhenAction(!!when ? when : new Date()));
+      dispatch(RefreshSelectsTimeEntryAction(profile));
+    },
+    [profile],
+  );
+
+  const handleJobChange = useCallback(
+    (event: ChangeEvent<{ value: unknown }>) => {
+      if (isString(event.target.value)) {
+        dispatch(SetTimeEntrySelectedJobAction(event.target.value));
+        dispatch(RefreshSelectsTimeEntryAction(profile));
+      }
+    },
+    [profile],
+  );
+  const handleProjectChange = useCallback((event: ChangeEvent<{ value: unknown }>) => {
+    if (isString(event.target.value)) {
+      dispatch(SetTimeEntrySelectedProjectAction(event.target.value));
+    }
+  }, []);
+
+  if (jobs.length === 0) {
+    return (
+      <div className={classes.hasPadding}>
+        <Typography color="inherit" noWrap>
+          You need to add at least one job to your <Link to={Routes.Profile}>Profile</Link>
+        </Typography>
+      </div>
+    );
+  }
 
   return (
     <Grid container direction="column">
@@ -81,24 +135,58 @@ export const TimeEntryForm: React.FC<TimeEntryFormProps> = props => {
           </RadioGroup>
         </FormControl>
         <MuiPickersUtilsProvider utils={DateFnsUtils}>
-          <KeyboardDatePicker
+          <KeyboardDateTimePicker
             margin="normal"
-            value={date}
-            onChange={handleDateChange}
+            ampm={false}
+            autoOk
+            value={when}
+            onChange={handleWhenChange}
             KeyboardButtonProps={{
               'aria-label': 'change date',
             }}
           />
-          <KeyboardTimePicker
-            margin="normal"
-            value={time}
-            ampm={false}
-            onChange={handleTimeChange}
-            KeyboardButtonProps={{
-              'aria-label': 'change time',
-            }}
-          />
         </MuiPickersUtilsProvider>
+        {jobs.length > 1 && (
+          <FormControl fullWidth>
+            <InputLabel htmlFor="job">Job</InputLabel>
+            <Select
+              value={selectedJobId}
+              onChange={handleJobChange}
+              inputProps={{
+                id: 'job',
+              }}
+            >
+              {map(
+                job => (
+                  <MenuItem key={job.id.toString()} value={job.id.toString()}>
+                    {job.name}
+                  </MenuItem>
+                ),
+                jobs,
+              )}
+            </Select>
+          </FormControl>
+        )}
+        <FormControl fullWidth>
+          <InputLabel htmlFor="project">Project</InputLabel>
+          <Select
+            value={selectedProjectId}
+            onChange={handleProjectChange}
+            disabled={projects.length === 1}
+            inputProps={{
+              id: 'project',
+            }}
+          >
+            {map(
+              project => (
+                <MenuItem key={project.id.toString()} value={project.id.toString()}>
+                  {project.name}
+                </MenuItem>
+              ),
+              projects,
+            )}
+          </Select>
+        </FormControl>
       </Grid>
       <Divider />
       <Grid
@@ -108,7 +196,11 @@ export const TimeEntryForm: React.FC<TimeEntryFormProps> = props => {
         alignItems="center"
         className={classes.hasPadding}
       >
-        <FabButtonSpinner onClick={handleSave} isBusy={isBusy} disabled={!date || !time || isBusy}>
+        <FabButtonSpinner
+          onClick={handleSave}
+          isBusy={isBusy}
+          disabled={!when || !selectedJobId || !selectedProjectId || isBusy}
+        >
           {type}
         </FabButtonSpinner>
       </Grid>

@@ -4,19 +4,17 @@ import {
   FormControl,
   FormControlLabel,
   Grid,
-  Input,
-  InputAdornment,
   makeStyles,
   Radio,
   RadioGroup,
+  TextField,
 } from '@material-ui/core';
 import {
-  KeyboardDatePicker,
+  DateTimePicker,
   MaterialUiPickersDate,
   MuiPickersUtilsProvider,
 } from '@material-ui/pickers';
 import React, { ChangeEvent, useCallback, useEffect, useState } from 'react';
-
 import ButtonSpinner from '../components/ButtonSpinner';
 import { TimeAbsenceEntryModel, TimeAbsenceEntryTypes } from '../models/time-absence-entry.model';
 import { UUID } from '../models/uuid.model';
@@ -39,39 +37,35 @@ export const TimeAbsenceEntryForm: React.FC<TimeAbsenceEntryFormProps> = props =
   const { model, isBusy, save } = props;
 
   const [type, setType] = useState(model.type);
-  const [date, setDate] = useState<Date | null>(model.when);
-
-  console.error('divide');
-  const [hours, setHours] = useState<number>(model.minutes);
-  const [minutes, setMinutes] = useState<number>(model.minutes);
+  const [description, setDescription] = useState<string>(model.description);
+  const [start, setStart] = useState<Date | null>(model.start);
+  const [end, setEnd] = useState<Date | null>(model.end);
 
   useEffect(() => {
     setType(model.type);
-    setDate(model.when);
-    setHours(model.minutes);
-    setMinutes(model.minutes);
-  }, [model]);
+    setStart(model.start);
+    setEnd(model.end);
+  }, [model, setType, setStart, setEnd]);
 
   const handleSave = useCallback(() => {
-    if (!!date && !!minutes) {
-      save(new TimeAbsenceEntryModel(UUID.Generate(), date, minutes, type));
+    if (!!start && !!end) {
+      save(new TimeAbsenceEntryModel(UUID.Generate(), description, start, end, type));
     }
-  }, [save, type, date, minutes]);
+  }, [save, type, description, start, end]);
 
   const handleTypeChange = useCallback(
     (_, value: string) => setType(value as TimeAbsenceEntryTypes),
     [setType],
   );
 
-  const handleDateChange = useCallback((date: MaterialUiPickersDate) => setDate(date), [setDate]);
-  const handleHoursChange = useCallback(
-    (event: ChangeEvent<HTMLInputElement>) => setHours(event.currentTarget.valueAsNumber),
-    [setHours],
+  const handleDescriptionChange = useCallback(
+    (event: ChangeEvent<HTMLInputElement>) => setDescription(event.currentTarget.value),
+    [setDescription],
   );
-  const handleMinutesChange = useCallback(
-    (event: ChangeEvent<HTMLInputElement>) => setMinutes(event.currentTarget.valueAsNumber),
-    [setMinutes],
-  );
+  const handleStartChange = useCallback((date: MaterialUiPickersDate) => setStart(date), [
+    setStart,
+  ]);
+  const handleEndChange = useCallback((date: MaterialUiPickersDate) => setEnd(date), [setEnd]);
 
   return (
     <Grid container direction="column">
@@ -82,61 +76,64 @@ export const TimeAbsenceEntryForm: React.FC<TimeAbsenceEntryFormProps> = props =
         justify="center"
         alignItems="center"
       >
-        <FormControl component="fieldset">
-          <RadioGroup
-            aria-label="timeEntryType"
-            name="timeEntryType"
-            row
-            value={type}
-            onChange={handleTypeChange}
-          >
-            <FormControlLabel
-              value={TimeAbsenceEntryTypes.VACATION}
-              control={<Radio />}
-              label="Vacation"
-            />
-            <FormControlLabel
-              value={TimeAbsenceEntryTypes.ILLNESS}
-              control={<Radio />}
-              label="Illness"
-            />
-          </RadioGroup>
-        </FormControl>
-        <MuiPickersUtilsProvider utils={DateFnsUtils}>
-          <KeyboardDatePicker
-            margin="normal"
-            value={date}
-            onChange={handleDateChange}
-            KeyboardButtonProps={{
-              'aria-label': 'change date',
-            }}
-          />
-        </MuiPickersUtilsProvider>
-        <Grid
-          container
-          direction="row"
-          // justify="center"
-          // alignItems="center"
-        >
-          <Grid item xs={6}>
-            <Input
-              placeholder="Hours"
-              type="number"
-              value={hours}
-              endAdornment={<InputAdornment position="end">hrs</InputAdornment>}
-              onChange={handleHoursChange}
-            />
-          </Grid>
-          <Grid item xs={6}>
-            <Input
-              placeholder="Minutes"
-              type="number"
-              value={minutes}
-              onChange={handleMinutesChange}
-              endAdornment={<InputAdornment position="end">mins</InputAdornment>}
-            />
-          </Grid>
+        <Grid item xs={12}>
+          <FormControl component="fieldset">
+            <RadioGroup
+              aria-label="timeEntryType"
+              name="timeEntryType"
+              row
+              value={type}
+              onChange={handleTypeChange}
+            >
+              <FormControlLabel
+                value={TimeAbsenceEntryTypes.VACATION}
+                control={<Radio />}
+                label="Vacation"
+              />
+              <FormControlLabel
+                value={TimeAbsenceEntryTypes.ILLNESS}
+                control={<Radio />}
+                label="Illness"
+              />
+            </RadioGroup>
+          </FormControl>
         </Grid>
+        <Grid item xs={12}>
+          <TextField
+            autoFocus
+            margin="dense"
+            id="description"
+            label="Description"
+            type="text"
+            value={description}
+            onChange={handleDescriptionChange}
+            fullWidth
+          />
+        </Grid>
+        <MuiPickersUtilsProvider utils={DateFnsUtils}>
+          <Grid item xs={12}>
+            <DateTimePicker
+              autoOk
+              ampm={false}
+              value={start}
+              maxDate={end}
+              onChange={handleStartChange}
+              label="Start"
+              fullWidth
+            />
+          </Grid>
+          <Grid item xs={12}>
+            <DateTimePicker
+              autoOk
+              ampm={false}
+              value={end}
+              minDate={start}
+              onChange={handleEndChange}
+              label="End"
+              fullWidth
+            />
+          </Grid>
+        </MuiPickersUtilsProvider>
       </Grid>
       <Divider />
       <Grid
@@ -146,7 +143,11 @@ export const TimeAbsenceEntryForm: React.FC<TimeAbsenceEntryFormProps> = props =
         alignItems="center"
         className={classes.hasPadding}
       >
-        <ButtonSpinner onClick={handleSave} isBusy={isBusy} disabled={!date || !minutes || isBusy}>
+        <ButtonSpinner
+          onClick={handleSave}
+          isBusy={isBusy}
+          disabled={!start || !end || start > end || isBusy}
+        >
           {type}
         </ButtonSpinner>
       </Grid>

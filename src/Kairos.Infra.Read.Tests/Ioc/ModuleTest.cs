@@ -1,6 +1,9 @@
 ﻿using System;
 using Kairos.Config.Ioc;
+using Kairos.Infra.Read.TimeAbsenceEntry;
 using Kairos.Infra.Read.TimeEntry;
+using Kairos.Infra.Read.TimeHolidayEntry;
+using Kairos.Infra.Read.UserProfile;
 using Kairos.Test.Common;
 using Xunit;
 
@@ -17,8 +20,8 @@ namespace Kairos.Infra.Read.Tests.Ioc
             var configBuilder = new ConfigBuilder();
 
             _scopeResolver.BuildContainer(
-                new Config.Ioc.Module(configBuilder.Build(), new ModuleOptions {HasReadRepository = true}),
-                new Infra.Read.Ioc.Module());
+                new Module(configBuilder.Build(), new ModuleOptions {HasReadRepository = true}),
+                new Read.Ioc.Module());
         }
 
         [Fact]
@@ -37,6 +40,24 @@ namespace Kairos.Infra.Read.Tests.Ioc
         public void should_resolve_ITimeEntryReadRepository()
         {
             _scopeResolver.IsSingleInstance<ITimeEntryReadRepository, TimeEntryReadRepository>();
+        }
+        
+        [Fact]
+        public void should_resolve_ITimeAbsenceEntryReadRepository()
+        {
+            _scopeResolver.IsSingleInstance<ITimeAbsenceEntryReadRepository, TimeAbsenceEntryReadRepository>();
+        }
+        
+        [Fact]
+        public void should_resolve_ITimeHolidayEntryReadRepository()
+        {
+            _scopeResolver.IsSingleInstance<ITimeHolidayEntryReadRepository, TimeHolidayEntryReadRepository>();
+        }
+        
+        [Fact]
+        public void should_resolve_IUserProfileReadRepository()
+        {
+            _scopeResolver.IsSingleInstance<IUserProfileReadRepository, UserProfileReadRepository>();
         }
 
         public void Dispose()

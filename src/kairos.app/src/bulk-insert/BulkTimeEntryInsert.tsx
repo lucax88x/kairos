@@ -2,10 +2,7 @@ import {
   Fab,
   Grid,
   makeStyles,
-  Table,
-  TableBody,
   TableCell,
-  TableHead,
   TableRow,
   TextField,
   Typography,
@@ -19,8 +16,10 @@ import React, { ChangeEvent, useCallback, useState } from 'react';
 
 import { formatAsDateTime } from '../code/constants';
 import FabButtonSpinner from '../components/FabButtonSpinner';
+import { VirtualizedTable } from '../components/VirtualizedTable';
 import { TimeEntryModel, TimeEntryTypes } from '../models/time-entry.model';
 import { UUID } from '../models/uuid.model';
+import { Index } from 'react-virtualized';
 
 const useStyles = makeStyles(theme => ({
   scroll: {
@@ -81,6 +80,10 @@ export const BulkTimeEntryInsertComponent: React.FC<BulkTimeEntryInsertProps> = 
     setModels(result);
   }, [setModels, csv]);
 
+  const noRowsRenderer = useCallback(() => <p>Empty or Invalid CSV</p>, []);
+  const rowGetter = useCallback(({ index }: Index) => models[index], [models]);
+  const dateFormatter = useCallback((data: Date) => format(data, formatAsDateTime), []);
+
   return (
     <Grid container spacing={2} direction="column" justify="center">
       <Grid item>
@@ -108,27 +111,25 @@ export const BulkTimeEntryInsertComponent: React.FC<BulkTimeEntryInsertProps> = 
         </Grid>
       </Grid>
       <Grid item className={classes.scroll}>
-        <Table>
-          <colgroup>
-            <col />
-            <col />
-          </colgroup>
-          <TableHead>
-            <TableRow>
-              <TableCell>Type</TableCell>
-              <TableCell>When</TableCell>
-            </TableRow>
-          </TableHead>
-          <TableBody>
-            {!!models.length ? (
-              modelToCells(models)
-            ) : (
-              <TableRow>
-                <TableCell colSpan={2}>Empty or Invalid CSV</TableCell>
-              </TableRow>
-            )}
-          </TableBody>
-        </Table>
+        <VirtualizedTable
+          rowCount={models.length}
+          noRowsRenderer={noRowsRenderer}
+          rowGetter={rowGetter}
+          columns={[
+            {
+              width: 100,
+              label: 'Type',
+              dataKey: 'type',
+            },
+            {
+              width: 200,
+              label: 'When',
+              dataKey: 'when',
+              flexGrow: 1,
+              formatter: dateFormatter,
+            },
+          ]}
+        />
       </Grid>
       <Grid item>
         <Grid container justify="center">

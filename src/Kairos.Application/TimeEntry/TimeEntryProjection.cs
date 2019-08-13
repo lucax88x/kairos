@@ -12,8 +12,8 @@ namespace Kairos.Application.TimeEntry
     public class TimeEntryProjection :
         INotificationHandler<TimeEntryAdded>,
         INotificationHandler<TimeEntryDeleted>,
-        IRequestHandler<GetTimeEntryById, TimeEntryReadDto>,
-        IRequestHandler<GetTimeEntries, ImmutableArray<TimeEntryReadDto>>
+        IRequestHandler<GetTimeEntryById, TimeEntryAggregationReadDto>,
+        IRequestHandler<GetTimeEntries, ImmutableList<TimeEntryAggregationReadDto>>
     {
         private readonly ITimeEntryReadRepository _timeEntryReadRepository;
 
@@ -24,7 +24,7 @@ namespace Kairos.Application.TimeEntry
 
         public async Task Handle(TimeEntryAdded notification, CancellationToken cancellationToken)
         {
-            await _timeEntryReadRepository.Add(notification.Id, notification.User, notification.When, (int) notification.Type);
+            await _timeEntryReadRepository.AddOrUpdate(notification.TimeEntry);
         }
         
         public async Task Handle(TimeEntryDeleted notification, CancellationToken cancellationToken)
@@ -32,12 +32,12 @@ namespace Kairos.Application.TimeEntry
             await _timeEntryReadRepository.Delete(notification.Id, notification.User);
         }
 
-        public async Task<TimeEntryReadDto> Handle(GetTimeEntryById request, CancellationToken cancellationToken)
+        public async Task<TimeEntryAggregationReadDto> Handle(GetTimeEntryById request, CancellationToken cancellationToken)
         {
             return await _timeEntryReadRepository.GetById(request.Id);
         }
 
-        public async Task<ImmutableArray<TimeEntryReadDto>> Handle(GetTimeEntries request,
+        public async Task<ImmutableList<TimeEntryAggregationReadDto>> Handle(GetTimeEntries request,
             CancellationToken cancellationToken)
         {
             return await _timeEntryReadRepository.Get(request.Id);

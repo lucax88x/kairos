@@ -1,28 +1,22 @@
 import produce from 'immer';
 import { call, put, takeLatest } from 'redux-saga/effects';
 import { createAsyncAction } from 'typesafe-actions';
-
 import { SharedActions } from '../actions';
-import { TimeEntryModel } from '../models/time-entry.model';
+import { UUID } from '../models/uuid.model';
 import { deleteTimeEntry } from '../services/time-entry/time-entry.service';
-import {
-  DELETE_TIME_ENTRY,
-  DELETE_TIME_ENTRY_FAILURE,
-  DELETE_TIME_ENTRY_SUCCESS,
-} from './constants';
+import { DELETE_TIME_ENTRY, DELETE_TIME_ENTRY_FAILURE, DELETE_TIME_ENTRY_SUCCESS } from './constants';
 import { SharedState } from './state';
+
 
 export const deleteTimeEntryAsync = createAsyncAction(
   DELETE_TIME_ENTRY,
   DELETE_TIME_ENTRY_SUCCESS,
   DELETE_TIME_ENTRY_FAILURE,
-)<{ model: TimeEntryModel }, void, string>();
+)<{ id: UUID }, void, string>();
 
-function* doDeleteTimeEntry({
-  payload: { model },
-}: ReturnType<typeof deleteTimeEntryAsync.request>) {
+function* doDeleteTimeEntry({ payload: { id } }: ReturnType<typeof deleteTimeEntryAsync.request>) {
   try {
-    yield call(deleteTimeEntry, model.id);
+    yield call(deleteTimeEntry, id);
 
     yield put(deleteTimeEntryAsync.success());
   } catch (error) {

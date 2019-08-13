@@ -8,16 +8,18 @@ import {
   CreateTimeEntryInputs,
 } from './CreateTimeEntry';
 import { TimeEntryModel } from './models/time-entry.model';
+import { selectProfile } from './profile/selectors';
 import { createTimeEntryAsync } from './shared/create-time-entry';
 import { selectIsCreateTimeEntryBusy } from './shared/selectors';
 import { State } from './state';
 
 const mapStateToProps = (state: State): CreateTimeEntryInputs => ({
+  profile: selectProfile(state),
   isBusy: selectIsCreateTimeEntryBusy(state),
 });
 
 const mapDispatchToProps = (dispatch: Dispatch<Actions>): CreateTimeEntryDispatches => ({
-  create: (model: TimeEntryModel) => dispatch(createTimeEntryAsync.request(model)),
+  onCreate: (model: TimeEntryModel) => dispatch(createTimeEntryAsync.request(model)),
 });
 
 export const CreateTimeEntry = connect(

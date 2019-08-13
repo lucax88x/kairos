@@ -14,6 +14,7 @@
   <ItemGroup>
     <ProjectReference Include="..\Kairos.Common\Kairos.Common.csproj" />
     <ProjectReference Include="..\Kairos.Config\Kairos.Config.csproj" />
+    <ProjectReference Include="..\Kairos.Domain\Kairos.Domain.csproj" />
   </ItemGroup>
 
 </Project>

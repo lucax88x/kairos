@@ -1,6 +1,6 @@
 export const deleteTimeHolidayEntryMutation = `
     mutation ($id: ID!) {
-        deleteHolidayTimeEntry(id: $id) {
+        deleteTimeHolidayEntry(id: $id) {
             id
         }
     }  

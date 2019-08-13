@@ -23,8 +23,7 @@ namespace Kairos.Application.TimeAbsenceEntry
 
         public async Task Handle(TimeAbsenceEntryAdded notification, CancellationToken cancellationToken)
         {
-            await _timeAbsenceEntryReadRepository.Add(notification.Id, notification.User, notification.When,
-                notification.Minutes, (int) notification.Type);
+            await _timeAbsenceEntryReadRepository.AddOrUpdate(notification.TimeAbsenceEntry);
         }
 
         public async Task Handle(TimeAbsenceEntryDeleted notification, CancellationToken cancellationToken)

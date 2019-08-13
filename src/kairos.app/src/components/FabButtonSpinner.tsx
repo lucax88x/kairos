@@ -14,6 +14,10 @@ const useStyles = makeStyles(theme => ({
   hasPadding: {
     padding: theme.spacing(3),
   },
+  root: {
+    display: 'flex',
+    alignItems: 'center',
+  },
   wrapper: {
     position: 'relative',
   },
@@ -32,11 +36,13 @@ const FabButtonSpinner: React.FC<ButtonSpinnerProps> = props => {
   const { children, disabled, isBusy, onClick } = props;
 
   return (
-    <div className={classes.wrapper}>
-      <Fab color="primary" onClick={onClick} disabled={isBusy || disabled}>
-        {children}
-      </Fab>
-      {isBusy && <CircularProgress size={68} className={classes.fabProgress} />}
+    <div className={classes.root}>
+      <div className={classes.wrapper}>
+        <Fab color="primary" onClick={onClick} disabled={isBusy || disabled}>
+          {children}
+        </Fab>
+        {isBusy && <CircularProgress size={68} className={classes.fabProgress} />}
+      </div>
     </div>
   );
 };

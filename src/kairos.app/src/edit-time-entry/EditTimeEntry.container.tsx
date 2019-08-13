@@ -3,6 +3,7 @@ import { Dispatch } from 'redux';
 
 import { Actions } from '../actions';
 import { TimeEntryModel } from '../models/time-entry.model';
+import { selectProfile } from '../profile/selectors';
 import { State } from '../state';
 import {
   EditTimeEntryComponent,
@@ -17,6 +18,7 @@ import {
 import { updateTimeEntryAsync } from './update-time-entry';
 
 const mapStateToProps = (state: State): EditTimeEntryInputs => ({
+  profile: selectProfile(state),
   timeEntry: selectTimeEntry(state),
   isGetBusy: selectIsGetTimeEntryBusy(state),
   isUpdateBusy: selectIsUpdateTimeEntryBusy(state),

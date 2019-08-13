@@ -1,8 +1,9 @@
-@import '../../node_modules/spinkit/scss/spinners/11-folding-cube.scss';
+@import '../styles/variables.scss';
+@import 'spinkit/scss/spinners/11-folding-cube.scss';
 
 .sk-folding-cube {
   .sk-cube::before {
-    background-color: #00A9A2;
+    background-color: $main-color;
   }
 }
 

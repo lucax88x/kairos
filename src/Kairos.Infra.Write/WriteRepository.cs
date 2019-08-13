@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Collections.Immutable;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -13,23 +14,28 @@ namespace Kairos.Infra.Write
 {
     public interface IWriteRepository
     {
-        Task<ImmutableList<Event>> Save<T>(params T[] aggregates) where T : AggregateRoot;
-        Task<T> Get<T>(Guid id) where T : AggregateRoot, new();
+        Task<ImmutableList<Event>> Save<T>(Func<T, string> keyTaker, params T[] aggregates) where T : AggregateRoot;
+        Task<T> GetOrDefault<T>(string key) where T : AggregateRoot, new();
+        Task<bool> Exists<T>(string key) where T : AggregateRoot;
     }
 
     public class WriteRepository : IWriteRepository
     {
         private readonly IWriteConnectionFactory _writeConnectionFactory;
+        private readonly IWriteSchemaBuilder _writeSchemaBuilder;
         private readonly ISerializer _serializer;
 
-        public WriteRepository(IWriteConnectionFactory writeConnectionFactory, ISerializer serializer)
+        public WriteRepository(IWriteConnectionFactory writeConnectionFactory, IWriteSchemaBuilder writeSchemaBuilder,
+            ISerializer serializer)
         {
             _writeConnectionFactory = writeConnectionFactory;
+            _writeSchemaBuilder = writeSchemaBuilder;
             _serializer = serializer;
         }
 
-        
-        public async Task<ImmutableList<Event>> Save<T>(params T[] aggregates) where T : AggregateRoot
+
+        public async Task<ImmutableList<Event>> Save<T>(Func<T, string> keyTaker, params T[] aggregates)
+            where T : AggregateRoot
         {
             try
             {
@@ -44,13 +50,15 @@ namespace Kairos.Infra.Write
 
                         var streamEvents = ToStreamEvents(events);
 
-                        await connection.AppendToStreamAsync(BuildStreamName<T>(aggregate.Id), aggregate.Version,
+                        await connection.AppendToStreamAsync(
+                            _writeSchemaBuilder.Build(BuildStreamName<T>(keyTaker(aggregate))),
+                            aggregate.Version,
                             streamEvents);
 
-                        aggregate.MarkChangesAsCommitted();
-                        
-                        result.AddRange(events);
 
+                        aggregate.MarkChangesAsCommitted();
+
+                        result.AddRange(events);
                     }
 
                     return result.ToImmutableList();
@@ -62,8 +70,18 @@ namespace Kairos.Infra.Write
             }
         }
 
+        public async Task<bool> Exists<T>(string key) where T : AggregateRoot
+        {
+            using (var connection = await _writeConnectionFactory.Connect())
+            {
+                var slice = await connection.ReadStreamEventsForwardAsync(
+                    _writeSchemaBuilder.Build(BuildStreamName<T>(key)), 0, 1, false);
 
-        public async Task<T> Get<T>(Guid id) where T : AggregateRoot, new()
+                return slice.Status != SliceReadStatus.StreamNotFound;
+            }
+        }
+
+        public async Task<T> GetOrDefault<T>(string key) where T : AggregateRoot, new()
         {
             using (var connection = await _writeConnectionFactory.Connect())
             {
@@ -74,13 +92,19 @@ namespace Kairos.Infra.Write
                 do
                 {
                     currentSlice =
-                        await connection.ReadStreamEventsForwardAsync(BuildStreamName<T>(id), nextSliceStart, 20,
+                        await connection.ReadStreamEventsForwardAsync(
+                            _writeSchemaBuilder.Build(BuildStreamName<T>(key)), nextSliceStart, 20,
                             false);
 
                     nextSliceStart = currentSlice.NextEventNumber;
 
                     streamEvents.AddRange(currentSlice.Events);
                 } while (!currentSlice.IsEndOfStream);
+
+                if (!streamEvents.Any())
+                {
+                    return null;
+                }
 
                 var events = ToEvents(streamEvents);
 
@@ -93,9 +117,9 @@ namespace Kairos.Infra.Write
             }
         }
 
-        private static string BuildStreamName<T>(Guid id) where T : AggregateRoot
+        private string BuildStreamName<T>(string key) where T : AggregateRoot
         {
-            return $"${typeof(T).Name}-${id}";
+            return $"${typeof(T).Name}-${key}";
         }
 
         private IEnumerable<EventData> ToStreamEvents(IEnumerable<Event> events)
@@ -104,14 +128,18 @@ namespace Kairos.Infra.Write
             {
                 var eventType = evt.GetType();
 
+                var data = Encoding.UTF8.GetBytes(_serializer.Serialize(evt));
+
+                var metadata = Encoding.UTF8.GetBytes(
+                    _serializer.Serialize(new EventMetadata(eventType.AssemblyQualifiedName,
+                        1)));
+
                 return new EventData(
                     Guid.NewGuid(),
                     eventType.Name,
                     true,
-                    Encoding.UTF8.GetBytes(_serializer.Serialize(evt)),
-                    Encoding.UTF8.GetBytes(
-                        _serializer.Serialize(new EventMetadata(eventType.AssemblyQualifiedName,
-                            1))));
+                    data,
+                    metadata);
             });
         }
 
@@ -127,6 +155,11 @@ namespace Kairos.Infra.Write
 
                 if (deserialized is Event evt) yield return evt;
             }
+        }
+
+        public static string DefaultKeyTaker<T>(T aggregateRoot) where T : AggregateRoot
+        {
+            return aggregateRoot.Id.ToString();
         }
     }
 }

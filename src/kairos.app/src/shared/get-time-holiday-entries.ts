@@ -11,7 +11,7 @@ import {
   CREATE_TIME_HOLIDAY_ENTRY_SUCCESS,
   DELETE_TIME_HOLIDAY_ENTRY_SUCCESS,
 } from '../shared/constants';
-import { selectTimeHolidayEntriesRoute } from '../shared/router.selectors';
+import { selectDashboardRoute, selectTimeHolidayEntriesRoute } from '../shared/router.selectors';
 import {
   GET_TIME_HOLIDAY_ENTRIES,
   GET_TIME_HOLIDAY_ENTRIES_FAILURE,
@@ -26,9 +26,10 @@ export const getTimeHolidayEntriesAsync = createAsyncAction(
 )<void, TimeHolidayEntryModel[], string>();
 
 function* doGetTimeHolidayEntriesOnOtherActions() {
-  const route: Route = yield select(selectTimeHolidayEntriesRoute);
+  const dashboardRoute: Route = yield select(selectDashboardRoute);
+  const timeHolidayEntriesRoute: Route = yield select(selectTimeHolidayEntriesRoute);
 
-  if (!!route) {
+  if (!!dashboardRoute || !!timeHolidayEntriesRoute) {
     yield put(getTimeHolidayEntriesAsync.request());
   }
 }

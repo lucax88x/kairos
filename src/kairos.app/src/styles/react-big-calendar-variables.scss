@@ -1,0 +1,33 @@
+@import './variables.scss';
+
+$out-of-range-color: darken(#fff, 40%);
+$out-of-range-bg-color: darken(#fff, 70%);
+
+$calendar-border: $main-color;
+$cell-border: $main-color;
+
+$border-color: $main-color;
+
+$segment-width: percentage(1 / 7);
+
+$time-selection-color: white;
+$time-selection-bg-color: rgba(255, 255, 255, 0.5);
+$date-selection-bg-color: rgba(255, 255, 255, 0.1);
+
+$event-bg: $main-color;
+$event-border: darken($main-color, 10%);
+$event-outline: #3b99fc;
+$event-color: #fff;
+$event-border-radius: 5px;
+$event-padding: 2px 5px;
+$event-zindex: 4;
+
+$btn-color: #fff;
+$btn-bg: #333;
+$btn-border: $main-color;
+
+$current-time-color: #74ad31;
+
+$rbc-css-prefix: rbc-i;
+
+$today-highlight-bg: $main-color;

@@ -1,5 +1,5 @@
 export const updateTimeEntryMutation = `
-    mutation ($timeEntry: TimeEntryInput!) {
+    mutation ($timeEntry: TimeEntryModel!) {
         updateTimeEntry(timeEntry: $timeEntry) {
             id
         }

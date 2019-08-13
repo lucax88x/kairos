@@ -32,6 +32,12 @@ namespace Kairos.Infra.Write.Tests.Ioc
         {
             _scopeResolver.IsSingleInstance<IWriteRepository, WriteRepository>();
         }
+        
+        [Fact]
+        public void should_resolve_IWriteSchemaBuilder()
+        {
+            _scopeResolver.IsSingleInstance<IWriteSchemaBuilder, WriteSchemaBuilder>();
+        }
 
         public void Dispose()
         {

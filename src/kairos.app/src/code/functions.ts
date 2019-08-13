@@ -15,14 +15,13 @@ import {
   subYears,
 } from 'date-fns';
 import { filter, groupBy, join } from 'ramda';
-
 import { padNumber } from '../code/padNumber';
-import { TimeEntryModel } from '../models/time-entry.model';
+import { TimeEntryListModel } from '../models/time-entry-list.model';
 
 export const filterByInterval = (interval: Interval) =>
-  filter((te: TimeEntryModel) => isWithinInterval(te.when, interval));
+  filter((te: TimeEntryListModel) => isWithinInterval(te.when, interval));
 
-export const groupByDate = groupBy((te: TimeEntryModel) => getDate(te.when).toString());
+export const groupByDate = groupBy((te: TimeEntryListModel) => getDate(te.when).toString());
 
 export const humanDifference = (left: Date, right: Date) => {
   const result = [];

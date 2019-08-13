@@ -1,9 +1,9 @@
 import { push } from 'connected-react-router';
 import { connect } from 'react-redux';
 import { Dispatch } from 'redux';
-
 import { Actions } from '../actions';
-import { TimeEntryModel } from '../models/time-entry.model';
+import { openTimeEntryDrawerAction } from '../layout/actions';
+import { TimeEntryListModel } from '../models/time-entry-list.model';
 import { deleteTimeEntryAsync } from '../shared/delete-time-entry';
 import {
   selectIsDeleteTimeEntryBusy,
@@ -20,8 +20,9 @@ const mapStateToProps = (state: State): TimeEntriesInputs => ({
 });
 
 const mapDispatchToProps = (dispatch: Dispatch<Actions>): TimeEntriesDispatches => ({
-  onUpdate: (model: TimeEntryModel) => dispatch(push(`/entry/${model.id}`)),
-  onDelete: (model: TimeEntryModel) => dispatch(deleteTimeEntryAsync.request({ model })),
+  onCreate: () => dispatch(openTimeEntryDrawerAction()),
+  onUpdate: (model: TimeEntryListModel) => dispatch(push(`/entry/${model.id}`)),
+  onDelete: (model: TimeEntryListModel) => dispatch(deleteTimeEntryAsync.request({ id: model.id })),
 });
 
 export const TimeEntries = connect(

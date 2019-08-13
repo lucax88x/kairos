@@ -6,11 +6,11 @@ using GraphQL.Types;
 using Kairos.Application;
 using Kairos.Config.Ioc;
 using Kairos.Web.Api.GraphQL;
-using Kairos.Web.Api.GraphQL.TimeAbsenceEntry;
 using Kairos.Web.Api.GraphQL.TimeAbsenceEntry.Types;
-using Kairos.Web.Api.GraphQL.TimeEntry;
 using Kairos.Web.Api.GraphQL.TimeEntry.Types;
+using Kairos.Web.Api.GraphQL.TimeHolidayEntry.Types;
 using Kairos.Web.Api.GraphQL.Types;
+using Kairos.Web.Api.GraphQL.UserProfile.Types;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Configuration;
 
@@ -83,7 +83,25 @@ namespace Kairos.Web.Api.Ioc
                 .AsSelf();
             builder.RegisterType<TimeAbsenceEntryTypeEnum>()
                 .AsSelf();
-            builder.RegisterType<TimeAbsenceEntryInputType>();
+            builder.RegisterType<TimeAbsenceEntryInputType>()
+                .AsSelf();
+            
+            builder.RegisterType<TimeHolidayEntryType>()
+                .AsSelf();
+            builder.RegisterType<TimeHolidayEntryInputType>()
+                .AsSelf();
+            
+            builder.RegisterType<UserProfileType>()
+                .AsSelf();
+            builder.RegisterType<UserProfileInputType>()
+                .AsSelf();
+            builder.RegisterType<UserJobType>()
+                .AsSelf();
+            builder.RegisterType<UserJobInputType>();
+            builder.RegisterType<UserProjectType>()
+                .AsSelf();
+            builder.RegisterType<UserProjectInputType>()
+                .AsSelf();
 
             builder.RegisterType<KairosQuery>()
                 .AsSelf();

@@ -3,14 +3,19 @@ using System.Collections.Generic;
 using System.Linq;
 using GraphQL.Types;
 using Kairos.Application.TimeAbsenceEntry.Commands;
+using Kairos.Application.TimeAbsenceEntry.Dtos;
 using Kairos.Application.TimeEntry.Commands;
 using Kairos.Application.TimeEntry.Dtos;
+using Kairos.Application.TimeHolidayEntry.Commands;
+using Kairos.Application.TimeHolidayEntry.Dtos;
+using Kairos.Application.UserProfile.Commands;
+using Kairos.Application.UserProfile.Dtos;
 using Kairos.Web.Api.GraphQL.TimeAbsenceEntry.Types;
-using Kairos.Web.Api.GraphQL.TimeAbsenceEntry.Types.Inputs;
 using Kairos.Web.Api.GraphQL.TimeEntry.Types;
-using Kairos.Web.Api.GraphQL.TimeEntry.Types.Inputs;
+using Kairos.Web.Api.GraphQL.TimeHolidayEntry.Types;
 using Kairos.Web.Api.GraphQL.Types;
 using Kairos.Web.Api.GraphQL.Types.Outputs;
+using Kairos.Web.Api.GraphQL.UserProfile.Types;
 using MediatR;
 
 namespace Kairos.Web.Api.GraphQL
@@ -26,6 +31,8 @@ namespace Kairos.Web.Api.GraphQL
 
             SetTimeEntry();
             SetTimeAbsenceEntry();
+            SetTimeHolidayEntry();
+            SetUserProfile();
         }
 
         private void SetTimeEntry()
@@ -37,10 +44,9 @@ namespace Kairos.Web.Api.GraphQL
                 ),
                 resolve: async context =>
                 {
-                    var input = context.GetArgument<TimeEntryInput>("timeEntry");
+                    var input = context.GetArgument<TimeEntryModel>("timeEntry");
 
-                    var ids = await _mediator.Send(
-                        new CreateTimeEntries(new TimeEntryModel(input.When, input.Type, input.Id)));
+                    var ids = await _mediator.Send(new CreateTimeEntries(input));
 
                     return new CreateOrUpdateOutput(ids.First());
                 });
@@ -52,12 +58,10 @@ namespace Kairos.Web.Api.GraphQL
                 ),
                 resolve: async context =>
                 {
-                    var inputs = context.GetArgument<IEnumerable<TimeEntryInput>>("timeEntries");
-                    
-                    var ids = await _mediator.Send(new CreateTimeEntries(
-                        inputs.Select(input =>
-                            new TimeEntryModel(input.When, input.Type, input.Id)).ToArray()));
-                    
+                    var inputs = context.GetArgument<IEnumerable<TimeEntryModel>>("timeEntries");
+
+                    var ids = await _mediator.Send(new CreateTimeEntries(inputs.ToArray()));
+
                     return new CreateOrUpdateOutputs(ids);
                 });
 
@@ -83,9 +87,9 @@ namespace Kairos.Web.Api.GraphQL
                 ),
                 resolve: async context =>
                 {
-                    var input = context.GetArgument<TimeAbsenceEntryInput>("timeAbsenceEntry");
+                    var input = context.GetArgument<TimeAbsenceEntryModel>("timeAbsenceEntry");
                     var id = await _mediator.Send(
-                        new CreateTimeAbsenceEntry(input.When, input.Minutes, input.Type, input.Id));
+                        new CreateTimeAbsenceEntry(input));
                     return new CreateOrUpdateOutput(id);
                 });
 
@@ -99,6 +103,52 @@ namespace Kairos.Web.Api.GraphQL
                     var input = context.GetArgument<Guid>("id");
                     var id = await _mediator.Send(new DeleteTimeAbsenceEntry(input));
                     return new CreateOrUpdateOutput(id);
+                });
+        }
+
+        private void SetTimeHolidayEntry()
+        {
+            FieldAsync<CreateOrUpdateOutputType>(
+                "createTimeHolidayEntry",
+                arguments: new QueryArguments(
+                    new QueryArgument<NonNullGraphType<TimeHolidayEntryInputType>> {Name = "timeHolidayEntry"}
+                ),
+                resolve: async context =>
+                {
+                    var input = context.GetArgument<TimeHolidayEntryModel>("timeHolidayEntry");
+                    var id = await _mediator.Send(
+                        new CreateTimeHolidayEntry(input));
+                    return new CreateOrUpdateOutput(id);
+                });
+
+            FieldAsync<CreateOrUpdateOutputType>(
+                "deleteTimeHolidayEntry",
+                arguments: new QueryArguments(
+                    new QueryArgument<IdGraphType> {Name = "id"}
+                ),
+                resolve: async context =>
+                {
+                    var input = context.GetArgument<Guid>("id");
+                    var id = await _mediator.Send(new DeleteTimeHolidayEntry(input));
+                    return new CreateOrUpdateOutput(id);
+                });
+        }
+
+        private void SetUserProfile()
+        {
+            FieldAsync<CreateOrUpdateOutputType>(
+                "createOrUpdateUserProfile",
+                arguments: new QueryArguments(
+                    new QueryArgument<NonNullGraphType<UserProfileInputType>> {Name = "userProfile"}
+                ),
+                resolve: async context =>
+                {
+                    var input = context.GetArgument<UserProfileModel>("userProfile");
+
+                    await _mediator.Send(
+                        new CreateOrUpdateUserProfile(input));
+
+                    return new CreateOrUpdateOutput(Guid.Empty);
                 });
         }
     }

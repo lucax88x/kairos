@@ -9,13 +9,16 @@ import {
 } from '../edit-time-absence-entry/constants';
 import { GET_TIME_ENTRY_FAILURE, UPDATE_TIME_ENTRY_FAILURE } from '../edit-time-entry/constants';
 import { enqueueSnackbarAction } from '../notification-manager/actions';
+import { UPDATE_PROFILE_FAILURE } from '../profile/constants';
 import {
   CREATE_TIME_ABSENCE_ENTRY_FAILURE,
   CREATE_TIME_ENTRY_FAILURE,
+  CREATE_TIME_HOLIDAY_ENTRY_FAILURE,
   DELETE_TIME_ABSENCE_ENTRY_FAILURE,
   DELETE_TIME_ENTRY_FAILURE,
   GET_TIME_ABSENCE_ENTRIES_FAILURE,
   GET_TIME_ENTRIES_FAILURE,
+  GET_TIME_HOLIDAY_ENTRIES_FAILURE,
 } from './constants';
 
 function* doNotifyError(action: PayloadAction<string, string>) {
@@ -37,6 +40,9 @@ export function* notifyError() {
       GET_TIME_ABSENCE_ENTRY_FAILURE,
       UPDATE_TIME_ABSENCE_ENTRY_FAILURE,
       BULK_INSERT_TIME_ENTRIES_FAILURE,
+      CREATE_TIME_HOLIDAY_ENTRY_FAILURE,
+      GET_TIME_HOLIDAY_ENTRIES_FAILURE,
+      UPDATE_PROFILE_FAILURE,
     ],
     doNotifyError,
   );

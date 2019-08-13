@@ -7,13 +7,17 @@ namespace Kairos.Infra.Write.Ioc
         protected override void Load(ContainerBuilder builder)
         {
             builder.RegisterModule(new Common.Ioc.Module());
-                            
+
             builder.RegisterType<WriteConnectionFactory>()
                 .As<IWriteConnectionFactory>()
                 .SingleInstance();
-            
+
             builder.RegisterType<WriteRepository>()
                 .As<IWriteRepository>()
+                .SingleInstance();
+
+            builder.RegisterType<WriteSchemaBuilder>()
+                .As<IWriteSchemaBuilder>()
                 .SingleInstance();
         }
     }

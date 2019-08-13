@@ -1,32 +1,40 @@
 using System;
+using System.Collections.Generic;
 using System.Collections.Immutable;
+using System.Linq;
 using System.Threading.Tasks;
+using Kairos.Domain.Events.TimeEntry.EventDtos;
+using Kairos.Infra.Read.UserProfile;
 
 namespace Kairos.Infra.Read.TimeEntry
 {
     public interface ITimeEntryReadRepository
     {
-        Task Add(Guid id, string user, DateTimeOffset when, int type);
+        Task AddOrUpdate(TimeEntryEventDto timeEntry);
         Task Delete(Guid id, string user);
-        Task<ImmutableArray<TimeEntryReadDto>> Get(string user);
-        Task<TimeEntryReadDto> GetById(Guid id);
+        Task<ImmutableList<TimeEntryAggregationReadDto>> Get(string user);
+        Task<TimeEntryAggregationReadDto> GetById(Guid id);
     }
 
     public class TimeEntryReadRepository : ITimeEntryReadRepository
     {
         private readonly IReadRepository _repository;
+        private readonly IUserProfileReadRepository _userProfileReadRepository;
 
-        public TimeEntryReadRepository(ReadRepositoryFactory readRepositoryFactory)
+        public TimeEntryReadRepository(ReadRepositoryFactory readRepositoryFactory,
+            IUserProfileReadRepository userProfileReadRepository)
         {
+            _userProfileReadRepository = userProfileReadRepository;
             _repository = readRepositoryFactory.Build("time-entry");
         }
 
-        public async Task Add(Guid id, string user, DateTimeOffset when, int type)
+        public async Task AddOrUpdate(TimeEntryEventDto timeEntry)
         {
-            var dto = new TimeEntryReadDto(id, when, type);
+            var dto = new TimeEntryReadDto(timeEntry.Id, timeEntry.When, (int) timeEntry.Type, timeEntry.Job,
+                timeEntry.Project);
 
-            await _repository.Set(id, dto);
-            await _repository.SortedSetAdd($"by-when|by-user|{user}", dto.When.UtcTicks, id);
+            await _repository.Set(timeEntry.Id, dto);
+            await _repository.SortedSetAdd($"by-when|by-user|{timeEntry.User}", dto.When.UtcTicks, timeEntry.Id);
         }
 
         public async Task Delete(Guid id, string user)
@@ -35,16 +43,29 @@ namespace Kairos.Infra.Read.TimeEntry
             await _repository.SortedSetRemove($"by-when|by-user|{user}", id);
         }
 
-        public async Task<ImmutableArray<TimeEntryReadDto>> Get(string user)
+        public async Task<ImmutableList<TimeEntryAggregationReadDto>> Get(string user)
         {
             var ids = await _repository.SortedSetRangeByScore($"by-when|by-user|{user}");
 
-            return await _repository.GetMultiple<TimeEntryReadDto>(ids);
+            var dtos = await _repository.GetMultiple<TimeEntryReadDto>(ids);
+
+            var jobs = await _userProfileReadRepository.GetMultipleJobs(dtos.Select(d => d.Job).Distinct());
+            var projects = await _userProfileReadRepository.GetMultipleProjects(dtos.Select(d => d.Project).Distinct());
+
+            var indexedJobs = jobs.ToDictionary(job => job.Id, job => job);
+            var indexedProjects = projects.ToDictionary(project => project.Id, project => project);
+
+            return dtos.Select(dto => new TimeEntryAggregationReadDto(dto.Id, dto.When, dto.Type, indexedJobs[dto.Job],
+                indexedProjects[dto.Project])).ToImmutableList();
         }
 
-        public async Task<TimeEntryReadDto> GetById(Guid id)
+        public async Task<TimeEntryAggregationReadDto> GetById(Guid id)
         {
-            return await _repository.Get<TimeEntryReadDto>(id);
+            var dto = await _repository.Get<TimeEntryReadDto>(id);
+            var job = await _userProfileReadRepository.GetJobById(dto.Job);
+            var project = await _userProfileReadRepository.GetProjectById(dto.Project);
+
+            return new TimeEntryAggregationReadDto(dto.Id, dto.When, dto.Type, job, project);
         }
     }
 }

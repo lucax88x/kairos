@@ -1,8 +1,9 @@
 export const getTimeAbsenceEntriesQuery = `{
   timeAbsenceEntries {
     id
-    when
-    minutes
+    description
+    start
+    end
     type
   }
 }`;
