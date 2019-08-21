@@ -39,30 +39,29 @@ namespace Kairos.Infra.Write
         {
             try
             {
-                using (var connection = await _writeConnectionFactory.Connect())
+                var connection = await _writeConnectionFactory.GetConnection();
+
+                var result = new List<Event>();
+                foreach (var aggregate in aggregates)
                 {
-                    var result = new List<Event>();
-                    foreach (var aggregate in aggregates)
-                    {
-                        var events = aggregate.GetUncommittedChanges();
+                    var events = aggregate.GetUncommittedChanges();
 
-                        if (!events.Any()) throw new ConcurrencyException();
+                    if (!events.Any()) throw new ConcurrencyException();
 
-                        var streamEvents = ToStreamEvents(events);
+                    var streamEvents = ToStreamEvents(events);
 
-                        await connection.AppendToStreamAsync(
-                            _writeSchemaBuilder.Build(BuildStreamName<T>(keyTaker(aggregate))),
-                            aggregate.Version,
-                            streamEvents);
+                    await connection.AppendToStreamAsync(
+                        _writeSchemaBuilder.Build(BuildStreamName<T>(keyTaker(aggregate))),
+                        aggregate.Version,
+                        streamEvents);
 
 
-                        aggregate.MarkChangesAsCommitted();
+                    aggregate.MarkChangesAsCommitted();
 
-                        result.AddRange(events);
-                    }
-
-                    return result.ToImmutableList();
+                    result.AddRange(events);
                 }
+
+                return result.ToImmutableList();
             }
             catch (WrongExpectedVersionException)
             {
@@ -72,49 +71,46 @@ namespace Kairos.Infra.Write
 
         public async Task<bool> Exists<T>(string key) where T : AggregateRoot
         {
-            using (var connection = await _writeConnectionFactory.Connect())
-            {
-                var slice = await connection.ReadStreamEventsForwardAsync(
-                    _writeSchemaBuilder.Build(BuildStreamName<T>(key)), 0, 1, false);
+            var connection = await _writeConnectionFactory.GetConnection();
 
-                return slice.Status != SliceReadStatus.StreamNotFound;
-            }
+            var slice = await connection.ReadStreamEventsForwardAsync(
+                _writeSchemaBuilder.Build(BuildStreamName<T>(key)), 0, 1, false);
+
+            return slice.Status != SliceReadStatus.StreamNotFound;
         }
 
         public async Task<T> GetOrDefault<T>(string key) where T : AggregateRoot, new()
         {
-            using (var connection = await _writeConnectionFactory.Connect())
+            var connection = await _writeConnectionFactory.GetConnection();
+            var streamEvents = new List<ResolvedEvent>();
+
+            StreamEventsSlice currentSlice;
+            long nextSliceStart = StreamPosition.Start;
+            do
             {
-                var streamEvents = new List<ResolvedEvent>();
+                currentSlice =
+                    await connection.ReadStreamEventsForwardAsync(
+                        _writeSchemaBuilder.Build(BuildStreamName<T>(key)), nextSliceStart, 20,
+                        false);
 
-                StreamEventsSlice currentSlice;
-                long nextSliceStart = StreamPosition.Start;
-                do
-                {
-                    currentSlice =
-                        await connection.ReadStreamEventsForwardAsync(
-                            _writeSchemaBuilder.Build(BuildStreamName<T>(key)), nextSliceStart, 20,
-                            false);
+                nextSliceStart = currentSlice.NextEventNumber;
 
-                    nextSliceStart = currentSlice.NextEventNumber;
+                streamEvents.AddRange(currentSlice.Events);
+            } while (!currentSlice.IsEndOfStream);
 
-                    streamEvents.AddRange(currentSlice.Events);
-                } while (!currentSlice.IsEndOfStream);
-
-                if (!streamEvents.Any())
-                {
-                    return null;
-                }
-
-                var events = ToEvents(streamEvents);
-
-                var aggregateRoot = new T();
-
-                // TODO: version?
-                aggregateRoot.LoadsFromHistory(events, streamEvents.Max(se => se.Event.EventNumber));
-
-                return aggregateRoot;
+            if (!streamEvents.Any())
+            {
+                return null;
             }
+
+            var events = ToEvents(streamEvents);
+
+            var aggregateRoot = new T();
+
+            // TODO: version?
+            aggregateRoot.LoadsFromHistory(events, streamEvents.Max(se => se.Event.EventNumber));
+
+            return aggregateRoot;
         }
 
         private string BuildStreamName<T>(string key) where T : AggregateRoot

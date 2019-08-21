@@ -1,16 +1,14 @@
 import { map } from 'ramda';
-
-import {
-  TimeHolidayEntryModel,
-  TimeHolidayEntryOutModel,
-} from '../../models/time-holiday-entry.model';
+import { TimeHolidayEntryModel, TimeHolidayEntryOutModel } from '../../models/time-holiday-entry.model';
 import { UUID } from '../../models/uuid.model';
 import { mutation, query } from '../graphql.service';
+import { createTimeHolidayEntriesMutation } from './mutations/create-time-holiday-entries';
 import { createTimeHolidayEntryMutation } from './mutations/create-time-holiday-entry';
 import { deleteTimeHolidayEntryMutation } from './mutations/delete-time-holiday-entry';
 import { updateTimeHolidayEntryMutation } from './mutations/update-time-holiday-entry';
 import { getTimeHolidayEntriesQuery } from './queries/get-time-holiday-entries';
 import { getTimeHolidayEntryQuery } from './queries/get-time-holiday-entry';
+
 
 export async function getTimeHolidayEntry(id: UUID) {
   const result = await query<{ timeHolidayEntry: TimeHolidayEntryOutModel }>(
@@ -41,4 +39,8 @@ export async function deleteTimeHolidayEntry(id: UUID) {
 
 export async function updateTimeHolidayEntry(model: TimeHolidayEntryModel) {
   await mutation(updateTimeHolidayEntryMutation, { timeHolidayEntry: model });
+}
+
+export async function bulkInsertTimeHolidayEntries(models: TimeHolidayEntryModel[]) {
+  await mutation(createTimeHolidayEntriesMutation, { timeHolidayEntries: models });
 }

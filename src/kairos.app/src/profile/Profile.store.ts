@@ -1,10 +1,10 @@
 import produce from 'immer';
-import { find } from 'ramda';
 import { useReducer } from 'react';
 import { action, ActionType } from 'typesafe-actions';
-
+import { indexById } from '../code/ramda.curried';
 import { JobModel } from '../models/job.model';
 import { ProjectModel } from '../models/project.model';
+import { UUID } from '../models/uuid.model';
 
 export interface State {
   jobs: JobModel[];
@@ -13,29 +13,31 @@ const initialState: State = { jobs: [] };
 
 export const InitializeJobsAction = (jobs: JobModel[]) => action('INITIALIZE_JOBS', { jobs });
 export const AddJobAction = () => action('ADD_JOB');
-export const DeleteJobAction = (job: JobModel) => action('DELETE_JOB', { job });
-export const UpdateJobNameAction = (job: JobModel, name: string) =>
-  action('UPDATE_JOB_NAME', { job, name });
-export const UpdateJobStartDateAction = (job: JobModel, start: Date) =>
-  action('UPDATE_JOB_START_DATE', { job, start });
-export const UpdateJobEndDateAction = (job: JobModel, end: Date) =>
-  action('UPDATE_JOB_END_DATE', { job, end });
-export const UpdateJobHolidaysPerYearAction = (job: JobModel, days: number) =>
-  action('UPDATE_JOB_HOLIDAYS_PER_YEAR', { job, days });
-export const UpdateJobDayAction = (job: JobModel, day: string, hours: number) =>
-  action('UPDATE_JOB_DAY', { job, day, hours });
+export const DeleteJobAction = (jobId: UUID) => action('DELETE_JOB', { jobId });
+export const UpdateJobNameAction = (jobId: UUID, name: string) =>
+  action('UPDATE_JOB_NAME', { jobId, name });
+export const UpdateJobStartDateAction = (jobId: UUID, start: Date) =>
+  action('UPDATE_JOB_START_DATE', { jobId, start });
+export const UpdateJobEndDateAction = (jobId: UUID, end: Date) =>
+  action('UPDATE_JOB_END_DATE', { jobId, end });
+export const UpdateJobHolidaysPerYearAction = (jobId: UUID, days: number) =>
+  action('UPDATE_JOB_HOLIDAYS_PER_YEAR', { jobId, days });
+export const UpdateJobDayAction = (jobId: UUID, day: string, hours: number) =>
+  action('UPDATE_JOB_DAY', { jobId, day, hours });
 
-export const InitializeProjectsAction = (job: JobModel, projects: ProjectModel[]) =>
-  action('INITIALIZE_PROJECTS', { job, projects });
-export const AddProjectAction = (job: JobModel) => action('ADD_PROJECT', { job });
-export const DeleteProjectAction = (job: JobModel, project: ProjectModel) =>
-  action('DELETE_PROJECT', { job, project });
-export const UpdateProjectNameAction = (job: JobModel, project: ProjectModel, name: string) =>
-  action('UPDATE_PROJECT_NAME', { job, project, name });
-export const UpdateProjectStartDateAction = (job: JobModel, project: ProjectModel, start: Date) =>
-  action('UPDATE_PROJECT_START_DATE', { job, project, start });
-export const UpdateProjectEndDateAction = (job: JobModel, project: ProjectModel, end: Date) =>
-  action('UPDATE_PROJECT_END_DATE', { job, project, end });
+export const InitializeProjectsAction = (jobId: UUID, projects: ProjectModel[]) =>
+  action('INITIALIZE_PROJECTS', { jobId, projects });
+export const AddProjectAction = (jobId: UUID) => action('ADD_PROJECT', { jobId });
+export const DeleteProjectAction = (jobId: UUID, projectId: UUID) =>
+  action('DELETE_PROJECT', { jobId, projectId });
+export const UpdateProjectNameAction = (jobId: UUID, projectId: UUID, name: string) =>
+  action('UPDATE_PROJECT_NAME', { jobId, projectId, name });
+export const UpdateProjectStartDateAction = (jobId: UUID, projectId: UUID, start: Date) =>
+  action('UPDATE_PROJECT_START_DATE', { jobId, projectId, start });
+export const UpdateProjectEndDateAction = (jobId: UUID, projectId: UUID, end: Date) =>
+  action('UPDATE_PROJECT_END_DATE', { jobId, projectId, end });
+export const UpdateProjectAllocationAction = (jobId: UUID, projectId: UUID, allocation: number) =>
+  action('UPDATE_PROJECT_ALLOCATION', { jobId, projectId, allocation });
 
 function reducer(
   state: State,
@@ -54,6 +56,7 @@ function reducer(
     | typeof UpdateProjectNameAction
     | typeof UpdateProjectStartDateAction
     | typeof UpdateProjectEndDateAction
+    | typeof UpdateProjectAllocationAction
   >,
 ): State {
   return produce(state, draft => {
@@ -67,132 +70,120 @@ function reducer(
         break;
       }
       case 'DELETE_JOB': {
-        draft.jobs.splice(draft.jobs.indexOf(action.payload.job), 1);
+        const jobIndex = indexById(action.payload.jobId)(state.jobs);
+
+        draft.jobs.splice(jobIndex, 1);
         break;
       }
       case 'UPDATE_JOB_NAME': {
-        draft.jobs[draft.jobs.indexOf(action.payload.job)] = action.payload.job.withName(
-          action.payload.name,
-        );
+        const jobIndex = indexById(action.payload.jobId)(state.jobs);
+
+        draft.jobs[jobIndex].name = action.payload.name;
         break;
       }
       case 'UPDATE_JOB_START_DATE': {
-        draft.jobs[draft.jobs.indexOf(action.payload.job)] = action.payload.job.withStartDate(
-          action.payload.start,
-        );
+        const jobIndex = indexById(action.payload.jobId)(state.jobs);
+
+        draft.jobs[jobIndex].start = action.payload.start;
         break;
       }
       case 'UPDATE_JOB_END_DATE': {
-        draft.jobs[draft.jobs.indexOf(action.payload.job)] = action.payload.job.withEndDate(
-          action.payload.end,
-        );
+        const jobIndex = indexById(action.payload.jobId)(state.jobs);
+
+        draft.jobs[jobIndex].end = action.payload.end;
         break;
       }
       case 'UPDATE_JOB_HOLIDAYS_PER_YEAR': {
-        draft.jobs[draft.jobs.indexOf(action.payload.job)] = action.payload.job.withHolidaysPerYear(
-          action.payload.days,
-        );
+        const jobIndex = indexById(action.payload.jobId)(state.jobs);
+
+        draft.jobs[jobIndex].holidaysPerYear = action.payload.days;
         break;
       }
       case 'UPDATE_JOB_DAY': {
-        let toUpdateJob = JobModel.empty;
+        const jobIndex = indexById(action.payload.jobId)(state.jobs);
+
         switch (action.payload.day) {
           case 'monday':
-            toUpdateJob = action.payload.job.withMonday(action.payload.hours);
+            draft.jobs[jobIndex].monday = action.payload.hours;
             break;
           case 'tuesday':
-            toUpdateJob = action.payload.job.withTuesday(action.payload.hours);
+            draft.jobs[jobIndex].tuesday = action.payload.hours;
             break;
           case 'wednesday':
-            toUpdateJob = action.payload.job.withWednesday(action.payload.hours);
+            draft.jobs[jobIndex].wednesday = action.payload.hours;
             break;
           case 'thursday':
-            toUpdateJob = action.payload.job.withThursday(action.payload.hours);
+            draft.jobs[jobIndex].thursday = action.payload.hours;
             break;
           case 'friday':
-            toUpdateJob = action.payload.job.withFriday(action.payload.hours);
+            draft.jobs[jobIndex].friday = action.payload.hours;
             break;
           case 'saturday':
-            toUpdateJob = action.payload.job.withSaturday(action.payload.hours);
+            draft.jobs[jobIndex].saturday = action.payload.hours;
             break;
           case 'sunday':
-            toUpdateJob = action.payload.job.withSunday(action.payload.hours);
+            draft.jobs[jobIndex].sunday = action.payload.hours;
             break;
-        }
-        if (!toUpdateJob.isEmpty()) {
-          draft.jobs[draft.jobs.indexOf(action.payload.job)] = toUpdateJob;
         }
         break;
       }
       case 'INITIALIZE_PROJECTS': {
-        const toUpdateJob = draft.jobs[draft.jobs.indexOf(action.payload.job)];
-        toUpdateJob.projects = action.payload.projects;
+        const jobIndex = indexById(action.payload.jobId)(state.jobs);
+
+        draft.jobs[jobIndex].projects = action.payload.projects;
         break;
       }
       case 'ADD_PROJECT': {
-        // draft.jobs[draft.jobs.indexOf(action.payload.job)] = action.payload.job.withProjects(action.pay);
+        const jobIndex = indexById(action.payload.jobId)(state.jobs);
+
+        draft.jobs[jobIndex].projects.push(new ProjectModel());
+        console.log('with remaining allocation!');
         break;
       }
       case 'DELETE_PROJECT': {
-        // const toUpdateJob = draft.jobs[draft.jobs.indexOf(action.payload.job)];
-        // toUpdateJob.projects.splice(toUpdateJob.projects.indexOf(action.payload.project), 1);
+        const jobIndex = indexById(action.payload.jobId)(state.jobs);
+        const stateJob = state.jobs[jobIndex];
+        const draftJob = draft.jobs[jobIndex];
+        const projectIndex = indexById(action.payload.projectId)(stateJob.projects);
+        draftJob.projects.splice(projectIndex, 1);
         break;
       }
       case 'UPDATE_PROJECT_NAME': {
+        const jobIndex = indexById(action.payload.jobId)(state.jobs);
+        const stateJob = state.jobs[jobIndex];
+        const draftJob = draft.jobs[jobIndex];
+        const projectIndex = indexById(action.payload.projectId)(stateJob.projects);
+        draftJob.projects[projectIndex].name = action.payload.name;
         break;
       }
       case 'UPDATE_PROJECT_START_DATE': {
+        const jobIndex = indexById(action.payload.jobId)(state.jobs);
+        const stateJob = state.jobs[jobIndex];
+        const draftJob = draft.jobs[jobIndex];
+        const projectIndex = indexById(action.payload.projectId)(stateJob.projects);
+        draftJob.projects[projectIndex].start = action.payload.start;
         break;
       }
       case 'UPDATE_PROJECT_END_DATE': {
+        const jobIndex = indexById(action.payload.jobId)(state.jobs);
+        const stateJob = state.jobs[jobIndex];
+        const draftJob = draft.jobs[jobIndex];
+        const projectIndex = indexById(action.payload.projectId)(stateJob.projects);
+        draftJob.projects[projectIndex].end = action.payload.end;
+        break;
+      }
+      case 'UPDATE_PROJECT_ALLOCATION': {
+        const jobIndex = indexById(action.payload.jobId)(state.jobs);
+        const stateJob = state.jobs[jobIndex];
+        const draftJob = draft.jobs[jobIndex];
+        const projectIndex = indexById(action.payload.projectId)(stateJob.projects);
+        draftJob.projects[projectIndex].allocation = action.payload.allocation;
+
+        console.log('update other allocations!');
         break;
       }
     }
   });
-
-  // case 'ADD_PROJECT':
-  //   return { ...state, projects: [...state.projects, new ProjectModel()] };
-  // case 'DELETE_PROJECT':
-  //   return { ...state, projects: without([action.payload.project], state.projects) };
-  // case 'INITIALIZE_PROJECTS':
-  //   return { ...state, projects: action.payload.projects };
-  // case 'UPDATE_PROJECT_NAME':
-  //   return {
-  //     ...state,
-  //     projects: state.projects.map(project => {
-  //       if (project.id === action.payload.project.id) {
-  //         return project.withName(action.payload.name);
-  //       } else {
-  //         return project;
-  //       }
-  //     }),
-  //   };
-  // case 'UPDATE_PROJECT_START_DATE':
-  //   return {
-  //     ...state,
-  //     projects: state.projects.map(project => {
-  //       if (project.id === action.payload.project.id) {
-  //         return project.withStartDate(action.payload.start);
-  //       } else {
-  //         return project;
-  //       }
-  //     }),
-  //   };
-  // case 'UPDATE_PROJECT_END_DATE':
-  //   return {
-  //     ...state,
-  //     projects: state.projects.map(project => {
-  //       if (project.id === action.payload.project.id) {
-  //         return project.withEndDate(action.payload.end);
-  //       } else {
-  //         return project;
-  //       }
-  //     }),
-  //   };
-
-  // default:
-  //   return initialState;
-  // }
 }
 
 export const useProfileReducer = () => useReducer(reducer, initialState);

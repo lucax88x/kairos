@@ -1,5 +1,5 @@
 import produce from 'immer';
-import { call, put, takeLatest } from 'redux-saga/effects';
+import { call, put, takeLatest, select } from 'redux-saga/effects';
 import { createAsyncAction } from 'typesafe-actions';
 import { ProfileActions } from '../actions';
 import { ProfileModel } from '../models/profile.model';
@@ -11,6 +11,7 @@ import {
   UPDATE_PROFILE_SUCCESS,
 } from './constants';
 import { ProfileState } from './state';
+import { selectIsAuthenticated } from '../auth/selectors';
 
 export const getProfileAsync = createAsyncAction(
   GET_PROFILE,
@@ -23,12 +24,16 @@ function* doGetProfileOnOtherActions() {
 }
 
 function* doGetProfile() {
-  try {
-    const profile = yield call(getProfile);
+  const isAuthenticated = yield select(selectIsAuthenticated);
 
-    yield put(getProfileAsync.success(profile));
-  } catch (error) {
-    yield put(getProfileAsync.failure(error.message));
+  if (isAuthenticated) {
+    try {
+      const profile = yield call(getProfile);
+
+      yield put(getProfileAsync.success(profile));
+    } catch (error) {
+      yield put(getProfileAsync.failure(error.message));
+    }
   }
 }
 

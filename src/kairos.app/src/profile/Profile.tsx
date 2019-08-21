@@ -1,39 +1,13 @@
-import {
-  Avatar,
-  Divider,
-  Grid,
-  IconButton,
-  makeStyles,
-  Paper,
-  Typography,
-} from '@material-ui/core';
+import { Avatar, Divider, Grid, IconButton, makeStyles, Paper, Typography } from '@material-ui/core';
 import AddIcon from '@material-ui/icons/Add';
 import { map } from 'ramda';
 import React, { Fragment, useCallback, useEffect } from 'react';
-
 import ButtonSpinner from '../components/ButtonSpinner';
 import Spinner from '../components/Spinner';
-import { JobModel } from '../models/job.model';
 import { ProfileModel } from '../models/profile.model';
-import { ProjectModel } from '../models/project.model';
 import { UserModel } from '../models/user.model';
 import { UUID } from '../models/uuid.model';
-import {
-  AddJobAction,
-  AddProjectAction,
-  DeleteJobAction,
-  DeleteProjectAction,
-  InitializeJobsAction,
-  UpdateJobDayAction,
-  UpdateJobEndDateAction,
-  UpdateJobHolidaysPerYearAction,
-  UpdateJobNameAction,
-  UpdateJobStartDateAction,
-  UpdateProjectEndDateAction,
-  UpdateProjectNameAction,
-  UpdateProjectStartDateAction,
-  useProfileReducer,
-} from './Profile.store';
+import { AddJobAction, AddProjectAction, DeleteJobAction, DeleteProjectAction, InitializeJobsAction, UpdateJobDayAction, UpdateJobEndDateAction, UpdateJobHolidaysPerYearAction, UpdateJobNameAction, UpdateJobStartDateAction, UpdateProjectAllocationAction, UpdateProjectEndDateAction, UpdateProjectNameAction, UpdateProjectStartDateAction, useProfileReducer } from './Profile.store';
 import { ProfileJobForm } from './ProfileJobForm';
 
 const useStyles = makeStyles(theme => ({
@@ -61,46 +35,51 @@ export const ProfileComponent: React.FC<ProfileProps> = props => {
   const [state, dispatch] = useProfileReducer();
 
   const handleAddJob = useCallback(() => dispatch(AddJobAction()), []);
-  const handleJobDelete = useCallback((job: JobModel) => dispatch(DeleteJobAction(job)), []);
+  const handleJobDelete = useCallback((jobId: UUID) => dispatch(DeleteJobAction(jobId)), []);
   const handleJobNameChange = useCallback(
-    (job: JobModel, name: string) => dispatch(UpdateJobNameAction(job, name)),
+    (jobId: UUID, name: string) => dispatch(UpdateJobNameAction(jobId, name)),
     [],
   );
   const handleJobStartDateChange = useCallback(
-    (job: JobModel, start: Date) => dispatch(UpdateJobStartDateAction(job, start)),
+    (jobId: UUID, start: Date) => dispatch(UpdateJobStartDateAction(jobId, start)),
     [],
   );
   const handleJobEndDateChange = useCallback(
-    (job: JobModel, end: Date) => dispatch(UpdateJobEndDateAction(job, end)),
+    (jobId: UUID, end: Date) => dispatch(UpdateJobEndDateAction(jobId, end)),
     [],
   );
   const handleJobHolidaysPerYearChange = useCallback(
-    (job: JobModel, days: number) => dispatch(UpdateJobHolidaysPerYearAction(job, days)),
+    (jobId: UUID, days: number) => dispatch(UpdateJobHolidaysPerYearAction(jobId, days)),
     [],
   );
   const handleJobDayChange = useCallback(
-    (job: JobModel, day: string, hours: number) => dispatch(UpdateJobDayAction(job, day, hours)),
+    (jobId: UUID, day: string, hours: number) => dispatch(UpdateJobDayAction(jobId, day, hours)),
     [],
   );
 
-  const handleAddProject = useCallback((job: JobModel) => dispatch(AddProjectAction(job)), []);
+  const handleAddProject = useCallback((jobId: UUID) => dispatch(AddProjectAction(jobId)), []);
   const handleProjectDelete = useCallback(
-    (job: JobModel, project: ProjectModel) => dispatch(DeleteProjectAction(job, project)),
+    (jobId: UUID, projectId: UUID) => dispatch(DeleteProjectAction(jobId, projectId)),
     [],
   );
   const handleProjectNameChange = useCallback(
-    (job: JobModel, project: ProjectModel, name: string) =>
-      dispatch(UpdateProjectNameAction(job, project, name)),
+    (jobId: UUID, projectId: UUID, name: string) =>
+      dispatch(UpdateProjectNameAction(jobId, projectId, name)),
+    [],
+  );
+  const handleProjectAllocationChange = useCallback(
+    (jobId: UUID, projectId: UUID, allocation: number) =>
+      dispatch(UpdateProjectAllocationAction(jobId, projectId, allocation)),
     [],
   );
   const handleProjectStartDateChange = useCallback(
-    (job: JobModel, project: ProjectModel, start: Date) =>
-      dispatch(UpdateProjectStartDateAction(job, project, start)),
+    (jobId: UUID, projectId: UUID, start: Date) =>
+      dispatch(UpdateProjectStartDateAction(jobId, projectId, start)),
     [],
   );
   const handleProjectEndDateChange = useCallback(
-    (job: JobModel, project: ProjectModel, end: Date) =>
-      dispatch(UpdateProjectEndDateAction(job, project, end)),
+    (jobId: UUID, projectId: UUID, end: Date) =>
+      dispatch(UpdateProjectEndDateAction(jobId, projectId, end)),
     [],
   );
 
@@ -158,6 +137,7 @@ export const ProfileComponent: React.FC<ProfileProps> = props => {
                     onJobDayChange={handleJobDayChange}
                     onProjectAdd={handleAddProject}
                     onProjectDelete={handleProjectDelete}
+                    onProjectAllocationChange={handleProjectAllocationChange}
                     onProjectNameChange={handleProjectNameChange}
                     onProjectStartDateChange={handleProjectStartDateChange}
                     onProjectEndDateChange={handleProjectEndDateChange}

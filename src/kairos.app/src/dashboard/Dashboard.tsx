@@ -3,6 +3,7 @@ import React from 'react';
 
 import { TimeEntriesByRange } from './TimeEntriesByRange.container';
 import { TimeEntriesCalendar } from './TimeEntriesCalendar.container';
+import { TimeStatistics } from './TimeStatistics.container';
 
 const useStyles = makeStyles(theme => ({
   paper: {
@@ -18,6 +19,11 @@ export const Dashboard: React.FC = props => {
 
   return (
     <Grid container spacing={3}>
+      <Grid item xs>
+        <Paper className={classes.paper}>
+          <TimeStatistics />
+        </Paper>
+      </Grid>
       <Grid item xs>
         <Paper className={classes.paper}>
           <TimeEntriesByRange />

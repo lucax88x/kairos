@@ -2,24 +2,20 @@ import { Fab, Grid, makeStyles, TextField, Typography } from '@material-ui/core'
 import CheckIcon from '@material-ui/icons/Check';
 import SaveIcon from '@material-ui/icons/Save';
 import { format, isValid, parseISO } from 'date-fns';
-import { chain, indexBy, split } from 'ramda';
-import indexOf from 'ramda/es/indexOf';
-import React, { ChangeEvent, useCallback, useMemo, useState } from 'react';
+import { split } from 'ramda';
+import React, { ChangeEvent, useCallback, useState } from 'react';
 import { Index } from 'react-virtualized';
 import { formatAsDateTime } from '../code/constants';
+import { isString } from '../code/is';
 import FabButtonSpinner from '../components/FabButtonSpinner';
 import { VirtualizedTable } from '../components/VirtualizedTable';
-import { ProfileModel } from '../models/profile.model';
-import { ProjectModel } from '../models/project.model';
-import { TimeEntryModel, TimeEntryTypes } from '../models/time-entry.model';
+import { TimeHolidayEntryModel } from '../models/time-holiday-entry.model';
 import { UUID } from '../models/uuid.model';
-import { isString } from '../code/is';
 
-interface TimeEntryInvalidModel {
-  when: Date | string;
-  type: TimeEntryTypes | string;
-  job: UUID | string;
-  project: UUID | string;
+interface TimeHolidayEntryInvalidModel {
+  start: Date | string;
+  end: Date | string;
+  description: string;
 }
 
 const useStyles = makeStyles(theme => ({
@@ -29,25 +25,27 @@ const useStyles = makeStyles(theme => ({
   },
 }));
 
-export interface BulkTimeEntryInsertInputs {
+export interface BulkTimeHolidayEntryInsertInputs {
   isBusy: boolean;
-  profile: ProfileModel;
 }
 
-export interface BulkTimeEntryInsertDispatches {
-  onBulkInsert: (models: TimeEntryModel[]) => void;
+export interface BulkTimeHolidayEntryInsertDispatches {
+  onBulkInsert: (models: TimeHolidayEntryModel[]) => void;
 }
 
-type BulkTimeEntryInsertProps = BulkTimeEntryInsertInputs & BulkTimeEntryInsertDispatches;
+type BulkTimeHolidayEntryInsertProps = BulkTimeHolidayEntryInsertInputs &
+  BulkTimeHolidayEntryInsertDispatches;
 
-export const BulkTimeEntryInsertComponent: React.FC<BulkTimeEntryInsertProps> = props => {
+export const BulkTimeHolidayEntryInsertComponent: React.FC<
+  BulkTimeHolidayEntryInsertProps
+> = props => {
   const classes = useStyles(props);
 
-  const { isBusy, profile, onBulkInsert } = props;
+  const { isBusy, onBulkInsert } = props;
 
   const [csv, setCsv] = useState('');
-  const [validModels, setValidModels] = useState<TimeEntryModel[]>([]);
-  const [invalidModels, setInvalidModels] = useState<TimeEntryInvalidModel[]>([]);
+  const [validModels, setValidModels] = useState<TimeHolidayEntryModel[]>([]);
+  const [invalidModels, setInvalidModels] = useState<TimeHolidayEntryInvalidModel[]>([]);
 
   const handleBulkInsert = useCallback(() => onBulkInsert(validModels), [
     onBulkInsert,
@@ -59,53 +57,28 @@ export const BulkTimeEntryInsertComponent: React.FC<BulkTimeEntryInsertProps> = 
     [setCsv],
   );
 
-  const indexedJobsByName = useMemo(() => indexBy(job => job.name, profile.jobs), [profile]);
-  const indexedJobsById = useMemo(() => indexBy(job => job.id.toString(), profile.jobs), [profile]);
-  const indexedProjectsByName = useMemo(
-    () =>
-      indexBy((project: ProjectModel) => project.name, chain(job => job.projects, profile.jobs)),
-    [profile],
-  );
-  const indexedProjectsById = useMemo(
-    () =>
-      indexBy(
-        (project: ProjectModel) => project.id.toString(),
-        chain(job => job.projects, profile.jobs),
-      ),
-    [profile],
-  );
-
   const handleParse = useCallback(() => {
-    const validModels: TimeEntryModel[] = [];
-    const invalidModels: TimeEntryInvalidModel[] = [];
+    const validModels: TimeHolidayEntryModel[] = [];
+    const invalidModels: TimeHolidayEntryInvalidModel[] = [];
     if (!!csv) {
       const lines = split('\n', csv);
       const splitByComma = split(',');
       for (let i = 0; i < lines.length; i++) {
         const cells = splitByComma(lines[i]);
-        if (cells.length >= 4) {
-          const when = parseISO(cells[0]);
-          const type = cells[1];
-          const jobName = cells[2];
-          const projectName = cells[3];
+        if (cells.length >= 3) {
+          const start = parseISO(cells[0]);
+          const end = parseISO(cells[1]);
+          const description = cells[2];
 
-          const job = indexedJobsByName[jobName.toString()];
-          const project = indexedProjectsByName[projectName.toString()];
-
-          const isWhenValid = isValid(when);
-          const isTypeValid = indexOf(type, [TimeEntryTypes.IN, TimeEntryTypes.OUT]) !== -1;
-          const isJobValid = !!job;
-          const isProjectValid = !!project;
-          if (isWhenValid && isTypeValid && isJobValid && isProjectValid) {
-            validModels.push(
-              new TimeEntryModel(UUID.Generate(), when, type as TimeEntryTypes, job.id, project.id),
-            );
+          const isStartValid = isValid(start);
+          const isEndValid = isValid(end);
+          if (isStartValid && isEndValid) {
+            validModels.push(new TimeHolidayEntryModel(UUID.Generate(), description, start, end));
           } else {
             invalidModels.push({
-              when: isWhenValid ? when : 'Invalid Date',
-              type: isTypeValid ? (type as TimeEntryTypes) : 'Invalid Type',
-              job: isJobValid ? job.id : 'Invalid Job',
-              project: isProjectValid ? project.id : 'Invalid Project',
+              description,
+              start: isStartValid ? start : 'Invalid Date',
+              end: isEndValid ? end : 'Invalid Date',
             });
           }
         }
@@ -113,7 +86,7 @@ export const BulkTimeEntryInsertComponent: React.FC<BulkTimeEntryInsertProps> = 
     }
     setValidModels(validModels);
     setInvalidModels(invalidModels);
-  }, [indexedJobsByName, indexedProjectsByName, setValidModels, setInvalidModels, csv]);
+  }, [setValidModels, setInvalidModels, csv]);
 
   const noRowsRenderer = useCallback(() => <p>Empty or Invalid CSV</p>, []);
   const validModelsRowGetter = useCallback(({ index }: Index) => validModels[index], [validModels]);
@@ -127,35 +100,17 @@ export const BulkTimeEntryInsertComponent: React.FC<BulkTimeEntryInsertProps> = 
 
     return date;
   }, []);
-  const jobFormatter = useCallback(
-    (jobId: UUID | string) => {
-      if (!isString(jobId)) {
-        return indexedJobsById[jobId.toString()].name;
-      }
-      return jobId;
-    },
-    [indexedJobsById],
-  );
-  const projectFormatter = useCallback(
-    (projectId: UUID | string) => {
-      if (!isString(projectId)) {
-        return indexedProjectsById[projectId.toString()].name;
-      }
-      return projectId;
-    },
-    [indexedProjectsById],
-  );
 
   return (
     <Grid container spacing={2} direction="column" justify="center">
       <Grid item>
         <Typography component="h1" variant="h6" noWrap>
-          Bulk insert of Time Entries (CSV)
+          Bulk insert of Holidays (CSV)
         </Typography>
       </Grid>
       <Grid item>
         <TextField
-          placeholder="DATE(dd/mm/yyyy hh:MM),TYPE(IN/OUT),JOB,PROJECT"
+          placeholder="START(dd/mm/yyyy hh:MM),END(dd/mm/yyyy hh:MM),DESCRIPTION"
           multiline
           variant="filled"
           rows={4}
@@ -192,22 +147,22 @@ export const BulkTimeEntryInsertComponent: React.FC<BulkTimeEntryInsertProps> = 
                 },
                 {
                   width: 200,
-                  label: 'When',
-                  dataKey: 'when',
+                  label: 'Description',
+                  dataKey: 'description',
+                },
+                {
+                  width: 200,
+                  label: 'Start',
+                  dataKey: 'start',
                   flexGrow: 1,
                   formatter: dateFormatter,
                 },
                 {
                   width: 200,
-                  label: 'Job',
-                  dataKey: 'job',
-                  formatter: jobFormatter,
-                },
-                {
-                  width: 200,
-                  label: 'Project',
-                  dataKey: 'project',
-                  formatter: projectFormatter,
+                  label: 'End',
+                  dataKey: 'end',
+                  flexGrow: 1,
+                  formatter: dateFormatter,
                 },
               ]}
             />
@@ -234,22 +189,22 @@ export const BulkTimeEntryInsertComponent: React.FC<BulkTimeEntryInsertProps> = 
                 },
                 {
                   width: 200,
-                  label: 'When',
-                  dataKey: 'when',
+                  label: 'Description',
+                  dataKey: 'description',
+                },
+                {
+                  width: 200,
+                  label: 'Start',
+                  dataKey: 'start',
                   flexGrow: 1,
                   formatter: dateFormatter,
                 },
                 {
                   width: 200,
-                  label: 'Job',
-                  dataKey: 'job',
-                  formatter: jobFormatter,
-                },
-                {
-                  width: 200,
-                  label: 'Project',
-                  dataKey: 'project',
-                  formatter: projectFormatter,
+                  label: 'End',
+                  dataKey: 'end',
+                  flexGrow: 1,
+                  formatter: dateFormatter,
                 },
               ]}
             />

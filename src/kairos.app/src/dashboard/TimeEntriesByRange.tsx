@@ -82,7 +82,7 @@ export const TimeEntriesByRangeComponent: React.FC<TimeEntriesByRangeProps> = me
 
   return (
     <Spinner show={isGetTimeEntriesBusy}>
-      <Typography component="h2" variant="h6" color="primary" gutterBottom>
+      <Typography component="h2" variant="h6"gutterBottom>
         Time Entries
       </Typography>
       <div

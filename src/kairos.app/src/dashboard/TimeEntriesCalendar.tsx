@@ -5,7 +5,7 @@ import { join, map } from 'ramda';
 import React, { useCallback, useEffect, useState } from 'react';
 import { Calendar, Event, momentLocalizer } from 'react-big-calendar';
 import { getEnterExitPairs } from '../code/calculator';
-import { Colors } from '../code/variables';
+import { Themes } from '../code/variables';
 import Spinner from '../components/Spinner';
 import { TimeAbsenceEntryModel } from '../models/time-absence-entry.model';
 import { TimeEntryListModel } from '../models/time-entry-list.model';
@@ -14,17 +14,20 @@ import { TimeHolidayEntryModel } from '../models/time-holiday-entry.model';
 const localizer = momentLocalizer(moment);
 
 const useStyles = makeStyles({
+  calendar: {
+    minHeight: '400px',
+  },
   work: {
-    backgroundColor: Colors.Main,
-    color: '#333',
+    backgroundColor: Themes.First.backgroundColor,
+    color: Themes.First.color,
   },
   absence: {
-    backgroundColor: '#8896ae',
-    color: '#fff',
+    backgroundColor: Themes.Second.backgroundColor,
+    color: Themes.Second.color,
   },
   holiday: {
-    backgroundColor: '#396ebe',
-    color: '#333',
+    backgroundColor: Themes.Third.backgroundColor,
+    color: Themes.Third.color,
   },
 });
 
@@ -116,7 +119,12 @@ export const TimeEntriesCalendarComponent: React.FC<TimeEntriesCalendarEntryProp
     <Spinner
       show={isGetTimeEntriesBusy || isGetTimeAbsenceEntriesBusy || isGetTimeHolidayEntriesBusy}
     >
-      <Calendar localizer={localizer} events={events} eventPropGetter={eventPropGetter} />
+      <Calendar
+        className={classes.calendar}
+        localizer={localizer}
+        events={events}
+        eventPropGetter={eventPropGetter}
+      />
     </Spinner>
   );
 };

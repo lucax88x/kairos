@@ -1,8 +1,11 @@
 import { parseISO } from 'date-fns';
 
 import { UUID } from './uuid.model';
+import { immerable } from 'immer';
 
 export class TimeHolidayEntryModel {
+  [immerable] = true;
+  
   constructor(
     public id = UUID.Generate(),
     public description = '',

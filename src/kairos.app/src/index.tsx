@@ -1,5 +1,3 @@
-import './index.scss';
-
 import { createMuiTheme, CssBaseline } from '@material-ui/core';
 import { ThemeProvider } from '@material-ui/styles';
 import { ConnectedRouter } from 'connected-react-router';
@@ -10,12 +8,12 @@ import { spring } from 'react-motion';
 import { Provider } from 'react-redux';
 import { Route } from 'react-router-dom';
 import { AnimatedSwitch, IAnimatedSwitchTransition } from 'react-router-transition';
-
 import { App } from './App.container';
 import { Login } from './auth/Login.container';
-import { Colors } from './code/variables';
+import { Themes } from './code/variables';
 import { ErrorBoundary } from './components/ErrorBoundary';
 import { history, store } from './createStore';
+import './index.scss';
 import { NotFound } from './NotFound';
 import { enqueueSnackbarAction } from './notification-manager/enqueue-snackbar';
 import { NotificationManager } from './notification-manager/NotificationManager.container';
@@ -26,10 +24,10 @@ const theme = createMuiTheme({
   palette: {
     type: 'dark',
     primary: {
-      main: Colors.Main,
-      contrastText: 'white',
+      main: Themes.First.backgroundColor,
+      contrastText: Themes.First.color,
     },
-    secondary: { main: '#11cb5f' },
+    secondary: { main: Themes.Second.backgroundColor, contrastText: Themes.Second.color },
   },
 });
 
@@ -70,6 +68,7 @@ ReactDOM.render(
         <SnackbarProvider
           maxSnack={3}
           preventDuplicate={true}
+          autoHideDuration={5000}
           anchorOrigin={{
             vertical: 'top',
             horizontal: 'right',

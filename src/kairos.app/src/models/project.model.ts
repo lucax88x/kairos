@@ -1,8 +1,10 @@
 import { parseISO } from 'date-fns';
-
+import { immerable } from 'immer';
 import { UUID } from './uuid.model';
 
 export class ProjectModel {
+  [immerable] = true;
+
   constructor(
     public id = UUID.Generate(),
     public name = '',
@@ -25,18 +27,6 @@ export class ProjectModel {
 
   isEmpty() {
     return this.id.equals(ProjectModel.empty.id) && this.name === ProjectModel.empty.name;
-  }
-
-  withName(name: string) {
-    return new ProjectModel(this.id, name, this.start, this.end, this.allocation);
-  }
-
-  withStartDate(date: Date) {
-    return new ProjectModel(this.id, this.name, date, this.end, this.allocation);
-  }
-
-  withEndDate(date: Date) {
-    return new ProjectModel(this.id, this.name, this.start, date, this.allocation);
   }
 }
 

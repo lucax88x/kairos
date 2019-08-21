@@ -1,4 +1,6 @@
 using System;
+using System.Collections.Immutable;
+using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using Kairos.Application.TimeHolidayEntry.Commands;
@@ -8,7 +10,7 @@ using MediatR;
 
 namespace Kairos.Application.TimeHolidayEntry
 {
-    public class TimeHolidayEntryService : IRequestHandler<CreateTimeHolidayEntry, Guid>,
+    public class TimeHolidayEntryService : IRequestHandler<CreateTimeHolidayEntries, ImmutableArray<Guid>>,
         IRequestHandler<DeleteTimeHolidayEntry, Guid>
     {
         private readonly IWriteRepository _writeRepository;
@@ -22,18 +24,25 @@ namespace Kairos.Application.TimeHolidayEntry
             _authProvider = authProvider;
         }
 
-        public async Task<Guid> Handle(CreateTimeHolidayEntry request, CancellationToken cancellationToken)
+        public async Task<ImmutableArray<Guid>> Handle(CreateTimeHolidayEntries request,
+            CancellationToken cancellationToken)
         {
             var user = _authProvider.GetUser();
 
-            var timeHolidayEntry =
-                Domain.TimeHolidayEntry.Create(new TimeHolidayEntryEventDto(request.TimeHolidayEntry.Id, user, request.TimeHolidayEntry.Description, request.TimeHolidayEntry.Start, request.TimeHolidayEntry.End));
+            var timeHolidayEntries = request.TimeHolidayEntries.Select(model =>
+                Domain.TimeHolidayEntry.Create(new TimeHolidayEntryEventDto(
+                    model.Id,
+                    user,
+                    model.Description,
+                    model.Start,
+                    model.End)
+                )).ToArray();
 
-            var events = await _writeRepository.Save(WriteRepository.DefaultKeyTaker, timeHolidayEntry);
+            var events = await _writeRepository.Save(WriteRepository.DefaultKeyTaker, timeHolidayEntries);
 
             foreach (var evt in events) await _mediator.Publish(evt, cancellationToken);
 
-            return timeHolidayEntry.Id;
+            return timeHolidayEntries.Select(te => te.Id).ToImmutableArray();
         }
 
         public async Task<Guid> Handle(DeleteTimeHolidayEntry request, CancellationToken cancellationToken)

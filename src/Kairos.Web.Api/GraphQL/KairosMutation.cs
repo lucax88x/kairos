@@ -88,11 +88,24 @@ namespace Kairos.Web.Api.GraphQL
                 resolve: async context =>
                 {
                     var input = context.GetArgument<TimeAbsenceEntryModel>("timeAbsenceEntry");
-                    var id = await _mediator.Send(
-                        new CreateTimeAbsenceEntry(input));
-                    return new CreateOrUpdateOutput(id);
-                });
+                    var ids = await _mediator.Send(new CreateTimeAbsenceEntries(input));
 
+                    return new CreateOrUpdateOutput(ids.First());
+                });
+            
+            FieldAsync<CreateOrUpdateOutputsType>(
+                "createTimeAbsenceEntries",
+                arguments: new QueryArguments(
+                    new QueryArgument<ListGraphType<NonNullGraphType<TimeAbsenceEntryInputType>>> {Name = "timeAbsenceEntries"}
+                ),
+                resolve: async context =>
+                {
+                    var input = context.GetArgument<IEnumerable<TimeAbsenceEntryModel>>("timeAbsenceEntries");
+                    var ids = await _mediator.Send(new CreateTimeAbsenceEntries(input.ToArray()));
+
+                    return new CreateOrUpdateOutputs(ids);
+                });
+            
             FieldAsync<CreateOrUpdateOutputType>(
                 "deleteTimeAbsenceEntry",
                 arguments: new QueryArguments(
@@ -116,9 +129,20 @@ namespace Kairos.Web.Api.GraphQL
                 resolve: async context =>
                 {
                     var input = context.GetArgument<TimeHolidayEntryModel>("timeHolidayEntry");
-                    var id = await _mediator.Send(
-                        new CreateTimeHolidayEntry(input));
-                    return new CreateOrUpdateOutput(id);
+                    var ids = await _mediator.Send(new CreateTimeHolidayEntries(input));
+                    return new CreateOrUpdateOutputs(ids);
+                });
+            
+            FieldAsync<CreateOrUpdateOutputsType>(
+                "createTimeHolidayEntries",
+                arguments: new QueryArguments(
+                    new QueryArgument<ListGraphType<NonNullGraphType<TimeHolidayEntryInputType>>> {Name = "timeHolidayEntries"}
+                ),
+                resolve: async context =>
+                {
+                    var input = context.GetArgument<IEnumerable<TimeHolidayEntryModel>>("timeHolidayEntries");
+                    var ids = await _mediator.Send(new CreateTimeHolidayEntries(input.ToArray()));
+                    return new CreateOrUpdateOutput(ids.First());
                 });
 
             FieldAsync<CreateOrUpdateOutputType>(

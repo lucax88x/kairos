@@ -7,7 +7,11 @@ import { Index } from 'react-virtualized';
 import { formatAsDateTime } from '../code/constants';
 import Spinner from '../components/Spinner';
 import { VirtualizedTable } from '../components/VirtualizedTable';
-import { TimeEntryListJobModel, TimeEntryListModel, TimeEntryListProjectModel } from '../models/time-entry-list.model';
+import {
+  TimeEntryListJobModel,
+  TimeEntryListModel,
+  TimeEntryListProjectModel,
+} from '../models/time-entry-list.model';
 
 const useStyles = makeStyles(theme => ({
   container: {
@@ -46,7 +50,9 @@ export const TimeEntriesComponent: React.FC<TimeEntriesProps> = props => {
   const handleUpdate = useCallback((model: TimeEntryListModel) => onUpdate(model), [onUpdate]);
   const handleDelete = useCallback((model: TimeEntryListModel) => onDelete(model), [onDelete]);
 
-  const noRowsRenderer = useCallback(() => <p>No time entries</p>, []);
+  const noRowsRenderer = useCallback(() => <p>{isGetTimeEntriesBusy ? '' : 'No time entries'}</p>, [
+    isGetTimeEntriesBusy,
+  ]);
   const rowGetter = useCallback(({ index }: Index) => timeEntries[index], [timeEntries]);
   const dateFormatter = useCallback((data: Date) => format(data, formatAsDateTime), []);
   const jobFormatter = useCallback((job: TimeEntryListJobModel) => job.name, []);
@@ -70,7 +76,7 @@ export const TimeEntriesComponent: React.FC<TimeEntriesProps> = props => {
 
   return (
     <Spinner show={isGetTimeEntriesBusy || isDeleteTimeEntryBusy}>
-      <Typography component="h2" variant="h6" color="primary" gutterBottom>
+      <Typography component="h2" variant="h6" gutterBottom>
         Time Entries
       </Typography>
       <div className={classes.container}>

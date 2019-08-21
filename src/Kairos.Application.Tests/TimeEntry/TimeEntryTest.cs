@@ -88,6 +88,12 @@ namespace Kairos.Application.Tests.TimeEntry
         {
             await Task.CompletedTask;
         }
+        
+        [Fact(Skip = "TODO")]
+        public async Task should_not_allow_to_create_time_entry_on_a_job_or_project_which_are_outside_the_date()
+        {
+            await Task.CompletedTask;
+        }
 
         public void Dispose()
         {

@@ -1,8 +1,11 @@
 import { put, takeLatest } from 'redux-saga/effects';
 import { PayloadAction } from 'typesafe-actions';
-
 import { LOGIN_FAILURE } from '../auth/constants';
-import { BULK_INSERT_TIME_ENTRIES_FAILURE } from '../bulk-insert/constants';
+import {
+  BULK_INSERT_TIME_ABSENCE_ENTRIES_FAILURE,
+  BULK_INSERT_TIME_ENTRIES_FAILURE,
+  BULK_INSERT_TIME_HOLIDAY_ENTRIES_FAILURE,
+} from '../bulk-insert/constants';
 import {
   GET_TIME_ABSENCE_ENTRY_FAILURE,
   UPDATE_TIME_ABSENCE_ENTRY_FAILURE,
@@ -40,6 +43,8 @@ export function* notifyError() {
       GET_TIME_ABSENCE_ENTRY_FAILURE,
       UPDATE_TIME_ABSENCE_ENTRY_FAILURE,
       BULK_INSERT_TIME_ENTRIES_FAILURE,
+      BULK_INSERT_TIME_ABSENCE_ENTRIES_FAILURE,
+      BULK_INSERT_TIME_HOLIDAY_ENTRIES_FAILURE,
       CREATE_TIME_HOLIDAY_ENTRY_FAILURE,
       GET_TIME_HOLIDAY_ENTRIES_FAILURE,
       UPDATE_PROFILE_FAILURE,

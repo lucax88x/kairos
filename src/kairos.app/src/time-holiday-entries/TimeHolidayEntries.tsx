@@ -47,7 +47,10 @@ export const TimeHolidayEntriesComponent: React.FC<TimeHolidayEntriesProps> = pr
   const handleUpdate = useCallback((model: TimeHolidayEntryModel) => onUpdate(model), [onUpdate]);
   const handleDelete = useCallback((model: TimeHolidayEntryModel) => onDelete(model), [onDelete]);
 
-  const noRowsRenderer = useCallback(() => <p>No holidays</p>, []);
+  const noRowsRenderer = useCallback(
+    () => <p>{isGetTimeHolidayEntriesBusy ? '' : 'No holidays'}</p>,
+    [isGetTimeHolidayEntriesBusy],
+  );
   const rowGetter = useCallback(({ index }: Index) => timeHolidayEntries[index], [
     timeHolidayEntries,
   ]);
@@ -71,7 +74,7 @@ export const TimeHolidayEntriesComponent: React.FC<TimeHolidayEntriesProps> = pr
 
   return (
     <Spinner show={isGetTimeHolidayEntriesBusy || isDeleteTimeHolidayEntryBusy}>
-      <Typography component="h2" variant="h6" color="primary" gutterBottom>
+      <Typography component="h2" variant="h6" gutterBottom>
         Holidays
       </Typography>
       <div className={classes.container}>

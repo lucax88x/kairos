@@ -1,7 +1,7 @@
 import { connect } from 'react-redux';
 import { Dispatch } from 'redux';
-
 import { Actions } from '../actions';
+import { selectProfile } from '../profile/selectors';
 import { State } from '../state';
 import { bulkInsertTimeEntriesAsync } from './bulk-insert-time-entries';
 import {
@@ -12,6 +12,7 @@ import {
 import { selectIsBulkTimeEntriesInsertBusy } from './selectors';
 
 const mapStateToProps = (state: State): BulkTimeEntryInsertInputs => ({
+  profile: selectProfile(state),
   isBusy: selectIsBulkTimeEntriesInsertBusy(state),
 });
 

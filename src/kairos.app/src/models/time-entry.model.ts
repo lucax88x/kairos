@@ -1,6 +1,7 @@
 import { parseISO } from 'date-fns';
 
 import { UUID } from './uuid.model';
+import { immerable } from 'immer';
 
 export enum TimeEntryTypes {
   IN = 'IN',
@@ -8,6 +9,8 @@ export enum TimeEntryTypes {
 }
 
 export class TimeEntryModel {
+  [immerable] = true;
+  
   constructor(
     public id = UUID.Generate(),
     public when = new Date(),

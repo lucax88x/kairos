@@ -1,11 +1,11 @@
 import { map } from 'ramda';
-
 import {
   TimeAbsenceEntryModel,
   TimeAbsenceEntryOutModel,
 } from '../../models/time-absence-entry.model';
 import { UUID } from '../../models/uuid.model';
 import { mutation, query } from '../graphql.service';
+import { createTimeAbsenceEntriesMutation } from './mutations/create-time-absence-entries';
 import { createTimeAbsenceEntryMutation } from './mutations/create-time-absence-entry';
 import { deleteTimeAbsenceEntryMutation } from './mutations/delete-time-absence-entry';
 import { updateTimeAbsenceEntryMutation } from './mutations/update-time-absence-entry';
@@ -41,4 +41,8 @@ export async function deleteTimeAbsenceEntry(id: UUID) {
 
 export async function updateTimeAbsenceEntry(model: TimeAbsenceEntryModel) {
   await mutation(updateTimeAbsenceEntryMutation, { timeAbsenceEntry: model });
+}
+
+export async function bulkInsertTimeAbsenceEntries(models: TimeAbsenceEntryModel[]) {
+  await mutation(createTimeAbsenceEntriesMutation, { timeAbsenceEntries: models });
 }

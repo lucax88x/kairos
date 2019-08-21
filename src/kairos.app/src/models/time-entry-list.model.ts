@@ -1,6 +1,7 @@
 import { parseISO } from 'date-fns';
 import { TimeEntryTypes } from './time-entry.model';
 import { UUID } from './uuid.model';
+import { immerable } from 'immer';
 
 export class TimeEntryListProjectModel {
   constructor(public name: string) {}
@@ -29,6 +30,8 @@ export class TimeEntryListJobModel {
 }
 
 export class TimeEntryListModel {
+  [immerable] = true;
+  
   constructor(
     public id: UUID,
     public when: Date,

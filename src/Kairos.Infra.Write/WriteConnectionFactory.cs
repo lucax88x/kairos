@@ -1,4 +1,5 @@
-﻿using System.Threading.Tasks;
+﻿using System;
+using System.Threading.Tasks;
 using EventStore.ClientAPI;
 using Kairos.Config;
 
@@ -6,26 +7,33 @@ namespace Kairos.Infra.Write
 {
     public interface IWriteConnectionFactory
     {
-        Task<IEventStoreConnection> Connect();
+        Task<IEventStoreConnection> GetConnection();
     }
 
-    public class WriteConnectionFactory : IWriteConnectionFactory
+    public class WriteConnectionFactory : IWriteConnectionFactory, IDisposable
     {
         private readonly WriteRepositoryConfig _writeRepositoryConfig;
+        private IEventStoreConnection _connection;
 
         public WriteConnectionFactory(WriteRepositoryConfig writeRepositoryConfig)
         {
             _writeRepositoryConfig = writeRepositoryConfig;
         }
 
-        public async Task<IEventStoreConnection> Connect()
+        public async Task<IEventStoreConnection> GetConnection()
         {
-            var connection =
-                EventStoreConnection.Create(_writeRepositoryConfig.ConnectionString);
+            if (_connection == null)
+            {
+                _connection = EventStoreConnection.Create(_writeRepositoryConfig.ConnectionString);
+                await _connection.ConnectAsync();
+            }
 
-            await connection.ConnectAsync();
+            return _connection;
+        }
 
-            return connection;
+        public void Dispose()
+        {
+            _connection?.Dispose();
         }
     }
 }

@@ -1,9 +1,11 @@
+import { immerable } from 'immer';
 import { map } from 'ramda';
-
 import { JobModel, JobOutModel } from './job.model';
 import { UUID } from './uuid.model';
 
 export class ProfileModel {
+  [immerable] = true;
+
   constructor(public id = UUID.Generate(), public jobs: JobModel[]) {}
 
   static fromOutModel(outModel: ProfileOutModel) {

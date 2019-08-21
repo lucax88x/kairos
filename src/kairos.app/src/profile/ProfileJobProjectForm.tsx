@@ -11,14 +11,16 @@ import {
 } from '@material-ui/core';
 import Slider from '@material-ui/core/Slider';
 import DeleteIcon from '@material-ui/icons/Delete';
+import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 import { DatePicker, MaterialUiPickersDate, MuiPickersUtilsProvider } from '@material-ui/pickers';
 import { endOfDay, format } from 'date-fns';
-import React, { ChangeEvent, Fragment, useCallback, useEffect, useState } from 'react';
-
+import React, { ChangeEvent, useCallback } from 'react';
 import { formatAsDate } from '../code/constants';
-import { Colors } from '../code/variables';
+import { isNumber } from '../code/is';
+import { Themes } from '../code/variables';
 import { JobModel } from '../models/job.model';
 import { ProjectModel } from '../models/project.model';
+import { UUID } from '../models/uuid.model';
 
 const useStyles = makeStyles(theme => ({
   heading: {
@@ -34,7 +36,8 @@ const useStyles = makeStyles(theme => ({
     width: '100%',
   },
   secondaryPaper: {
-    backgroundColor: Colors.Secondary,
+    backgroundColor: Themes.Second.backgroundColor,
+    color: Themes.Second.color,
   },
 }));
 
@@ -44,10 +47,11 @@ export interface ProfileJobProjectFormInputs {
 }
 
 export interface ProfileJobProjectFormDispatches {
-  onDelete: (job: JobModel, project: ProjectModel) => void;
-  onNameChange: (job: JobModel, project: ProjectModel, name: string) => void;
-  onStartDateChange: (job: JobModel, project: ProjectModel, date: Date) => void;
-  onEndDateChange: (job: JobModel, project: ProjectModel, date: Date) => void;
+  onDelete: (jobId: UUID, project: UUID) => void;
+  onNameChange: (jobId: UUID, project: UUID, name: string) => void;
+  onAllocationChange: (jobId: UUID, project: UUID, allocation: number) => void;
+  onStartDateChange: (jobId: UUID, project: UUID, date: Date) => void;
+  onEndDateChange: (jobId: UUID, project: UUID, date: Date) => void;
 }
 
 type ProfileJobProjectFormProps = ProfileJobProjectFormInputs & ProfileJobProjectFormDispatches;
@@ -55,19 +59,37 @@ type ProfileJobProjectFormProps = ProfileJobProjectFormInputs & ProfileJobProjec
 export const ProfileJobProjectForm: React.FC<ProfileJobProjectFormProps> = props => {
   const classes = useStyles(props);
 
-  const { job, project, onDelete, onNameChange, onStartDateChange, onEndDateChange } = props;
+  const {
+    job,
+    project,
+    onDelete,
+    onNameChange,
+    onAllocationChange,
+    onStartDateChange,
+    onEndDateChange,
+  } = props;
 
-  const handleDelete = useCallback(() => onDelete(job, project), [onDelete, job, project]);
+  const handleDelete = useCallback(() => onDelete(job.id, project.id), [onDelete, job, project]);
 
   const handleNameChange = useCallback(
-    (event: ChangeEvent<HTMLInputElement>) => onNameChange(job, project, event.currentTarget.value),
+    (event: ChangeEvent<HTMLInputElement>) =>
+      onNameChange(job.id, project.id, event.currentTarget.value),
     [onNameChange, job, project],
+  );
+
+  const handleAllocationChange = useCallback(
+    (_, val: number | number[]) => {
+      if (isNumber(val)) {
+        onAllocationChange(job.id, project.id, val);
+      }
+    },
+    [onAllocationChange, job, project],
   );
 
   const handleStartDateChange = useCallback(
     (date: MaterialUiPickersDate) => {
       if (!!date) {
-        onStartDateChange(job, project, date);
+        onStartDateChange(job.id, project.id, date);
       }
     },
     [onStartDateChange, job, project],
@@ -76,7 +98,7 @@ export const ProfileJobProjectForm: React.FC<ProfileJobProjectFormProps> = props
   const handleEndDateChange = useCallback(
     (date: MaterialUiPickersDate) => {
       if (!!date) {
-        onEndDateChange(job, project, endOfDay(date));
+        onEndDateChange(job.id, project.id, endOfDay(date));
       }
     },
     [onEndDateChange, job, project],
@@ -84,7 +106,7 @@ export const ProfileJobProjectForm: React.FC<ProfileJobProjectFormProps> = props
 
   return (
     <ExpansionPanel className={classes.secondaryPaper}>
-      <ExpansionPanelSummary>
+      <ExpansionPanelSummary expandIcon={<ExpandMoreIcon />}>
         <Grid container alignItems={'center'} justify={'space-between'}>
           <Grid item>
             <Typography className={classes.heading}>
@@ -134,6 +156,7 @@ export const ProfileJobProjectForm: React.FC<ProfileJobProjectFormProps> = props
                 min={10}
                 max={100}
                 value={project.allocation}
+                onChange={handleAllocationChange}
               />
             </Grid>
           </Grid>

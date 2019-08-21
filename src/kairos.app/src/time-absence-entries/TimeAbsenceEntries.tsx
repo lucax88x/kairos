@@ -47,7 +47,10 @@ export const TimeAbsenceEntriesComponent: React.FC<TimeAbsenceEntriesProps> = pr
   const handleUpdate = useCallback((model: TimeAbsenceEntryModel) => onUpdate(model), [onUpdate]);
   const handleDelete = useCallback((model: TimeAbsenceEntryModel) => onDelete(model), [onDelete]);
 
-  const noRowsRenderer = useCallback(() => <p>No absences</p>, []);
+  const noRowsRenderer = useCallback(
+    () => <p>{isGetTimeAbsenceEntriesBusy ? '' : 'No absences'}</p>,
+    [isGetTimeAbsenceEntriesBusy],
+  );
   const rowGetter = useCallback(({ index }: Index) => timeAbsenceEntries[index], [
     timeAbsenceEntries,
   ]);
@@ -71,7 +74,7 @@ export const TimeAbsenceEntriesComponent: React.FC<TimeAbsenceEntriesProps> = pr
 
   return (
     <Spinner show={isGetTimeAbsenceEntriesBusy || isDeleteTimeAbsenceEntryBusy}>
-      <Typography component="h2" variant="h6" color="primary" gutterBottom>
+      <Typography component="h2" variant="h6" gutterBottom>
         Absences
       </Typography>
       <div className={classes.container}>

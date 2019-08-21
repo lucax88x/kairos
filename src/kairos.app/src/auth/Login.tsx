@@ -22,20 +22,16 @@ const useStyles = makeStyles(theme => ({
   },
 }));
 
-export interface LoginInputs {
-  isAuthenticated: boolean;
-}
-
 export interface LoginDispatches {
   login: () => void;
 }
 
-type LoginProps = LoginInputs & LoginDispatches;
+type LoginProps = LoginDispatches;
 
 export const LoginComponent: React.FC<LoginProps> = props => {
   const classes = useStyles(props);
 
-  const { isAuthenticated, login } = props;
+  const { login } = props;
 
   return (
     <Container component="main" maxWidth="xs">

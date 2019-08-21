@@ -11,6 +11,7 @@ import {
   BULK_INSERT_TIME_ENTRIES_SUCCESS,
 } from './constants';
 import { BulkInsertState } from './state';
+import { enqueueSnackbarAction } from '../notification-manager/actions';
 
 export const bulkInsertTimeEntriesAsync = createAsyncAction(
   BULK_INSERT_TIME_ENTRIES,
@@ -18,7 +19,7 @@ export const bulkInsertTimeEntriesAsync = createAsyncAction(
   BULK_INSERT_TIME_ENTRIES_FAILURE,
 )<{ models: TimeEntryModel[] }, void, string>();
 
-function* doDeleteTimeAbsenceEntry({
+function* doBulkTimeEntries({
   payload: { models },
 }: ReturnType<typeof bulkInsertTimeEntriesAsync.request>) {
   try {
@@ -30,8 +31,13 @@ function* doDeleteTimeAbsenceEntry({
   }
 }
 
+function* doNotifySuccess() {
+  yield put(enqueueSnackbarAction('Time entries saved!', { variant: 'success' }));
+}
+
 export function* bulkInsertTimeEntriesSaga() {
-  yield takeLatest(BULK_INSERT_TIME_ENTRIES, doDeleteTimeAbsenceEntry);
+  yield takeLatest(BULK_INSERT_TIME_ENTRIES, doBulkTimeEntries);
+  yield takeLatest(BULK_INSERT_TIME_ENTRIES_SUCCESS, doNotifySuccess);
 }
 
 export const bulkInsertTimeEntriesReducer = (
