@@ -41,7 +41,7 @@ namespace Kairos.Application.TimeAbsenceEntry
 
             foreach (var evt in events) await _mediator.Publish(evt, cancellationToken);
 
-            return timeAbsenceEntries.Select(te => te.Id).ToImmutableArray();
+                            return timeAbsenceEntries.Select(te => te.Id).ToImmutableArray();
         }
 
         public async Task<Guid> Handle(DeleteTimeAbsenceEntry request, CancellationToken cancellationToken)

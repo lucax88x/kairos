@@ -6,7 +6,7 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import { spring } from 'react-motion';
 import { Provider } from 'react-redux';
-import { Route } from 'react-router-dom';
+import { Route, Redirect } from 'react-router-dom';
 import { AnimatedSwitch, IAnimatedSwitchTransition } from 'react-router-transition';
 import { App } from './App.container';
 import { Login } from './auth/Login.container';
@@ -79,6 +79,7 @@ ReactDOM.render(
 
         <ConnectedRouter history={history}>
           <AnimatedSwitch {...pageTransitions} mapStyles={mapStyles} className="switch-wrapper">
+            <Redirect exact={true} from="/" to={Routes.Dashboard} />
             <Route path={Routes.Login} component={Login} />
             <Route path="" component={App} />
             <Route component={NotFound} />

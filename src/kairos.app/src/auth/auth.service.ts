@@ -56,7 +56,7 @@ class AuthService {
   async logout() {
     const auth0Client = await this.auth0ClientPromise;
 
-    await auth0Client.logout({ client_id: clientId, returnTo: 'http://localhost:3000' });
+    await auth0Client.logout({ client_id: clientId, returnTo: 'http://localhost:3000/login' });
   }
 
   async getToken(): Promise<string> {

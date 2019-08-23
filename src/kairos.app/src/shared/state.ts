@@ -1,15 +1,17 @@
+import { CountryModel } from '../models/country.model';
 import { TimeAbsenceEntryModel } from '../models/time-absence-entry.model';
-import { TimeHolidayEntryModel } from '../models/time-holiday-entry.model';
-import { TimeEntryModel } from '../models/time-entry.model';
 import { TimeEntryListModel } from '../models/time-entry-list.model';
+import { TimeHolidayEntryModel } from '../models/time-holiday-entry.model';
 
 export interface SharedState {
+  countries: CountryModel[];
   timeEntries: TimeEntryListModel[];
   timeAbsenceEntries: TimeAbsenceEntryModel[];
   timeHolidayEntries: TimeHolidayEntryModel[];
 
   ui: {
     busy: {
+      getCountries: boolean;
       getTimeEntries: boolean;
       createTimeEntry: boolean;
       deleteTimeEntry: boolean;
@@ -24,12 +26,14 @@ export interface SharedState {
 }
 
 export const sharedInitialState: SharedState = {
+  countries: [],
   timeEntries: [],
   timeAbsenceEntries: [],
   timeHolidayEntries: [],
 
   ui: {
     busy: {
+      getCountries: false,
       getTimeEntries: false,
       createTimeEntry: false,
       deleteTimeEntry: false,

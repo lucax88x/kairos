@@ -1,6 +1,6 @@
 import { push } from 'connected-react-router';
 import { produce } from 'immer';
-import { call, put, takeLatest } from 'redux-saga/effects';
+import { call, put, takeLatest, select } from 'redux-saga/effects';
 import { action } from 'typesafe-actions';
 import { AuthActions } from '../actions';
 import { UserModel } from '../models/user.model';
@@ -9,7 +9,8 @@ import { Routes } from '../routes';
 import { authService } from './auth.service';
 import { CHECK_IS_AUTHENTICATED, IS_ANONYMOUS, IS_AUTHENTICATED } from './constants';
 import { AuthState } from './state';
-
+import { selectLoginRoute } from '../shared/router.selectors';
+import { Route } from '../models/route.model';
 
 export const checkIsAuthenticated = () => action(CHECK_IS_AUTHENTICATED);
 export const isAuthenticated = (user: UserModel) => action(IS_AUTHENTICATED, user);
@@ -31,6 +32,12 @@ function* redirectIfAnonymous() {
 
 function* doWhenAuthenticated() {
   yield put(getProfileAsync.request());
+
+  const loginRoute: Route = yield select(selectLoginRoute);
+
+  if (!!loginRoute) {
+    yield put(push(Routes.Dashboard));
+  }
 }
 
 export function* checkIsAuthenticatedSaga() {

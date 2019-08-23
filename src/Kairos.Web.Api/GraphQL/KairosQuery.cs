@@ -1,10 +1,12 @@
 using System;
 using GraphQL.Types;
 using Kairos.Application;
+using Kairos.Application.Country.Queries;
 using Kairos.Application.TimeAbsenceEntry.Queries;
 using Kairos.Application.TimeEntry.Queries;
 using Kairos.Application.TimeHolidayEntry.Queries;
 using Kairos.Application.UserProfile.Queries;
+using Kairos.Web.Api.GraphQL.Country.Types;
 using Kairos.Web.Api.GraphQL.TimeAbsenceEntry.Types;
 using Kairos.Web.Api.GraphQL.TimeEntry.Types;
 using Kairos.Web.Api.GraphQL.TimeHolidayEntry.Types;
@@ -24,12 +26,21 @@ namespace Kairos.Web.Api.GraphQL
             _authProvider = authProvider;
             Name = nameof(KairosQuery);
 
+            SetCountry();
             SetTimeEntry();
             SetTimeAbsenceEntry();
             SetTimeHolidayEntry();
             SetUserProfile();
         }
 
+        private void SetCountry()
+        {
+            FieldAsync<ListGraphType<CountryType>>(
+                "countries",
+                "The available countries",
+                resolve: async context => await _mediator.Send(new GetCountries()));
+        }
+        
         private void SetTimeEntry()
         {
             FieldAsync<TimeEntryType>(

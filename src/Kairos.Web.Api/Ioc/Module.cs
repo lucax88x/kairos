@@ -6,6 +6,7 @@ using GraphQL.Types;
 using Kairos.Application;
 using Kairos.Config.Ioc;
 using Kairos.Web.Api.GraphQL;
+using Kairos.Web.Api.GraphQL.Country.Types;
 using Kairos.Web.Api.GraphQL.TimeAbsenceEntry.Types;
 using Kairos.Web.Api.GraphQL.TimeEntry.Types;
 using Kairos.Web.Api.GraphQL.TimeHolidayEntry.Types;
@@ -72,6 +73,9 @@ namespace Kairos.Web.Api.Ioc
             builder.RegisterType<CreateOrUpdateOutputsType>()
                 .AsSelf();
 
+            builder.RegisterType<CountryType>()
+                .AsSelf();
+            
             builder.RegisterType<TimeEntryType>()
                 .AsSelf();
             builder.RegisterType<TimeEntryTypeEnum>()

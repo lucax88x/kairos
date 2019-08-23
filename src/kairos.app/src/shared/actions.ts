@@ -1,3 +1,5 @@
+export { getCountriesAsync } from './get-countries';
+
 export { getTimeEntriesAsync } from './get-time-entries';
 export { createTimeEntryAsync } from './create-time-entry';
 export { deleteTimeEntryAsync } from './delete-time-entry';

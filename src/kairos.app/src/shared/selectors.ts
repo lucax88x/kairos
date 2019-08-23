@@ -4,6 +4,11 @@ import { State } from '../state';
 
 const selectState = (state: State) => state.shared;
 
+export const selectCountries = createSelector(
+  selectState,
+  state => state.countries,
+);
+
 export const selectTimeEntries = createSelector(
   selectState,
   state => state.timeEntries,
@@ -27,6 +32,11 @@ export const selectUi = createSelector(
 export const selectBusy = createSelector(
   selectUi,
   ui => ui.busy,
+);
+
+export const selectIsGetCountriesBusy = createSelector(
+  selectBusy,
+  busy => busy.getCountries,
 );
 
 export const selectIsGetTimeEntriesBusy = createSelector(

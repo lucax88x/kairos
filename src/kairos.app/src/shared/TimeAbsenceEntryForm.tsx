@@ -2,11 +2,11 @@ import DateFnsUtils from '@date-io/date-fns';
 import {
   Divider,
   FormControl,
-  FormControlLabel,
   Grid,
+  InputLabel,
   makeStyles,
-  Radio,
-  RadioGroup,
+  MenuItem,
+  Select,
   TextField,
 } from '@material-ui/core';
 import {
@@ -15,6 +15,7 @@ import {
   MuiPickersUtilsProvider,
 } from '@material-ui/pickers';
 import React, { ChangeEvent, useCallback, useEffect, useState } from 'react';
+import { isString } from '../code/is';
 import ButtonSpinner from '../components/ButtonSpinner';
 import { TimeAbsenceEntryModel, TimeAbsenceEntryTypes } from '../models/time-absence-entry.model';
 import { UUID } from '../models/uuid.model';
@@ -42,10 +43,11 @@ export const TimeAbsenceEntryForm: React.FC<TimeAbsenceEntryFormProps> = props =
   const [end, setEnd] = useState<Date | null>(model.end);
 
   useEffect(() => {
+    console.log('nooh');
     setType(model.type);
     setStart(model.start);
     setEnd(model.end);
-  }, [model, setType, setStart, setEnd]);
+  }, [model]);
 
   const handleSave = useCallback(() => {
     if (!!start && !!end) {
@@ -54,7 +56,11 @@ export const TimeAbsenceEntryForm: React.FC<TimeAbsenceEntryFormProps> = props =
   }, [save, type, description, start, end]);
 
   const handleTypeChange = useCallback(
-    (_, value: string) => setType(value as TimeAbsenceEntryTypes),
+    (event: ChangeEvent<{ value: unknown }>) => {
+      if (isString(event.target.value)) {
+        setType(event.target.value as TimeAbsenceEntryTypes);
+      }
+    },
     [setType],
   );
 
@@ -76,40 +82,31 @@ export const TimeAbsenceEntryForm: React.FC<TimeAbsenceEntryFormProps> = props =
         justify="center"
         alignItems="center"
       >
-        <Grid item xs={12}>
-          <FormControl component="fieldset">
-            <RadioGroup
-              aria-label="timeEntryType"
-              name="timeEntryType"
-              row
-              value={type}
-              onChange={handleTypeChange}
-            >
-              <FormControlLabel
-                value={TimeAbsenceEntryTypes.VACATION}
-                control={<Radio />}
-                label="Vacation"
-              />
-              <FormControlLabel
-                value={TimeAbsenceEntryTypes.ILLNESS}
-                control={<Radio />}
-                label="Illness"
-              />
-            </RadioGroup>
-          </FormControl>
-        </Grid>
-        <Grid item xs={12}>
-          <TextField
-            autoFocus
-            margin="dense"
-            id="description"
-            label="Description"
-            type="text"
-            value={description}
-            onChange={handleDescriptionChange}
-            fullWidth
-          />
-        </Grid>
+        <FormControl fullWidth>
+          <InputLabel htmlFor="type">Type</InputLabel>
+          <Select
+            value={type}
+            onChange={handleTypeChange}
+            inputProps={{
+              id: 'type',
+            }}
+          >
+            <MenuItem value={TimeAbsenceEntryTypes.ILLNESS}>Illness</MenuItem>
+            <MenuItem value={TimeAbsenceEntryTypes.VACATION}>Vacation</MenuItem>
+            <MenuItem value={TimeAbsenceEntryTypes.PERMIT}>Permit</MenuItem>
+            <MenuItem value={TimeAbsenceEntryTypes.COMPENSATION}>Compensation</MenuItem>
+          </Select>
+        </FormControl>
+        <TextField
+          autoFocus
+          margin="dense"
+          id="description"
+          label="Description"
+          type="text"
+          value={description}
+          onChange={handleDescriptionChange}
+          fullWidth
+        />
         <MuiPickersUtilsProvider utils={DateFnsUtils}>
           <Grid item xs={12}>
             <DateTimePicker

@@ -1,4 +1,5 @@
 ﻿using System;
+using Kairos.Application.Country;
 using Kairos.Application.TimeAbsenceEntry;
 using Kairos.Application.TimeEntry;
 using Kairos.Application.TimeHolidayEntry;
@@ -61,6 +62,18 @@ namespace Kairos.Application.Tests.Ioc
         public void should_resolve_TimeHolidayEntryProjection()
         {
             _scopeResolver.IsInstancePerLifetimeScope<TimeHolidayEntryProjection>();
+        }
+        
+        [Fact]
+        public void should_resolve_CountryProjection()
+        {
+            _scopeResolver.IsInstancePerLifetimeScope<CountryProjection>();
+        }
+        
+        [Fact]
+        public void should_resolve_CountryProvider()
+        {
+            _scopeResolver.IsSingleInstance<ICountryProvider, CountryProvider>();
         }
 
         public void Dispose()

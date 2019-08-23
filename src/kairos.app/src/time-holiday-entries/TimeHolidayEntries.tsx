@@ -2,13 +2,15 @@ import { Button, IconButton, makeStyles, Typography } from '@material-ui/core';
 import CreateIcon from '@material-ui/icons/Create';
 import DeleteIcon from '@material-ui/icons/Delete';
 import { format } from 'date-fns';
-import React, { useCallback } from 'react';
+import React, { useCallback, useState, useMemo } from 'react';
 import { Index } from 'react-virtualized';
-
 import { formatAsDateTime } from '../code/constants';
+import { Autocomplete } from '../components/Autocomplete';
 import Spinner from '../components/Spinner';
 import { VirtualizedTable } from '../components/VirtualizedTable';
+import { CountryModel } from '../models/country.model';
 import { TimeHolidayEntryModel } from '../models/time-holiday-entry.model';
+import { map } from 'ramda';
 
 const useStyles = makeStyles(theme => ({
   container: {
@@ -20,8 +22,10 @@ const useStyles = makeStyles(theme => ({
 
 export interface TimeHolidayEntriesInputs {
   timeHolidayEntries: TimeHolidayEntryModel[];
+  countries: CountryModel[];
   isGetTimeHolidayEntriesBusy: boolean;
   isDeleteTimeHolidayEntryBusy: boolean;
+  isGetCountriesBusy: boolean;
 }
 
 export interface TimeHolidayEntriesDispatches {
@@ -35,8 +39,10 @@ type TimeHolidayEntriesProps = TimeHolidayEntriesInputs & TimeHolidayEntriesDisp
 export const TimeHolidayEntriesComponent: React.FC<TimeHolidayEntriesProps> = props => {
   const {
     timeHolidayEntries,
+    countries,
     isGetTimeHolidayEntriesBusy,
     isDeleteTimeHolidayEntryBusy,
+    isGetCountriesBusy,
     onCreate,
     onUpdate,
     onDelete,
@@ -44,8 +50,12 @@ export const TimeHolidayEntriesComponent: React.FC<TimeHolidayEntriesProps> = pr
 
   const classes = useStyles(props);
 
+  const [country, setCountry] = useState('');
+
   const handleUpdate = useCallback((model: TimeHolidayEntryModel) => onUpdate(model), [onUpdate]);
   const handleDelete = useCallback((model: TimeHolidayEntryModel) => onDelete(model), [onDelete]);
+  const handleCountryChange = useCallback(() => setCountry(''), [setCountry]);
+  const handleOverrideHolidays = useCallback(() => console.log('override'), []);
 
   const noRowsRenderer = useCallback(
     () => <p>{isGetTimeHolidayEntriesBusy ? '' : 'No holidays'}</p>,
@@ -70,6 +80,11 @@ export const TimeHolidayEntriesComponent: React.FC<TimeHolidayEntriesProps> = pr
       </IconButton>
     ),
     [handleDelete],
+  );
+
+  const countriesSuggestion = useMemo(
+    () => map(c => ({ value: c.countryCode, label: c.country }), countries),
+    [countries],
   );
 
   return (
@@ -119,6 +134,16 @@ export const TimeHolidayEntriesComponent: React.FC<TimeHolidayEntriesProps> = pr
       </div>
       <Button variant="contained" color="primary" onClick={onCreate}>
         Create
+      </Button>
+      <Autocomplete
+        isBusy={isGetCountriesBusy}
+        data={countriesSuggestion}
+        value={country}
+        onChange={handleCountryChange}
+      />
+
+      <Button variant="contained" color="primary" onClick={handleOverrideHolidays}>
+        Override Holidays from country preset
       </Button>
     </Spinner>
   );

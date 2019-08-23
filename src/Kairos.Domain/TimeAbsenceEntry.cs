@@ -8,7 +8,9 @@ namespace Kairos.Domain
     public enum TimeAbsenceEntryType
     {
         Vacation = 1,
-        Illness = 2
+        Illness = 2,
+        Permit = 3,
+        Compensation = 4
     }
 
     public class TimeAbsenceEntry : AggregateRoot

@@ -4,6 +4,11 @@ import { createSelector } from 'reselect';
 import { Routes } from '../routes';
 import { State } from '../state';
 
+export const selectLoginRoute = createSelector(
+  (state: State) => state,
+  createMatchSelector(Routes.Login),
+);
+
 export const selectProfileRoute = createSelector(
   (state: State) => state,
   createMatchSelector(Routes.Profile),

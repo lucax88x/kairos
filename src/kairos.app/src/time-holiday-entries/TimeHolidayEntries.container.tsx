@@ -10,6 +10,8 @@ import {
   selectIsDeleteTimeHolidayEntryBusy,
   selectIsGetTimeHolidayEntriesBusy,
   selectTimeHolidayEntries,
+  selectCountries,
+  selectIsGetCountriesBusy,
 } from '../shared/selectors';
 import { State } from '../state';
 import {
@@ -20,8 +22,10 @@ import {
 
 const mapStateToProps = (state: State): TimeHolidayEntriesInputs => ({
   timeHolidayEntries: selectTimeHolidayEntries(state),
+  countries: selectCountries(state),
   isGetTimeHolidayEntriesBusy: selectIsGetTimeHolidayEntriesBusy(state),
   isDeleteTimeHolidayEntryBusy: selectIsDeleteTimeHolidayEntryBusy(state),
+  isGetCountriesBusy: selectIsGetCountriesBusy(state),
 });
 
 const mapDispatchToProps = (dispatch: Dispatch<Actions>): TimeHolidayEntriesDispatches => ({

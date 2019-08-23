@@ -9,10 +9,12 @@ import { deleteTimeEntryReducer } from './delete-time-entry';
 import { deleteTimeHolidayEntryReducer } from './delete-time-holiday-entry';
 import { getTimeAbsenceEntriesReducer } from './get-time-absence-entries';
 import { getTimeEntriesReducer } from './get-time-entries';
+import { getCountriesReducer } from './get-countries';
 import { getTimeHolidayEntriesReducer } from './get-time-holiday-entries';
 import { sharedInitialState, SharedState } from './state';
 
 const reducers = [
+  getCountriesReducer,
   getTimeEntriesReducer,
   createTimeEntryReducer,
   deleteTimeEntryReducer,

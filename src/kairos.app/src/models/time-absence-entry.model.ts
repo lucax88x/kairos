@@ -2,15 +2,16 @@ import { endOfDay, parseISO, startOfDay } from 'date-fns';
 import { UUID } from './uuid.model';
 import { immerable } from 'immer';
 
-
 export enum TimeAbsenceEntryTypes {
   VACATION = 'VACATION',
   ILLNESS = 'ILLNESS',
+  PERMIT = 'PERMIT',
+  COMPENSATION = 'COMPENSATION',
 }
 
 export class TimeAbsenceEntryModel {
   [immerable] = true;
-  
+
   constructor(
     public id = UUID.Generate(),
     public description = '',

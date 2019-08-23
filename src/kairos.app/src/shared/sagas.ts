@@ -1,5 +1,6 @@
 export { notifyError } from './notify-error';
 
+export { getCountriesSaga } from './get-countries';
 export { getTimeEntriesSaga } from './get-time-entries';
 export { createTimeEntrySaga } from './create-time-entry';
 export { deleteTimeEntrySaga } from './delete-time-entry';

@@ -16,6 +16,7 @@ import { TimeEntryListModel } from '../models/time-entry-list.model';
 import { Themes } from '../code/variables';
 import { mapIndexed } from '../code/ramda.curried';
 import { styles } from '@material-ui/pickers/views/Clock/Clock';
+import { UUID } from '../models/uuid.model';
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -101,7 +102,11 @@ export const TimeStatisticsComponent: React.FC<TimeStatisticsProps> = memo(props
 
   const generateTiles = useCallback(
     mapIndexed<TimeStatisticTile, JSX.Element>()((tile, index) => (
-      <GridListTile className={classes.gridTile} style={{ ...Themes.getRelativeToIndex(index) }}>
+      <GridListTile
+        key={tile.title}
+        className={classes.gridTile}
+        style={{ ...Themes.getRelativeToIndex(index) }}
+      >
         <div className={classes.gridTileContent}>{tile.text}</div>
         <GridListTileBar title={tile.title} subtitle={tile.subtitle} />
       </GridListTile>

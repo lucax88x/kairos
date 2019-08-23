@@ -1,14 +1,9 @@
-﻿using System;
-using System.Globalization;
-using System.Text;
-using Autofac;
-using GraphQL;
+﻿using Autofac;
 using GraphQL.Server;
 using GraphQL.Server.Ui.Playground;
 using GraphQL.Types;
 using Kairos.Web.Api.Filters;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
@@ -16,6 +11,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Serilog;
 using Serilog.Events;
+using Module = Kairos.Web.Api.Ioc.Module;
 
 namespace Kairos.Web.Api
 {
@@ -30,7 +26,7 @@ namespace Kairos.Web.Api
 
         public void ConfigureContainer(ContainerBuilder builder)
         {
-            builder.RegisterModule(new Ioc.Module(Configuration));
+            builder.RegisterModule(new Module(Configuration));
         }
 
         public void ConfigureServices(IServiceCollection services)

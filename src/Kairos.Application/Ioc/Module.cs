@@ -4,6 +4,7 @@ using Autofac.Extras.DynamicProxy;
 using AutofacSerilogIntegration;
 using FluentValidation;
 using Kairos.Application.Behaviors;
+using Kairos.Application.Country;
 using Kairos.Common.Interceptors;
 using MediatR;
 using MediatR.Pipeline;
@@ -18,7 +19,8 @@ namespace Kairos.Application.Ioc
 
             builder.RegisterModule(new Infra.Read.Ioc.Module());
             builder.RegisterModule(new Infra.Write.Ioc.Module());
-            
+            builder.RegisterType<CountryProvider>().As<ICountryProvider>().SingleInstance();
+
             RegisterMediatr(builder);
         }
 
@@ -45,7 +47,7 @@ namespace Kairos.Application.Ioc
             builder.RegisterGeneric(typeof(RequestPostProcessorBehavior<,>)).As(typeof(IPipelineBehavior<,>));
             builder.RegisterGeneric(typeof(RequestPreProcessorBehavior<,>)).As(typeof(IPipelineBehavior<,>));
             builder.RegisterGeneric(typeof(ValidationBehavior<,>)).As(typeof(IPipelineBehavior<,>));
-            
+
             builder.RegisterAssemblyTypes(assembly).AsClosedTypesOf(typeof(IValidator<>));
 
             builder.Register<ServiceFactory>(ctx =>

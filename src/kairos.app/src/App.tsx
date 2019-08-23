@@ -26,18 +26,17 @@ import TimerIcon from '@material-ui/icons/Timer';
 import WeekendIcon from '@material-ui/icons/Weekend';
 import clsx from 'clsx';
 import React, { useCallback, useState } from 'react';
-import { Link, Route } from 'react-router-dom';
-
+import { Link, Redirect, Route } from 'react-router-dom';
 import { ReactComponent as LogoIcon } from './assets/images/logo.svg';
 import { BulkInsert } from './bulk-insert/BulkInsert';
 import { CreateTimeAbsenceEntry } from './CreateTimeAbsenceEntry.container';
 import { CreateTimeEntry } from './CreateTimeEntry.container';
 import { CreateTimeHolidayEntryModal } from './CreateTimeHolidayEntryModal.container';
 import { Dashboard } from './dashboard/Dashboard';
-import { Profile } from './profile/Profile.container';
 import { EditTimeAbsenceEntry } from './edit-time-absence-entry/EditTimeAbsenceEntry.container';
 import { EditTimeEntry } from './edit-time-entry/EditTimeEntry.container';
 import { UserModel } from './models/user.model';
+import { Profile } from './profile/Profile.container';
 import { Routes } from './routes';
 import { TimeAbsenceEntries } from './time-absence-entries/TimeAbsenceEntries.container';
 import { TimeEntries } from './time-entries/TimeEntries.container';
@@ -379,8 +378,7 @@ export const AppComponent: React.FC<AppProps> = props => {
       <main className={classes.content}>
         <div className={classes.appBarSpacer} />
         <Container maxWidth="lg" className={classes.container}>
-          {/* <Redirect exact={true} from="/" to={Routes.Dashboard} /> */}
-          <Route exact={true} path={Routes.Dashboard} component={Dashboard} />
+          <Route path={Routes.Dashboard} component={Dashboard} />
           <Route path={Routes.Profile} component={Profile} />
           <Route path={Routes.TimeEntries} component={TimeEntries} />
           <Route path={Routes.TimeAbsenceEntries} component={TimeAbsenceEntries} />
