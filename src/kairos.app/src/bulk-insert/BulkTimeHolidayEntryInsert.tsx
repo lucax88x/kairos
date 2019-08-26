@@ -13,8 +13,7 @@ import { TimeHolidayEntryModel } from '../models/time-holiday-entry.model';
 import { UUID } from '../models/uuid.model';
 
 interface TimeHolidayEntryInvalidModel {
-  start: Date | string;
-  end: Date | string;
+  when: Date | string;
   description: string;
 }
 
@@ -65,20 +64,17 @@ export const BulkTimeHolidayEntryInsertComponent: React.FC<
       const splitByComma = split(',');
       for (let i = 0; i < lines.length; i++) {
         const cells = splitByComma(lines[i]);
-        if (cells.length >= 3) {
-          const start = parseISO(cells[0]);
-          const end = parseISO(cells[1]);
-          const description = cells[2];
+        if (cells.length >= 2) {
+          const when = parseISO(cells[0]);
+          const description = cells[1];
 
-          const isStartValid = isValid(start);
-          const isEndValid = isValid(end);
-          if (isStartValid && isEndValid) {
-            validModels.push(new TimeHolidayEntryModel(UUID.Generate(), description, start, end));
+          const isWhenValid = isValid(when);
+          if (isWhenValid) {
+            validModels.push(new TimeHolidayEntryModel(UUID.Generate(), description, when));
           } else {
             invalidModels.push({
               description,
-              start: isStartValid ? start : 'Invalid Date',
-              end: isEndValid ? end : 'Invalid Date',
+              when: isWhenValid ? when : 'Invalid Date',
             });
           }
         }
@@ -110,7 +106,7 @@ export const BulkTimeHolidayEntryInsertComponent: React.FC<
       </Grid>
       <Grid item>
         <TextField
-          placeholder="START(dd/mm/yyyy hh:MM),END(dd/mm/yyyy hh:MM),DESCRIPTION"
+          placeholder="WHEN(dd/mm/yyyy hh:MM), DESCRIPTION"
           multiline
           variant="filled"
           rows={4}
@@ -152,15 +148,8 @@ export const BulkTimeHolidayEntryInsertComponent: React.FC<
                 },
                 {
                   width: 200,
-                  label: 'Start',
-                  dataKey: 'start',
-                  flexGrow: 1,
-                  formatter: dateFormatter,
-                },
-                {
-                  width: 200,
-                  label: 'End',
-                  dataKey: 'end',
+                  label: 'When',
+                  dataKey: 'When',
                   flexGrow: 1,
                   formatter: dateFormatter,
                 },
@@ -194,15 +183,8 @@ export const BulkTimeHolidayEntryInsertComponent: React.FC<
                 },
                 {
                   width: 200,
-                  label: 'Start',
-                  dataKey: 'start',
-                  flexGrow: 1,
-                  formatter: dateFormatter,
-                },
-                {
-                  width: 200,
-                  label: 'End',
-                  dataKey: 'end',
+                  label: 'When',
+                  dataKey: 'When',
                   flexGrow: 1,
                   formatter: dateFormatter,
                 },

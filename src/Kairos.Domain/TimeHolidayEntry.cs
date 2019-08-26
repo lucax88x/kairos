@@ -9,8 +9,7 @@ namespace Kairos.Domain
     {
         public string User { get; private set; }
         public string Description { get; private set; }
-        public DateTimeOffset Start { get; private set; }
-        public DateTimeOffset End { get; private set; }
+        public DateTimeOffset When { get; private set; }
 
         protected override void Apply(Event @event)
         {
@@ -21,8 +20,7 @@ namespace Kairos.Domain
                     Id = added.TimeHolidayEntry.Id;
                     User = added.TimeHolidayEntry.User;
                     Description = added.TimeHolidayEntry.Description;
-                    End = added.TimeHolidayEntry.End;
-                    Start = added.TimeHolidayEntry.Start;
+                    When = added.TimeHolidayEntry.When;
                     return;
                 }
 

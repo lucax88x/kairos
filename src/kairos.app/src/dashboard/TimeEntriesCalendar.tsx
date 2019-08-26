@@ -1,5 +1,5 @@
 import { makeStyles } from '@material-ui/styles';
-import { endOfYear, startOfYear } from 'date-fns';
+import { endOfYear, startOfYear, endOfDay, startOfDay } from 'date-fns';
 import moment from 'moment';
 import { join, map } from 'ramda';
 import React, { useCallback, useEffect, useState } from 'react';
@@ -87,8 +87,8 @@ export const TimeEntriesCalendarComponent: React.FC<TimeEntriesCalendarEntryProp
 
     const holidays = map(
       hol => ({
-        start: hol.start,
-        end: hol.end,
+        start: startOfDay(hol.when),
+        end: endOfDay(hol.when),
         title: hol.description,
         resource: EventType.Holiday,
       }),

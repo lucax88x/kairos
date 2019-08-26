@@ -10,8 +10,7 @@ namespace Kairos.Web.Api.GraphQL.TimeHolidayEntry.Types
             Name = nameof(TimeHolidayEntryModel);
             Field(x => x.Id, type: typeof(IdGraphType));
             Field(x => x.Description);
-            Field(x => x.Start);
-            Field(x => x.End);
+            Field(x => x.When);
         }
     }
 }

@@ -12,8 +12,7 @@ namespace Kairos.Web.Api.GraphQL.TimeHolidayEntry.Types
 
             Field(d => d.Id, type: typeof(IdGraphType)).Description("The id of the time holiday entry.");
             Field(d => d.Description).Description("General description of entry");
-            Field(d => d.Start).Description("Start");
-            Field(d => d.End).Description("End");
+            Field(d => d.When).Description("when it is");
         }
     }
 }

@@ -1,3 +1,5 @@
+export const SELECT_YEAR = '[SHARED] Select year';
+
 export const GET_COUNTRIES = '[SHARED] Get Countries';
 export const GET_COUNTRIES_SUCCESS = '[SHARED] Get Countries Success';
 export const GET_COUNTRIES_FAILURE = '[SHARED] Get Countries Failure';

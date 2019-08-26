@@ -5,36 +5,24 @@ import { immerable } from 'immer';
 
 export class TimeHolidayEntryModel {
   [immerable] = true;
-  
-  constructor(
-    public id = UUID.Generate(),
-    public description = '',
-    public start = new Date(),
-    public end = new Date(),
-  ) {}
+
+  constructor(public id = UUID.Generate(), public description = '', public when = new Date()) {}
 
   static fromOutModel(outModel: TimeHolidayEntryOutModel) {
     return new TimeHolidayEntryModel(
       new UUID(outModel.id),
       outModel.description,
-      parseISO(outModel.start),
-      parseISO(outModel.end),
+      parseISO(outModel.when),
     );
   }
 
-  static empty: TimeHolidayEntryModel = new TimeHolidayEntryModel(
-    new UUID(),
-    '',
-    new Date(0),
-    new Date(0),
-  );
+  static empty: TimeHolidayEntryModel = new TimeHolidayEntryModel(new UUID(), '', new Date(0));
 
   isEmpty() {
     return (
       this.id.equals(TimeHolidayEntryModel.empty.id) &&
       this.description === TimeHolidayEntryModel.empty.description &&
-      this.start === TimeHolidayEntryModel.empty.start &&
-      this.end === TimeHolidayEntryModel.empty.end
+      this.when === TimeHolidayEntryModel.empty.when
     );
   }
 }
@@ -42,6 +30,5 @@ export class TimeHolidayEntryModel {
 export interface TimeHolidayEntryOutModel {
   id: string;
   description: string;
-  start: string;
-  end: string;
+  when: string;
 }

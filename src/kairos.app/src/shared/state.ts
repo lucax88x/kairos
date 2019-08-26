@@ -4,6 +4,7 @@ import { TimeEntryListModel } from '../models/time-entry-list.model';
 import { TimeHolidayEntryModel } from '../models/time-holiday-entry.model';
 
 export interface SharedState {
+  selectedYear: number;
   countries: CountryModel[];
   timeEntries: TimeEntryListModel[];
   timeAbsenceEntries: TimeAbsenceEntryModel[];
@@ -26,6 +27,7 @@ export interface SharedState {
 }
 
 export const sharedInitialState: SharedState = {
+  selectedYear: 2019,
   countries: [],
   timeEntries: [],
   timeAbsenceEntries: [],

@@ -1,12 +1,23 @@
 import DateFnsUtils from '@date-io/date-fns';
-import { Button, Dialog, DialogActions, DialogContent, DialogTitle, Grid, TextField } from '@material-ui/core';
-import { DateTimePicker, MaterialUiPickersDate, MuiPickersUtilsProvider } from '@material-ui/pickers';
-import { endOfDay, startOfDay } from 'date-fns';
+import {
+  Button,
+  Dialog,
+  DialogActions,
+  DialogContent,
+  DialogTitle,
+  Grid,
+  TextField,
+} from '@material-ui/core';
+import {
+  DateTimePicker,
+  MaterialUiPickersDate,
+  MuiPickersUtilsProvider,
+} from '@material-ui/pickers';
+import { startOfDay } from 'date-fns';
 import React, { ChangeEvent, useCallback, useState } from 'react';
 import ButtonSpinner from './components/ButtonSpinner';
 import { TimeHolidayEntryModel } from './models/time-holiday-entry.model';
 import { UUID } from './models/uuid.model';
-
 
 export interface CreateTimeHolidayEntryModalInputs {
   isBusy: boolean;
@@ -27,22 +38,18 @@ export const CreateTimeHolidayEntryModalComponent: React.FC<
   const { isBusy, isOpen, onCreate, onClose } = props;
 
   const [description, setDescription] = useState<string>('Holiday');
-  const [start, setStart] = useState<Date | null>(startOfDay(new Date()));
-  const [end, setEnd] = useState<Date | null>(endOfDay(new Date()));
+  const [when, setStart] = useState<Date | null>(startOfDay(new Date()));
 
   const handleDescriptionChange = useCallback(
     (event: ChangeEvent<HTMLInputElement>) => setDescription(event.currentTarget.value),
     [setDescription],
   );
-  const handleStartChange = useCallback((date: MaterialUiPickersDate) => setStart(date), [
-    setStart,
-  ]);
-  const handleEndChange = useCallback((date: MaterialUiPickersDate) => setEnd(date), [setEnd]);
+  const handleWhenChange = useCallback((date: MaterialUiPickersDate) => setStart(date), [setStart]);
   const handleCreate = useCallback(() => {
-    if (!!start && !!end) {
-      onCreate(new TimeHolidayEntryModel(UUID.Generate(), description, start, end));
+    if (!!when) {
+      onCreate(new TimeHolidayEntryModel(UUID.Generate(), description, when));
     }
-  }, [onCreate, description, start, end]);
+  }, [onCreate, description, when]);
 
   return (
     <Dialog open={isOpen} onClose={onClose} aria-labelledby="form-dialog-title">
@@ -62,24 +69,13 @@ export const CreateTimeHolidayEntryModalComponent: React.FC<
             />
           </Grid>
           <MuiPickersUtilsProvider utils={DateFnsUtils}>
-            <Grid item xs={6}>
+            <Grid item xs={12}>
               <DateTimePicker
                 autoOk
                 ampm={false}
-                value={start}
-                maxDate={end}
-                onChange={handleStartChange}
-                label="Start"
-              />
-            </Grid>
-            <Grid item xs={6}>
-              <DateTimePicker
-                autoOk
-                ampm={false}
-                value={end}
-                minDate={start}
-                onChange={handleEndChange}
-                label="End"
+                value={when}
+                onChange={handleWhenChange}
+                label="When"
               />
             </Grid>
           </MuiPickersUtilsProvider>
@@ -89,11 +85,7 @@ export const CreateTimeHolidayEntryModalComponent: React.FC<
         <Button onClick={onClose} color="secondary" disabled={isBusy}>
           Cancel
         </Button>
-        <ButtonSpinner
-          onClick={handleCreate}
-          isBusy={isBusy}
-          disabled={!start || !end || start > end || isBusy}
-        >
+        <ButtonSpinner onClick={handleCreate} isBusy={isBusy} disabled={!when || isBusy}>
           Create
         </ButtonSpinner>
       </DialogActions>

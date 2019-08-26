@@ -4,6 +4,11 @@ import { State } from '../state';
 
 const selectState = (state: State) => state.shared;
 
+export const selectSelectedYear = createSelector(
+  selectState,
+  state => state.selectedYear,
+);
+
 export const selectCountries = createSelector(
   selectState,
   state => state.countries,

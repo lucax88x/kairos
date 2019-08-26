@@ -24,10 +24,10 @@ namespace Kairos.Infra.Read.TimeHolidayEntry
 
         public async Task AddOrUpdate(TimeHolidayEntryEventDto timeHolidayEntry)
         {
-            var dto = new TimeHolidayEntryReadDto(timeHolidayEntry.Id, timeHolidayEntry.Description, timeHolidayEntry.Start, timeHolidayEntry.End);
+            var dto = new TimeHolidayEntryReadDto(timeHolidayEntry.Id, timeHolidayEntry.Description, timeHolidayEntry.When);
 
             await _repository.Set(timeHolidayEntry.Id, dto);
-            await _repository.SortedSetAdd($"by-when|by-user|{timeHolidayEntry.User}", dto.Start.UtcTicks, timeHolidayEntry.Id);
+            await _repository.SortedSetAdd($"by-when|by-user|{timeHolidayEntry.User}", dto.When.UtcTicks, timeHolidayEntry.Id);
         }
 
         public async Task Delete(Guid id, string user)

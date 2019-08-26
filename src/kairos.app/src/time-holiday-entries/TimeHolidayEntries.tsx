@@ -2,7 +2,8 @@ import { Button, IconButton, makeStyles, Typography } from '@material-ui/core';
 import CreateIcon from '@material-ui/icons/Create';
 import DeleteIcon from '@material-ui/icons/Delete';
 import { format } from 'date-fns';
-import React, { useCallback, useState, useMemo } from 'react';
+import { map } from 'ramda';
+import React, { useCallback, useMemo, useState } from 'react';
 import { Index } from 'react-virtualized';
 import { formatAsDateTime } from '../code/constants';
 import { Autocomplete } from '../components/Autocomplete';
@@ -10,7 +11,6 @@ import Spinner from '../components/Spinner';
 import { VirtualizedTable } from '../components/VirtualizedTable';
 import { CountryModel } from '../models/country.model';
 import { TimeHolidayEntryModel } from '../models/time-holiday-entry.model';
-import { map } from 'ramda';
 
 const useStyles = makeStyles(theme => ({
   container: {
@@ -100,15 +100,8 @@ export const TimeHolidayEntriesComponent: React.FC<TimeHolidayEntriesProps> = pr
           columns={[
             {
               width: 200,
-              label: 'Start',
-              dataKey: 'start',
-              flexGrow: 1,
-              formatter: dateFormatter,
-            },
-            {
-              width: 200,
-              label: 'End',
-              dataKey: 'end',
+              label: 'When',
+              dataKey: 'When',
               flexGrow: 1,
               formatter: dateFormatter,
             },

@@ -14,6 +14,7 @@ import {
   SwipeableDrawer,
   Toolbar,
   Typography,
+  Select,
 } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
 import BeachAccessIcon from '@material-ui/icons/BeachAccess';
@@ -25,7 +26,7 @@ import MenuIcon from '@material-ui/icons/Menu';
 import TimerIcon from '@material-ui/icons/Timer';
 import WeekendIcon from '@material-ui/icons/Weekend';
 import clsx from 'clsx';
-import React, { useCallback, useState } from 'react';
+import React, { useCallback, useState, ChangeEvent } from 'react';
 import { Link, Redirect, Route } from 'react-router-dom';
 import { ReactComponent as LogoIcon } from './assets/images/logo.svg';
 import { BulkInsert } from './bulk-insert/BulkInsert';
@@ -41,6 +42,7 @@ import { Routes } from './routes';
 import { TimeAbsenceEntries } from './time-absence-entries/TimeAbsenceEntries.container';
 import { TimeEntries } from './time-entries/TimeEntries.container';
 import { TimeHolidayEntries } from './time-holiday-entries/TimeHolidayEntries.container';
+import { isNumber } from './code/is';
 
 const drawerWidth = 240;
 
@@ -137,13 +139,15 @@ const useStyles = makeStyles(theme => ({
 }));
 
 export interface AppInputs {
+  user: UserModel;
+  selectedYear: number;
   isLeftDrawerOpen: boolean;
   isTimeEntryDrawerOpen: boolean;
   isTimeAbsenceEntryDrawerOpen: boolean;
-  user: UserModel;
 }
 
 export interface AppDispatches {
+  onSelectYear: (year: number) => void;
   openLeftDrawer: () => void;
   closeLeftDrawer: () => void;
   openTimeEntryDrawer: () => void;
@@ -159,7 +163,9 @@ export type AppProps = AppInputs & AppDispatches;
 export const AppComponent: React.FC<AppProps> = props => {
   const {
     user,
+    selectedYear,
     isLeftDrawerOpen,
+    onSelectYear,
     openLeftDrawer,
     closeLeftDrawer,
     isTimeEntryDrawerOpen,
@@ -179,6 +185,7 @@ export const AppComponent: React.FC<AppProps> = props => {
   const handleLeftDrawerClose = useCallback(() => closeLeftDrawer(), [closeLeftDrawer]);
 
   const [userMenuEl, setUserMenuEl] = useState<Element | null>(null);
+  const [year, setYear] = useState<number>(selectedYear);
 
   const shouldSkipSwipe = useCallback(
     (event: React.KeyboardEvent | React.MouseEvent) =>
@@ -239,6 +246,16 @@ export const AppComponent: React.FC<AppProps> = props => {
     [setUserMenuEl],
   );
 
+  const handleYearChange = useCallback(
+    (event: ChangeEvent<{ value: unknown }>) => {
+      if (isNumber(event.currentTarget.value)) {
+        setYear(event.currentTarget.value);
+        onSelectYear(event.currentTarget.value);
+      }
+    },
+    [setYear],
+  );
+
   return (
     <div className={classes.root}>
       <AppBar
@@ -265,6 +282,17 @@ export const AppComponent: React.FC<AppProps> = props => {
               kairos
             </Link>
           </Typography>
+
+          <Select
+            value={year}
+            onChange={handleYearChange}
+            inputProps={{
+              id: 'year',
+            }}
+          >
+            <MenuItem value={2019}>2019</MenuItem>
+          </Select>
+
           <IconButton
             color="inherit"
             aria-label="Open time absence entry"
