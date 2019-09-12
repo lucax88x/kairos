@@ -2,11 +2,13 @@
 
     <PropertyGroup>
         <TargetFramework>netstandard2.0</TargetFramework>
+        <LangVersion>default</LangVersion>
     </PropertyGroup>
 
     <ItemGroup>
       <PackageReference Include="Autofac" Version="4.9.2" />
       <PackageReference Include="FluentAssertions" Version="5.7.0" />
+      <PackageReference Include="Microsoft.Extensions.Configuration" Version="2.2.0" />
       <PackageReference Include="Microsoft.Extensions.Configuration.Abstractions" Version="2.2.0" />
     </ItemGroup>
 

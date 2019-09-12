@@ -65,9 +65,9 @@ namespace Kairos.Application.TimeHolidayEntry
         {
             var user = _authProvider.GetUser();
 
-            var toDeleteEntries = await _writeRepository.GetOrDefault<Domain.TimeHolidayEntry>(request.Id.ToString());
-
-            toDeleteEntries.Delete();
+//            var toDeleteEntries = await _writeRepository.GetOrDefault<Domain.TimeHolidayEntry>(request.Id.ToString());
+//
+//            toDeleteEntries.Delete();
 
             var holidays = DateSystem.GetPublicHoliday(request.Year, request.CountryCode);
 
