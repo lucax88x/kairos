@@ -16,5 +16,5 @@ type CreateTimeAbsenceEntryProps = CreateTimeAbsenceEntryInputs & CreateTimeAbse
 export const CreateTimeAbsenceEntryComponent: React.FC<CreateTimeAbsenceEntryProps> = props => {
   const { onCreate, isBusy } = props;
 
-  return <TimeAbsenceEntryForm isBusy={isBusy} model={new TimeAbsenceEntryModel()} save={onCreate} />;
+  return <TimeAbsenceEntryForm isBusy={isBusy} model={new TimeAbsenceEntryModel()} onSave={onCreate} />;
 };

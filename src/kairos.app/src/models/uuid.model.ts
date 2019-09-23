@@ -3,7 +3,7 @@ import { immerable } from 'immer';
 
 export class UUID {
   [immerable] = true;
-  
+
   public static Empty = '00000000-0000-0000-0000-000000000000';
 
   public static Generate(): UUID {

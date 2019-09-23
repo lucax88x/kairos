@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using Kairos.Application.TimeAbsenceEntry.Commands;
+using Kairos.Common.Exceptions.Technical;
 using Kairos.Domain;
 using Kairos.Domain.Events.TimeAbsenceEntry.EventDtos;
 using Kairos.Infra.Write;
@@ -11,7 +12,9 @@ using MediatR;
 
 namespace Kairos.Application.TimeAbsenceEntry
 {
-    public class TimeAbsenceEntryService : IRequestHandler<CreateTimeAbsenceEntries, ImmutableArray<Guid>>,
+    public class TimeAbsenceEntryService : 
+        IRequestHandler<CreateTimeAbsenceEntries, ImmutableArray<Guid>>,
+        IRequestHandler<UpdateTimeAbsenceEntry, Guid>,
         IRequestHandler<DeleteTimeAbsenceEntry, Guid>
     {
         private readonly IWriteRepository _writeRepository;
@@ -31,10 +34,7 @@ namespace Kairos.Application.TimeAbsenceEntry
             var user = _authProvider.GetUser();
 
             var timeAbsenceEntries = request.TimeAbsenceEntries.Select(model => Domain.TimeAbsenceEntry.Create(
-                    new TimeAbsenceEntryEventDto(model.Id, user, model.Description,
-                        model.Start,
-                        model.End,
-                        (TimeAbsenceEntryType) model.Type)))
+                    model.ToEventDto(user)))
                 .ToArray();
 
             var events = await _writeRepository.Save(WriteRepository.DefaultKeyTaker, timeAbsenceEntries);
@@ -46,15 +46,38 @@ namespace Kairos.Application.TimeAbsenceEntry
 
         public async Task<Guid> Handle(DeleteTimeAbsenceEntry request, CancellationToken cancellationToken)
         {
-            var timeAbsenceEntry = await _writeRepository.GetOrDefault<Domain.TimeAbsenceEntry>(request.Id.ToString());
+            var toDeleteEntry = await _writeRepository.GetOrDefault<Domain.TimeAbsenceEntry>(request.Id.ToString());
 
-            timeAbsenceEntry.Delete();
+            if (toDeleteEntry == null)
+            {
+                throw new NotFoundItemException();
+            }
+            
+            toDeleteEntry.Delete();
 
-            var events = await _writeRepository.Save(WriteRepository.DefaultKeyTaker, timeAbsenceEntry);
+            var events = await _writeRepository.Save(WriteRepository.DefaultKeyTaker, toDeleteEntry);
 
             foreach (var evt in events) await _mediator.Publish(evt, cancellationToken);
 
             return request.Id;
+        }
+        
+        public async Task<Guid> Handle(UpdateTimeAbsenceEntry request, CancellationToken cancellationToken)
+        {
+            var toUpdateEntry = await _writeRepository.GetOrDefault<Domain.TimeAbsenceEntry>(request.TimeAbsenceEntry.Id.ToString());
+
+            if (toUpdateEntry == null)
+            {
+                throw new NotFoundItemException();
+            }
+
+            toUpdateEntry.Update(request.TimeAbsenceEntry.ToEventDto());
+
+            var events = await _writeRepository.Save(WriteRepository.DefaultKeyTaker, toUpdateEntry);
+
+            foreach (var evt in events) await _mediator.Publish(evt, cancellationToken);
+
+            return toUpdateEntry.Id;
         }
     }
 }

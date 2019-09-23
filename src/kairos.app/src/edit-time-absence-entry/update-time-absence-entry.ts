@@ -11,6 +11,7 @@ import {
   UPDATE_TIME_ABSENCE_ENTRY_SUCCESS,
 } from './constants';
 import { EditTimeAbsenceEntryState } from './state';
+import { enqueueSnackbarAction } from '../notification-manager/enqueue-snackbar';
 
 export const updateTimeAbsenceEntryAsync = createAsyncAction(
   UPDATE_TIME_ABSENCE_ENTRY,
@@ -30,8 +31,13 @@ function* doDeleteTimeAbsenceEntry({
   }
 }
 
+function* doNotifySuccess() {
+  yield put(enqueueSnackbarAction('Absence updated!', { variant: 'success' }));
+}
+
 export function* updateTimeAbsenceEntrySaga() {
   yield takeLatest(UPDATE_TIME_ABSENCE_ENTRY, doDeleteTimeAbsenceEntry);
+  yield takeLatest(UPDATE_TIME_ABSENCE_ENTRY_SUCCESS, doNotifySuccess);
 }
 
 export const updateTimeAbsenceEntryReducer = (

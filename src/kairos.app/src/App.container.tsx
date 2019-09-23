@@ -5,12 +5,23 @@ import { Actions } from './actions';
 import { AppComponent, AppDispatches, AppInputs } from './App';
 import { logout } from './auth/logout';
 import { selectUser } from './auth/selectors';
-import { closeLeftDrawerAction, closeTimeAbsenceEntryDrawerAction, closeTimeEntryDrawerAction, openLeftDrawerAction, openTimeAbsenceEntryDrawerAction, openTimeEntryDrawerAction } from './layout/actions';
-import { selectIsLeftDrawerOpen, selectIsTimeAbsenceEntryDrawerOpen, selectIsTimeEntryDrawerOpen } from './layout/selectors';
+import {
+  closeLeftDrawerAction,
+  closeTimeAbsenceEntryDrawerAction,
+  closeTimeEntryDrawerAction,
+  openLeftDrawerAction,
+  openTimeAbsenceEntryDrawerAction,
+  openTimeEntryDrawerAction,
+} from './layout/actions';
+import {
+  selectIsLeftDrawerOpen,
+  selectIsTimeAbsenceEntryDrawerOpen,
+  selectIsTimeEntryDrawerOpen,
+} from './layout/selectors';
 import { Routes } from './routes';
 import { selectSelectedYear } from './shared/selectors';
 import { State } from './state';
-
+import { selectYear } from './shared/actions';
 
 const mapStateToProps = (state: State): AppInputs => ({
   user: selectUser(state),

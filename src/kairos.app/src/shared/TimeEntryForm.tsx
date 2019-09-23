@@ -18,17 +18,18 @@ import {
   MuiPickersUtilsProvider,
 } from '@material-ui/pickers';
 import { map } from 'ramda';
-import React, { ChangeEvent, useCallback, useEffect, useState } from 'react';
+import React, { ChangeEvent, useCallback, useEffect } from 'react';
+import SaveIcon from '@material-ui/icons/Save';
 import { Link } from 'react-router-dom';
-
 import { isString } from '../code/is';
-import FabButtonSpinner from '../components/FabButtonSpinner';
+import ButtonSpinner from '../components/ButtonSpinner';
 import { ProfileModel } from '../models/profile.model';
 import { TimeEntryModel, TimeEntryTypes } from '../models/time-entry.model';
 import { UUID } from '../models/uuid.model';
 import { Routes } from '../routes';
 import {
   RefreshSelectsTimeEntryAction,
+  SetModel,
   SetTimeEntrySelectedJobAction,
   SetTimeEntrySelectedProjectAction,
   SetTimeEntryTypeAction,
@@ -52,10 +53,10 @@ export interface TimeEntryFormProps {
 export const TimeEntryForm: React.FC<TimeEntryFormProps> = props => {
   const classes = useStyles(props);
 
-  const { isBusy, profile, onSave } = props;
+  const { isBusy, profile, model, onSave } = props;
 
   const [state, dispatch] = useTimeEntryFormReducer();
-  const { when, type, jobs, selectedJobId, projects, selectedProjectId } = state;
+  const { id, when, type, jobs, selectedJobId, projects, selectedProjectId } = state;
 
   useEffect(() => {
     dispatch(RefreshSelectsTimeEntryAction(profile));
@@ -64,16 +65,10 @@ export const TimeEntryForm: React.FC<TimeEntryFormProps> = props => {
   const handleSave = useCallback(() => {
     if (!!when) {
       onSave(
-        new TimeEntryModel(
-          UUID.Generate(),
-          when,
-          type,
-          new UUID(selectedJobId),
-          new UUID(selectedProjectId),
-        ),
+        new TimeEntryModel(id, when, type, new UUID(selectedJobId), new UUID(selectedProjectId)),
       );
     }
-  }, [onSave, type, when, selectedJobId, selectedProjectId]);
+  }, [onSave, id, type, when, selectedJobId, selectedProjectId]);
 
   const handleTypeChange = useCallback(
     (_, value: string) => dispatch(SetTimeEntryTypeAction(value as TimeEntryTypes)),
@@ -97,11 +92,18 @@ export const TimeEntryForm: React.FC<TimeEntryFormProps> = props => {
     },
     [profile],
   );
+
   const handleProjectChange = useCallback((event: ChangeEvent<{ value: unknown }>) => {
     if (isString(event.target.value)) {
       dispatch(SetTimeEntrySelectedProjectAction(event.target.value));
     }
   }, []);
+
+  useEffect(() => {
+    if (!model.isEmpty()) {
+      dispatch(SetModel(model));
+    }
+  }, [model]);
 
   if (jobs.length === 0) {
     return (
@@ -196,13 +198,13 @@ export const TimeEntryForm: React.FC<TimeEntryFormProps> = props => {
         alignItems="center"
         className={classes.hasPadding}
       >
-        <FabButtonSpinner
+        <ButtonSpinner
           onClick={handleSave}
           isBusy={isBusy}
           disabled={!when || !selectedJobId || !selectedProjectId || isBusy}
         >
-          {type}
-        </FabButtonSpinner>
+          {model.isEmpty() ? type : <SaveIcon />}
+        </ButtonSpinner>
       </Grid>
     </Grid>
   );

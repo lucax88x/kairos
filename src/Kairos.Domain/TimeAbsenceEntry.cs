@@ -37,6 +37,15 @@ namespace Kairos.Domain
                     return;
                 }
 
+                case TimeAbsenceEntryUpdated updated:
+                {
+                    Description = updated.TimeAbsenceEntry.Description;
+                    End = updated.TimeAbsenceEntry.End;
+                    Start = updated.TimeAbsenceEntry.Start;
+                    Type = updated.TimeAbsenceEntry.Type;
+                    return;
+                }
+
                 case TimeAbsenceEntryDeleted _:
                 {
                     IsDeleted = true;
@@ -48,6 +57,11 @@ namespace Kairos.Domain
         public void Delete()
         {
             ApplyChange(new TimeAbsenceEntryDeleted(Id, User));
+        }
+
+        public void Update(TimeAbsenceEntryEventDto eventDto)
+        {
+            ApplyChange(new TimeAbsenceEntryUpdated(eventDto));
         }
 
         public static TimeAbsenceEntry Create(TimeAbsenceEntryEventDto timeAbsenceEntry)

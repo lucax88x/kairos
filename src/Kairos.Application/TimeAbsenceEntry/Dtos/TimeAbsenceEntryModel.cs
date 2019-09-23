@@ -1,4 +1,6 @@
 using System;
+using Kairos.Domain;
+using Kairos.Domain.Events.TimeAbsenceEntry.EventDtos;
 
 namespace Kairos.Application.TimeAbsenceEntry.Dtos
 {
@@ -20,6 +22,16 @@ namespace Kairos.Application.TimeAbsenceEntry.Dtos
             Start = start;
             End = end;
             Id = !id.HasValue || id.Value == Guid.Empty ? Guid.NewGuid() : id.Value;
+        }
+
+        public TimeAbsenceEntryEventDto ToEventDto(string user = null)
+        {
+            return new TimeAbsenceEntryEventDto(Id,
+                user,
+                Description,
+                Start,
+                End,
+                (TimeAbsenceEntryType) Type);
         }
     }
 }

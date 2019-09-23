@@ -19,6 +19,7 @@ import {
   TimeHolidayEntriesDispatches,
   TimeHolidayEntriesInputs,
 } from './TimeHolidayEntries';
+import { updateTimeHolidayEntriesByCountryAsync } from '../shared/actions';
 
 const mapStateToProps = (state: State): TimeHolidayEntriesInputs => ({
   timeHolidayEntries: selectTimeHolidayEntries(state),
@@ -33,6 +34,8 @@ const mapDispatchToProps = (dispatch: Dispatch<Actions>): TimeHolidayEntriesDisp
   onUpdate: (model: TimeHolidayEntryModel) => dispatch(push(`/holiday/${model.id}`)),
   onDelete: (model: TimeHolidayEntryModel) =>
     dispatch(deleteTimeHolidayEntryAsync.request({ model })),
+  onUpdateHolidays: (countryCode: string) =>
+    dispatch(updateTimeHolidayEntriesByCountryAsync.request({ countryCode })),
 });
 
 export const TimeHolidayEntries = connect(

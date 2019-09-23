@@ -1,24 +1,12 @@
 import DateFnsUtils from '@date-io/date-fns';
-import {
-  Divider,
-  FormControl,
-  Grid,
-  InputLabel,
-  makeStyles,
-  MenuItem,
-  Select,
-  TextField,
-} from '@material-ui/core';
-import {
-  DateTimePicker,
-  MaterialUiPickersDate,
-  MuiPickersUtilsProvider,
-} from '@material-ui/pickers';
+import { Divider, FormControl, Grid, InputLabel, makeStyles, MenuItem, Select, TextField } from '@material-ui/core';
+import SaveIcon from '@material-ui/icons/Save';
+import { DateTimePicker, MaterialUiPickersDate, MuiPickersUtilsProvider } from '@material-ui/pickers';
 import React, { ChangeEvent, useCallback, useEffect, useState } from 'react';
 import { isString } from '../code/is';
 import ButtonSpinner from '../components/ButtonSpinner';
 import { TimeAbsenceEntryModel, TimeAbsenceEntryTypes } from '../models/time-absence-entry.model';
-import { UUID } from '../models/uuid.model';
+
 
 const useStyles = makeStyles(theme => ({
   hasPadding: {
@@ -29,31 +17,35 @@ const useStyles = makeStyles(theme => ({
 export interface TimeAbsenceEntryFormProps {
   model: TimeAbsenceEntryModel;
   isBusy: boolean;
-  save: (model: TimeAbsenceEntryModel) => void;
+  onSave: (model: TimeAbsenceEntryModel) => void;
 }
 
 export const TimeAbsenceEntryForm: React.FC<TimeAbsenceEntryFormProps> = props => {
   const classes = useStyles(props);
 
-  const { model, isBusy, save } = props;
+  const { model, isBusy, onSave } = props;
 
+  const [id, setId] = useState(model.id);
   const [type, setType] = useState(model.type);
   const [description, setDescription] = useState<string>(model.description);
   const [start, setStart] = useState<Date | null>(model.start);
   const [end, setEnd] = useState<Date | null>(model.end);
 
   useEffect(() => {
-    console.log('nooh');
-    setType(model.type);
-    setStart(model.start);
-    setEnd(model.end);
+    if (!model.isEmpty()) {
+      setId(model.id);
+      setType(model.type);
+      setDescription(model.description);
+      setStart(model.start);
+      setEnd(model.end);
+    }
   }, [model]);
 
   const handleSave = useCallback(() => {
     if (!!start && !!end) {
-      save(new TimeAbsenceEntryModel(UUID.Generate(), description, start, end, type));
+      onSave(new TimeAbsenceEntryModel(id, description, start, end, type));
     }
-  }, [save, type, description, start, end]);
+  }, [onSave, id, type, description, start, end]);
 
   const handleTypeChange = useCallback(
     (event: ChangeEvent<{ value: unknown }>) => {
@@ -145,7 +137,7 @@ export const TimeAbsenceEntryForm: React.FC<TimeAbsenceEntryFormProps> = props =
           isBusy={isBusy}
           disabled={!start || !end || start > end || isBusy}
         >
-          {type}
+          {model.isEmpty() ? type : <SaveIcon />}
         </ButtonSpinner>
       </Grid>
     </Grid>

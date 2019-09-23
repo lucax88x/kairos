@@ -7,10 +7,11 @@ import { action, ActionType } from 'typesafe-actions';
 import { JobModel } from '../models/job.model';
 import { ProfileModel } from '../models/profile.model';
 import { ProjectModel } from '../models/project.model';
-import { TimeEntryTypes } from '../models/time-entry.model';
+import { TimeEntryTypes, TimeEntryModel } from '../models/time-entry.model';
 import { UUID } from '../models/uuid.model';
 
 export interface State {
+  id: UUID;
   type: TimeEntryTypes;
   when: Date;
 
@@ -22,6 +23,7 @@ export interface State {
 }
 
 const initialState: State = {
+  id: UUID.Generate(),
   type: TimeEntryTypes.IN,
   when: new Date(),
   jobs: [],
@@ -30,6 +32,8 @@ const initialState: State = {
   selectedProjectId: UUID.Empty,
 };
 
+export const SetModel = (model: TimeEntryModel) =>
+  action('SET_MODEL', { model });
 export const RefreshSelectsTimeEntryAction = (profile: ProfileModel) =>
   action('REFRESH_SELECTS', { profile });
 export const SetTimeEntryTypeAction = (type: TimeEntryTypes) => action('SET_TYPE', { type });
@@ -42,6 +46,7 @@ export const SetTimeEntrySelectedProjectAction = (projectId: string) =>
 function reducer(
   state: State,
   action: ActionType<
+    | typeof SetModel
     | typeof RefreshSelectsTimeEntryAction
     | typeof SetTimeEntryTypeAction
     | typeof SetTimeEntryWhenAction
@@ -51,6 +56,14 @@ function reducer(
 ): State {
   return produce(state, draft => {
     switch (action.type) {
+      case 'SET_MODEL': {
+        draft.id = action.payload.model.id;
+        draft.selectedJobId = action.payload.model.job.toString();
+        draft.selectedProjectId = action.payload.model.project.toString();
+        draft.when = action.payload.model.when;
+        draft.type = action.payload.model.type;
+        break;
+      }
       case 'REFRESH_SELECTS': {
         const maxDate = new Date(8640000000000000);
         const date = !!state.when ? state.when : new Date();

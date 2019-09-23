@@ -1,12 +1,12 @@
-import { Button, IconButton, makeStyles, Typography } from '@material-ui/core';
+import { Button, IconButton, makeStyles, Typography, Grid } from '@material-ui/core';
 import CreateIcon from '@material-ui/icons/Create';
 import DeleteIcon from '@material-ui/icons/Delete';
 import { format } from 'date-fns';
 import { map } from 'ramda';
 import React, { useCallback, useMemo, useState } from 'react';
 import { Index } from 'react-virtualized';
-import { formatAsDateTime } from '../code/constants';
-import { Autocomplete } from '../components/Autocomplete';
+import { formatAsDate } from '../code/constants';
+import { Autocomplete, AutocompleteSuggestion } from '../components/Autocomplete';
 import Spinner from '../components/Spinner';
 import { VirtualizedTable } from '../components/VirtualizedTable';
 import { CountryModel } from '../models/country.model';
@@ -32,6 +32,7 @@ export interface TimeHolidayEntriesDispatches {
   onCreate: () => void;
   onUpdate: (item: TimeHolidayEntryModel) => void;
   onDelete: (item: TimeHolidayEntryModel) => void;
+  onUpdateHolidays: (countryCode: string) => void;
 }
 
 type TimeHolidayEntriesProps = TimeHolidayEntriesInputs & TimeHolidayEntriesDispatches;
@@ -46,6 +47,7 @@ export const TimeHolidayEntriesComponent: React.FC<TimeHolidayEntriesProps> = pr
     onCreate,
     onUpdate,
     onDelete,
+    onUpdateHolidays,
   } = props;
 
   const classes = useStyles(props);
@@ -54,8 +56,14 @@ export const TimeHolidayEntriesComponent: React.FC<TimeHolidayEntriesProps> = pr
 
   const handleUpdate = useCallback((model: TimeHolidayEntryModel) => onUpdate(model), [onUpdate]);
   const handleDelete = useCallback((model: TimeHolidayEntryModel) => onDelete(model), [onDelete]);
-  const handleCountryChange = useCallback(() => setCountry(''), [setCountry]);
-  const handleOverrideHolidays = useCallback(() => console.log('override'), []);
+  const handleCountryChange = useCallback(
+    (suggestion: AutocompleteSuggestion) => setCountry(suggestion.value),
+    [setCountry],
+  );
+  const handleUpdateHolidays = useCallback(() => onUpdateHolidays(country), [
+    country,
+    onUpdateHolidays,
+  ]);
 
   const noRowsRenderer = useCallback(
     () => <p>{isGetTimeHolidayEntriesBusy ? '' : 'No holidays'}</p>,
@@ -64,7 +72,7 @@ export const TimeHolidayEntriesComponent: React.FC<TimeHolidayEntriesProps> = pr
   const rowGetter = useCallback(({ index }: Index) => timeHolidayEntries[index], [
     timeHolidayEntries,
   ]);
-  const dateFormatter = useCallback((data: Date) => format(data, formatAsDateTime), []);
+  const dateFormatter = useCallback((data: Date) => !!data && format(data, formatAsDate), []);
   const updateCellRenderer = useCallback(
     model => (
       <IconButton color="inherit" aria-label="Update entry" onClick={() => handleUpdate(model)}>
@@ -99,14 +107,15 @@ export const TimeHolidayEntriesComponent: React.FC<TimeHolidayEntriesProps> = pr
           rowGetter={rowGetter}
           columns={[
             {
-              width: 200,
+              width: 100,
               label: 'When',
-              dataKey: 'When',
+              dataKey: 'when',
               flexGrow: 1,
               formatter: dateFormatter,
             },
             {
-              width: 200,
+              width: 100,
+              flexGrow: 2,
               label: 'Description',
               dataKey: 'description',
             },
@@ -128,16 +137,28 @@ export const TimeHolidayEntriesComponent: React.FC<TimeHolidayEntriesProps> = pr
       <Button variant="contained" color="primary" onClick={onCreate}>
         Create
       </Button>
-      <Autocomplete
-        isBusy={isGetCountriesBusy}
-        data={countriesSuggestion}
-        value={country}
-        onChange={handleCountryChange}
-      />
-
-      <Button variant="contained" color="primary" onClick={handleOverrideHolidays}>
-        Override Holidays from country preset
-      </Button>
+      <hr></hr>
+      <Grid container alignItems={'center'} justify={'space-between'}>
+        <Grid item>
+          <Autocomplete
+            isBusy={isGetCountriesBusy}
+            data={countriesSuggestion}
+            placeholder="Search for a country"
+            value={country}
+            onSelectSuggestion={handleCountryChange}
+          />
+        </Grid>
+        <Grid item>
+          <Button
+            variant="contained"
+            color="primary"
+            onClick={handleUpdateHolidays}
+            disabled={!country}
+          >
+            Add Holidays from country
+          </Button>
+        </Grid>
+      </Grid>
     </Spinner>
   );
 };

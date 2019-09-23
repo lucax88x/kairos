@@ -25,7 +25,7 @@ const mapStateToProps = (state: State): EditTimeEntryInputs => ({
 });
 
 const mapDispatchToProps = (dispatch: Dispatch<Actions>): EditTimeEntryDispatches => ({
-  update: (model: TimeEntryModel) => dispatch(updateTimeEntryAsync.request({ model })),
+  onUpdate: (model: TimeEntryModel) => dispatch(updateTimeEntryAsync.request({ model })),
 });
 
 export const EditTimeEntry = connect(

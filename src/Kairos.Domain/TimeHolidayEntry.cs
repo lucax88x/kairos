@@ -23,6 +23,13 @@ namespace Kairos.Domain
                     When = added.TimeHolidayEntry.When;
                     return;
                 }
+                
+                case TimeHolidayEntryUpdated updated:
+                {
+                    Description = updated.TimeHolidayEntry.Description;
+                    When = updated.TimeHolidayEntry.When;
+                    return;
+                }
 
                 case TimeHolidayEntryDeleted _:
                 {
@@ -35,6 +42,11 @@ namespace Kairos.Domain
         public void Delete()
         {
             ApplyChange(new TimeHolidayEntryDeleted(Id, User));
+        }
+        
+        public void Update(TimeHolidayEntryEventDto eventDto)
+        {
+            ApplyChange(new TimeHolidayEntryUpdated(eventDto));
         }
 
         public static TimeHolidayEntry Create(TimeHolidayEntryEventDto timeHolidayEntry)

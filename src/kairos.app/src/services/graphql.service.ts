@@ -35,6 +35,8 @@ function call<R, P = null>(query: string, data?: P): Promise<R> {
         return;
       }
 
+      // TODO: we can inspect 404 or stuffs like that here
+      // result.data.errors[0].extensions.code
       reject({ message: result.data.errors[0].message });
     } catch (error) {
       console.error(error);

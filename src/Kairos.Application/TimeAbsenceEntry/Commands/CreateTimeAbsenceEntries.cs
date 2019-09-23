@@ -1,10 +1,8 @@
 using System;
 using System.Collections.Generic;
 using System.Collections.Immutable;
-using FluentValidation;
 using Kairos.Application.TimeAbsenceEntry.Dtos;
 using Kairos.Common;
-using Kairos.Domain;
 
 namespace Kairos.Application.TimeAbsenceEntry.Commands
 {

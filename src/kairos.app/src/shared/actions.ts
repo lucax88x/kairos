@@ -11,3 +11,6 @@ export { deleteTimeAbsenceEntryAsync } from './delete-time-absence-entry';
 export { getTimeHolidayEntriesAsync } from './get-time-holiday-entries';
 export { createTimeHolidayEntryAsync } from './create-time-holiday-entry';
 export { deleteTimeHolidayEntryAsync } from './delete-time-holiday-entry';
+export { updateTimeHolidayEntriesByCountryAsync } from './update-time-holiday-entries-by-country';
+
+export { selectYear } from './select-year';

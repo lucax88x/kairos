@@ -28,7 +28,7 @@ export interface LoginDispatches {
 
 type LoginProps = LoginDispatches;
 
-export const LoginComponent: React.FC<LoginProps> = props => {
+export const LoginFormComponent: React.FC<LoginProps> = props => {
   const classes = useStyles(props);
 
   const { login } = props;

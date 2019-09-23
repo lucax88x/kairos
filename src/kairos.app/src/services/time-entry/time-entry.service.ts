@@ -17,8 +17,10 @@ export async function getTimeEntry(id: UUID) {
   return TimeEntryModel.fromOutModel(result.timeEntry);
 }
 
-export async function getTimeEntries() {
-  const result = await query<{ timeEntries: TimeEntryListOutModel[] }>(getTimeEntriesQuery);
+export async function getTimeEntries(year: number) {
+  const result = await query<{ timeEntries: TimeEntryListOutModel[] }>(getTimeEntriesQuery, {
+    year,
+  });
 
   return map(out => TimeEntryListModel.fromOutModel(out), result.timeEntries);
 }

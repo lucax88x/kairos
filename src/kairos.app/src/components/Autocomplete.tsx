@@ -8,10 +8,12 @@ import Spinner from './Spinner';
 
 export type AutocompleteProps = TextFieldProps & {
   isBusy: boolean;
-  data: Suggestion[];
+  data: AutocompleteSuggestion[];
+  placeholder: string;
+  onSelectSuggestion: (suggestion: AutocompleteSuggestion) => void;
 };
 
-interface Suggestion {
+export interface AutocompleteSuggestion {
   value: string;
   label: string;
 }
@@ -43,14 +45,14 @@ interface RenderSuggestionProps {
   highlightedIndex: number | null;
   index: number;
   itemProps: MenuItemProps<'div', { button?: never }>;
-  selectedItem: Suggestion['label'];
-  suggestion: Suggestion;
+  selectedItem: AutocompleteSuggestion;
+  suggestion: AutocompleteSuggestion;
 }
 
 function renderSuggestion(suggestionProps: RenderSuggestionProps) {
   const { suggestion, index, itemProps, highlightedIndex, selectedItem } = suggestionProps;
   const isHighlighted = highlightedIndex === index;
-  const isSelected = (selectedItem || '').indexOf(suggestion.label) > -1;
+  const isSelected = ((selectedItem && selectedItem.label) || '').indexOf(suggestion.label) > -1;
 
   return (
     <MenuItem
@@ -67,7 +69,11 @@ function renderSuggestion(suggestionProps: RenderSuggestionProps) {
   );
 }
 
-function getSuggestions(suggestions: Suggestion[], value: string, { showEmpty = false } = {}) {
+function getSuggestions(
+  suggestions: AutocompleteSuggestion[],
+  value: string,
+  { showEmpty = false } = {},
+) {
   const inputValue = value.trim().toLowerCase();
   const inputLength = inputValue.length;
   let count = 0;
@@ -90,7 +96,6 @@ const useStyles = makeStyles((theme: Theme) =>
   createStyles({
     root: {
       flexGrow: 1,
-      height: 250,
     },
     container: {
       flexGrow: 1,
@@ -122,14 +127,17 @@ const useStyles = makeStyles((theme: Theme) =>
 export const Autocomplete: React.FC<AutocompleteProps> = props => {
   const classes = useStyles(props);
 
-  const { isBusy, data } = props;
-
-  console.log(data);
+  const { isBusy, data, placeholder, onSelectSuggestion } = props;
 
   return (
     <div className={classes.root}>
       <Spinner show={isBusy}>
-        <Downshift>
+        <Downshift
+          onSelect={onSelectSuggestion}
+          itemToString={(suggestion: AutocompleteSuggestion) =>
+            !!suggestion ? suggestion.label : ''
+          }
+        >
           {({
             getInputProps,
             getItemProps,
@@ -141,7 +149,7 @@ export const Autocomplete: React.FC<AutocompleteProps> = props => {
             selectedItem,
           }) => {
             const { onBlur, onFocus, ...inputProps } = getInputProps({
-              placeholder: 'Search for a country (start with a)',
+              placeholder,
             });
 
             return (
@@ -156,19 +164,19 @@ export const Autocomplete: React.FC<AutocompleteProps> = props => {
                   inputProps,
                 })}
                 <div {...getMenuProps()}>
-                  {isOpen ? (
+                  {isOpen && (
                     <Paper className={classes.paper} square>
                       {getSuggestions(data, inputValue!).map((suggestion, index) =>
                         renderSuggestion({
                           suggestion,
                           index,
-                          itemProps: getItemProps({ item: suggestion.label }),
+                          itemProps: getItemProps({ item: suggestion }),
                           highlightedIndex,
                           selectedItem,
                         }),
                       )}
                     </Paper>
-                  ) : null}
+                  )}
                 </div>
               </div>
             );

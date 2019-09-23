@@ -40,7 +40,7 @@ namespace Kairos.Web.Api.GraphQL
                 "The available countries",
                 resolve: async context => await _mediator.Send(new GetCountries()));
         }
-        
+
         private void SetTimeEntry()
         {
             FieldAsync<TimeEntryType>(
@@ -55,7 +55,15 @@ namespace Kairos.Web.Api.GraphQL
             FieldAsync<ListGraphType<TimeEntryType>>(
                 "timeEntries",
                 "The time entries of user",
-                resolve: async context => await _mediator.Send(new GetTimeEntries(_authProvider.GetUser())));
+                arguments: new QueryArguments(
+                    new QueryArgument<IntGraphType> {Name = "year"}
+                ),
+                resolve: async context =>
+                {
+                    var year = context.GetArgument<int>("year");
+
+                    return await _mediator.Send(new GetTimeEntries(_authProvider.GetUser(), year));
+                });
         }
 
         private void SetTimeAbsenceEntry()
@@ -72,7 +80,15 @@ namespace Kairos.Web.Api.GraphQL
             FieldAsync<ListGraphType<TimeAbsenceEntryType>>(
                 "timeAbsenceEntries",
                 "The time absence entries of user",
-                resolve: async context => await _mediator.Send(new GetTimeAbsenceEntries(_authProvider.GetUser())));
+                arguments: new QueryArguments(
+                    new QueryArgument<IntGraphType> {Name = "year"}
+                ),
+                resolve: async context =>
+                {
+                    var year = context.GetArgument<int>("year");
+
+                    return await _mediator.Send(new GetTimeAbsenceEntries(_authProvider.GetUser(), year));
+                });
         }
 
         private void SetTimeHolidayEntry()
@@ -89,7 +105,15 @@ namespace Kairos.Web.Api.GraphQL
             FieldAsync<ListGraphType<TimeHolidayEntryType>>(
                 "timeHolidayEntries",
                 "The time holiday entries of user",
-                resolve: async context => await _mediator.Send(new GetTimeHolidayEntries(_authProvider.GetUser())));
+                arguments: new QueryArguments(
+                    new QueryArgument<IntGraphType> {Name = "year"}
+                ),
+                resolve: async context =>
+                {
+                    var year = context.GetArgument<int>("year");
+
+                    return await _mediator.Send(new GetTimeHolidayEntries(_authProvider.GetUser(), year));
+                });
         }
 
         private void SetUserProfile()

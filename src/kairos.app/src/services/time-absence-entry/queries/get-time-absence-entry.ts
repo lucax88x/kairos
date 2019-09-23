@@ -1,7 +1,9 @@
 export const getTimeAbsenceEntryQuery = `query ($id: ID!) {
   timeAbsenceEntry(id: $id) {
-    id,
-    when,
+    id
+    description
+    start
+    end
     type
   }
 }`;

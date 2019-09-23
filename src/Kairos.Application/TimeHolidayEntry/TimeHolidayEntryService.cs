@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using Kairos.Application.TimeHolidayEntry.Commands;
+using Kairos.Common.Exceptions.Technical;
 using Kairos.Domain.Events.TimeHolidayEntry.EventDtos;
 using Kairos.Infra.Write;
 using MediatR;
@@ -14,6 +15,7 @@ namespace Kairos.Application.TimeHolidayEntry
     public class TimeHolidayEntryService :
         IRequestHandler<CreateTimeHolidayEntries, ImmutableArray<Guid>>,
         IRequestHandler<DeleteTimeHolidayEntry, Guid>,
+        IRequestHandler<UpdateTimeHolidayEntry, Guid>,
         IRequestHandler<UpdateTimeHolidayEntriesByCountry, ImmutableArray<Guid>>
     {
         private readonly IWriteRepository _writeRepository;
@@ -32,13 +34,8 @@ namespace Kairos.Application.TimeHolidayEntry
         {
             var user = _authProvider.GetUser();
 
-            var timeHolidayEntries = request.TimeHolidayEntries.Select(model =>
-                Domain.TimeHolidayEntry.Create(new TimeHolidayEntryEventDto(
-                    model.Id,
-                    user,
-                    model.Description,
-                    model.When)
-                )).ToArray();
+            var timeHolidayEntries = request.TimeHolidayEntries
+                .Select(model => Domain.TimeHolidayEntry.Create(model.ToEventDto(user))).ToArray();
 
             var events = await _writeRepository.Save(WriteRepository.DefaultKeyTaker, timeHolidayEntries);
 
@@ -51,6 +48,11 @@ namespace Kairos.Application.TimeHolidayEntry
         {
             var toDeleteEntry = await _writeRepository.GetOrDefault<Domain.TimeHolidayEntry>(request.Id.ToString());
 
+            if (toDeleteEntry == null)
+            {
+                throw new NotFoundItemException();
+            }
+
             toDeleteEntry.Delete();
 
             var events = await _writeRepository.Save(WriteRepository.DefaultKeyTaker, toDeleteEntry);
@@ -58,6 +60,25 @@ namespace Kairos.Application.TimeHolidayEntry
             foreach (var evt in events) await _mediator.Publish(evt, cancellationToken);
 
             return request.Id;
+        }
+
+        public async Task<Guid> Handle(UpdateTimeHolidayEntry request, CancellationToken cancellationToken)
+        {
+            var toUpdateEntry =
+                await _writeRepository.GetOrDefault<Domain.TimeHolidayEntry>(request.TimeHolidayEntry.Id.ToString());
+
+            if (toUpdateEntry == null)
+            {
+                throw new NotFoundItemException();
+            }
+
+            toUpdateEntry.Update(request.TimeHolidayEntry.ToEventDto());
+
+            var events = await _writeRepository.Save(WriteRepository.DefaultKeyTaker, toUpdateEntry);
+
+            foreach (var evt in events) await _mediator.Publish(evt, cancellationToken);
+
+            return toUpdateEntry.Id;
         }
 
         public async Task<ImmutableArray<Guid>> Handle(UpdateTimeHolidayEntriesByCountry request,

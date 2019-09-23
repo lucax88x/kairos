@@ -40,9 +40,7 @@ export class TimeAbsenceEntryModel {
   isEmpty() {
     return (
       this.id.equals(TimeAbsenceEntryModel.empty.id) &&
-      this.description === TimeAbsenceEntryModel.empty.description &&
-      this.start === TimeAbsenceEntryModel.empty.start &&
-      this.end === TimeAbsenceEntryModel.empty.end
+      this.description === TimeAbsenceEntryModel.empty.description
     );
   }
 }

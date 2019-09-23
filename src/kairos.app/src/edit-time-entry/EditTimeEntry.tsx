@@ -1,6 +1,5 @@
 import { Grid, makeStyles, Paper } from '@material-ui/core';
-import React, { useCallback } from 'react';
-
+import React from 'react';
 import Spinner from '../components/Spinner';
 import { ProfileModel } from '../models/profile.model';
 import { TimeEntryModel } from '../models/time-entry.model';
@@ -23,7 +22,7 @@ export interface EditTimeEntryInputs {
 }
 
 export interface EditTimeEntryDispatches {
-  update: (model: TimeEntryModel) => void;
+  onUpdate: (model: TimeEntryModel) => void;
 }
 
 type EditTimeEntryProps = EditTimeEntryInputs & EditTimeEntryDispatches;
@@ -31,7 +30,7 @@ type EditTimeEntryProps = EditTimeEntryInputs & EditTimeEntryDispatches;
 export const EditTimeEntryComponent: React.FC<EditTimeEntryProps> = props => {
   const classes = useStyles(props);
 
-  const { profile, timeEntry, isGetBusy, isUpdateBusy, update } = props;
+  const { profile, timeEntry, isGetBusy, isUpdateBusy, onUpdate } = props;
 
   return (
     <Grid container spacing={3}>
@@ -42,7 +41,7 @@ export const EditTimeEntryComponent: React.FC<EditTimeEntryProps> = props => {
               profile={profile}
               isBusy={isUpdateBusy}
               model={timeEntry}
-              onSave={update}
+              onSave={onUpdate}
             />
           </Spinner>
         </Paper>

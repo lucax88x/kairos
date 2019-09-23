@@ -22,6 +22,7 @@ export interface SharedState {
       getTimeHolidayEntries: boolean;
       createTimeHolidayEntry: boolean;
       deleteTimeHolidayEntry: boolean;
+      updateTimeHolidayEntriesByCountry: boolean;
     };
   };
 }
@@ -45,6 +46,7 @@ export const sharedInitialState: SharedState = {
       getTimeHolidayEntries: false,
       createTimeHolidayEntry: false,
       deleteTimeHolidayEntry: false,
+      updateTimeHolidayEntriesByCountry: false,
     },
   },
 };

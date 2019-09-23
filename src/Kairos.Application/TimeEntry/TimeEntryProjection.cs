@@ -2,7 +2,6 @@ using System.Collections.Immutable;
 using System.Threading;
 using System.Threading.Tasks;
 using Kairos.Application.TimeEntry.Queries;
-using Kairos.Domain.Events;
 using Kairos.Domain.Events.TimeEntry;
 using Kairos.Infra.Read.TimeEntry;
 using MediatR;
@@ -11,6 +10,7 @@ namespace Kairos.Application.TimeEntry
 {
     public class TimeEntryProjection :
         INotificationHandler<TimeEntryAdded>,
+        INotificationHandler<TimeEntryUpdated>,
         INotificationHandler<TimeEntryDeleted>,
         IRequestHandler<GetTimeEntryById, TimeEntryAggregationReadDto>,
         IRequestHandler<GetTimeEntries, ImmutableList<TimeEntryAggregationReadDto>>
@@ -23,6 +23,11 @@ namespace Kairos.Application.TimeEntry
         }
 
         public async Task Handle(TimeEntryAdded notification, CancellationToken cancellationToken)
+        {
+            await _timeEntryReadRepository.AddOrUpdate(notification.TimeEntry);
+        }
+        
+        public async Task Handle(TimeEntryUpdated notification, CancellationToken cancellationToken)
         {
             await _timeEntryReadRepository.AddOrUpdate(notification.TimeEntry);
         }
@@ -40,7 +45,7 @@ namespace Kairos.Application.TimeEntry
         public async Task<ImmutableList<TimeEntryAggregationReadDto>> Handle(GetTimeEntries request,
             CancellationToken cancellationToken)
         {
-            return await _timeEntryReadRepository.Get(request.Id);
+            return await _timeEntryReadRepository.Get(request.User, request.Year);
         }
     }
 }

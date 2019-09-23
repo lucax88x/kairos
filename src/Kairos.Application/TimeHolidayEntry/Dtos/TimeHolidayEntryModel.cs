@@ -1,4 +1,5 @@
 using System;
+using Kairos.Domain.Events.TimeHolidayEntry.EventDtos;
 
 namespace Kairos.Application.TimeHolidayEntry.Dtos
 {
@@ -17,6 +18,16 @@ namespace Kairos.Application.TimeHolidayEntry.Dtos
             Id = !id.HasValue || id.Value == Guid.Empty ? Guid.NewGuid() : id.Value;
             Description = description;
             When = when;
+        }
+
+        public TimeHolidayEntryEventDto ToEventDto(string user = null)
+        {
+            return new TimeHolidayEntryEventDto(
+                Id,
+                user,
+                Description,
+                When
+            );
         }
     }
 }

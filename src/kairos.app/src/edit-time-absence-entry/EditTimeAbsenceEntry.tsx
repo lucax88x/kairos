@@ -21,7 +21,7 @@ export interface EditTimeAbsenceEntryInputs {
 }
 
 export interface EditTimeAbsenceEntryDispatches {
-  update: (model: TimeAbsenceEntryModel) => void;
+  onUpdate: (model: TimeAbsenceEntryModel) => void;
 }
 
 type EditTimeAbsenceEntryProps = EditTimeAbsenceEntryInputs & EditTimeAbsenceEntryDispatches;
@@ -29,14 +29,14 @@ type EditTimeAbsenceEntryProps = EditTimeAbsenceEntryInputs & EditTimeAbsenceEnt
 export const EditTimeAbsenceEntryComponent: React.FC<EditTimeAbsenceEntryProps> = props => {
   const classes = useStyles(props);
 
-  const { timeAbsenceEntry, isGetBusy, isUpdateBusy, update } = props;
+  const { timeAbsenceEntry, isGetBusy, isUpdateBusy, onUpdate } = props;
 
   return (
     <Grid container spacing={3}>
       <Grid item xs>
         <Paper className={classes.paper}>
           <Spinner show={isGetBusy}>
-            <TimeAbsenceEntryForm isBusy={isUpdateBusy} model={timeAbsenceEntry} save={update} />
+            <TimeAbsenceEntryForm isBusy={isUpdateBusy} model={timeAbsenceEntry} onSave={onUpdate} />
           </Spinner>
         </Paper>
       </Grid>

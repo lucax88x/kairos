@@ -4,8 +4,7 @@ using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using Kairos.Application.TimeEntry.Commands;
-using Kairos.Domain;
-using Kairos.Domain.Events.TimeEntry.EventDtos;
+using Kairos.Common.Exceptions.Technical;
 using Kairos.Infra.Write;
 using MediatR;
 
@@ -13,6 +12,7 @@ namespace Kairos.Application.TimeEntry
 {
     public class TimeEntryService :
         IRequestHandler<CreateTimeEntries, ImmutableArray<Guid>>,
+        IRequestHandler<UpdateTimeEntry, Guid>,
         IRequestHandler<DeleteTimeEntry, Guid>
     {
         private readonly IWriteRepository _writeRepository;
@@ -30,14 +30,8 @@ namespace Kairos.Application.TimeEntry
         {
             var user = _authProvider.GetUser();
 
-            var timeEntries = request.Entries.Select(model =>
-                Domain.TimeEntry.Create(new TimeEntryEventDto(
-                    model.Id,
-                    user,
-                    model.When,
-                    (TimeEntryType) model.Type,
-                    model.Job,
-                    model.Project))).ToArray();
+            var timeEntries = request.Entries.Select(model => Domain.TimeEntry.Create(model.ToEventDto(user)))
+                .ToArray();
 
             var events = await _writeRepository.Save(WriteRepository.DefaultKeyTaker, timeEntries);
 
@@ -48,15 +42,38 @@ namespace Kairos.Application.TimeEntry
 
         public async Task<Guid> Handle(DeleteTimeEntry request, CancellationToken cancellationToken)
         {
-            var timeEntry = await _writeRepository.GetOrDefault<Domain.TimeEntry>(request.Id.ToString());
+            var toDeleteEntry = await _writeRepository.GetOrDefault<Domain.TimeEntry>(request.Id.ToString());
 
-            timeEntry.Delete();
+            if (toDeleteEntry == null)
+            {
+                throw new NotFoundItemException();
+            }
 
-            var events = await _writeRepository.Save(WriteRepository.DefaultKeyTaker, timeEntry);
+            toDeleteEntry.Delete();
+
+            var events = await _writeRepository.Save(WriteRepository.DefaultKeyTaker, toDeleteEntry);
 
             foreach (var evt in events) await _mediator.Publish(evt, cancellationToken);
 
             return request.Id;
+        }
+
+        public async Task<Guid> Handle(UpdateTimeEntry request, CancellationToken cancellationToken)
+        {
+            var toUpdateEntry = await _writeRepository.GetOrDefault<Domain.TimeEntry>(request.Entry.Id.ToString());
+
+            if (toUpdateEntry == null)
+            {
+                throw new NotFoundItemException();
+            }
+
+            toUpdateEntry.Update(request.Entry.ToEventDto());
+
+            var events = await _writeRepository.Save(WriteRepository.DefaultKeyTaker, toUpdateEntry);
+
+            foreach (var evt in events) await _mediator.Publish(evt, cancellationToken);
+
+            return toUpdateEntry.Id;
         }
     }
 }

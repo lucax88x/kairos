@@ -23,9 +23,10 @@ export async function getTimeAbsenceEntry(id: UUID) {
   return TimeAbsenceEntryModel.fromOutModel(result.timeAbsenceEntry);
 }
 
-export async function getTimeAbsenceEntries() {
+export async function getTimeAbsenceEntries(year: number) {
   const result = await query<{ timeAbsenceEntries: TimeAbsenceEntryOutModel[] }>(
     getTimeAbsenceEntriesQuery,
+    { year },
   );
 
   return map(out => TimeAbsenceEntryModel.fromOutModel(out), result.timeAbsenceEntries);

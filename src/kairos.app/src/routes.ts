@@ -7,5 +7,6 @@ export class Routes {
   static TimeHolidayEntries = '/time-holiday-entries';
   static EditTimeEntry = '/entry/:id';
   static EditTimeAbsenceEntry = '/absence/:id';
+  static EditTimeHolidayEntry = '/holiday/:id';
   static BulkInsert = '/bulk-insert';
 }

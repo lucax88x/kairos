@@ -12,7 +12,7 @@ namespace Kairos.Infra.Read.TimeEntry
     {
         Task AddOrUpdate(TimeEntryEventDto timeEntry);
         Task Delete(Guid id, string user);
-        Task<ImmutableList<TimeEntryAggregationReadDto>> Get(string user);
+        Task<ImmutableList<TimeEntryAggregationReadDto>> Get(string user, int year);
         Task<TimeEntryAggregationReadDto> GetById(Guid id);
     }
 
@@ -43,11 +43,13 @@ namespace Kairos.Infra.Read.TimeEntry
             await _repository.SortedSetRemove($"by-when|by-user|{user}", id);
         }
 
-        public async Task<ImmutableList<TimeEntryAggregationReadDto>> Get(string user)
+        public async Task<ImmutableList<TimeEntryAggregationReadDto>> Get(string user, int year)
         {
             var ids = await _repository.SortedSetRangeByScore($"by-when|by-user|{user}");
 
             var dtos = await _repository.GetMultiple<TimeEntryReadDto>(ids);
+            
+            dtos = dtos.Where(d => d.When.Year == year).ToImmutableArray();
 
             var jobs = await _userProfileReadRepository.GetMultipleJobs(dtos.Select(d => d.Job).Distinct());
             var projects = await _userProfileReadRepository.GetMultipleProjects(dtos.Select(d => d.Project).Distinct());

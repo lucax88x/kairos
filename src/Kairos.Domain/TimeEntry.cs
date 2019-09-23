@@ -16,6 +16,8 @@ namespace Kairos.Domain
         public string User { get; private set; }
         public DateTimeOffset When { get; private set; }
         public TimeEntryType Type { get; private set; }
+        public Guid Job { get; private set; }
+        public Guid Project { get; private set; }
 
         protected override void Apply(Event @event)
         {
@@ -26,7 +28,17 @@ namespace Kairos.Domain
                     Id = added.TimeEntry.Id;
                     User = added.TimeEntry.User;
                     When = added.TimeEntry.When;
-                    Type = added.TimeEntry.Type;
+                    Job = added.TimeEntry.Job;
+                    Project = added.TimeEntry.Project;
+                    return;
+                }
+
+                case TimeEntryUpdated updated:
+                {
+                    When = updated.TimeEntry.When;
+                    Type = updated.TimeEntry.Type;
+                    Job = updated.TimeEntry.Job;
+                    Project = updated.TimeEntry.Project;
                     return;
                 }
 
@@ -43,11 +55,16 @@ namespace Kairos.Domain
             ApplyChange(new TimeEntryDeleted(Id, User));
         }
 
-        public static TimeEntry Create(TimeEntryEventDto timeEntry)
+        public void Update(TimeEntryEventDto eventDto)
+        {
+            ApplyChange(new TimeEntryUpdated(eventDto));
+        }
+
+        public static TimeEntry Create(TimeEntryEventDto eventDto)
         {
             var instance = new TimeEntry();
 
-            instance.ApplyChange(new TimeEntryAdded(timeEntry));
+            instance.ApplyChange(new TimeEntryAdded(eventDto));
 
             return instance;
         }

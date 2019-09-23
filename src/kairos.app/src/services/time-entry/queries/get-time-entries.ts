@@ -1,5 +1,5 @@
-export const getTimeEntriesQuery = `{
-  timeEntries {
+export const getTimeEntriesQuery = `query ($year: Int!) {
+  timeEntries(year: $year) {
     id
     when
     type

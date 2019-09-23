@@ -6,11 +6,13 @@ namespace Kairos.Application.TimeEntry.Queries
 {
     public class GetTimeEntries : Query<ImmutableList<TimeEntryAggregationReadDto>>
     {
-        public GetTimeEntries(string id)
+        public GetTimeEntries(string user, int year)
         {
-            Id = id;
+            User = user;
+            Year = year;
         }
 
-        public string Id { get; }
+        public string User { get; }
+        public int Year { get; }
     }
 }

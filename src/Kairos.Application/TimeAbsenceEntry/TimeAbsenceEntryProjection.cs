@@ -10,6 +10,7 @@ namespace Kairos.Application.TimeAbsenceEntry
 {
     public class TimeAbsenceEntryProjection :
         INotificationHandler<TimeAbsenceEntryAdded>,
+        INotificationHandler<TimeAbsenceEntryUpdated>,
         INotificationHandler<TimeAbsenceEntryDeleted>,
         IRequestHandler<GetTimeAbsenceEntryById, TimeAbsenceEntryReadDto>,
         IRequestHandler<GetTimeAbsenceEntries, ImmutableArray<TimeAbsenceEntryReadDto>>
@@ -22,6 +23,11 @@ namespace Kairos.Application.TimeAbsenceEntry
         }
 
         public async Task Handle(TimeAbsenceEntryAdded notification, CancellationToken cancellationToken)
+        {
+            await _timeAbsenceEntryReadRepository.AddOrUpdate(notification.TimeAbsenceEntry);
+        }
+        
+        public async Task Handle(TimeAbsenceEntryUpdated notification, CancellationToken cancellationToken)
         {
             await _timeAbsenceEntryReadRepository.AddOrUpdate(notification.TimeAbsenceEntry);
         }
@@ -40,7 +46,7 @@ namespace Kairos.Application.TimeAbsenceEntry
         public async Task<ImmutableArray<TimeAbsenceEntryReadDto>> Handle(GetTimeAbsenceEntries request,
             CancellationToken cancellationToken)
         {
-            return await _timeAbsenceEntryReadRepository.Get(request.Id);
+            return await _timeAbsenceEntryReadRepository.Get(request.User, request.Year);
         }
     }
 }

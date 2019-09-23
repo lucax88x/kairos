@@ -11,6 +11,7 @@ import {
   DELETE_TIME_HOLIDAY_ENTRY_SUCCESS,
 } from './constants';
 import { SharedState } from './state';
+import { enqueueSnackbarAction } from '../notification-manager/actions';
 
 export const deleteTimeHolidayEntryAsync = createAsyncAction(
   DELETE_TIME_HOLIDAY_ENTRY,
@@ -30,8 +31,13 @@ function* doDeleteTimeHolidayEntry({
   }
 }
 
+function* doNotifySuccess() {
+  yield put(enqueueSnackbarAction('Holiday deleted!', { variant: 'success' }));
+}
+
 export function* deleteTimeHolidayEntrySaga() {
   yield takeLatest(DELETE_TIME_HOLIDAY_ENTRY, doDeleteTimeHolidayEntry);
+  yield takeLatest(DELETE_TIME_HOLIDAY_ENTRY_SUCCESS, doNotifySuccess);
 }
 
 export const deleteTimeHolidayEntryReducer = (state: SharedState, action: SharedActions): SharedState =>

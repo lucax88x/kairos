@@ -11,6 +11,7 @@ import {
   DELETE_TIME_ABSENCE_ENTRY_SUCCESS,
 } from './constants';
 import { SharedState } from './state';
+import { enqueueSnackbarAction } from '../notification-manager/actions';
 
 export const deleteTimeAbsenceEntryAsync = createAsyncAction(
   DELETE_TIME_ABSENCE_ENTRY,
@@ -30,8 +31,13 @@ function* doDeleteTimeAbsenceEntry({
   }
 }
 
+function* doNotifySuccess() {
+  yield put(enqueueSnackbarAction('Time Absence Entry updated!', { variant: 'success' }));
+}
+
 export function* deleteTimeAbsenceEntrySaga() {
   yield takeLatest(DELETE_TIME_ABSENCE_ENTRY, doDeleteTimeAbsenceEntry);
+  yield takeLatest(DELETE_TIME_ABSENCE_ENTRY_SUCCESS, doNotifySuccess);
 }
 
 export const deleteTimeAbsenceEntryReducer = (state: SharedState, action: SharedActions): SharedState =>

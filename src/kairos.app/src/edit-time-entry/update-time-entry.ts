@@ -11,6 +11,7 @@ import {
   UPDATE_TIME_ENTRY_SUCCESS,
 } from './constants';
 import { EditTimeEntryState } from './state';
+import { enqueueSnackbarAction } from '../notification-manager/actions';
 
 export const updateTimeEntryAsync = createAsyncAction(
   UPDATE_TIME_ENTRY,
@@ -30,8 +31,13 @@ function* doDeleteTimeEntry({
   }
 }
 
+function* doNotifySuccess() {
+  yield put(enqueueSnackbarAction('Time Entry updated!', { variant: 'success' }));
+}
+
 export function* updateTimeEntrySaga() {
   yield takeLatest(UPDATE_TIME_ENTRY, doDeleteTimeEntry);
+  yield takeLatest(UPDATE_TIME_ENTRY_SUCCESS, doNotifySuccess);
 }
 
 export const updateTimeEntryReducer = (

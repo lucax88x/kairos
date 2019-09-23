@@ -6,6 +6,7 @@ import { UUID } from '../models/uuid.model';
 import { deleteTimeEntry } from '../services/time-entry/time-entry.service';
 import { DELETE_TIME_ENTRY, DELETE_TIME_ENTRY_FAILURE, DELETE_TIME_ENTRY_SUCCESS } from './constants';
 import { SharedState } from './state';
+import { enqueueSnackbarAction } from '../notification-manager/actions';
 
 
 export const deleteTimeEntryAsync = createAsyncAction(
@@ -24,8 +25,13 @@ function* doDeleteTimeEntry({ payload: { id } }: ReturnType<typeof deleteTimeEnt
   }
 }
 
+function* doNotifySuccess() {
+  yield put(enqueueSnackbarAction('Time Absence Entry deleted!', { variant: 'success' }));
+}
+
 export function* deleteTimeEntrySaga() {
   yield takeLatest(DELETE_TIME_ENTRY, doDeleteTimeEntry);
+  yield takeLatest(DELETE_TIME_ENTRY_SUCCESS, doNotifySuccess);
 }
 
 export const deleteTimeEntryReducer = (state: SharedState, action: SharedActions): SharedState =>

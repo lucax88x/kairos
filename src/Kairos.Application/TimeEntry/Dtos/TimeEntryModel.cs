@@ -1,4 +1,6 @@
 using System;
+using Kairos.Domain;
+using Kairos.Domain.Events.TimeEntry.EventDtos;
 
 namespace Kairos.Application.TimeEntry.Dtos
 {
@@ -21,6 +23,17 @@ namespace Kairos.Application.TimeEntry.Dtos
             Type = type;
             Job = job;
             Project = project;
+        }
+
+        public TimeEntryEventDto ToEventDto(string user = null)
+        {
+            return new TimeEntryEventDto(
+                Id,
+                user,
+                When,
+                (TimeEntryType) Type,
+                Job,
+                Project);
         }
     }
 }

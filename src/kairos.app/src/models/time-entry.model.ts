@@ -2,6 +2,8 @@ import { parseISO } from 'date-fns';
 
 import { UUID } from './uuid.model';
 import { immerable } from 'immer';
+import { JobModel, JobOutModel } from './job.model';
+import { ProjectOutModel } from './project.model';
 
 export enum TimeEntryTypes {
   IN = 'IN',
@@ -24,8 +26,8 @@ export class TimeEntryModel {
       new UUID(outModel.id),
       parseISO(outModel.when),
       TimeEntryTypes[outModel.type],
-      new UUID(outModel.job),
-      new UUID(outModel.project),
+      new UUID(outModel.job.id),
+      new UUID(outModel.project.id),
     );
   }
 
@@ -45,6 +47,6 @@ export interface TimeEntryOutModel {
   id: string;
   when: string;
   type: TimeEntryTypes;
-  job: string;
-  project: string;
+  job: Partial<JobOutModel>;
+  project: Partial<ProjectOutModel>;
 }

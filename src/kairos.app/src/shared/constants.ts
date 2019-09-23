@@ -39,3 +39,7 @@ export const CREATE_TIME_HOLIDAY_ENTRY_FAILURE = '[SHARED] Create Time Holiday E
 export const DELETE_TIME_HOLIDAY_ENTRY = '[SHARED] Delete Time Holiday Entry';
 export const DELETE_TIME_HOLIDAY_ENTRY_SUCCESS = '[SHARED] Delete Time Holiday Entry Success';
 export const DELETE_TIME_HOLIDAY_ENTRY_FAILURE = '[SHARED] Delete Time Holiday Entry Failure';
+
+export const UPDATE_TIME_HOLIDAY_ENTRIES_BY_COUNTRY = '[SHARED] Update Time Entries by Country';
+export const UPDATE_TIME_HOLIDAY_ENTRIES_BY_COUNTRY_SUCCESS = '[SHARED] Update Time Entries by Country Success';
+export const UPDATE_TIME_HOLIDAY_ENTRIES_BY_COUNTRY_FAILURE = '[SHARED] Update Time Entries by Country Failure';

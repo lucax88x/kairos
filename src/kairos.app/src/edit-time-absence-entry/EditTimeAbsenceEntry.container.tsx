@@ -23,7 +23,7 @@ const mapStateToProps = (state: State): EditTimeAbsenceEntryInputs => ({
 });
 
 const mapDispatchToProps = (dispatch: Dispatch<Actions>): EditTimeAbsenceEntryDispatches => ({
-  update: (model: TimeAbsenceEntryModel) => dispatch(updateTimeAbsenceEntryAsync.request({ model })),
+  onUpdate: (model: TimeAbsenceEntryModel) => dispatch(updateTimeAbsenceEntryAsync.request({ model })),
 });
 
 export const EditTimeAbsenceEntry = connect(

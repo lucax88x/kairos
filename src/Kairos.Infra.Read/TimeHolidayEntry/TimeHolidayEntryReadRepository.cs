@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Immutable;
+using System.Linq;
 using System.Threading.Tasks;
 using Kairos.Domain.Events.TimeHolidayEntry.EventDtos;
 
@@ -9,7 +10,7 @@ namespace Kairos.Infra.Read.TimeHolidayEntry
     {
         Task AddOrUpdate(TimeHolidayEntryEventDto timeHolidayEntry);
         Task Delete(Guid id, string user);
-        Task<ImmutableArray<TimeHolidayEntryReadDto>> Get(string user);
+        Task<ImmutableArray<TimeHolidayEntryReadDto>> Get(string user, int year);
         Task<TimeHolidayEntryReadDto> GetById(Guid id);
     }
 
@@ -36,11 +37,13 @@ namespace Kairos.Infra.Read.TimeHolidayEntry
             await _repository.SortedSetRemove($"by-when|by-user|{user}", id);
         }
 
-        public async Task<ImmutableArray<TimeHolidayEntryReadDto>> Get(string user)
+        public async Task<ImmutableArray<TimeHolidayEntryReadDto>> Get(string user, int year)
         {
             var ids = await _repository.SortedSetRangeByScore($"by-when|by-user|{user}");
 
-            return await _repository.GetMultiple<TimeHolidayEntryReadDto>(ids);
+            var dtos = await _repository.GetMultiple<TimeHolidayEntryReadDto>(ids);
+
+            return dtos.Where(d => d.When.Year == year).ToImmutableArray();
         }
 
         public async Task<TimeHolidayEntryReadDto> GetById(Guid id)

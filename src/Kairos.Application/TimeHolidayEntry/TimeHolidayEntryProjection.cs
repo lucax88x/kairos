@@ -10,6 +10,7 @@ namespace Kairos.Application.TimeHolidayEntry
 {
     public class TimeHolidayEntryProjection :
         INotificationHandler<TimeHolidayEntryAdded>,
+        INotificationHandler<TimeHolidayEntryUpdated>,
         INotificationHandler<TimeHolidayEntryDeleted>,
         IRequestHandler<GetTimeHolidayEntryById, TimeHolidayEntryReadDto>,
         IRequestHandler<GetTimeHolidayEntries, ImmutableArray<TimeHolidayEntryReadDto>>
@@ -22,6 +23,11 @@ namespace Kairos.Application.TimeHolidayEntry
         }
 
         public async Task Handle(TimeHolidayEntryAdded notification, CancellationToken cancellationToken)
+        {
+            await _timeHolidayEntryReadRepository.AddOrUpdate(notification.TimeHolidayEntry);
+        }
+        
+        public async Task Handle(TimeHolidayEntryUpdated notification, CancellationToken cancellationToken)
         {
             await _timeHolidayEntryReadRepository.AddOrUpdate(notification.TimeHolidayEntry);
         }
@@ -40,7 +46,7 @@ namespace Kairos.Application.TimeHolidayEntry
         public async Task<ImmutableArray<TimeHolidayEntryReadDto>> Handle(GetTimeHolidayEntries request,
             CancellationToken cancellationToken)
         {
-            return await _timeHolidayEntryReadRepository.Get(request.Id);
+            return await _timeHolidayEntryReadRepository.Get(request.User, request.Year);
         }
     }
 }

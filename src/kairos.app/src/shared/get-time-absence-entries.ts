@@ -2,22 +2,16 @@ import { LOCATION_CHANGE } from 'connected-react-router';
 import produce from 'immer';
 import { call, put, select, takeLatest } from 'redux-saga/effects';
 import { createAsyncAction } from 'typesafe-actions';
-
 import { SharedActions } from '../actions';
 import { Route } from '../models/route.model';
 import { TimeAbsenceEntryModel } from '../models/time-absence-entry.model';
 import { getTimeAbsenceEntries } from '../services/time-absence-entry/time-absence-entry.service';
-import {
-  CREATE_TIME_ABSENCE_ENTRY_SUCCESS,
-  DELETE_TIME_ABSENCE_ENTRY_SUCCESS,
-} from '../shared/constants';
-import { selectTimeAbsenceEntriesRoute, selectDashboardRoute } from '../shared/router.selectors';
-import {
-  GET_TIME_ABSENCE_ENTRIES,
-  GET_TIME_ABSENCE_ENTRIES_FAILURE,
-  GET_TIME_ABSENCE_ENTRIES_SUCCESS,
-} from './constants';
+import { CREATE_TIME_ABSENCE_ENTRY_SUCCESS, DELETE_TIME_ABSENCE_ENTRY_SUCCESS, SELECT_YEAR } from '../shared/constants';
+import { selectDashboardRoute, selectTimeAbsenceEntriesRoute } from '../shared/router.selectors';
+import { GET_TIME_ABSENCE_ENTRIES, GET_TIME_ABSENCE_ENTRIES_FAILURE, GET_TIME_ABSENCE_ENTRIES_SUCCESS } from './constants';
+import { selectSelectedYear } from './selectors';
 import { SharedState } from './state';
+
 
 export const getTimeAbsenceEntriesAsync = createAsyncAction(
   GET_TIME_ABSENCE_ENTRIES,
@@ -36,7 +30,9 @@ function* doGetTimeAbsenceEntriesOnOtherActions() {
 
 function* doGetTimeAbsenceEntries() {
   try {
-    const timeAbsenceEntries = yield call(getTimeAbsenceEntries);
+    const year = yield select(selectSelectedYear);
+
+    const timeAbsenceEntries = yield call(getTimeAbsenceEntries, year);
 
     yield put(getTimeAbsenceEntriesAsync.success(timeAbsenceEntries));
   } catch (error) {
@@ -46,7 +42,12 @@ function* doGetTimeAbsenceEntries() {
 
 export function* getTimeAbsenceEntriesSaga() {
   yield takeLatest(
-    [LOCATION_CHANGE, CREATE_TIME_ABSENCE_ENTRY_SUCCESS, DELETE_TIME_ABSENCE_ENTRY_SUCCESS],
+    [
+      LOCATION_CHANGE,
+      CREATE_TIME_ABSENCE_ENTRY_SUCCESS,
+      DELETE_TIME_ABSENCE_ENTRY_SUCCESS,
+      SELECT_YEAR,
+    ],
     doGetTimeAbsenceEntriesOnOtherActions,
   );
   yield takeLatest(GET_TIME_ABSENCE_ENTRIES, doGetTimeAbsenceEntries);
