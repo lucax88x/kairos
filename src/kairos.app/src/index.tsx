@@ -6,13 +6,16 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import { spring } from 'react-motion';
 import { Provider } from 'react-redux';
-import { Route, Redirect } from 'react-router-dom';
+import { Redirect, Route } from 'react-router-dom';
 import { AnimatedSwitch, IAnimatedSwitchTransition } from 'react-router-transition';
+import { PersistGate } from 'redux-persist/integration/react';
 import { App } from './App.container';
 import { LoginForm } from './auth/LoginForm.container';
 import { Themes } from './code/variables';
 import { ErrorBoundary } from './components/ErrorBoundary';
-import { history, store } from './createStore';
+import { SpinnerIcon } from './components/SpinnerIcon';
+import { history, persistor, store } from './createStore';
+import { I18nLoader } from './i18nLoader.container';
 import './index.scss';
 import { NotFound } from './NotFound';
 import { enqueueSnackbarAction } from './notification-manager/enqueue-snackbar';
@@ -63,29 +66,33 @@ const pageTransitions = {
 ReactDOM.render(
   <ErrorBoundary>
     <Provider store={store}>
-      <ThemeProvider theme={theme}>
-        <CssBaseline />
-        <SnackbarProvider
-          maxSnack={3}
-          preventDuplicate={true}
-          autoHideDuration={5000}
-          anchorOrigin={{
-            vertical: 'top',
-            horizontal: 'right',
-          }}
-        >
-          <NotificationManager />
-        </SnackbarProvider>
+      <PersistGate loading={<SpinnerIcon />} persistor={persistor}>
+        <I18nLoader>
+          <ThemeProvider theme={theme}>
+            <CssBaseline />
+            <SnackbarProvider
+              maxSnack={3}
+              preventDuplicate={true}
+              autoHideDuration={5000}
+              anchorOrigin={{
+                vertical: 'top',
+                horizontal: 'right',
+              }}
+            >
+              <NotificationManager />
+            </SnackbarProvider>
 
-        <ConnectedRouter history={history}>
-          <AnimatedSwitch {...pageTransitions} mapStyles={mapStyles} className="switch-wrapper">
-            <Redirect exact={true} from="/" to={Routes.Dashboard} />
-            <Route path={Routes.Login} component={LoginForm} />
-            <Route path="" component={App} />
-            <Route component={NotFound} />
-          </AnimatedSwitch>
-        </ConnectedRouter>
-      </ThemeProvider>
+            <ConnectedRouter history={history}>
+              <AnimatedSwitch {...pageTransitions} mapStyles={mapStyles} className="switch-wrapper">
+                <Redirect exact={true} from="/" to={Routes.Dashboard} />
+                <Route path={Routes.Login} component={LoginForm} />
+                <Route path="" component={App} />
+                <Route component={NotFound} />
+              </AnimatedSwitch>
+            </ConnectedRouter>
+          </ThemeProvider>
+        </I18nLoader>
+      </PersistGate>
     </Provider>
   </ErrorBoundary>,
   document.getElementById('root'),

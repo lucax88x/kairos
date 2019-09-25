@@ -13,7 +13,7 @@ namespace Kairos.Infra.Write
     public class WriteConnectionFactory : IWriteConnectionFactory, IDisposable
     {
         private readonly WriteRepositoryConfig _writeRepositoryConfig;
-        private IEventStoreConnection _connection;
+        private IEventStoreConnection? _connection;
 
         public WriteConnectionFactory(WriteRepositoryConfig writeRepositoryConfig)
         {

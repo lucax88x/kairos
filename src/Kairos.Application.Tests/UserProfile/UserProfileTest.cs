@@ -24,33 +24,33 @@ namespace Kairos.Application.Tests.UserProfile
         public async Task should_create_user_profile()
         {
             // GIVEN
-            var command = new CreateOrUpdateUserProfile(new UserProfileModel(new[] {_sandbox.Model.UserJob.Build()}));
+            var command = new CreateOrUpdateUserProfile(new UserProfileModel(new[] {_sandbox.Model!.UserJob.Build()}));
 
             // WHEN           
-            var user = await _sandbox.Mediator.Send(command);
+            var user = await _sandbox.Mediator!.Send(command);
 
             // THEN
-            _sandbox.Should.Mediator.Be("CreateOrUpdateUserProfile -> UserProfileAdded");
+            _sandbox.Should!.Mediator!.Be("CreateOrUpdateUserProfile -> UserProfileAdded");
 
-            await _sandbox.Should.Redis.Exists.Set("user-profile", user);
+            await _sandbox.Should!.Redis!.Exists.Set("user-profile", user);
         }
 
         [Fact]
         public async Task should_update_user_profile_if_already_exists()
         {
             // GIVEN
-            var user = await _sandbox.Scenario.UserProfile.WithEmptyProfile();
+            var user = await _sandbox.Scenario!.UserProfile.WithEmptyProfile();
             _sandbox.ClearMediator();
 
             var command = new CreateOrUpdateUserProfile(new UserProfileModel());
 
             // WHEN           
-            await _sandbox.Mediator.Send(command);
+            await _sandbox.Mediator!.Send(command);
 
             // THEN
-            _sandbox.Should.Mediator.Be("CreateOrUpdateUserProfile -> UserProfileUpdated");
+            _sandbox.Should!.Mediator!.Be("CreateOrUpdateUserProfile -> UserProfileUpdated");
 
-            await _sandbox.Should.Redis.Exists.Set("user-profile", user);
+            await _sandbox.Should!.Redis!.Exists.Set("user-profile", user);
         }
 
         [Fact(Skip = "TODO")]

@@ -1,3 +1,4 @@
+import { Trans, t } from '@lingui/macro';
 import {
   AppBar,
   Avatar,
@@ -31,9 +32,11 @@ import { getYear } from 'date-fns';
 import { map } from 'ramda';
 import React, { ChangeEvent, useCallback, useState } from 'react';
 import { Link, Route } from 'react-router-dom';
+import { ReactComponent as EnglishFlag } from './assets/images/en.svg';
+import { ReactComponent as ItalianFlag } from './assets/images/it.svg';
 import { ReactComponent as LogoIcon } from './assets/images/logo.svg';
 import { BulkInsert } from './bulk-insert/BulkInsert';
-import { isNumber } from './code/is';
+import { isLanguage, isNumber } from './code/is';
 import { SimpleIcon } from './components/SimpleIcon';
 import { CreateTimeAbsenceEntry } from './CreateTimeAbsenceEntry.container';
 import { CreateTimeEntry } from './CreateTimeEntry.container';
@@ -42,12 +45,14 @@ import { Dashboard } from './dashboard/Dashboard';
 import { EditTimeAbsenceEntry } from './edit-time-absence-entry/EditTimeAbsenceEntry.container';
 import { EditTimeEntry } from './edit-time-entry/EditTimeEntry.container';
 import { EditTimeHolidayEntry } from './edit-time-holiday-entry/EditTimeHolidayEntry.container';
+import { Language, Languages } from './models/language-model';
 import { UserModel } from './models/user.model';
 import { Profile } from './profile/Profile.container';
 import { Routes } from './routes';
 import { TimeAbsenceEntries } from './time-absence-entries/TimeAbsenceEntries.container';
 import { TimeEntries } from './time-entries/TimeEntries.container';
 import { TimeHolidayEntries } from './time-holiday-entries/TimeHolidayEntries.container';
+import { i18n } from './i18nLoader';
 
 const drawerWidth = 240;
 
@@ -64,6 +69,12 @@ const useStyles = makeStyles(theme => ({
   },
   logo: {
     width: 40,
+  },
+  languageOption: {
+    padding: theme.spacing(1),
+  },
+  languageOptionFlag: {
+    width: 20,
   },
   footerAvatar: {
     width: 24,
@@ -167,6 +178,7 @@ const useStyles = makeStyles(theme => ({
 
 export interface AppInputs {
   user: UserModel;
+  selectedLanguage: Language;
   selectedYear: number;
   isLeftDrawerOpen: boolean;
   isTimeEntryDrawerOpen: boolean;
@@ -175,6 +187,7 @@ export interface AppInputs {
 
 export interface AppDispatches {
   onSelectYear: (year: number) => void;
+  onSelectLanguage: (language: Language) => void;
   openLeftDrawer: () => void;
   closeLeftDrawer: () => void;
   openTimeEntryDrawer: () => void;
@@ -190,9 +203,9 @@ export type AppProps = AppInputs & AppDispatches;
 export const AppComponent: React.FC<AppProps> = props => {
   const {
     user,
+    selectedLanguage,
     selectedYear,
     isLeftDrawerOpen,
-    onSelectYear,
     openLeftDrawer,
     closeLeftDrawer,
     isTimeEntryDrawerOpen,
@@ -203,6 +216,8 @@ export const AppComponent: React.FC<AppProps> = props => {
     closeTimeAbsenceEntryDrawer,
     onLogout,
     onNavigateToProfile,
+    onSelectYear,
+    onSelectLanguage,
   } = props;
 
   const classes = useStyles(props);
@@ -212,6 +227,7 @@ export const AppComponent: React.FC<AppProps> = props => {
   const handleLeftDrawerClose = useCallback(() => closeLeftDrawer(), [closeLeftDrawer]);
 
   const [userMenuEl, setUserMenuEl] = useState<Element | null>(null);
+  const [language, setLanguage] = useState<Language>(selectedLanguage);
   const [year, setYear] = useState<number>(selectedYear);
 
   const shouldSkipSwipe = useCallback(
@@ -283,6 +299,29 @@ export const AppComponent: React.FC<AppProps> = props => {
     [setYear],
   );
 
+  const handleLanguageChange = useCallback(
+    (event: ChangeEvent<{ value: unknown }>) => {
+      if (isLanguage(event.target.value)) {
+        setLanguage(event.target.value);
+        onSelectLanguage(event.target.value);
+      }
+    },
+    [setYear],
+  );
+
+  const getFlag = useCallback(
+    (language: Language) => {
+      switch (language) {
+        case 'it':
+          return <ItalianFlag className={classes.languageOptionFlag} />;
+        default:
+        case 'en':
+          return <EnglishFlag className={classes.languageOptionFlag} />;
+      }
+    },
+    [classes],
+  );
+
   return (
     <>
       <div className={classes.root}>
@@ -291,80 +330,123 @@ export const AppComponent: React.FC<AppProps> = props => {
           className={clsx(classes.appBar, isLeftDrawerOpen && classes.appBarShift)}
         >
           <Toolbar className={classes.toolbar}>
-            <IconButton
-              edge="start"
-              color="inherit"
-              aria-label="Open menu"
-              onClick={handleLeftDrawerOpen}
-              className={clsx(classes.menuButton, isLeftDrawerOpen && classes.menuButtonHidden)}
-            >
-              <MenuIcon />
-            </IconButton>
+            <Grid container>
+              <Grid container item alignItems={'center'} justify={'flex-start'} spacing={1} xs={6}>
+                <Grid item>
+                  <IconButton
+                    edge="start"
+                    color="inherit"
+                    aria-label={i18n._(t`TopBar.OpenMenu`)}
+                    onClick={handleLeftDrawerOpen}
+                    className={clsx(
+                      classes.menuButton,
+                      isLeftDrawerOpen && classes.menuButtonHidden,
+                    )}
+                  >
+                    <MenuIcon />
+                  </IconButton>
+                </Grid>
+                <Grid item>
+                  <Link to={Routes.Dashboard}>
+                    <LogoIcon className={classes.logo} />
+                  </Link>
+                </Grid>
 
-            <Link to={Routes.Dashboard}>
-              <LogoIcon className={classes.logo} />
-            </Link>
+                <Grid item>
+                  <Typography
+                    component="h1"
+                    variant="h6"
+                    color="inherit"
+                    noWrap
+                    className={classes.title}
+                  >
+                    <Link to={Routes.Dashboard} className={classes.link}>
+                      kairos
+                    </Link>
+                  </Typography>
+                </Grid>
+              </Grid>
+              <Grid container item alignItems={'center'} justify={'flex-end'} spacing={1} xs={6}>
+                <Grid item>
+                  <Select
+                    value={year}
+                    onChange={handleYearChange}
+                    inputProps={{
+                      id: 'year',
+                    }}
+                  >
+                    {map(
+                      year => (
+                        <MenuItem key={year} value={year}>
+                          {year}
+                        </MenuItem>
+                      ),
+                      years,
+                    )}
+                  </Select>
+                </Grid>
+                <Grid item>
+                  <IconButton
+                    color="inherit"
+                    aria-label={i18n._(t`TopBar.OpenTimeAbsenceEntry`)}
+                    onClick={handleTimeAbsenceEntryDrawerOpen}
+                  >
+                    <WeekendIcon />
+                  </IconButton>
+                </Grid>
+                <Grid item>
+                  <IconButton
+                    color="inherit"
+                    aria-label={i18n._(t`TopBar.OpenTimeEntry`)}
+                    onClick={handleTimeEntryDrawerOpen}
+                  >
+                    <TimerIcon />
+                  </IconButton>
+                </Grid>
+                <Grid item>
+                  <Avatar
+                    alt={user.name}
+                    src={user.picture}
+                    className={classes.avatar}
+                    onClick={handleUserMenuOpen}
+                  />
 
-            <Typography
-              component="h1"
-              variant="h6"
-              color="inherit"
-              noWrap
-              className={classes.title}
-            >
-              <Link to={Routes.Dashboard} className={classes.link}>
-                kairos
-              </Link>
-            </Typography>
-
-            <Select
-              value={year}
-              onChange={handleYearChange}
-              inputProps={{
-                id: 'year',
-              }}
-            >
-              {map(
-                year => (
-                  <MenuItem key={year} value={year}>
-                    {year}
-                  </MenuItem>
-                ),
-                years,
-              )}
-            </Select>
-
-            <IconButton
-              color="inherit"
-              aria-label="Open time absence entry"
-              onClick={handleTimeAbsenceEntryDrawerOpen}
-            >
-              <WeekendIcon />
-            </IconButton>
-            <IconButton
-              color="inherit"
-              aria-label="Open time entry"
-              onClick={handleTimeEntryDrawerOpen}
-            >
-              <TimerIcon />
-            </IconButton>
-
-            <Avatar
-              alt={user.name}
-              src={user.picture}
-              className={classes.avatar}
-              onClick={handleUserMenuOpen}
-            />
-
-            <Menu
-              anchorEl={userMenuEl}
-              keepMounted
-              open={Boolean(userMenuEl)}
-              onClose={handleUserMenuClose}
-            >
-              <MenuItem onClick={onNavigateToProfile}>Profile</MenuItem>
-              <MenuItem onClick={onLogout}>Logout</MenuItem>
-            </Menu>
+                  <Menu
+                    anchorEl={userMenuEl}
+                    keepMounted
+                    open={Boolean(userMenuEl)}
+                    onClose={handleUserMenuClose}
+                  >
+                    <MenuItem onClick={onNavigateToProfile}>
+                      <Trans>TopBar.Profile</Trans>
+                    </MenuItem>
+                    <MenuItem>
+                      <Select
+                        value={language}
+                        onChange={handleLanguageChange}
+                        inputProps={{
+                          id: 'language',
+                        }}
+                      >
+                        {map(
+                          language => (
+                            <MenuItem
+                              key={language}
+                              value={language}
+                              className={classes.languageOption}
+                            >
+                              {getFlag(language)}
+                            </MenuItem>
+                          ),
+                          Languages,
+                        )}
+                      </Select>
+                    </MenuItem>
+                    <MenuItem onClick={onLogout}>Logout</MenuItem>
+                  </Menu>
+                </Grid>
+              </Grid>
+            </Grid>
           </Toolbar>
         </AppBar>
         <Drawer
@@ -385,33 +467,33 @@ export const AppComponent: React.FC<AppProps> = props => {
               <ListItemIcon>
                 <DashboardIcon />
               </ListItemIcon>
-              <ListItemText primary="Dashboard" />
+              <ListItemText primary={<Trans>LeftMenu.Dashboard</Trans>} />
             </ListItem>
             <Divider />
             <ListItem button to={Routes.TimeEntries} component={Link}>
               <ListItemIcon>
                 <TimerIcon />
               </ListItemIcon>
-              <ListItemText primary="Time Entries" />
+              <ListItemText primary={<Trans>LeftMenu.TimeEntries</Trans>} />
             </ListItem>
             <ListItem button to={Routes.TimeAbsenceEntries} component={Link}>
               <ListItemIcon>
                 <WeekendIcon />
               </ListItemIcon>
-              <ListItemText primary="Absences" />
+              <ListItemText primary={<Trans>LeftMenu.TimeAbsenceEntries</Trans>} />
             </ListItem>
             <ListItem button to={Routes.TimeHolidayEntries} component={Link}>
               <ListItemIcon>
                 <BeachAccessIcon />
               </ListItemIcon>
-              <ListItemText primary="Holidays" />
+              <ListItemText primary={<Trans>LeftMenu.TimeHolidayEntries</Trans>} />
             </ListItem>
             <Divider />
             <ListItem button to={Routes.BulkInsert} component={Link}>
               <ListItemIcon>
                 <FastForwardIcon />
               </ListItemIcon>
-              <ListItemText primary="Bulk Insert" />
+              <ListItemText primary={<Trans>LeftMenu.BulkInsert</Trans>} />
             </ListItem>
           </List>
         </Drawer>

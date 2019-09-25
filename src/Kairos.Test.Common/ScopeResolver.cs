@@ -6,7 +6,7 @@ namespace Kairos.Test.Common
 {
     public class ScopeResolver : IDisposable
     {
-        private IContainer _container;
+        private IContainer? _container;
 
         public ScopeResolver BuildContainer(params Module[] modules)
         {
@@ -45,6 +45,8 @@ namespace Kairos.Test.Common
 
         public void IsSingleInstance<T1, T2>()
         {
+            if (_container == null) throw new ArgumentNullException(nameof(_container));
+
             _container.Resolve<T1>().Should().BeOfType<T2>();
 
             using (var scope1 = _container.BeginLifetimeScope())
@@ -69,6 +71,8 @@ namespace Kairos.Test.Common
 
         public void IsInstancePerLifetimeScope<T1, T2>()
         {
+            if (_container == null) throw new ArgumentNullException(nameof(_container));
+            
             _container.Resolve<T1>().Should().BeOfType<T2>();
 
             using (var scope1 = _container.BeginLifetimeScope())

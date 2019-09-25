@@ -1,14 +1,13 @@
-import './assets/fonts/roboto/index.scss';
-import './index.scss';
-
 import { routerMiddleware } from 'connected-react-router';
 import { createBrowserHistory } from 'history';
 import { applyMiddleware, createStore, Store } from 'redux';
 import { composeWithDevTools } from 'redux-devtools-extension';
 import { createLogger } from 'redux-logger';
+import { persistStore } from 'redux-persist';
 import createSagaMiddleware from 'redux-saga';
-
 import { Actions } from './actions';
+import './assets/fonts/roboto/index.scss';
+import './index.scss';
 import { rootReducers } from './reducers';
 import { rootSagas } from './sagas';
 import { State } from './state';
@@ -29,3 +28,5 @@ export const store: Store<State, Actions> = createStore<State, Actions, {}, {}>(
 );
 
 sagaMiddleware.run(rootSagas);
+
+export const persistor = persistStore(store);

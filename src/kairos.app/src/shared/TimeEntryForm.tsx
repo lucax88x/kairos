@@ -1,41 +1,18 @@
 import DateFnsUtils from '@date-io/date-fns';
-import {
-  Divider,
-  FormControl,
-  FormControlLabel,
-  Grid,
-  InputLabel,
-  makeStyles,
-  MenuItem,
-  Radio,
-  RadioGroup,
-  Select,
-  Typography,
-} from '@material-ui/core';
-import {
-  KeyboardDateTimePicker,
-  MaterialUiPickersDate,
-  MuiPickersUtilsProvider,
-} from '@material-ui/pickers';
+import { Trans } from '@lingui/macro';
+import { Divider, FormControl, FormControlLabel, Grid, InputLabel, makeStyles, MenuItem, Radio, RadioGroup, Select, Typography } from '@material-ui/core';
+import SaveIcon from '@material-ui/icons/Save';
+import { KeyboardDateTimePicker, MaterialUiPickersDate, MuiPickersUtilsProvider } from '@material-ui/pickers';
 import { map } from 'ramda';
 import React, { ChangeEvent, useCallback, useEffect } from 'react';
-import SaveIcon from '@material-ui/icons/Save';
 import { Link } from 'react-router-dom';
 import { isString } from '../code/is';
 import ButtonSpinner from '../components/ButtonSpinner';
 import { ProfileModel } from '../models/profile.model';
-import { TimeEntryModel, TimeEntryTypes } from '../models/time-entry.model';
+import { getTransFromType, TimeEntryModel, TimeEntryTypes } from '../models/time-entry.model';
 import { UUID } from '../models/uuid.model';
 import { Routes } from '../routes';
-import {
-  RefreshSelectsTimeEntryAction,
-  SetModel,
-  SetTimeEntrySelectedJobAction,
-  SetTimeEntrySelectedProjectAction,
-  SetTimeEntryTypeAction,
-  SetTimeEntryWhenAction,
-  useTimeEntryFormReducer,
-} from './TimeEntryForm.store';
+import { RefreshSelectsTimeEntryAction, SetModel, SetTimeEntrySelectedJobAction, SetTimeEntrySelectedProjectAction, SetTimeEntryTypeAction, SetTimeEntryWhenAction, useTimeEntryFormReducer } from './TimeEntryForm.store';
 
 const useStyles = makeStyles(theme => ({
   hasPadding: {
@@ -109,7 +86,14 @@ export const TimeEntryForm: React.FC<TimeEntryFormProps> = props => {
     return (
       <div className={classes.hasPadding}>
         <Typography color="inherit" noWrap>
-          You need to add at least one job to your <Link to={Routes.Profile}>Profile</Link>
+          <Trans>TimeEntryForm.YouNeedAtLeastOneJob</Trans>
+          <Trans
+            id="TimeEntryForm.Profile"
+            components={[<Link to={Routes.Profile}>Profile</Link>]}
+          />
+          <Trans>
+            See the <Link to="/more">description</Link> below.
+          </Trans>
         </Typography>
       </div>
     );
@@ -132,8 +116,16 @@ export const TimeEntryForm: React.FC<TimeEntryFormProps> = props => {
             value={type}
             onChange={handleTypeChange}
           >
-            <FormControlLabel value={TimeEntryTypes.IN} control={<Radio />} label="In" />
-            <FormControlLabel value={TimeEntryTypes.OUT} control={<Radio />} label="Out" />
+            <FormControlLabel
+              value={TimeEntryTypes.IN}
+              control={<Radio />}
+              label={<Trans>Values.TimeEntryTypes.In</Trans>}
+            />
+            <FormControlLabel
+              value={TimeEntryTypes.OUT}
+              control={<Radio />}
+              label={<Trans>Values.TimeEntryTypes.Out</Trans>}
+            />
           </RadioGroup>
         </FormControl>
         <MuiPickersUtilsProvider utils={DateFnsUtils}>
@@ -150,7 +142,9 @@ export const TimeEntryForm: React.FC<TimeEntryFormProps> = props => {
         </MuiPickersUtilsProvider>
         {jobs.length > 1 && (
           <FormControl fullWidth>
-            <InputLabel htmlFor="job">Job</InputLabel>
+            <InputLabel htmlFor="job">
+              <Trans>Labels.Job</Trans>
+            </InputLabel>
             <Select
               value={selectedJobId}
               onChange={handleJobChange}
@@ -170,7 +164,9 @@ export const TimeEntryForm: React.FC<TimeEntryFormProps> = props => {
           </FormControl>
         )}
         <FormControl fullWidth>
-          <InputLabel htmlFor="project">Project</InputLabel>
+          <InputLabel htmlFor="project">
+            <Trans>Labels.Project</Trans>
+          </InputLabel>
           <Select
             value={selectedProjectId}
             onChange={handleProjectChange}
@@ -203,7 +199,7 @@ export const TimeEntryForm: React.FC<TimeEntryFormProps> = props => {
           isBusy={isBusy}
           disabled={!when || !selectedJobId || !selectedProjectId || isBusy}
         >
-          {model.isEmpty() ? type : <SaveIcon />}
+          {model.isEmpty() ? getTransFromType(type) : <SaveIcon />}
         </ButtonSpinner>
       </Grid>
     </Grid>

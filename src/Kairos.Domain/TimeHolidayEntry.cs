@@ -7,8 +7,8 @@ namespace Kairos.Domain
 {
     public class TimeHolidayEntry : AggregateRoot
     {
-        public string User { get; private set; }
-        public string Description { get; private set; }
+        public string? User { get; private set; }
+        public string? Description { get; private set; }
         public DateTimeOffset When { get; private set; }
 
         protected override void Apply(Event @event)

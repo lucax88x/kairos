@@ -25,7 +25,7 @@ namespace Kairos.Application.TimeEntry.Dtos
             Project = project;
         }
 
-        public TimeEntryEventDto ToEventDto(string user = null)
+        public TimeEntryEventDto ToEventDto(string? user = null)
         {
             return new TimeEntryEventDto(
                 Id,

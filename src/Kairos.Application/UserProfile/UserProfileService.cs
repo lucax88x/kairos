@@ -10,7 +10,7 @@ using MediatR;
 namespace Kairos.Application.UserProfile
 {
     public class UserProfileService :
-        IRequestHandler<CreateOrUpdateUserProfile, string>
+        IRequestHandler<CreateOrUpdateUserProfile, string?>
     {
         private readonly IWriteRepository _writeRepository;
         private readonly IAuthProvider _authProvider;
@@ -23,7 +23,7 @@ namespace Kairos.Application.UserProfile
             _authProvider = authProvider;
         }
 
-        public async Task<string> Handle(CreateOrUpdateUserProfile request, CancellationToken cancellationToken)
+        public async Task<string?> Handle(CreateOrUpdateUserProfile request, CancellationToken cancellationToken)
         {
             var user = _authProvider.GetUser();
 

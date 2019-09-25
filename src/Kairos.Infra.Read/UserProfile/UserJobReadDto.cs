@@ -8,7 +8,7 @@ namespace Kairos.Infra.Read.UserProfile
 {
     public class UserJobReadDto
     {
-        public UserJobReadDto(Guid id, string name, DateTimeOffset start, DateTimeOffset? end, decimal holidaysPerYear,
+        public UserJobReadDto(Guid id, string? name, DateTimeOffset start, DateTimeOffset? end, decimal holidaysPerYear,
             decimal monday, decimal tuesday, decimal wednesday, decimal thursday, decimal friday, decimal saturday, decimal sunday, 
             IEnumerable<UserProjectReadDto> projects)
         {
@@ -28,7 +28,7 @@ namespace Kairos.Infra.Read.UserProfile
         }
 
         public Guid Id { get; }
-        public string Name { get; }
+        public string? Name { get; }
         public DateTimeOffset Start { get; }
         public DateTimeOffset? End { get; }
         public decimal HolidaysPerYear { get; }

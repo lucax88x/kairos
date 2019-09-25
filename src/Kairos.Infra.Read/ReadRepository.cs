@@ -40,7 +40,7 @@ namespace Kairos.Infra.Read
         Task SortedSetRemove(string key, Guid id, CommandFlags flags = CommandFlags.None);
         Task SortedSetRemove(string key, string id, CommandFlags flags = CommandFlags.None);
 
-        Task<ImmutableArray<string>> SortedSetRangeByScore(string key,
+        Task<ImmutableArray<string?>> SortedSetRangeByScore(string key,
             double start = double.NegativeInfinity,
             double stop = double.PositiveInfinity,
             Exclude exclude = Exclude.None,
@@ -170,7 +170,7 @@ namespace Kairos.Infra.Read
             await _database.SortedSetRemoveAsync(key, id, flags);
         }
 
-        public async Task<ImmutableArray<string>> SortedSetRangeByScore(string key,
+        public async Task<ImmutableArray<string?>> SortedSetRangeByScore(string key,
             double start = double.NegativeInfinity,
             double stop = double.PositiveInfinity,
             Exclude exclude = Exclude.None,

@@ -8,8 +8,8 @@ namespace Kairos.Domain
 {
     public class UserProfile : AggregateRoot
     {
-        public string User { get; private set; }
-        public ImmutableList<UserJob> Jobs { get; private set; }
+        public string? User { get; private set; }
+        public ImmutableList<UserJob>? Jobs { get; private set; }
 
         protected override void Apply(Event @event)
         {

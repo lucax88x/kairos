@@ -7,7 +7,7 @@ namespace Kairos.Application.TimeAbsenceEntry.Dtos
     public class TimeAbsenceEntryModel
     {
         public Guid Id { get; set; }
-        public string Description { get; set; }
+        public string? Description { get; set; }
         public DateTimeOffset Start { get; set; }
         public DateTimeOffset End { get; set; }
         public int Type { get; set; }
@@ -24,7 +24,7 @@ namespace Kairos.Application.TimeAbsenceEntry.Dtos
             Id = !id.HasValue || id.Value == Guid.Empty ? Guid.NewGuid() : id.Value;
         }
 
-        public TimeAbsenceEntryEventDto ToEventDto(string user = null)
+        public TimeAbsenceEntryEventDto ToEventDto(string? user = null)
         {
             return new TimeAbsenceEntryEventDto(Id,
                 user,

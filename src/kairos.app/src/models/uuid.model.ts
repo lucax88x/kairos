@@ -1,5 +1,5 @@
-import uuidv4 from 'uuid/v4';
 import { immerable } from 'immer';
+import uuidv4 from 'uuid/v4';
 
 export class UUID {
   [immerable] = true;

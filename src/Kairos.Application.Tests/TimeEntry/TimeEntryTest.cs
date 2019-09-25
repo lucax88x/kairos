@@ -35,11 +35,11 @@ namespace Kairos.Application.Tests.TimeEntry
                     Guid.NewGuid()));
 
             // WHEN           
-            Func<Task> action = async () => await _sandbox.Mediator.Send(command);
+            Func<Task> action = async () => await _sandbox.Mediator!.Send(command);
 
             // THEN
             await action.Should().ThrowAsync<ValidationException>();
-            _sandbox.Should.Mediator.Be("CreateTimeEntry");
+            _sandbox.Should!.Mediator!.Be("CreateTimeEntry");
         }
 
         [Fact]
@@ -52,35 +52,35 @@ namespace Kairos.Application.Tests.TimeEntry
                 UserProfileScenarioBuilder.Project1));
 
             // WHEN           
-            var ids = await _sandbox.Mediator.Send(command);
+            var ids = await _sandbox.Mediator!.Send(command);
 
             // THEN
-            _sandbox.Should.Mediator.Be("CreateTimeEntry -> TimeEntryAdded");
+            _sandbox.Should!.Mediator!.Be("CreateTimeEntry -> TimeEntryAdded");
 
             // TODO: check if event store has event
-//            await _sandbox.Should.Cassandra.Exists(id);
-            await _sandbox.Should.Redis.Exists.Set("time-entry", ids.First());
-            await _sandbox.Should.Redis.Exists.SortedSet("time-entry", "by-when", 1);
+//            await _sandbox.Should!.Cassandra.Exists(id);
+            await _sandbox.Should!.Redis!.Exists.Set("time-entry", ids.First());
+            await _sandbox.Should!.Redis!.Exists.SortedSet("time-entry", "by-when", 1);
         }
 
         [Fact]
         public async Task should_delete_time_entry()
         {
             // GIVEN
-            await _sandbox.Scenario.UserProfile.WithProfile();
+            await _sandbox.Scenario!.UserProfile.WithProfile();
             var existingId = await _sandbox.Scenario.TimeEntry.With("2019/01/01", TimeEntryType.In);
             _sandbox.ClearMediator();
 
             var command = new DeleteTimeEntry(existingId);
 
             // WHEN           
-            await _sandbox.Mediator.Send(command);
+            await _sandbox.Mediator!.Send(command);
 
             // THEN
-            _sandbox.Should.Mediator.Be("DeleteTimeEntry -> TimeEntryDeleted");
+            _sandbox.Should!.Mediator!.Be("DeleteTimeEntry -> TimeEntryDeleted");
 
-            await _sandbox.Should.Redis.NotExists.Set("time-entry", existingId);
-            await _sandbox.Should.Redis.NotExists.SortedSet("time-entry", "by-when");
+            await _sandbox.Should!.Redis!.NotExists.Set("time-entry", existingId);
+            await _sandbox.Should!.Redis!.NotExists.SortedSet("time-entry", "by-when");
         }
         
         [Fact(Skip = "TODO")]

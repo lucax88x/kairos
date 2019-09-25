@@ -1,3 +1,4 @@
+import { t, Trans } from '@lingui/macro';
 import { Fab, Grid, makeStyles, TextField, Typography } from '@material-ui/core';
 import CheckIcon from '@material-ui/icons/Check';
 import SaveIcon from '@material-ui/icons/Save';
@@ -10,6 +11,7 @@ import { formatAsDateTime } from '../code/constants';
 import { isString } from '../code/is';
 import FabButtonSpinner from '../components/FabButtonSpinner';
 import { VirtualizedTable } from '../components/VirtualizedTable';
+import { i18n } from '../i18nLoader';
 import { TimeAbsenceEntryModel, TimeAbsenceEntryTypes } from '../models/time-absence-entry.model';
 import { UUID } from '../models/uuid.model';
 
@@ -90,9 +92,11 @@ export const BulkTimeAbsenceEntryInsertComponent: React.FC<
           } else {
             invalidModels.push({
               description,
-              start: isStartValid ? start : 'Invalid Date',
-              end: isEndValid ? end : 'Invalid Date',
-              type: isTypeValid ? (type as TimeAbsenceEntryTypes) : 'Invalid Type',
+              start: isStartValid ? start : i18n._(t`Validation.InvalidDate`),
+              end: isEndValid ? end : i18n._(t`Validation.InvalidDate`),
+              type: isTypeValid
+                ? (type as TimeAbsenceEntryTypes)
+                : i18n._(t`Validation.InvalidType`),
             });
           }
         }
@@ -119,7 +123,7 @@ export const BulkTimeAbsenceEntryInsertComponent: React.FC<
     <Grid container spacing={2} direction="column" justify="center">
       <Grid item>
         <Typography component="h1" variant="h6" noWrap>
-          Bulk insert of Absences (CSV)
+          <Trans>BulkTimeAbsenceEntryInsert.Title</Trans>
         </Typography>
       </Grid>
       <Grid item>
@@ -145,7 +149,7 @@ export const BulkTimeAbsenceEntryInsertComponent: React.FC<
         <>
           <Grid item>
             <Typography component="h1" variant="h6" noWrap>
-              Valid Entries
+              <Trans>BulkTimeAbsenceEntryInsert.ValidEntries</Trans>
             </Typography>
           </Grid>
           <Grid item className={classes.scroll}>
@@ -156,24 +160,24 @@ export const BulkTimeAbsenceEntryInsertComponent: React.FC<
               columns={[
                 {
                   width: 100,
-                  label: 'Type',
+                  label: i18n._(t`BulkTimeAbsenceEntryInsert.TypeTableHeader`),
                   dataKey: 'type',
                 },
                 {
                   width: 200,
-                  label: 'Description',
+                  label: i18n._(t`BulkTimeAbsenceEntryInsert.DescriptionTableHeader`),
                   dataKey: 'description',
                 },
                 {
                   width: 200,
-                  label: 'Start',
+                  label: i18n._(t`BulkTimeAbsenceEntryInsert.StartTableHeader`),
                   dataKey: 'start',
                   flexGrow: 1,
                   formatter: dateFormatter,
                 },
                 {
                   width: 200,
-                  label: 'End',
+                  label: i18n._(t`BulkTimeAbsenceEntryInsert.EndTableHeader`),
                   dataKey: 'end',
                   flexGrow: 1,
                   formatter: dateFormatter,
@@ -187,7 +191,7 @@ export const BulkTimeAbsenceEntryInsertComponent: React.FC<
         <>
           <Grid item>
             <Typography component="h1" variant="h6" noWrap>
-              Invalid Entries
+              <Trans>BulkTimeAbsenceEntryInsert.InvalidEntries</Trans>
             </Typography>
           </Grid>
           <Grid item className={classes.scroll}>
@@ -198,24 +202,24 @@ export const BulkTimeAbsenceEntryInsertComponent: React.FC<
               columns={[
                 {
                   width: 100,
-                  label: 'Type',
+                  label: i18n._(t`BulkTimeAbsenceEntryInsert.TypeTableHeader`),
                   dataKey: 'type',
                 },
                 {
                   width: 200,
-                  label: 'Description',
+                  label: i18n._(t`BulkTimeAbsenceEntryInsert.DescriptionTableHeader`),
                   dataKey: 'description',
                 },
                 {
                   width: 200,
-                  label: 'Start',
+                  label: i18n._(t`BulkTimeAbsenceEntryInsert.StartTableHeader`),
                   dataKey: 'start',
                   flexGrow: 1,
                   formatter: dateFormatter,
                 },
                 {
                   width: 200,
-                  label: 'End',
+                  label: i18n._(t`BulkTimeAbsenceEntryInsert.EndTableHeader`),
                   dataKey: 'end',
                   flexGrow: 1,
                   formatter: dateFormatter,

@@ -7,7 +7,7 @@ namespace Kairos.Domain.Events.UserProfile.EventDtos
 {
     public class UserJobEventDto
     {
-        public UserJobEventDto(Guid id, string name, DateTimeOffset start, DateTimeOffset? end, decimal holidaysPerYear,
+        public UserJobEventDto(Guid id, string? name, DateTimeOffset start, DateTimeOffset? end, decimal holidaysPerYear,
             decimal monday, decimal tuesday, decimal wednesday, decimal thursday, decimal friday, decimal saturday,
             decimal sunday,
             IEnumerable<UserProjectEventDto> projects)
@@ -28,7 +28,7 @@ namespace Kairos.Domain.Events.UserProfile.EventDtos
         }
 
         public Guid Id { get; }
-        public string Name { get; }
+        public string? Name { get; }
         public DateTimeOffset Start { get; }
         public DateTimeOffset? End { get; }
         public decimal HolidaysPerYear { get; }

@@ -7,7 +7,7 @@ namespace Kairos.Domain
 {
     public class UserJob : Entity
     {
-        public UserJob(string name, DateTimeOffset start, DateTimeOffset? end, decimal holidaysPerYear, decimal monday,
+        public UserJob(string? name, DateTimeOffset start, DateTimeOffset? end, decimal holidaysPerYear, decimal monday,
             decimal tuesday, decimal wednesday, decimal thursday, decimal friday, decimal saturday, decimal sunday,
             IEnumerable<UserProject> projects)
         {
@@ -25,7 +25,7 @@ namespace Kairos.Domain
             Projects = projects.ToImmutableList();
         }
 
-        public string Name { get; }
+        public string? Name { get; }
         public DateTimeOffset Start { get; }
         public DateTimeOffset? End { get; }
         public decimal HolidaysPerYear { get; }

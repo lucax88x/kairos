@@ -1,3 +1,4 @@
+import { t, Trans } from '@lingui/macro';
 import { Fab, Grid, makeStyles, TextField, Typography } from '@material-ui/core';
 import CheckIcon from '@material-ui/icons/Check';
 import SaveIcon from '@material-ui/icons/Save';
@@ -7,13 +8,14 @@ import indexOf from 'ramda/es/indexOf';
 import React, { ChangeEvent, useCallback, useMemo, useState } from 'react';
 import { Index } from 'react-virtualized';
 import { formatAsDateTime } from '../code/constants';
+import { isString } from '../code/is';
 import FabButtonSpinner from '../components/FabButtonSpinner';
 import { VirtualizedTable } from '../components/VirtualizedTable';
+import { i18n } from '../i18nLoader';
 import { ProfileModel } from '../models/profile.model';
 import { ProjectModel } from '../models/project.model';
 import { TimeEntryModel, TimeEntryTypes } from '../models/time-entry.model';
 import { UUID } from '../models/uuid.model';
-import { isString } from '../code/is';
 
 interface TimeEntryInvalidModel {
   when: Date | string;
@@ -102,10 +104,10 @@ export const BulkTimeEntryInsertComponent: React.FC<BulkTimeEntryInsertProps> = 
             );
           } else {
             invalidModels.push({
-              when: isWhenValid ? when : 'Invalid Date',
-              type: isTypeValid ? (type as TimeEntryTypes) : 'Invalid Type',
-              job: isJobValid ? job.id : 'Invalid Job',
-              project: isProjectValid ? project.id : 'Invalid Project',
+              when: isWhenValid ? when : i18n._(t`Validation.InvalidDate`),
+              type: isTypeValid ? (type as TimeEntryTypes) : i18n._(t`Validation.InvalidType`),
+              job: isJobValid ? job.id : i18n._(t`Validation.InvalidJob`),
+              project: isProjectValid ? project.id : i18n._(t`Validation.InvalidProject`),
             });
           }
         }
@@ -150,7 +152,7 @@ export const BulkTimeEntryInsertComponent: React.FC<BulkTimeEntryInsertProps> = 
     <Grid container spacing={2} direction="column" justify="center">
       <Grid item>
         <Typography component="h1" variant="h6" noWrap>
-          Bulk insert of Time Entries (CSV)
+          <Trans>BulkTimeEntryInsert.Title</Trans>
         </Typography>
       </Grid>
       <Grid item>
@@ -176,7 +178,7 @@ export const BulkTimeEntryInsertComponent: React.FC<BulkTimeEntryInsertProps> = 
         <>
           <Grid item>
             <Typography component="h1" variant="h6" noWrap>
-              Valid Entries
+              <Trans>BulkTimeEntryInsert.ValidEntries</Trans>
             </Typography>
           </Grid>
           <Grid item className={classes.scroll}>
@@ -187,25 +189,25 @@ export const BulkTimeEntryInsertComponent: React.FC<BulkTimeEntryInsertProps> = 
               columns={[
                 {
                   width: 100,
-                  label: 'Type',
+                  label: i18n._(t`BulkTimeEntryInsert.TypeTableHeader`),
                   dataKey: 'type',
                 },
                 {
                   width: 200,
-                  label: 'When',
+                  label: i18n._(t`BulkTimeEntryInsert.WhenTableHeader`),
                   dataKey: 'when',
                   flexGrow: 1,
                   formatter: dateFormatter,
                 },
                 {
                   width: 200,
-                  label: 'Job',
+                  label: i18n._(t`BulkTimeEntryInsert.JobTableHeader`),
                   dataKey: 'job',
                   formatter: jobFormatter,
                 },
                 {
                   width: 200,
-                  label: 'Project',
+                  label: i18n._(t`BulkTimeEntryInsert.ProjectTableHeader`),
                   dataKey: 'project',
                   formatter: projectFormatter,
                 },
@@ -218,7 +220,7 @@ export const BulkTimeEntryInsertComponent: React.FC<BulkTimeEntryInsertProps> = 
         <>
           <Grid item>
             <Typography component="h1" variant="h6" noWrap>
-              Invalid Entries
+              <Trans>BulkTimeEntryInsert.InvalidEntries</Trans>
             </Typography>
           </Grid>
           <Grid item className={classes.scroll}>
@@ -229,25 +231,25 @@ export const BulkTimeEntryInsertComponent: React.FC<BulkTimeEntryInsertProps> = 
               columns={[
                 {
                   width: 100,
-                  label: 'Type',
+                  label: i18n._(t`BulkTimeEntryInsert.TypeTableHeader`),
                   dataKey: 'type',
                 },
                 {
                   width: 200,
-                  label: 'When',
+                  label: i18n._(t`BulkTimeEntryInsert.WhenTableHeader`),
                   dataKey: 'when',
                   flexGrow: 1,
                   formatter: dateFormatter,
                 },
                 {
                   width: 200,
-                  label: 'Job',
+                  label: i18n._(t`BulkTimeEntryInsert.JobTableHeader`),
                   dataKey: 'job',
                   formatter: jobFormatter,
                 },
                 {
                   width: 200,
-                  label: 'Project',
+                  label: i18n._(t`BulkTimeEntryInsert.ProjectTableHeader`),
                   dataKey: 'project',
                   formatter: projectFormatter,
                 },

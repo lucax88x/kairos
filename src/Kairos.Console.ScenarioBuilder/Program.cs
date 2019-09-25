@@ -10,7 +10,7 @@ namespace Kairos.Console.ScenarioBuilder
 {
     class Program
     {
-        private static IConfigurationRoot _configuration;
+        private static IConfigurationRoot? _configuration;
 
         private static async Task<int> Main()
         {
@@ -31,7 +31,7 @@ namespace Kairos.Console.ScenarioBuilder
                             .Build();
                     })
                     .ConfigureContainer((ContainerBuilder builder) =>
-                        builder.RegisterModule(new Ioc.Module(_configuration))
+                        builder.RegisterModule(new Ioc.Module(_configuration!))
                     )
                     .ConfigureServices((_, services) => { services.AddAutofac(); });
 

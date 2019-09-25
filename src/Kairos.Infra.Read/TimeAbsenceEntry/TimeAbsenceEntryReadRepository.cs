@@ -9,7 +9,7 @@ namespace Kairos.Infra.Read.TimeAbsenceEntry
     public interface ITimeAbsenceEntryReadRepository
     {
         Task AddOrUpdate(TimeAbsenceEntryEventDto timeAbsenceEntry);
-        Task Delete(Guid id, string user);
+        Task Delete(Guid id, string? user);
         Task<ImmutableArray<TimeAbsenceEntryReadDto>> Get(string user, int year);
         Task<TimeAbsenceEntryReadDto> GetById(Guid id);
     }
@@ -33,7 +33,7 @@ namespace Kairos.Infra.Read.TimeAbsenceEntry
                 timeAbsenceEntry.Id);
         }
 
-        public async Task Delete(Guid id, string user)
+        public async Task Delete(Guid id, string? user)
         {
             await _repository.SetRemove(id);
             await _repository.SortedSetRemove($"by-when|by-user|{user}", id);

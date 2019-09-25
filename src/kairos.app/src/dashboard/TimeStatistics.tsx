@@ -1,3 +1,4 @@
+import { Trans } from '@lingui/macro';
 import {
   ExpansionPanel,
   ExpansionPanelDetails,
@@ -9,14 +10,11 @@ import {
   Typography,
 } from '@material-ui/core';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
-import { map } from 'ramda';
 import React, { memo, useCallback, useMemo } from 'react';
+import { mapIndexed } from '../code/ramda.curried';
+import { Themes } from '../code/variables';
 import Spinner from '../components/Spinner';
 import { TimeEntryListModel } from '../models/time-entry-list.model';
-import { Themes } from '../code/variables';
-import { mapIndexed } from '../code/ramda.curried';
-import { styles } from '@material-ui/pickers/views/Clock/Clock';
-import { UUID } from '../models/uuid.model';
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -119,9 +117,11 @@ export const TimeStatisticsComponent: React.FC<TimeStatisticsProps> = memo(props
       <div className={classes.root}>
         <ExpansionPanel>
           <ExpansionPanelSummary expandIcon={<ExpandMoreIcon />}>
-            <Typography className={classes.heading}>Working hours</Typography>
+            <Typography className={classes.heading}>
+              <Trans>TimeStatistics.WorkingHours.Title</Trans>
+            </Typography>
             <Typography className={classes.secondaryHeading}>
-              statistics regarding working hours
+              <Trans>TimeStatistics.WorkingHours.SecondaryTitle</Trans>
             </Typography>
           </ExpansionPanelSummary>
           <ExpansionPanelDetails>
@@ -132,9 +132,11 @@ export const TimeStatisticsComponent: React.FC<TimeStatisticsProps> = memo(props
         </ExpansionPanel>
         <ExpansionPanel>
           <ExpansionPanelSummary expandIcon={<ExpandMoreIcon />}>
-            <Typography className={classes.heading}>Vacations</Typography>
+            <Typography className={classes.heading}>
+              <Trans>TimeStatistics.Vacations.Title</Trans>
+            </Typography>
             <Typography className={classes.secondaryHeading}>
-              statistics regarding vacation days
+              <Trans>TimeStatistics.Vacations.SubTitle</Trans>
             </Typography>
           </ExpansionPanelSummary>
           <ExpansionPanelDetails>
@@ -145,9 +147,11 @@ export const TimeStatisticsComponent: React.FC<TimeStatisticsProps> = memo(props
         </ExpansionPanel>
         <ExpansionPanel>
           <ExpansionPanelSummary expandIcon={<ExpandMoreIcon />}>
-            <Typography className={classes.heading}>Illness</Typography>
+            <Typography className={classes.heading}>
+              <Trans>TimeStatistics.Illness.Title</Trans>
+            </Typography>
             <Typography className={classes.secondaryHeading}>
-              statistics regarding illness days
+              <Trans>TimeStatistics.Illness.SubTitle</Trans>
             </Typography>
           </ExpansionPanelSummary>
           <ExpansionPanelDetails>

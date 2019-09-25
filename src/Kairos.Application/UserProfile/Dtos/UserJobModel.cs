@@ -32,7 +32,7 @@ namespace Kairos.Application.UserProfile.Dtos
         }
 
         public Guid Id { get; set; }
-        public string Name { get; set; }
+        public string? Name { get; set; }
         public DateTimeOffset Start { get; set; }
         public DateTimeOffset? End { get; set; }
         public decimal HolidaysPerYear { get; set; }
@@ -43,7 +43,7 @@ namespace Kairos.Application.UserProfile.Dtos
         public decimal Friday { get; set; }
         public decimal Saturday { get; set; }
         public decimal Sunday { get; set; }
-        public IEnumerable<UserProjectModel> Projects { get; set; }
+        public IEnumerable<UserProjectModel>? Projects { get; set; }
 
         public static UserJobEventDto To(UserJobModel model)
         {

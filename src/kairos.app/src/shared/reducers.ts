@@ -11,6 +11,7 @@ import { getTimeAbsenceEntriesReducer } from './get-time-absence-entries';
 import { getTimeEntriesReducer } from './get-time-entries';
 import { getTimeHolidayEntriesReducer } from './get-time-holiday-entries';
 import { selectYearReducer } from './select-year';
+import { selectLanguageReducer } from './select-language';
 import { sharedInitialState, SharedState } from './state';
 import { updateTimeHolidayEntriesByCountryReducer } from './update-time-holiday-entries-by-country';
 
@@ -26,6 +27,7 @@ const reducers = [
   createTimeHolidayEntryReducer,
   deleteTimeHolidayEntryReducer,
   selectYearReducer,
+  selectLanguageReducer,
   updateTimeHolidayEntriesByCountryReducer,
 ];
 

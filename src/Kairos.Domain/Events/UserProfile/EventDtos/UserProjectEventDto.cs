@@ -4,7 +4,7 @@ namespace Kairos.Domain.Events.UserProfile.EventDtos
 {
     public class UserProjectEventDto
     {
-        public UserProjectEventDto(Guid id, string name, DateTimeOffset start, DateTimeOffset? end, int allocation)
+        public UserProjectEventDto(Guid id, string? name, DateTimeOffset start, DateTimeOffset? end, int allocation)
         {
             Id = id;
             Name = name;
@@ -14,7 +14,7 @@ namespace Kairos.Domain.Events.UserProfile.EventDtos
         }
 
         public Guid Id { get; }
-        public string Name { get; }
+        public string? Name { get; }
         public DateTimeOffset Start { get; }
         public DateTimeOffset? End { get; }
         public int Allocation { get; }

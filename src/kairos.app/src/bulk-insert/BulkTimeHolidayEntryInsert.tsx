@@ -1,3 +1,4 @@
+import { t, Trans } from '@lingui/macro';
 import { Fab, Grid, makeStyles, TextField, Typography } from '@material-ui/core';
 import CheckIcon from '@material-ui/icons/Check';
 import SaveIcon from '@material-ui/icons/Save';
@@ -9,6 +10,7 @@ import { formatAsDateTime } from '../code/constants';
 import { isString } from '../code/is';
 import FabButtonSpinner from '../components/FabButtonSpinner';
 import { VirtualizedTable } from '../components/VirtualizedTable';
+import { i18n } from '../i18nLoader';
 import { TimeHolidayEntryModel } from '../models/time-holiday-entry.model';
 import { UUID } from '../models/uuid.model';
 
@@ -74,7 +76,7 @@ export const BulkTimeHolidayEntryInsertComponent: React.FC<
           } else {
             invalidModels.push({
               description,
-              when: isWhenValid ? when : 'Invalid Date',
+              when: isWhenValid ? when : i18n._(t`Validation.InvalidDate`),
             });
           }
         }
@@ -127,7 +129,7 @@ export const BulkTimeHolidayEntryInsertComponent: React.FC<
         <>
           <Grid item>
             <Typography component="h1" variant="h6" noWrap>
-              Valid Entries
+              <Trans>BulkTimeHolidayEntryInsert.ValidEntries</Trans>
             </Typography>
           </Grid>
           <Grid item className={classes.scroll}>
@@ -138,17 +140,17 @@ export const BulkTimeHolidayEntryInsertComponent: React.FC<
               columns={[
                 {
                   width: 100,
-                  label: 'Type',
+                  label: i18n._(t`BulkTimeHolidayEntryInsert.TypeTableHeader`),
                   dataKey: 'type',
                 },
                 {
                   width: 200,
-                  label: 'Description',
+                  label: i18n._(t`BulkTimeHolidayEntryInsert.DescriptionTableHeader`),
                   dataKey: 'description',
                 },
                 {
                   width: 200,
-                  label: 'When',
+                  label: i18n._(t`BulkTimeHolidayEntryInsert.WhenTableHeader`),
                   dataKey: 'When',
                   flexGrow: 1,
                   formatter: dateFormatter,
@@ -162,7 +164,7 @@ export const BulkTimeHolidayEntryInsertComponent: React.FC<
         <>
           <Grid item>
             <Typography component="h1" variant="h6" noWrap>
-              Invalid Entries
+              <Trans>BulkTimeHolidayEntryInsert.InvalidEntries</Trans>
             </Typography>
           </Grid>
           <Grid item className={classes.scroll}>
@@ -173,17 +175,17 @@ export const BulkTimeHolidayEntryInsertComponent: React.FC<
               columns={[
                 {
                   width: 100,
-                  label: 'Type',
+                  label: i18n._(t`BulkTimeHolidayEntryInsert.TypeTableHeader`),
                   dataKey: 'type',
                 },
                 {
                   width: 200,
-                  label: 'Description',
+                  label: i18n._(t`BulkTimeHolidayEntryInsert.DescriptionTableHeader`),
                   dataKey: 'description',
                 },
                 {
                   width: 200,
-                  label: 'When',
+                  label: i18n._(t`BulkTimeHolidayEntryInsert.WhenTableHeader`),
                   dataKey: 'When',
                   flexGrow: 1,
                   formatter: dateFormatter,

@@ -1,0 +1,50 @@
+{
+  "TimeStatistics.WorkingHours.Title": {
+    "origin": [
+      [
+        "src/dashboard/TimeStatistics.tsx",
+        67
+      ]
+    ]
+  },
+  "TimeStatistics.WorkingHours.SecondaryTitle": {
+    "origin": [
+      [
+        "src/dashboard/TimeStatistics.tsx",
+        70
+      ]
+    ]
+  },
+  "TimeStatistics.Vacations.Title": {
+    "origin": [
+      [
+        "src/dashboard/TimeStatistics.tsx",
+        82
+      ]
+    ]
+  },
+  "TimeStatistics.Vacations.SubTitle": {
+    "origin": [
+      [
+        "src/dashboard/TimeStatistics.tsx",
+        85
+      ]
+    ]
+  },
+  "TimeStatistics.Illness.Title": {
+    "origin": [
+      [
+        "src/dashboard/TimeStatistics.tsx",
+        97
+      ]
+    ]
+  },
+  "TimeStatistics.Illness.SubTitle": {
+    "origin": [
+      [
+        "src/dashboard/TimeStatistics.tsx",
+        100
+      ]
+    ]
+  }
+}

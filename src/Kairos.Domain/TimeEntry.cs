@@ -13,7 +13,7 @@ namespace Kairos.Domain
 
     public class TimeEntry : AggregateRoot
     {
-        public string User { get; private set; }
+        public string? User { get; private set; }
         public DateTimeOffset When { get; private set; }
         public TimeEntryType Type { get; private set; }
         public Guid Job { get; private set; }

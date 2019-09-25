@@ -1,4 +1,5 @@
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Hosting;
 
@@ -7,9 +8,9 @@ namespace Kairos.Web.Api.Filters
     public class GraphQlAuthMiddleware
     {
         private readonly RequestDelegate _next;
-        private readonly IHostingEnvironment _environment;
+        private readonly IWebHostEnvironment _environment;
 
-        public GraphQlAuthMiddleware(RequestDelegate next, IHostingEnvironment environment)
+        public GraphQlAuthMiddleware(RequestDelegate next, IWebHostEnvironment environment)
         {
             _next = next;
             _environment = environment;

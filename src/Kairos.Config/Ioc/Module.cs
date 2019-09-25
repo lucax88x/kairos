@@ -22,20 +22,15 @@ namespace Kairos.Config.Ioc
             if (_options.HasWriteRepository)
             {
                 builder.RegisterInstance(
-                        new WriteRepositoryConfig
-                        {
-                            ConnectionString = GetValueOrThrow("WriteRepository:ConnectionString")
-                        })
+                        new WriteRepositoryConfig(GetValueOrThrow("WriteRepository:ConnectionString")))
                     .SingleInstance();
             }
 
             if (_options.HasReadRepository)
             {
-                builder.RegisterInstance(new ReadRepositoryConfig
-                    {
-                        Database = int.Parse(GetValueOrThrow("ReadRepository:Database")),
-                        Endpoints = GetValuesOrThrow("ReadRepository:Endpoints").ToList()
-                    })
+                builder.RegisterInstance(new ReadRepositoryConfig(
+                        int.Parse(GetValueOrThrow("ReadRepository:Database")),
+                        GetValuesOrThrow("ReadRepository:Endpoints").ToList()))
                     .SingleInstance();
             }
         }

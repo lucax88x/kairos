@@ -16,7 +16,7 @@ namespace Kairos.Infra.Read
 
     public class ReadConnectionFactory : IReadConnectionFactory
     {
-        private IConnectionMultiplexer _connection;
+        private IConnectionMultiplexer? _connection;
         private readonly ReadRepositoryConfig _readRepositoryConfig;
 
         public int Database => _readRepositoryConfig.Database;

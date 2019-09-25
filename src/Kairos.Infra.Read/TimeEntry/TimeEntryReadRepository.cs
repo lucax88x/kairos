@@ -11,7 +11,7 @@ namespace Kairos.Infra.Read.TimeEntry
     public interface ITimeEntryReadRepository
     {
         Task AddOrUpdate(TimeEntryEventDto timeEntry);
-        Task Delete(Guid id, string user);
+        Task Delete(Guid id, string? user);
         Task<ImmutableList<TimeEntryAggregationReadDto>> Get(string user, int year);
         Task<TimeEntryAggregationReadDto> GetById(Guid id);
     }
@@ -37,7 +37,7 @@ namespace Kairos.Infra.Read.TimeEntry
             await _repository.SortedSetAdd($"by-when|by-user|{timeEntry.User}", dto.When.UtcTicks, timeEntry.Id);
         }
 
-        public async Task Delete(Guid id, string user)
+        public async Task Delete(Guid id, string? user)
         {
             await _repository.SetRemove(id);
             await _repository.SortedSetRemove($"by-when|by-user|{user}", id);

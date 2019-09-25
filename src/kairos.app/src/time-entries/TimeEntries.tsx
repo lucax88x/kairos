@@ -1,3 +1,4 @@
+import { t, Trans } from '@lingui/macro';
 import { Button, IconButton, makeStyles, Typography } from '@material-ui/core';
 import CreateIcon from '@material-ui/icons/Create';
 import DeleteIcon from '@material-ui/icons/Delete';
@@ -7,11 +8,13 @@ import { Index } from 'react-virtualized';
 import { formatAsDateTime } from '../code/constants';
 import Spinner from '../components/Spinner';
 import { VirtualizedTable } from '../components/VirtualizedTable';
+import { i18n } from '../i18nLoader';
 import {
   TimeEntryListJobModel,
   TimeEntryListModel,
   TimeEntryListProjectModel,
 } from '../models/time-entry-list.model';
+import { getTextFromType, TimeEntryTypes } from '../models/time-entry.model';
 
 const useStyles = makeStyles(theme => ({
   container: {
@@ -50,10 +53,12 @@ export const TimeEntriesComponent: React.FC<TimeEntriesProps> = props => {
   const handleUpdate = useCallback((model: TimeEntryListModel) => onUpdate(model), [onUpdate]);
   const handleDelete = useCallback((model: TimeEntryListModel) => onDelete(model), [onDelete]);
 
-  const noRowsRenderer = useCallback(() => <p>{isGetTimeEntriesBusy ? '' : 'No time entries'}</p>, [
-    isGetTimeEntriesBusy,
-  ]);
+  const noRowsRenderer = useCallback(
+    () => <p>{isGetTimeEntriesBusy ? '' : <Trans>TimeEntries.NoItems</Trans>}</p>,
+    [isGetTimeEntriesBusy],
+  );
   const rowGetter = useCallback(({ index }: Index) => timeEntries[index], [timeEntries]);
+  const typeFormatter = useCallback((type: TimeEntryTypes) => getTextFromType(type), []);
   const dateFormatter = useCallback((data: Date) => format(data, formatAsDateTime), []);
   const jobFormatter = useCallback((job: TimeEntryListJobModel) => job.name, []);
   const projectFormatter = useCallback((project: TimeEntryListProjectModel) => project.name, []);
@@ -77,7 +82,7 @@ export const TimeEntriesComponent: React.FC<TimeEntriesProps> = props => {
   return (
     <Spinner show={isGetTimeEntriesBusy || isDeleteTimeEntryBusy}>
       <Typography component="h2" variant="h6" gutterBottom>
-        Time Entries
+        <Trans>TimeEntries.Title</Trans>
       </Typography>
       <div className={classes.container}>
         <VirtualizedTable
@@ -87,25 +92,26 @@ export const TimeEntriesComponent: React.FC<TimeEntriesProps> = props => {
           columns={[
             {
               width: 100,
-              label: 'Type',
+              label: i18n._(t`TimeEntries.TypeTableHeader`),
               dataKey: 'type',
+              formatter: typeFormatter,
             },
             {
               width: 200,
-              label: 'When',
+              label: i18n._(t`TimeEntries.WhenTableHeader`),
               dataKey: 'when',
               flexGrow: 1,
               formatter: dateFormatter,
             },
             {
               width: 200,
-              label: 'Job',
+              label: i18n._(t`TimeEntries.JobTableHeader`),
               dataKey: 'job',
               formatter: jobFormatter,
             },
             {
               width: 200,
-              label: 'Project',
+              label: i18n._(t`TimeEntries.ProjectTableHeader`),
               dataKey: 'project',
               formatter: projectFormatter,
             },
@@ -125,7 +131,7 @@ export const TimeEntriesComponent: React.FC<TimeEntriesProps> = props => {
         />
       </div>
       <Button variant="contained" color="primary" onClick={onCreate}>
-        Create
+        <Trans>Buttons.Create</Trans>
       </Button>
     </Spinner>
   );

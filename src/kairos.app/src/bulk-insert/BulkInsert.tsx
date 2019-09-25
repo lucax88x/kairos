@@ -6,6 +6,8 @@ import React, { useCallback, useState } from 'react';
 import { BulkTimeAbsenceEntryInsert } from './BulkTimeAbsenceEntryInsert.container';
 import { BulkTimeEntryInsert } from './BulkTimeEntryInsert.container';
 import { BulkTimeHolidayEntryInsert } from './BulkTimeHolidayEntryInsert.container';
+import { i18n } from '../i18nLoader';
+import { t } from '@lingui/macro';
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -27,9 +29,9 @@ export const BulkInsert: React.FC = props => {
   return (
     <div className={classes.root}>
       <Tabs value={tab} onChange={handleChangeTab} centered>
-        <Tab label="Time Entries" icon={<TimerIcon />} />
-        <Tab label="Absences" icon={<WeekendIcon />} />
-        <Tab label="Holidays" icon={<BeachAccessIcon />} />
+        <Tab label={i18n._(t`BulkInsert.TimeEntryTabHeader`)} icon={<TimerIcon />} />
+        <Tab label={i18n._(t`BulkInsert.TimeAbsenceEntryTabHeader`)} icon={<WeekendIcon />} />
+        <Tab label={i18n._(t`BulkInsert.TimeHolidayEntryTabHeader`)} icon={<BeachAccessIcon />} />
       </Tabs>
       <div className={classes.tabContent}>
         {tab === 0 && <BulkTimeEntryInsert />}

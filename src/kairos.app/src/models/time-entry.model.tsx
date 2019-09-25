@@ -1,9 +1,10 @@
+import { t, Trans } from '@lingui/macro';
 import { parseISO } from 'date-fns';
-
-import { UUID } from './uuid.model';
 import { immerable } from 'immer';
-import { JobModel, JobOutModel } from './job.model';
+import { i18n } from '../i18nLoader';
+import { JobOutModel } from './job.model';
 import { ProjectOutModel } from './project.model';
+import { UUID } from './uuid.model';
 
 export enum TimeEntryTypes {
   IN = 'IN',
@@ -12,7 +13,7 @@ export enum TimeEntryTypes {
 
 export class TimeEntryModel {
   [immerable] = true;
-  
+
   constructor(
     public id = UUID.Generate(),
     public when = new Date(),
@@ -49,4 +50,24 @@ export interface TimeEntryOutModel {
   type: TimeEntryTypes;
   job: Partial<JobOutModel>;
   project: Partial<ProjectOutModel>;
+}
+
+export function getTextFromType(type: TimeEntryTypes) {
+  switch (type) {
+    case TimeEntryTypes.IN:
+      return i18n._(t`Values.TimeEntryTypes.In`);
+    default:
+    case TimeEntryTypes.OUT:
+      return i18n._(t`Values.TimeEntryTypes.Out`);
+  }
+}
+
+export function getTransFromType(type: TimeEntryTypes) {
+  switch (type) {
+    case TimeEntryTypes.IN:
+      return <Trans>Values.TimeEntryTypes.In</Trans>;
+    default:
+    case TimeEntryTypes.OUT:
+      return <Trans>Values.TimeEntryTypes.Out</Trans>;
+  }
 }

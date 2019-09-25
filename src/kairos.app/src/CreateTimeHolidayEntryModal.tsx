@@ -1,3 +1,4 @@
+import { Trans } from '@lingui/macro';
 import { Dialog, DialogContent, DialogTitle } from '@material-ui/core';
 import React from 'react';
 import { TimeHolidayEntryModel } from './models/time-holiday-entry.model';
@@ -22,7 +23,9 @@ export const CreateTimeHolidayEntryModalComponent: React.FC<
   const { isBusy, isOpen, onCreate, onClose } = props;
   return (
     <Dialog open={isOpen} onClose={onClose} aria-labelledby="form-dialog-title">
-      <DialogTitle id="form-dialog-title">Create Holiday</DialogTitle>
+      <DialogTitle id="form-dialog-title">
+        <Trans>CreateTimeHolidayEntry.ModalTitle</Trans>
+      </DialogTitle>
       <DialogContent>
         <TimeHolidayEntryForm
           isBusy={isBusy}

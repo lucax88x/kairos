@@ -19,7 +19,7 @@ namespace Kairos.Application.UserProfile.Dtos
         }
 
         public Guid Id { get; set; }
-        public string Name { get; set; }
+        public string? Name { get; set; }
         public DateTimeOffset Start { get; set; }
         public DateTimeOffset? End { get; set; }
         public int Allocation { get; set; }

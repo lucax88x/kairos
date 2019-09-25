@@ -1,7 +1,6 @@
+- language
 - docker-compose
 - select all in grids
-- update
 - click on calendar goes to edit
 - statistics & dashboard
-- language
 - update holiday from country UTF8

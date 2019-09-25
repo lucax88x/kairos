@@ -1,14 +1,15 @@
+import { t, Trans } from '@lingui/macro';
 import { Button, IconButton, makeStyles, Typography } from '@material-ui/core';
 import CreateIcon from '@material-ui/icons/Create';
 import DeleteIcon from '@material-ui/icons/Delete';
 import { format } from 'date-fns';
 import React, { useCallback } from 'react';
 import { Index } from 'react-virtualized';
-
 import { formatAsDateTime } from '../code/constants';
 import Spinner from '../components/Spinner';
 import { VirtualizedTable } from '../components/VirtualizedTable';
-import { TimeAbsenceEntryModel } from '../models/time-absence-entry.model';
+import { i18n } from '../i18nLoader';
+import { getTextFromType, TimeAbsenceEntryModel, TimeAbsenceEntryTypes } from '../models/time-absence-entry.model';
 
 const useStyles = makeStyles(theme => ({
   container: {
@@ -48,16 +49,21 @@ export const TimeAbsenceEntriesComponent: React.FC<TimeAbsenceEntriesProps> = pr
   const handleDelete = useCallback((model: TimeAbsenceEntryModel) => onDelete(model), [onDelete]);
 
   const noRowsRenderer = useCallback(
-    () => <p>{isGetTimeAbsenceEntriesBusy ? '' : 'No absences'}</p>,
+    () => <p>{isGetTimeAbsenceEntriesBusy ? '' : <Trans>TimeAbsenceEntries.NoItems</Trans>}</p>,
     [isGetTimeAbsenceEntriesBusy],
   );
   const rowGetter = useCallback(({ index }: Index) => timeAbsenceEntries[index], [
     timeAbsenceEntries,
   ]);
+  const typeFormatter = useCallback((type: TimeAbsenceEntryTypes) => getTextFromType(type), []);
   const dateFormatter = useCallback((data: Date) => format(data, formatAsDateTime), []);
   const updateCellRenderer = useCallback(
     model => (
-      <IconButton color="inherit" aria-label="Update entry" onClick={() => handleUpdate(model)}>
+      <IconButton
+        color="inherit"
+        aria-label={i18n._(t`TimeAbsenceEnties.UpdateTimeAbsenceEntryButton`)}
+        onClick={() => handleUpdate(model)}
+      >
         <CreateIcon />
       </IconButton>
     ),
@@ -65,7 +71,11 @@ export const TimeAbsenceEntriesComponent: React.FC<TimeAbsenceEntriesProps> = pr
   );
   const deleteCellRenderer = useCallback(
     model => (
-      <IconButton color="inherit" aria-label="Delete entry" onClick={() => handleDelete(model)}>
+      <IconButton
+        color="inherit"
+        aria-label={i18n._(t`TimeAbsenceEnties.DeleteTimeAbsenceEntryButton`)}
+        onClick={() => handleDelete(model)}
+      >
         <DeleteIcon />
       </IconButton>
     ),
@@ -75,7 +85,7 @@ export const TimeAbsenceEntriesComponent: React.FC<TimeAbsenceEntriesProps> = pr
   return (
     <Spinner show={isGetTimeAbsenceEntriesBusy || isDeleteTimeAbsenceEntryBusy}>
       <Typography component="h2" variant="h6" gutterBottom>
-        Absences
+        <Trans>TimeAbsenceEntries.Title</Trans>
       </Typography>
       <div className={classes.container}>
         <VirtualizedTable
@@ -85,26 +95,27 @@ export const TimeAbsenceEntriesComponent: React.FC<TimeAbsenceEntriesProps> = pr
           columns={[
             {
               width: 100,
-              label: 'Type',
+              label: i18n._(t`TimeAbsenceEntries.TypeTableHeader`),
               dataKey: 'type',
+              formatter: typeFormatter,
             },
             {
               width: 200,
-              label: 'Start',
+              label: i18n._(t`TimeAbsenceEntries.StartTableHeader`),
               dataKey: 'start',
               flexGrow: 1,
               formatter: dateFormatter,
             },
             {
               width: 200,
-              label: 'end',
+              label: i18n._(t`TimeAbsenceEntries.EndTableHeader`),
               dataKey: 'end',
               flexGrow: 1,
               formatter: dateFormatter,
             },
             {
               width: 200,
-              label: 'Description',
+              label: i18n._(t`TimeAbsenceEntries.DescriptionTableHeader`),
               dataKey: 'description',
             },
             {
@@ -123,7 +134,7 @@ export const TimeAbsenceEntriesComponent: React.FC<TimeAbsenceEntriesProps> = pr
         />
       </div>
       <Button variant="contained" color="primary" onClick={onCreate}>
-        Create
+        <Trans>Buttons.Create</Trans>
       </Button>
     </Spinner>
   );

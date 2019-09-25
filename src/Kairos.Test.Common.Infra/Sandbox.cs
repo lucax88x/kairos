@@ -17,14 +17,14 @@ namespace Kairos.Test.Common.Infra
     public class Sandbox : IDisposable
     {
         private readonly IContainer _container;
-        private MediatorSniffer _mediatorSniffer;
+        private MediatorSniffer? _mediatorSniffer;
         private readonly SandboxOptions _sandboxOptions;
 
-        public FluentSandboxAssertion Should { get; private set; }
-        public IMediator Mediator { get; private set; }
-        public ScenarioBuilder Scenario { get; private set; }
-        public ModelBuilder Model { get; private set; }
-        public IReadConnectionFactory ReadConnectionFactory { get; private set; }
+        public FluentSandboxAssertion? Should { get; private set; }
+        public IMediator? Mediator { get; private set; }
+        public ScenarioBuilder? Scenario { get; private set; }
+        public ModelBuilder? Model { get; private set; }
+        public IReadConnectionFactory? ReadConnectionFactory { get; private set; }
 
         public Sandbox(SandboxOptions sandboxOptions, params Module[] modules)
         {
@@ -60,7 +60,7 @@ namespace Kairos.Test.Common.Infra
 
         public void ClearMediator()
         {
-            _mediatorSniffer.Clear();
+            _mediatorSniffer?.Clear();
         }
 
         public void Dispose()
@@ -180,7 +180,7 @@ namespace Kairos.Test.Common.Infra
         {
             if (_sandboxOptions.SetupRedis)
             {
-                ReadConnectionFactory.FlushDatabase(5);
+                ReadConnectionFactory?.FlushDatabase(5);
             }
         }
     }

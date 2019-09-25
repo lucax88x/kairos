@@ -1,7 +1,6 @@
 using System;
 using System.Collections.Generic;
 using System.Collections.Immutable;
-using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -14,8 +13,8 @@ namespace Kairos.Infra.Write
 {
     public interface IWriteRepository
     {
-        Task<ImmutableList<Event>> Save<T>(Func<T, string> keyTaker, params T[] aggregates) where T : AggregateRoot;
-        Task<T> GetOrDefault<T>(string key) where T : AggregateRoot, new();
+        Task<ImmutableList<Event>> Save<T>(Func<T, string?> keyTaker, params T[] aggregates) where T : AggregateRoot;
+        Task<T?> GetOrDefault<T>(string key) where T : AggregateRoot, new();
         Task<bool> Exists<T>(string key) where T : AggregateRoot;
     }
 
@@ -34,7 +33,7 @@ namespace Kairos.Infra.Write
         }
 
 
-        public async Task<ImmutableList<Event>> Save<T>(Func<T, string> keyTaker, params T[] aggregates)
+        public async Task<ImmutableList<Event>> Save<T>(Func<T, string?> keyTaker, params T[] aggregates)
             where T : AggregateRoot
         {
             try
@@ -79,7 +78,7 @@ namespace Kairos.Infra.Write
             return slice.Status != SliceReadStatus.StreamNotFound;
         }
 
-        public async Task<T> GetOrDefault<T>(string key) where T : AggregateRoot, new()
+        public async Task<T?> GetOrDefault<T>(string key) where T : AggregateRoot, new()
         {
             var connection = await _writeConnectionFactory.GetConnection();
             var streamEvents = new List<ResolvedEvent>();
@@ -100,7 +99,7 @@ namespace Kairos.Infra.Write
 
             if (!streamEvents.Any())
             {
-                return null;
+                return default;
             }
 
             var events = ToEvents(streamEvents);
@@ -113,8 +112,13 @@ namespace Kairos.Infra.Write
             return aggregateRoot;
         }
 
-        private string BuildStreamName<T>(string key) where T : AggregateRoot
+        private string BuildStreamName<T>(string? key) where T : AggregateRoot
         {
+            if (string.IsNullOrWhiteSpace(key))
+            {
+                return $"${typeof(T).Name}";
+            }
+
             return $"${typeof(T).Name}-${key}";
         }
 

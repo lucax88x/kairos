@@ -1,11 +1,12 @@
+import { Trans } from '@lingui/macro';
 import { makeStyles, Typography } from '@material-ui/core';
 import { eachDayOfInterval, endOfMonth, getDate, startOfMonth } from 'date-fns';
 import { map } from 'ramda';
 import React, { memo, useCallback, useMemo } from 'react';
-
 import { getDifferencesByRange } from '../code/calculator';
 import Spinner from '../components/Spinner';
 import { TimeEntryListModel } from '../models/time-entry-list.model';
+
 
 const useStyles = makeStyles(theme => ({
   grid: {
@@ -82,8 +83,8 @@ export const TimeEntriesByRangeComponent: React.FC<TimeEntriesByRangeProps> = me
 
   return (
     <Spinner show={isGetTimeEntriesBusy}>
-      <Typography component="h2" variant="h6"gutterBottom>
-        Time Entries
+      <Typography component="h2" variant="h6" gutterBottom>
+        <Trans>TimeEntriesByRange.Title</Trans>
       </Typography>
       <div
         className={classes.grid}

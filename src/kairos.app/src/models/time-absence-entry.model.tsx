@@ -1,6 +1,8 @@
 import { endOfDay, parseISO, startOfDay } from 'date-fns';
-import { UUID } from './uuid.model';
 import { immerable } from 'immer';
+import { UUID } from './uuid.model';
+import { Trans, t } from '@lingui/macro';
+import { i18n } from '../i18nLoader';
 
 export enum TimeAbsenceEntryTypes {
   VACATION = 'VACATION',
@@ -51,4 +53,32 @@ export interface TimeAbsenceEntryOutModel {
   start: string;
   end: string;
   type: TimeAbsenceEntryTypes;
+}
+
+export function getTextFromType(type: TimeAbsenceEntryTypes) {
+  switch (type) {
+    case TimeAbsenceEntryTypes.COMPENSATION:
+      return i18n._(t`Values.TimeAbsenceEntryTypes.Compensation`);
+    case TimeAbsenceEntryTypes.PERMIT:
+      return i18n._(t`Values.TimeAbsenceEntryTypes.Permit`);
+    case TimeAbsenceEntryTypes.VACATION:
+      return i18n._(t`Values.TimeAbsenceEntryTypes.Vacation`);
+    default:
+    case TimeAbsenceEntryTypes.ILLNESS:
+      return i18n._(t`Values.TimeAbsenceEntryTypes.Illness`);
+  }
+}
+
+export function getTransFromType(type: TimeAbsenceEntryTypes) {
+  switch (type) {
+    case TimeAbsenceEntryTypes.COMPENSATION:
+      return <Trans>Values.TimeAbsenceEntryTypes.Compensation</Trans>;
+    case TimeAbsenceEntryTypes.PERMIT:
+      return <Trans>Values.TimeAbsenceEntryTypes.Permit</Trans>;
+    case TimeAbsenceEntryTypes.VACATION:
+      return <Trans>Values.TimeAbsenceEntryTypes.Vacation</Trans>;
+    default:
+    case TimeAbsenceEntryTypes.ILLNESS:
+      return <Trans>Values.TimeAbsenceEntryTypes.Illness</Trans>;
+  }
 }

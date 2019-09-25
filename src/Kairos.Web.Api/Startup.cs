@@ -9,6 +9,7 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Hosting;
 using Serilog;
 using Serilog.Events;
 using Module = Kairos.Web.Api.Ioc.Module;
@@ -37,8 +38,12 @@ namespace Kairos.Web.Api
             var audience = "http://localhost:3000";
 
             services.AddMvc(options =>
-                    options.Filters.AddService(typeof(ApiExceptionFilter)))
-                .SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
+                {
+                    options.Filters.AddService(typeof(ApiExceptionFilter));
+                    options.EnableEndpointRouting = false;
+                })
+                .AddNewtonsoftJson()
+                .SetCompatibilityVersion(CompatibilityVersion.Version_3_0);
 
             services.AddScoped<ApiExceptionFilter>();
 
@@ -59,7 +64,7 @@ namespace Kairos.Web.Api
             });
         }
 
-        public void Configure(IApplicationBuilder app, IHostingEnvironment env)
+        public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
             if (env.IsDevelopment())
             {

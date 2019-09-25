@@ -15,8 +15,8 @@ namespace Kairos.Domain
 
     public class TimeAbsenceEntry : AggregateRoot
     {
-        public string User { get; private set; }
-        public string Description { get; private set; }
+        public string? User { get; private set; }
+        public string? Description { get; private set; }
         public DateTimeOffset Start { get; private set; }
 
         public DateTimeOffset End { get; private set; }

@@ -2,7 +2,7 @@
 {
     public class FluentSandboxAssertion
     {
-        public FluentMediatorAssertion Mediator { get; set; }
-        public FluentRedisAssertion Redis { get; set; }
+        public FluentMediatorAssertion? Mediator { get; set; }
+        public FluentRedisAssertion? Redis { get; set; }
     }
 }

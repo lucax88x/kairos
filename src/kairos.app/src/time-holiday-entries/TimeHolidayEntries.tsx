@@ -1,4 +1,5 @@
-import { Button, IconButton, makeStyles, Typography, Grid } from '@material-ui/core';
+import { t, Trans } from '@lingui/macro';
+import { Button, Grid, IconButton, makeStyles, Typography } from '@material-ui/core';
 import CreateIcon from '@material-ui/icons/Create';
 import DeleteIcon from '@material-ui/icons/Delete';
 import { format } from 'date-fns';
@@ -9,6 +10,7 @@ import { formatAsDate } from '../code/constants';
 import { Autocomplete, AutocompleteSuggestion } from '../components/Autocomplete';
 import Spinner from '../components/Spinner';
 import { VirtualizedTable } from '../components/VirtualizedTable';
+import { i18n } from '../i18nLoader';
 import { CountryModel } from '../models/country.model';
 import { TimeHolidayEntryModel } from '../models/time-holiday-entry.model';
 
@@ -66,7 +68,7 @@ export const TimeHolidayEntriesComponent: React.FC<TimeHolidayEntriesProps> = pr
   ]);
 
   const noRowsRenderer = useCallback(
-    () => <p>{isGetTimeHolidayEntriesBusy ? '' : 'No holidays'}</p>,
+    () => <p>{isGetTimeHolidayEntriesBusy ? '' : <Trans>TimeHolidayEntries.NoItems</Trans>}</p>,
     [isGetTimeHolidayEntriesBusy],
   );
   const rowGetter = useCallback(({ index }: Index) => timeHolidayEntries[index], [
@@ -75,7 +77,11 @@ export const TimeHolidayEntriesComponent: React.FC<TimeHolidayEntriesProps> = pr
   const dateFormatter = useCallback((data: Date) => !!data && format(data, formatAsDate), []);
   const updateCellRenderer = useCallback(
     model => (
-      <IconButton color="inherit" aria-label="Update entry" onClick={() => handleUpdate(model)}>
+      <IconButton
+        color="inherit"
+        aria-label={i18n._(t`TimeHolidayEntries.UpdateHolidayButton`)}
+        onClick={() => handleUpdate(model)}
+      >
         <CreateIcon />
       </IconButton>
     ),
@@ -83,7 +89,11 @@ export const TimeHolidayEntriesComponent: React.FC<TimeHolidayEntriesProps> = pr
   );
   const deleteCellRenderer = useCallback(
     model => (
-      <IconButton color="inherit" aria-label="Delete entry" onClick={() => handleDelete(model)}>
+      <IconButton
+        color="inherit"
+        aria-label={i18n._(t`TimeHolidayEntries.DeleteHolidayButton`)}
+        onClick={() => handleDelete(model)}
+      >
         <DeleteIcon />
       </IconButton>
     ),
@@ -108,7 +118,7 @@ export const TimeHolidayEntriesComponent: React.FC<TimeHolidayEntriesProps> = pr
           columns={[
             {
               width: 100,
-              label: 'When',
+              label: i18n._(t`TimeHolidayEntries.WhenTableHeader`),
               dataKey: 'when',
               flexGrow: 1,
               formatter: dateFormatter,
@@ -116,7 +126,7 @@ export const TimeHolidayEntriesComponent: React.FC<TimeHolidayEntriesProps> = pr
             {
               width: 100,
               flexGrow: 2,
-              label: 'Description',
+              label: i18n._(t`TimeHolidayEntries.DescriptionTableHeader`),
               dataKey: 'description',
             },
             {
@@ -135,7 +145,7 @@ export const TimeHolidayEntriesComponent: React.FC<TimeHolidayEntriesProps> = pr
         />
       </div>
       <Button variant="contained" color="primary" onClick={onCreate}>
-        Create
+        <Trans>Buttons.Create</Trans>
       </Button>
       <hr></hr>
       <Grid container alignItems={'center'} justify={'space-between'}>
@@ -143,7 +153,7 @@ export const TimeHolidayEntriesComponent: React.FC<TimeHolidayEntriesProps> = pr
           <Autocomplete
             isBusy={isGetCountriesBusy}
             data={countriesSuggestion}
-            placeholder="Search for a country"
+            placeholder={i18n._(t`TimeHolidayEntries.SearchForCountry`)}
             value={country}
             onSelectSuggestion={handleCountryChange}
           />
@@ -155,7 +165,7 @@ export const TimeHolidayEntriesComponent: React.FC<TimeHolidayEntriesProps> = pr
             onClick={handleUpdateHolidays}
             disabled={!country}
           >
-            Add Holidays from country
+            <Trans>TimeHolidayEntries.UpdateHolidaysFromCountryButton</Trans>
           </Button>
         </Grid>
       </Grid>

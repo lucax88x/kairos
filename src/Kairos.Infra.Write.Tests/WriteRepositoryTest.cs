@@ -50,7 +50,7 @@ namespace Kairos.Infra.Write.Tests
             var loaded = await _sut.GetOrDefault<TestDomainObject>(obj.Id.ToString());
 
             // THEN
-            loaded.Counter.Should().Be(3);
+            loaded!.Counter.Should().Be(3);
         }
 
         [Fact]
@@ -62,7 +62,7 @@ namespace Kairos.Infra.Write.Tests
             await _sut.Save(WriteRepository.DefaultKeyTaker, obj);
 
             var loaded = await _sut.GetOrDefault<TestDomainObject>(obj.Id.ToString());
-            loaded.Increase();
+            loaded!.Increase();
 
             // WHEN          
             var events = await _sut.Save(WriteRepository.DefaultKeyTaker, loaded);

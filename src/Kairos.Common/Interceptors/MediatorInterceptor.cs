@@ -21,7 +21,7 @@ namespace Kairos.Common.Interceptors
 
             var argument = invocation.Arguments.Select(a => (a ?? "").ToString()).ToArray().FirstOrDefault();
 
-            string resp = null;
+            string? resp = null;
             if (argument != null)
             {
                 resp = argument.Split('.').Last();
