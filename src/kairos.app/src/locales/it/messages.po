@@ -15,7 +15,7 @@ msgstr ""
 
 #: src/bulk-insert/BulkInsert.tsx:26
 msgid "BulkInsert.TimeAbsenceEntryTabHeader"
-msgstr ""
+msgstr "Assenze"
 
 #: src/bulk-insert/BulkInsert.tsx:25
 msgid "BulkInsert.TimeEntryTabHeader"
@@ -23,12 +23,12 @@ msgstr ""
 
 #: src/bulk-insert/BulkInsert.tsx:27
 msgid "BulkInsert.TimeHolidayEntryTabHeader"
-msgstr ""
+msgstr "Vacanze"
 
 #: src/bulk-insert/BulkTimeAbsenceEntryInsert.tsx:110
 #: src/bulk-insert/BulkTimeAbsenceEntryInsert.tsx:145
 msgid "BulkTimeAbsenceEntryInsert.DescriptionTableHeader"
-msgstr ""
+msgstr "Descrizione"
 
 #: src/bulk-insert/BulkTimeAbsenceEntryInsert.tsx:122
 #: src/bulk-insert/BulkTimeAbsenceEntryInsert.tsx:157
@@ -242,11 +242,11 @@ msgid "See the <0>description</0> below."
 msgstr ""
 
 #: src/time-absence-entries/TimeAbsenceEntries.tsx:33
-msgid "TimeAbsenceEnties.DeleteTimeAbsenceEntryButton"
+msgid "TimeAbsenceEntries.DeleteTimeAbsenceEntryButton"
 msgstr ""
 
 #: src/time-absence-entries/TimeAbsenceEntries.tsx:30
-msgid "TimeAbsenceEnties.UpdateTimeAbsenceEntryButton"
+msgid "TimeAbsenceEntries.UpdateTimeAbsenceEntryButton"
 msgstr ""
 
 #: src/time-absence-entries/TimeAbsenceEntries.tsx:64
@@ -343,7 +343,7 @@ msgstr ""
 
 #: src/dashboard/TimeStatistics.tsx:100
 msgid "TimeStatistics.Illness.SubTitle"
-msgstr "it"
+msgstr ""
 
 #: src/dashboard/TimeStatistics.tsx:97
 msgid "TimeStatistics.Illness.Title"
@@ -437,4 +437,3 @@ msgstr ""
 msgid "Values.TimeEntryTypes.Out"
 msgstr ""
 
-#: src/dashboard/TimeStatistics.tsx:67

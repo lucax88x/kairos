@@ -7,7 +7,7 @@
       ]
     ]
   },
-  "TimeAbsenceEnties.UpdateTimeAbsenceEntryButton": {
+  "TimeAbsenceEntries.UpdateTimeAbsenceEntryButton": {
     "origin": [
       [
         "src/time-absence-entries/TimeAbsenceEntries.tsx",
@@ -15,7 +15,7 @@
       ]
     ]
   },
-  "TimeAbsenceEnties.DeleteTimeAbsenceEntryButton": {
+  "TimeAbsenceEntries.DeleteTimeAbsenceEntryButton": {
     "origin": [
       [
         "src/time-absence-entries/TimeAbsenceEntries.tsx",

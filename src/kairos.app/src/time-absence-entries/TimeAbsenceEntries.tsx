@@ -61,7 +61,7 @@ export const TimeAbsenceEntriesComponent: React.FC<TimeAbsenceEntriesProps> = pr
     model => (
       <IconButton
         color="inherit"
-        aria-label={i18n._(t`TimeAbsenceEnties.UpdateTimeAbsenceEntryButton`)}
+        aria-label={i18n._(t`TimeAbsenceEntries.UpdateTimeAbsenceEntryButton`)}
         onClick={() => handleUpdate(model)}
       >
         <CreateIcon />
@@ -73,7 +73,7 @@ export const TimeAbsenceEntriesComponent: React.FC<TimeAbsenceEntriesProps> = pr
     model => (
       <IconButton
         color="inherit"
-        aria-label={i18n._(t`TimeAbsenceEnties.DeleteTimeAbsenceEntryButton`)}
+        aria-label={i18n._(t`TimeAbsenceEntries.DeleteTimeAbsenceEntryButton`)}
         onClick={() => handleDelete(model)}
       >
         <DeleteIcon />
