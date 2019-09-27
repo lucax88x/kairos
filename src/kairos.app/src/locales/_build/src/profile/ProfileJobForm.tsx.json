@@ -1,0 +1,102 @@
+{
+  "Profile.UnknownJob": {
+    "origin": [
+      [
+        "src/profile/ProfileJobForm.tsx",
+        63
+      ]
+    ]
+  },
+  "Profile.CurrentDateLabel": {
+    "origin": [
+      [
+        "src/profile/ProfileJobForm.tsx",
+        68
+      ]
+    ]
+  },
+  "Labels.Name": {
+    "origin": [
+      [
+        "src/profile/ProfileJobForm.tsx",
+        83
+      ]
+    ]
+  },
+  "Labels.Start": {
+    "origin": [
+      [
+        "src/profile/ProfileJobForm.tsx",
+        89
+      ]
+    ]
+  },
+  "Labels.End": {
+    "origin": [
+      [
+        "src/profile/ProfileJobForm.tsx",
+        94
+      ]
+    ]
+  },
+  "Labels.Holidays": {
+    "origin": [
+      [
+        "src/profile/ProfileJobForm.tsx",
+        98
+      ]
+    ]
+  },
+  "Labels.Monday": {
+    "origin": [
+      [
+        "src/profile/ProfileJobForm.tsx",
+        103
+      ]
+    ]
+  },
+  "Labels.Thursday": {
+    "origin": [
+      [
+        "src/profile/ProfileJobForm.tsx",
+        106
+      ],
+      [
+        "src/profile/ProfileJobForm.tsx",
+        112
+      ]
+    ]
+  },
+  "Labels.Wednesday": {
+    "origin": [
+      [
+        "src/profile/ProfileJobForm.tsx",
+        109
+      ]
+    ]
+  },
+  "Labels.Friday": {
+    "origin": [
+      [
+        "src/profile/ProfileJobForm.tsx",
+        115
+      ]
+    ]
+  },
+  "Labels.Saturday": {
+    "origin": [
+      [
+        "src/profile/ProfileJobForm.tsx",
+        118
+      ]
+    ]
+  },
+  "Labels.Sunday": {
+    "origin": [
+      [
+        "src/profile/ProfileJobForm.tsx",
+        121
+      ]
+    ]
+  }
+}

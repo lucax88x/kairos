@@ -1,5 +1,16 @@
 import DateFnsUtils from '@date-io/date-fns';
-import { Divider, ExpansionPanel, ExpansionPanelDetails, ExpansionPanelSummary, Grid, IconButton, makeStyles, TextField, Typography } from '@material-ui/core';
+import { t, Trans } from '@lingui/macro';
+import {
+  Divider,
+  ExpansionPanel,
+  ExpansionPanelDetails,
+  ExpansionPanelSummary,
+  Grid,
+  IconButton,
+  makeStyles,
+  TextField,
+  Typography,
+} from '@material-ui/core';
 import AddIcon from '@material-ui/icons/Add';
 import DeleteIcon from '@material-ui/icons/Delete';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
@@ -8,11 +19,13 @@ import { endOfDay, format } from 'date-fns';
 import { map } from 'ramda';
 import React, { ChangeEvent, Fragment, useCallback } from 'react';
 import { formatAsDate } from '../code/constants';
+import { getDatepickerLocale } from '../code/get-datepicker-locale';
 import { Themes } from '../code/variables';
+import { i18n } from '../i18nLoader';
 import { JobModel } from '../models/job.model';
 import { UUID } from '../models/uuid.model';
 import { ProfileJobProjectForm } from './ProfileJobProjectForm';
-
+import { Language } from '../models/language-model';
 
 const useStyles = makeStyles(theme => ({
   paper: { padding: theme.spacing(3) },
@@ -33,6 +46,7 @@ const useStyles = makeStyles(theme => ({
 }));
 
 export interface ProfileJobFormInputs {
+  selectedLanguage: Language;
   job: JobModel;
 }
 
@@ -58,6 +72,7 @@ export const ProfileJobForm: React.FC<ProfileJobFormProps> = props => {
   const classes = useStyles(props);
 
   const {
+    selectedLanguage,
     job,
     onJobDelete,
     onJobNameChange,
@@ -126,12 +141,14 @@ export const ProfileJobForm: React.FC<ProfileJobFormProps> = props => {
       <ExpansionPanelSummary expandIcon={<ExpandMoreIcon />}>
         <Grid container alignItems={'center'} justify={'space-between'}>
           <Grid item>
-            <Typography className={classes.heading}>{!!job.name ? job.name : 'Unknown'}</Typography>
+            <Typography className={classes.heading}>
+              {!!job.name ? job.name : i18n._(t`Profile.UnknownJob`)}
+            </Typography>
           </Grid>
           <Grid item>
             <Typography className={classes.secondaryHeading}>
               {`${format(job.start, formatAsDate)} - ${
-                !!job.end ? format(job.end, formatAsDate) : 'current'
+                !!job.end ? format(job.end, formatAsDate) : i18n._(t`Profile.CurrentDateLabel`)
               }`}
             </Typography>
           </Grid>
@@ -150,13 +167,16 @@ export const ProfileJobForm: React.FC<ProfileJobFormProps> = props => {
                 <TextField
                   margin="dense"
                   fullWidth
-                  label="Name"
+                  label={<Trans>Labels.Name</Trans>}
                   type="text"
                   value={job.name}
                   onChange={handleJobNameChange}
                 />
               </Grid>
-              <MuiPickersUtilsProvider utils={DateFnsUtils}>
+              <MuiPickersUtilsProvider
+                utils={DateFnsUtils}
+                locale={getDatepickerLocale(selectedLanguage)}
+              >
                 <Grid item xs={3}>
                   <DatePicker
                     autoOk
@@ -164,7 +184,7 @@ export const ProfileJobForm: React.FC<ProfileJobFormProps> = props => {
                     value={job.start}
                     // maxDate={end}
                     onChange={handleJobStartDateChange}
-                    label="Start"
+                    label={<Trans>Labels.Start</Trans>}
                   />
                 </Grid>
                 <Grid item xs={3}>
@@ -174,7 +194,7 @@ export const ProfileJobForm: React.FC<ProfileJobFormProps> = props => {
                     value={job.end}
                     // minDate={start}
                     onChange={handleJobEndDateChange}
-                    label="End"
+                    label={<Trans>Labels.End</Trans>}
                   />
                 </Grid>
               </MuiPickersUtilsProvider>
@@ -182,7 +202,7 @@ export const ProfileJobForm: React.FC<ProfileJobFormProps> = props => {
                 <TextField
                   margin="dense"
                   fullWidth
-                  label="Holidays (days per year)"
+                  label={<Trans>Labels.Holidays</Trans>}
                   inputProps={{ min: 0, max: 365, step: 1 }}
                   type="number"
                   value={job.holidaysPerYear}
@@ -193,7 +213,7 @@ export const ProfileJobForm: React.FC<ProfileJobFormProps> = props => {
             <Grid container item alignItems={'center'} justify={'space-between'}>
               <Grid item>
                 <TextField
-                  label="Monday"
+                  label={<Trans>Labels.Monday</Trans>}
                   inputProps={{ min: 0, max: 23.59, step: 0.1 }}
                   type="number"
                   value={job.monday}
@@ -203,7 +223,7 @@ export const ProfileJobForm: React.FC<ProfileJobFormProps> = props => {
               <Grid item>
                 <TextField
                   margin="dense"
-                  label="Tuesday"
+                  label={<Trans>Labels.Thursday</Trans>}
                   inputProps={{ min: 0, max: 23.59, step: 0.1 }}
                   type="number"
                   value={job.tuesday}
@@ -213,7 +233,7 @@ export const ProfileJobForm: React.FC<ProfileJobFormProps> = props => {
               <Grid item>
                 <TextField
                   margin="dense"
-                  label="Wednesday"
+                  label={<Trans>Labels.Wednesday</Trans>}
                   inputProps={{ min: 0, max: 23.59, step: 0.1 }}
                   type="number"
                   value={job.wednesday}
@@ -223,7 +243,7 @@ export const ProfileJobForm: React.FC<ProfileJobFormProps> = props => {
               <Grid item>
                 <TextField
                   margin="dense"
-                  label="Thursday"
+                  label={<Trans>Labels.Thursday</Trans>}
                   inputProps={{ min: 0, max: 23.59, step: 0.1 }}
                   type="number"
                   value={job.thursday}
@@ -233,7 +253,7 @@ export const ProfileJobForm: React.FC<ProfileJobFormProps> = props => {
               <Grid item>
                 <TextField
                   margin="dense"
-                  label="Friday"
+                  label={<Trans>Labels.Friday</Trans>}
                   inputProps={{ min: 0, max: 23.59, step: 0.1 }}
                   type="number"
                   value={job.friday}
@@ -243,7 +263,7 @@ export const ProfileJobForm: React.FC<ProfileJobFormProps> = props => {
               <Grid item>
                 <TextField
                   margin="dense"
-                  label="Saturday"
+                  label={<Trans>Labels.Saturday</Trans>}
                   inputProps={{ min: 0, max: 23.59, step: 0.1 }}
                   type="number"
                   value={job.saturday}
@@ -253,7 +273,7 @@ export const ProfileJobForm: React.FC<ProfileJobFormProps> = props => {
               <Grid item>
                 <TextField
                   margin="dense"
-                  label="Sunday"
+                  label={<Trans>Labels.Sunday</Trans>}
                   inputProps={{ min: 0, max: 23.59, step: 0.1 }}
                   type="number"
                   value={job.sunday}
@@ -290,6 +310,7 @@ export const ProfileJobForm: React.FC<ProfileJobFormProps> = props => {
               project => (
                 <Fragment key={project.id.toString()}>
                   <ProfileJobProjectForm
+                    selectedLanguage={selectedLanguage}
                     job={job}
                     project={project}
                     onDelete={onProjectDelete}

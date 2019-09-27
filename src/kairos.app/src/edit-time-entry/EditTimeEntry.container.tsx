@@ -16,8 +16,10 @@ import {
   selectTimeEntry,
 } from './selectors';
 import { updateTimeEntryAsync } from './update-time-entry';
+import { selectSelectedLanguage } from '../shared/selectors';
 
 const mapStateToProps = (state: State): EditTimeEntryInputs => ({
+  selectedLanguage: selectSelectedLanguage(state),
   profile: selectProfile(state),
   timeEntry: selectTimeEntry(state),
   isGetBusy: selectIsGetTimeEntryBusy(state),

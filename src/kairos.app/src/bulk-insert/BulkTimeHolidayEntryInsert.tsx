@@ -103,7 +103,7 @@ export const BulkTimeHolidayEntryInsertComponent: React.FC<
     <Grid container spacing={2} direction="column" justify="center">
       <Grid item>
         <Typography component="h1" variant="h6" noWrap>
-          Bulk insert of Holidays (CSV)
+          <Trans>BulkTimeHolidayEntryInsert.Title</Trans>
         </Typography>
       </Grid>
       <Grid item>
@@ -151,7 +151,7 @@ export const BulkTimeHolidayEntryInsertComponent: React.FC<
                 {
                   width: 200,
                   label: i18n._(t`BulkTimeHolidayEntryInsert.WhenTableHeader`),
-                  dataKey: 'When',
+                  dataKey: 'when',
                   flexGrow: 1,
                   formatter: dateFormatter,
                 },
@@ -186,7 +186,7 @@ export const BulkTimeHolidayEntryInsertComponent: React.FC<
                 {
                   width: 200,
                   label: i18n._(t`BulkTimeHolidayEntryInsert.WhenTableHeader`),
-                  dataKey: 'When',
+                  dataKey: 'when',
                   flexGrow: 1,
                   formatter: dateFormatter,
                 },

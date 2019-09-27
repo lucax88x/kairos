@@ -1,0 +1,26 @@
+{
+  "Values.TimeEntryTypes.In": {
+    "origin": [
+      [
+        "src/models/time-entry.model.tsx",
+        37
+      ],
+      [
+        "src/models/time-entry.model.tsx",
+        46
+      ]
+    ]
+  },
+  "Values.TimeEntryTypes.Out": {
+    "origin": [
+      [
+        "src/models/time-entry.model.tsx",
+        40
+      ],
+      [
+        "src/models/time-entry.model.tsx",
+        49
+      ]
+    ]
+  }
+}

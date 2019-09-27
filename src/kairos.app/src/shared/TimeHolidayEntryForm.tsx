@@ -7,7 +7,9 @@ import {
   MuiPickersUtilsProvider,
 } from '@material-ui/pickers';
 import React, { ChangeEvent, useCallback, useEffect, useState } from 'react';
+import { getDatepickerLocale } from '../code/get-datepicker-locale';
 import ButtonSpinner from '../components/ButtonSpinner';
+import { Language } from '../models/language-model';
 import { TimeHolidayEntryModel } from '../models/time-holiday-entry.model';
 
 const useStyles = makeStyles(theme => ({
@@ -17,6 +19,7 @@ const useStyles = makeStyles(theme => ({
 }));
 
 export interface TimeHolidayEntryFormProps {
+  selectedLanguage: Language;
   model: TimeHolidayEntryModel;
   isBusy: boolean;
   onSave: (model: TimeHolidayEntryModel) => void;
@@ -25,7 +28,7 @@ export interface TimeHolidayEntryFormProps {
 export const TimeHolidayEntryForm: React.FC<TimeHolidayEntryFormProps> = props => {
   const classes = useStyles(props);
 
-  const { model, isBusy, onSave } = props;
+  const { selectedLanguage, model, isBusy, onSave } = props;
 
   const [id, setId] = useState(model.id);
   const [description, setDescription] = useState<string>(model.description);
@@ -71,7 +74,10 @@ export const TimeHolidayEntryForm: React.FC<TimeHolidayEntryFormProps> = props =
           onChange={handleDescriptionChange}
           fullWidth
         />
-        <MuiPickersUtilsProvider utils={DateFnsUtils}>
+        <MuiPickersUtilsProvider
+          utils={DateFnsUtils}
+          locale={getDatepickerLocale(selectedLanguage)}
+        >
           <Grid item xs={12}>
             <DateTimePicker
               autoOk

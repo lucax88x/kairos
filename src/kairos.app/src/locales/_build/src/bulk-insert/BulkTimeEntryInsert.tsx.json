@@ -1,0 +1,106 @@
+{
+  "Validation.InvalidDate": {
+    "origin": [
+      [
+        "src/bulk-insert/BulkTimeEntryInsert.tsx",
+        61
+      ]
+    ]
+  },
+  "Validation.InvalidType": {
+    "origin": [
+      [
+        "src/bulk-insert/BulkTimeEntryInsert.tsx",
+        62
+      ]
+    ]
+  },
+  "Validation.InvalidJob": {
+    "origin": [
+      [
+        "src/bulk-insert/BulkTimeEntryInsert.tsx",
+        63
+      ]
+    ]
+  },
+  "Validation.InvalidProject": {
+    "origin": [
+      [
+        "src/bulk-insert/BulkTimeEntryInsert.tsx",
+        64
+      ]
+    ]
+  },
+  "BulkTimeEntryInsert.Title": {
+    "origin": [
+      [
+        "src/bulk-insert/BulkTimeEntryInsert.tsx",
+        99
+      ]
+    ]
+  },
+  "BulkTimeEntryInsert.ValidEntries": {
+    "origin": [
+      [
+        "src/bulk-insert/BulkTimeEntryInsert.tsx",
+        115
+      ]
+    ]
+  },
+  "BulkTimeEntryInsert.TypeTableHeader": {
+    "origin": [
+      [
+        "src/bulk-insert/BulkTimeEntryInsert.tsx",
+        122
+      ],
+      [
+        "src/bulk-insert/BulkTimeEntryInsert.tsx",
+        157
+      ]
+    ]
+  },
+  "BulkTimeEntryInsert.WhenTableHeader": {
+    "origin": [
+      [
+        "src/bulk-insert/BulkTimeEntryInsert.tsx",
+        127
+      ],
+      [
+        "src/bulk-insert/BulkTimeEntryInsert.tsx",
+        162
+      ]
+    ]
+  },
+  "BulkTimeEntryInsert.JobTableHeader": {
+    "origin": [
+      [
+        "src/bulk-insert/BulkTimeEntryInsert.tsx",
+        134
+      ],
+      [
+        "src/bulk-insert/BulkTimeEntryInsert.tsx",
+        169
+      ]
+    ]
+  },
+  "BulkTimeEntryInsert.ProjectTableHeader": {
+    "origin": [
+      [
+        "src/bulk-insert/BulkTimeEntryInsert.tsx",
+        140
+      ],
+      [
+        "src/bulk-insert/BulkTimeEntryInsert.tsx",
+        175
+      ]
+    ]
+  },
+  "BulkTimeEntryInsert.InvalidEntries": {
+    "origin": [
+      [
+        "src/bulk-insert/BulkTimeEntryInsert.tsx",
+        150
+      ]
+    ]
+  }
+}

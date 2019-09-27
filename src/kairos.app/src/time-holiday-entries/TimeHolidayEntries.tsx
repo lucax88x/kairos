@@ -153,6 +153,7 @@ export const TimeHolidayEntriesComponent: React.FC<TimeHolidayEntriesProps> = pr
           <Autocomplete
             isBusy={isGetCountriesBusy}
             data={countriesSuggestion}
+            label={i18n._(t`TimeHolidayEntries.CountryLabel`)}
             placeholder={i18n._(t`TimeHolidayEntries.SearchForCountry`)}
             value={country}
             onSelectSuggestion={handleCountryChange}

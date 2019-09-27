@@ -1,0 +1,58 @@
+{
+  "TimeEntryForm.YouNeedAtLeastOneJob": {
+    "origin": [
+      [
+        "src/shared/TimeEntryForm.tsx",
+        58
+      ]
+    ]
+  },
+  "TimeEntryForm.Profile": {
+    "origin": [
+      [
+        "src/shared/TimeEntryForm.tsx",
+        59
+      ]
+    ]
+  },
+  "See the <0>description</0> below.": {
+    "origin": [
+      [
+        "src/shared/TimeEntryForm.tsx",
+        60
+      ]
+    ]
+  },
+  "Values.TimeEntryTypes.In": {
+    "origin": [
+      [
+        "src/shared/TimeEntryForm.tsx",
+        70
+      ]
+    ]
+  },
+  "Values.TimeEntryTypes.Out": {
+    "origin": [
+      [
+        "src/shared/TimeEntryForm.tsx",
+        71
+      ]
+    ]
+  },
+  "Labels.Job": {
+    "origin": [
+      [
+        "src/shared/TimeEntryForm.tsx",
+        81
+      ]
+    ]
+  },
+  "Labels.Project": {
+    "origin": [
+      [
+        "src/shared/TimeEntryForm.tsx",
+        93
+      ]
+    ]
+  }
+}

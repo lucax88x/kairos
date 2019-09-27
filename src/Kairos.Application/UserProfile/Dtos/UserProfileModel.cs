@@ -1,7 +1,5 @@
 using System;
 using System.Collections.Generic;
-using System.Collections.Immutable;
-using System.Linq;
 
 namespace Kairos.Application.UserProfile.Dtos
 {
@@ -12,7 +10,6 @@ namespace Kairos.Application.UserProfile.Dtos
 
         public UserProfileModel()
         {
-            var test =  Jobs.First();
         }
 
         public UserProfileModel(IEnumerable<UserJobModel>? jobs = null, Guid? id = null)

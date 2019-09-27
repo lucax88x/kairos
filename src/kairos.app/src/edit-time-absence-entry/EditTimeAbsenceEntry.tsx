@@ -1,7 +1,7 @@
 import { Grid, makeStyles, Paper } from '@material-ui/core';
-import React, { useCallback } from 'react';
-
+import React from 'react';
 import Spinner from '../components/Spinner';
+import { Language } from '../models/language-model';
 import { TimeAbsenceEntryModel } from '../models/time-absence-entry.model';
 import { TimeAbsenceEntryForm } from '../shared/TimeAbsenceEntryForm';
 
@@ -15,6 +15,7 @@ const useStyles = makeStyles(theme => ({
 }));
 
 export interface EditTimeAbsenceEntryInputs {
+  selectedLanguage: Language;
   timeAbsenceEntry: TimeAbsenceEntryModel;
   isGetBusy: boolean;
   isUpdateBusy: boolean;
@@ -29,14 +30,19 @@ type EditTimeAbsenceEntryProps = EditTimeAbsenceEntryInputs & EditTimeAbsenceEnt
 export const EditTimeAbsenceEntryComponent: React.FC<EditTimeAbsenceEntryProps> = props => {
   const classes = useStyles(props);
 
-  const { timeAbsenceEntry, isGetBusy, isUpdateBusy, onUpdate } = props;
+  const { selectedLanguage, timeAbsenceEntry, isGetBusy, isUpdateBusy, onUpdate } = props;
 
   return (
     <Grid container spacing={3}>
       <Grid item xs>
         <Paper className={classes.paper}>
           <Spinner show={isGetBusy}>
-            <TimeAbsenceEntryForm isBusy={isUpdateBusy} model={timeAbsenceEntry} onSave={onUpdate} />
+            <TimeAbsenceEntryForm
+              selectedLanguage={selectedLanguage}
+              isBusy={isUpdateBusy}
+              model={timeAbsenceEntry}
+              onSave={onUpdate}
+            />
           </Spinner>
         </Paper>
       </Grid>

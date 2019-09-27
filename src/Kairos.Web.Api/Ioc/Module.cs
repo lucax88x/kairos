@@ -58,12 +58,6 @@ namespace Kairos.Web.Api.Ioc
                     return (GraphType) res;
                 };
             });
-
-            builder.Register<IDependencyResolver>(c =>
-            {
-                var context = c.Resolve<IComponentContext>();
-                return new FuncDependencyResolver(type => context.Resolve(type));
-            });
         }
 
         private static void RegisterTypes(ContainerBuilder builder)

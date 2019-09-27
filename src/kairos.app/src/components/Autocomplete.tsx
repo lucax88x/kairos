@@ -9,6 +9,7 @@ import Spinner from './Spinner';
 export type AutocompleteProps = TextFieldProps & {
   isBusy: boolean;
   data: AutocompleteSuggestion[];
+  label: string;
   placeholder: string;
   onSelectSuggestion: (suggestion: AutocompleteSuggestion) => void;
 };
@@ -127,7 +128,7 @@ const useStyles = makeStyles((theme: Theme) =>
 export const Autocomplete: React.FC<AutocompleteProps> = props => {
   const classes = useStyles(props);
 
-  const { isBusy, data, placeholder, onSelectSuggestion } = props;
+  const { isBusy, data, placeholder, label, onSelectSuggestion } = props;
 
   return (
     <div className={classes.root}>
@@ -157,7 +158,7 @@ export const Autocomplete: React.FC<AutocompleteProps> = props => {
                 {renderInput({
                   fullWidth: true,
                   classes,
-                  label: 'Country',
+                  label,
                   // tslint:disable-next-line: no-any
                   InputLabelProps: getLabelProps({ shrink: true } as any),
                   InputProps: { onBlur, onFocus },

@@ -10,10 +10,11 @@ import {
 import { TimeEntryModel } from './models/time-entry.model';
 import { selectProfile } from './profile/selectors';
 import { createTimeEntryAsync } from './shared/create-time-entry';
-import { selectIsCreateTimeEntryBusy } from './shared/selectors';
+import { selectIsCreateTimeEntryBusy, selectSelectedLanguage } from './shared/selectors';
 import { State } from './state';
 
 const mapStateToProps = (state: State): CreateTimeEntryInputs => ({
+  selectedLanguage: selectSelectedLanguage(state),
   profile: selectProfile(state),
   isBusy: selectIsCreateTimeEntryBusy(state),
 });

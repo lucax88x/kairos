@@ -1,0 +1,74 @@
+{
+  "TimeHolidayEntries.NoItems": {
+    "origin": [
+      [
+        "src/time-holiday-entries/TimeHolidayEntries.tsx",
+        31
+      ]
+    ]
+  },
+  "TimeHolidayEntries.UpdateHolidayButton": {
+    "origin": [
+      [
+        "src/time-holiday-entries/TimeHolidayEntries.tsx",
+        36
+      ]
+    ]
+  },
+  "TimeHolidayEntries.DeleteHolidayButton": {
+    "origin": [
+      [
+        "src/time-holiday-entries/TimeHolidayEntries.tsx",
+        39
+      ]
+    ]
+  },
+  "TimeHolidayEntries.WhenTableHeader": {
+    "origin": [
+      [
+        "src/time-holiday-entries/TimeHolidayEntries.tsx",
+        51
+      ]
+    ]
+  },
+  "TimeHolidayEntries.DescriptionTableHeader": {
+    "origin": [
+      [
+        "src/time-holiday-entries/TimeHolidayEntries.tsx",
+        59
+      ]
+    ]
+  },
+  "Buttons.Create": {
+    "origin": [
+      [
+        "src/time-holiday-entries/TimeHolidayEntries.tsx",
+        77
+      ]
+    ]
+  },
+  "TimeHolidayEntries.CountryLabel": {
+    "origin": [
+      [
+        "src/time-holiday-entries/TimeHolidayEntries.tsx",
+        82
+      ]
+    ]
+  },
+  "TimeHolidayEntries.SearchForCountry": {
+    "origin": [
+      [
+        "src/time-holiday-entries/TimeHolidayEntries.tsx",
+        82
+      ]
+    ]
+  },
+  "TimeHolidayEntries.UpdateHolidaysFromCountryButton": {
+    "origin": [
+      [
+        "src/time-holiday-entries/TimeHolidayEntries.tsx",
+        86
+      ]
+    ]
+  }
+}

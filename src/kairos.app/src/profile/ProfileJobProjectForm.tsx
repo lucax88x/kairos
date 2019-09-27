@@ -1,4 +1,5 @@
 import DateFnsUtils from '@date-io/date-fns';
+import { t, Trans } from '@lingui/macro';
 import {
   ExpansionPanel,
   ExpansionPanelDetails,
@@ -16,9 +17,12 @@ import { DatePicker, MaterialUiPickersDate, MuiPickersUtilsProvider } from '@mat
 import { endOfDay, format } from 'date-fns';
 import React, { ChangeEvent, useCallback } from 'react';
 import { formatAsDate } from '../code/constants';
+import { getDatepickerLocale } from '../code/get-datepicker-locale';
 import { isNumber } from '../code/is';
 import { Themes } from '../code/variables';
+import { i18n } from '../i18nLoader';
 import { JobModel } from '../models/job.model';
+import { Language } from '../models/language-model';
 import { ProjectModel } from '../models/project.model';
 import { UUID } from '../models/uuid.model';
 
@@ -42,6 +46,7 @@ const useStyles = makeStyles(theme => ({
 }));
 
 export interface ProfileJobProjectFormInputs {
+  selectedLanguage: Language;
   job: JobModel;
   project: ProjectModel;
 }
@@ -60,6 +65,7 @@ export const ProfileJobProjectForm: React.FC<ProfileJobProjectFormProps> = props
   const classes = useStyles(props);
 
   const {
+    selectedLanguage,
     job,
     project,
     onDelete,
@@ -110,13 +116,15 @@ export const ProfileJobProjectForm: React.FC<ProfileJobProjectFormProps> = props
         <Grid container alignItems={'center'} justify={'space-between'}>
           <Grid item>
             <Typography className={classes.heading}>
-              {!!project.name ? project.name : 'Unknown'}
+              {!!project.name ? project.name : i18n._(t`Profile.UnknownProject`)}
             </Typography>
           </Grid>
           <Grid item>
             <Typography className={classes.secondaryHeading}>
               {`${format(project.start, formatAsDate)} - ${
-                !!project.end ? format(project.end, formatAsDate) : 'current'
+                !!project.end
+                  ? format(project.end, formatAsDate)
+                  : i18n._(t`Profile.CurrentDateLabel`)
               } - ${project.allocation}%`}
             </Typography>
           </Grid>
@@ -139,14 +147,16 @@ export const ProfileJobProjectForm: React.FC<ProfileJobProjectFormProps> = props
               <TextField
                 fullWidth
                 margin="dense"
-                label="Name"
+                label={<Trans>Labels.Name</Trans>}
                 type="text"
                 value={project.name}
                 onChange={handleNameChange}
               />
             </Grid>
             <Grid item xs={5}>
-              <Typography gutterBottom>Allocation</Typography>
+              <Typography gutterBottom>
+                <Trans>Labels.Allocation</Trans>
+              </Typography>
               <Slider
                 className={classes.slider}
                 defaultValue={100}
@@ -161,7 +171,10 @@ export const ProfileJobProjectForm: React.FC<ProfileJobProjectFormProps> = props
             </Grid>
           </Grid>
           <Grid container item alignItems={'center'} justify={'space-between'}>
-            <MuiPickersUtilsProvider utils={DateFnsUtils}>
+            <MuiPickersUtilsProvider
+              utils={DateFnsUtils}
+              locale={getDatepickerLocale(selectedLanguage)}
+            >
               <Grid item xs={5}>
                 <DatePicker
                   autoOk
@@ -169,7 +182,7 @@ export const ProfileJobProjectForm: React.FC<ProfileJobProjectFormProps> = props
                   value={project.start}
                   // maxDate={end}
                   onChange={handleStartDateChange}
-                  label="Start"
+                  label={<Trans>Labels.Start</Trans>}
                 />
               </Grid>
               <Grid item xs={5}>
@@ -179,7 +192,7 @@ export const ProfileJobProjectForm: React.FC<ProfileJobProjectFormProps> = props
                   value={project.end}
                   // minDate={start}
                   onChange={handleEndDateChange}
-                  label="End"
+                  label={<Trans>Labels.End</Trans>}
                 />
               </Grid>
             </MuiPickersUtilsProvider>

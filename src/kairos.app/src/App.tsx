@@ -70,7 +70,11 @@ const useStyles = makeStyles(theme => ({
   logo: {
     width: 40,
   },
+  languageSelect: {
+    textAlign: 'center',
+  },
   languageOption: {
+    justifyContent: 'center',
     padding: theme.spacing(1),
   },
   languageOptionFlag: {
@@ -422,11 +426,10 @@ export const AppComponent: React.FC<AppProps> = props => {
                     </MenuItem>
                     <MenuItem>
                       <Select
+                        fullWidth
                         value={language}
                         onChange={handleLanguageChange}
-                        inputProps={{
-                          id: 'language',
-                        }}
+                        className={classes.languageSelect}
                       >
                         {map(
                           language => (

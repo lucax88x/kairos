@@ -1,0 +1,74 @@
+{
+  "TimeAbsenceEntries.NoItems": {
+    "origin": [
+      [
+        "src/time-absence-entries/TimeAbsenceEntries.tsx",
+        24
+      ]
+    ]
+  },
+  "TimeAbsenceEnties.UpdateTimeAbsenceEntryButton": {
+    "origin": [
+      [
+        "src/time-absence-entries/TimeAbsenceEntries.tsx",
+        30
+      ]
+    ]
+  },
+  "TimeAbsenceEnties.DeleteTimeAbsenceEntryButton": {
+    "origin": [
+      [
+        "src/time-absence-entries/TimeAbsenceEntries.tsx",
+        33
+      ]
+    ]
+  },
+  "TimeAbsenceEntries.Title": {
+    "origin": [
+      [
+        "src/time-absence-entries/TimeAbsenceEntries.tsx",
+        38
+      ]
+    ]
+  },
+  "TimeAbsenceEntries.TypeTableHeader": {
+    "origin": [
+      [
+        "src/time-absence-entries/TimeAbsenceEntries.tsx",
+        44
+      ]
+    ]
+  },
+  "TimeAbsenceEntries.StartTableHeader": {
+    "origin": [
+      [
+        "src/time-absence-entries/TimeAbsenceEntries.tsx",
+        50
+      ]
+    ]
+  },
+  "TimeAbsenceEntries.EndTableHeader": {
+    "origin": [
+      [
+        "src/time-absence-entries/TimeAbsenceEntries.tsx",
+        57
+      ]
+    ]
+  },
+  "TimeAbsenceEntries.DescriptionTableHeader": {
+    "origin": [
+      [
+        "src/time-absence-entries/TimeAbsenceEntries.tsx",
+        64
+      ]
+    ]
+  },
+  "Buttons.Create": {
+    "origin": [
+      [
+        "src/time-absence-entries/TimeAbsenceEntries.tsx",
+        82
+      ]
+    ]
+  }
+}

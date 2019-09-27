@@ -1,0 +1,26 @@
+{
+  "BulkInsert.TimeEntryTabHeader": {
+    "origin": [
+      [
+        "src/bulk-insert/BulkInsert.tsx",
+        25
+      ]
+    ]
+  },
+  "BulkInsert.TimeAbsenceEntryTabHeader": {
+    "origin": [
+      [
+        "src/bulk-insert/BulkInsert.tsx",
+        26
+      ]
+    ]
+  },
+  "BulkInsert.TimeHolidayEntryTabHeader": {
+    "origin": [
+      [
+        "src/bulk-insert/BulkInsert.tsx",
+        27
+      ]
+    ]
+  }
+}

@@ -1,6 +1,7 @@
 import { Grid, makeStyles, Paper } from '@material-ui/core';
 import React from 'react';
 import Spinner from '../components/Spinner';
+import { Language } from '../models/language-model';
 import { ProfileModel } from '../models/profile.model';
 import { TimeEntryModel } from '../models/time-entry.model';
 import { TimeEntryForm } from '../shared/TimeEntryForm';
@@ -15,6 +16,7 @@ const useStyles = makeStyles(theme => ({
 }));
 
 export interface EditTimeEntryInputs {
+  selectedLanguage: Language;
   profile: ProfileModel;
   timeEntry: TimeEntryModel;
   isGetBusy: boolean;
@@ -30,7 +32,7 @@ type EditTimeEntryProps = EditTimeEntryInputs & EditTimeEntryDispatches;
 export const EditTimeEntryComponent: React.FC<EditTimeEntryProps> = props => {
   const classes = useStyles(props);
 
-  const { profile, timeEntry, isGetBusy, isUpdateBusy, onUpdate } = props;
+  const { selectedLanguage, profile, timeEntry, isGetBusy, isUpdateBusy, onUpdate } = props;
 
   return (
     <Grid container spacing={3}>
@@ -38,6 +40,7 @@ export const EditTimeEntryComponent: React.FC<EditTimeEntryProps> = props => {
         <Paper className={classes.paper}>
           <Spinner show={isGetBusy}>
             <TimeEntryForm
+              selectedLanguage={selectedLanguage}
               profile={profile}
               isBusy={isUpdateBusy}
               model={timeEntry}

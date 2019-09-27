@@ -1,3 +1,4 @@
+import React from 'react';
 import { t, Trans } from '@lingui/macro';
 import { parseISO } from 'date-fns';
 import { immerable } from 'immer';

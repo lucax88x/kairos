@@ -13,6 +13,334 @@ msgstr ""
 "Language-Team: \n"
 "Plural-Forms: \n"
 
+#: src/bulk-insert/BulkInsert.tsx:26
+msgid "BulkInsert.TimeAbsenceEntryTabHeader"
+msgstr "BulkInsert.TimeAbsenceEntryTabHeader"
+
+#: src/bulk-insert/BulkInsert.tsx:25
+msgid "BulkInsert.TimeEntryTabHeader"
+msgstr "BulkInsert.TimeEntryTabHeader"
+
+#: src/bulk-insert/BulkInsert.tsx:27
+msgid "BulkInsert.TimeHolidayEntryTabHeader"
+msgstr "BulkInsert.TimeHolidayEntryTabHeader"
+
+#: src/bulk-insert/BulkTimeAbsenceEntryInsert.tsx:110
+#: src/bulk-insert/BulkTimeAbsenceEntryInsert.tsx:145
+msgid "BulkTimeAbsenceEntryInsert.DescriptionTableHeader"
+msgstr "BulkTimeAbsenceEntryInsert.DescriptionTableHeader"
+
+#: src/bulk-insert/BulkTimeAbsenceEntryInsert.tsx:122
+#: src/bulk-insert/BulkTimeAbsenceEntryInsert.tsx:157
+msgid "BulkTimeAbsenceEntryInsert.EndTableHeader"
+msgstr "BulkTimeAbsenceEntryInsert.EndTableHeader"
+
+#: src/bulk-insert/BulkTimeAbsenceEntryInsert.tsx:133
+msgid "BulkTimeAbsenceEntryInsert.InvalidEntries"
+msgstr "BulkTimeAbsenceEntryInsert.InvalidEntries"
+
+#: src/bulk-insert/BulkTimeAbsenceEntryInsert.tsx:115
+#: src/bulk-insert/BulkTimeAbsenceEntryInsert.tsx:150
+msgid "BulkTimeAbsenceEntryInsert.StartTableHeader"
+msgstr "BulkTimeAbsenceEntryInsert.StartTableHeader"
+
+#: src/bulk-insert/BulkTimeAbsenceEntryInsert.tsx:82
+msgid "BulkTimeAbsenceEntryInsert.Title"
+msgstr "BulkTimeAbsenceEntryInsert.Title"
+
+#: src/bulk-insert/BulkTimeAbsenceEntryInsert.tsx:105
+#: src/bulk-insert/BulkTimeAbsenceEntryInsert.tsx:140
+msgid "BulkTimeAbsenceEntryInsert.TypeTableHeader"
+msgstr "BulkTimeAbsenceEntryInsert.TypeTableHeader"
+
+#: src/bulk-insert/BulkTimeAbsenceEntryInsert.tsx:98
+msgid "BulkTimeAbsenceEntryInsert.ValidEntries"
+msgstr "BulkTimeAbsenceEntryInsert.ValidEntries"
+
+#: src/bulk-insert/BulkTimeEntryInsert.tsx:150
+msgid "BulkTimeEntryInsert.InvalidEntries"
+msgstr "BulkTimeEntryInsert.InvalidEntries"
+
+#: src/bulk-insert/BulkTimeEntryInsert.tsx:134
+#: src/bulk-insert/BulkTimeEntryInsert.tsx:169
+msgid "BulkTimeEntryInsert.JobTableHeader"
+msgstr "BulkTimeEntryInsert.JobTableHeader"
+
+#: src/bulk-insert/BulkTimeEntryInsert.tsx:140
+#: src/bulk-insert/BulkTimeEntryInsert.tsx:175
+msgid "BulkTimeEntryInsert.ProjectTableHeader"
+msgstr "BulkTimeEntryInsert.ProjectTableHeader"
+
+#: src/bulk-insert/BulkTimeEntryInsert.tsx:99
+msgid "BulkTimeEntryInsert.Title"
+msgstr "BulkTimeEntryInsert.Title"
+
+#: src/bulk-insert/BulkTimeEntryInsert.tsx:122
+#: src/bulk-insert/BulkTimeEntryInsert.tsx:157
+msgid "BulkTimeEntryInsert.TypeTableHeader"
+msgstr "BulkTimeEntryInsert.TypeTableHeader"
+
+#: src/bulk-insert/BulkTimeEntryInsert.tsx:115
+msgid "BulkTimeEntryInsert.ValidEntries"
+msgstr "BulkTimeEntryInsert.ValidEntries"
+
+#: src/bulk-insert/BulkTimeEntryInsert.tsx:127
+#: src/bulk-insert/BulkTimeEntryInsert.tsx:162
+msgid "BulkTimeEntryInsert.WhenTableHeader"
+msgstr "BulkTimeEntryInsert.WhenTableHeader"
+
+#: src/bulk-insert/BulkTimeHolidayEntryInsert.tsx:101
+#: src/bulk-insert/BulkTimeHolidayEntryInsert.tsx:129
+msgid "BulkTimeHolidayEntryInsert.DescriptionTableHeader"
+msgstr "BulkTimeHolidayEntryInsert.DescriptionTableHeader"
+
+#: src/bulk-insert/BulkTimeHolidayEntryInsert.tsx:117
+msgid "BulkTimeHolidayEntryInsert.InvalidEntries"
+msgstr "BulkTimeHolidayEntryInsert.InvalidEntries"
+
+#: src/bulk-insert/BulkTimeHolidayEntryInsert.tsx:73
+msgid "BulkTimeHolidayEntryInsert.Title"
+msgstr "BulkTimeHolidayEntryInsert.Title"
+
+#: src/bulk-insert/BulkTimeHolidayEntryInsert.tsx:96
+#: src/bulk-insert/BulkTimeHolidayEntryInsert.tsx:124
+msgid "BulkTimeHolidayEntryInsert.TypeTableHeader"
+msgstr "BulkTimeHolidayEntryInsert.TypeTableHeader"
+
+#: src/bulk-insert/BulkTimeHolidayEntryInsert.tsx:89
+msgid "BulkTimeHolidayEntryInsert.ValidEntries"
+msgstr "BulkTimeHolidayEntryInsert.ValidEntries"
+
+#: src/bulk-insert/BulkTimeHolidayEntryInsert.tsx:106
+#: src/bulk-insert/BulkTimeHolidayEntryInsert.tsx:134
+msgid "BulkTimeHolidayEntryInsert.WhenTableHeader"
+msgstr "BulkTimeHolidayEntryInsert.WhenTableHeader"
+
+#: src/time-absence-entries/TimeAbsenceEntries.tsx:82
+#: src/time-entries/TimeEntries.tsx:82
+#: src/time-holiday-entries/TimeHolidayEntries.tsx:77
+msgid "Buttons.Create"
+msgstr "Buttons.Create"
+
+#: src/profile/Profile.tsx:80
+msgid "Buttons.Update"
+msgstr "Buttons.Update"
+
+#: src/CreateTimeHolidayEntryModal.tsx:10
+msgid "CreateTimeHolidayEntry.ModalTitle"
+msgstr "CreateTimeHolidayEntry.ModalTitle"
+
+#: src/shared/TimeAbsenceEntryForm.tsx:52
+msgid "Label.Type"
+msgstr "Label.Type"
+
+#: src/profile/ProfileJobProjectForm.tsx:83
+msgid "Labels.Allocation"
+msgstr "Labels.Allocation"
+
+#: src/shared/TimeAbsenceEntryForm.tsx:71
+msgid "Labels.Description"
+msgstr "Labels.Description"
+
+#: src/profile/ProfileJobForm.tsx:94
+#: src/profile/ProfileJobProjectForm.tsx:98
+#: src/shared/TimeAbsenceEntryForm.tsx:77
+msgid "Labels.End"
+msgstr "Labels.End"
+
+#: src/profile/ProfileJobForm.tsx:115
+msgid "Labels.Friday"
+msgstr "Labels.Friday"
+
+#: src/profile/ProfileJobForm.tsx:98
+msgid "Labels.Holidays"
+msgstr "Labels.Holidays"
+
+#: src/shared/TimeEntryForm.tsx:81
+msgid "Labels.Job"
+msgstr "Labels.Job"
+
+#: src/profile/ProfileJobForm.tsx:103
+msgid "Labels.Monday"
+msgstr "Labels.Monday"
+
+#: src/profile/ProfileJobForm.tsx:83
+#: src/profile/ProfileJobProjectForm.tsx:79
+msgid "Labels.Name"
+msgstr "Labels.Name"
+
+#: src/shared/TimeEntryForm.tsx:93
+msgid "Labels.Project"
+msgstr "Labels.Project"
+
+#: src/profile/ProfileJobForm.tsx:118
+msgid "Labels.Saturday"
+msgstr "Labels.Saturday"
+
+#: src/profile/ProfileJobForm.tsx:89
+#: src/profile/ProfileJobProjectForm.tsx:93
+#: src/shared/TimeAbsenceEntryForm.tsx:74
+msgid "Labels.Start"
+msgstr "Labels.Start"
+
+#: src/profile/ProfileJobForm.tsx:121
+msgid "Labels.Sunday"
+msgstr "Labels.Sunday"
+
+#: src/profile/ProfileJobForm.tsx:106
+#: src/profile/ProfileJobForm.tsx:112
+msgid "Labels.Thursday"
+msgstr "Labels.Thursday"
+
+#: src/profile/ProfileJobForm.tsx:109
+msgid "Labels.Wednesday"
+msgstr "Labels.Wednesday"
+
+#: src/App.tsx:312
+msgid "LeftMenu.BulkInsert"
+msgstr "LeftMenu.BulkInsert"
+
+#: src/App.tsx:286
+msgid "LeftMenu.Dashboard"
+msgstr "LeftMenu.Dashboard"
+
+#: src/App.tsx:299
+msgid "LeftMenu.TimeAbsenceEntries"
+msgstr "LeftMenu.TimeAbsenceEntries"
+
+#: src/App.tsx:293
+msgid "LeftMenu.TimeEntries"
+msgstr "LeftMenu.TimeEntries"
+
+#: src/App.tsx:305
+msgid "LeftMenu.TimeHolidayEntries"
+msgstr "LeftMenu.TimeHolidayEntries"
+
+#: src/profile/ProfileJobForm.tsx:68
+#: src/profile/ProfileJobProjectForm.tsx:65
+msgid "Profile.CurrentDateLabel"
+msgstr "Profile.CurrentDateLabel"
+
+#: src/profile/Profile.tsx:59
+msgid "Profile.JobsTitle"
+msgstr "Profile.JobsTitle"
+
+#: src/profile/Profile.tsx:74
+msgid "Profile.NoJobsDefined"
+msgstr "Profile.NoJobsDefined"
+
+#: src/profile/ProfileJobForm.tsx:63
+msgid "Profile.UnknownJob"
+msgstr "Profile.UnknownJob"
+
+#: src/profile/ProfileJobProjectForm.tsx:58
+msgid "Profile.UnknownProject"
+msgstr "Profile.UnknownProject"
+
+#: src/shared/TimeEntryForm.tsx:60
+msgid "See the <0>description</0> below."
+msgstr "See the <0>description</0> below."
+
+#: src/time-absence-entries/TimeAbsenceEntries.tsx:33
+msgid "TimeAbsenceEnties.DeleteTimeAbsenceEntryButton"
+msgstr "TimeAbsenceEnties.DeleteTimeAbsenceEntryButton"
+
+#: src/time-absence-entries/TimeAbsenceEntries.tsx:30
+msgid "TimeAbsenceEnties.UpdateTimeAbsenceEntryButton"
+msgstr "TimeAbsenceEnties.UpdateTimeAbsenceEntryButton"
+
+#: src/time-absence-entries/TimeAbsenceEntries.tsx:64
+msgid "TimeAbsenceEntries.DescriptionTableHeader"
+msgstr "TimeAbsenceEntries.DescriptionTableHeader"
+
+#: src/time-absence-entries/TimeAbsenceEntries.tsx:57
+msgid "TimeAbsenceEntries.EndTableHeader"
+msgstr "TimeAbsenceEntries.EndTableHeader"
+
+#: src/time-absence-entries/TimeAbsenceEntries.tsx:24
+msgid "TimeAbsenceEntries.NoItems"
+msgstr "TimeAbsenceEntries.NoItems"
+
+#: src/time-absence-entries/TimeAbsenceEntries.tsx:50
+msgid "TimeAbsenceEntries.StartTableHeader"
+msgstr "TimeAbsenceEntries.StartTableHeader"
+
+#: src/time-absence-entries/TimeAbsenceEntries.tsx:38
+msgid "TimeAbsenceEntries.Title"
+msgstr "TimeAbsenceEntries.Title"
+
+#: src/time-absence-entries/TimeAbsenceEntries.tsx:44
+msgid "TimeAbsenceEntries.TypeTableHeader"
+msgstr "TimeAbsenceEntries.TypeTableHeader"
+
+#: src/time-entries/TimeEntries.tsx:57
+msgid "TimeEntries.JobTableHeader"
+msgstr "TimeEntries.JobTableHeader"
+
+#: src/time-entries/TimeEntries.tsx:24
+msgid "TimeEntries.NoItems"
+msgstr "TimeEntries.NoItems"
+
+#: src/time-entries/TimeEntries.tsx:63
+msgid "TimeEntries.ProjectTableHeader"
+msgstr "TimeEntries.ProjectTableHeader"
+
+#: src/time-entries/TimeEntries.tsx:38
+msgid "TimeEntries.Title"
+msgstr "TimeEntries.Title"
+
+#: src/time-entries/TimeEntries.tsx:44
+msgid "TimeEntries.TypeTableHeader"
+msgstr "TimeEntries.TypeTableHeader"
+
+#: src/time-entries/TimeEntries.tsx:50
+msgid "TimeEntries.WhenTableHeader"
+msgstr "TimeEntries.WhenTableHeader"
+
+#: src/dashboard/TimeEntriesByRange.tsx:51
+msgid "TimeEntriesByRange.Title"
+msgstr "TimeEntriesByRange.Title"
+
+#: src/shared/TimeEntryForm.tsx:59
+msgid "TimeEntryForm.Profile"
+msgstr "TimeEntryForm.Profile"
+
+#: src/shared/TimeEntryForm.tsx:58
+msgid "TimeEntryForm.YouNeedAtLeastOneJob"
+msgstr "TimeEntryForm.YouNeedAtLeastOneJob"
+
+#: src/time-holiday-entries/TimeHolidayEntries.tsx:82
+msgid "TimeHolidayEntries.CountryLabel"
+msgstr "TimeHolidayEntries.CountryLabel"
+
+#: src/time-holiday-entries/TimeHolidayEntries.tsx:39
+msgid "TimeHolidayEntries.DeleteHolidayButton"
+msgstr "TimeHolidayEntries.DeleteHolidayButton"
+
+#: src/time-holiday-entries/TimeHolidayEntries.tsx:59
+msgid "TimeHolidayEntries.DescriptionTableHeader"
+msgstr "TimeHolidayEntries.DescriptionTableHeader"
+
+#: src/time-holiday-entries/TimeHolidayEntries.tsx:31
+msgid "TimeHolidayEntries.NoItems"
+msgstr "TimeHolidayEntries.NoItems"
+
+#: src/time-holiday-entries/TimeHolidayEntries.tsx:82
+msgid "TimeHolidayEntries.SearchForCountry"
+msgstr "TimeHolidayEntries.SearchForCountry"
+
+#: src/time-holiday-entries/TimeHolidayEntries.tsx:36
+msgid "TimeHolidayEntries.UpdateHolidayButton"
+msgstr "TimeHolidayEntries.UpdateHolidayButton"
+
+#: src/time-holiday-entries/TimeHolidayEntries.tsx:86
+msgid "TimeHolidayEntries.UpdateHolidaysFromCountryButton"
+msgstr "TimeHolidayEntries.UpdateHolidaysFromCountryButton"
+
+#: src/time-holiday-entries/TimeHolidayEntries.tsx:51
+msgid "TimeHolidayEntries.WhenTableHeader"
+msgstr "TimeHolidayEntries.WhenTableHeader"
+
 #: src/dashboard/TimeStatistics.tsx:100
 msgid "TimeStatistics.Illness.SubTitle"
 msgstr "TimeStatistics.Illness.SubTitle"
@@ -36,3 +364,75 @@ msgstr "TimeStatistics.WorkingHours.SecondaryTitle"
 #: src/dashboard/TimeStatistics.tsx:67
 msgid "TimeStatistics.WorkingHours.Title"
 msgstr "TimeStatistics.WorkingHours.Title"
+
+#: src/App.tsx:213
+msgid "TopBar.OpenMenu"
+msgstr "TopBar.OpenMenu"
+
+#: src/App.tsx:242
+msgid "TopBar.OpenTimeAbsenceEntry"
+msgstr "TopBar.OpenTimeAbsenceEntry"
+
+#: src/App.tsx:247
+msgid "TopBar.OpenTimeEntry"
+msgstr "TopBar.OpenTimeEntry"
+
+#: src/App.tsx:256
+msgid "TopBar.Profile"
+msgstr "TopBar.Profile"
+
+#: src/bulk-insert/BulkTimeAbsenceEntryInsert.tsx:55
+#: src/bulk-insert/BulkTimeAbsenceEntryInsert.tsx:56
+#: src/bulk-insert/BulkTimeEntryInsert.tsx:61
+#: src/bulk-insert/BulkTimeHolidayEntryInsert.tsx:50
+msgid "Validation.InvalidDate"
+msgstr "Validation.InvalidDate"
+
+#: src/bulk-insert/BulkTimeEntryInsert.tsx:63
+msgid "Validation.InvalidJob"
+msgstr "Validation.InvalidJob"
+
+#: src/bulk-insert/BulkTimeEntryInsert.tsx:64
+msgid "Validation.InvalidProject"
+msgstr "Validation.InvalidProject"
+
+#: src/bulk-insert/BulkTimeAbsenceEntryInsert.tsx:59
+#: src/bulk-insert/BulkTimeEntryInsert.tsx:62
+msgid "Validation.InvalidType"
+msgstr "Validation.InvalidType"
+
+#: src/models/time-absence-entry.model.tsx:37
+#: src/models/time-absence-entry.model.tsx:50
+#: src/shared/TimeAbsenceEntryForm.tsx:67
+msgid "Values.TimeAbsenceEntryTypes.Compensation"
+msgstr "Values.TimeAbsenceEntryTypes.Compensation"
+
+#: src/models/time-absence-entry.model.tsx:44
+#: src/models/time-absence-entry.model.tsx:57
+#: src/shared/TimeAbsenceEntryForm.tsx:58
+msgid "Values.TimeAbsenceEntryTypes.Illness"
+msgstr "Values.TimeAbsenceEntryTypes.Illness"
+
+#: src/models/time-absence-entry.model.tsx:39
+#: src/models/time-absence-entry.model.tsx:52
+#: src/shared/TimeAbsenceEntryForm.tsx:64
+msgid "Values.TimeAbsenceEntryTypes.Permit"
+msgstr "Values.TimeAbsenceEntryTypes.Permit"
+
+#: src/models/time-absence-entry.model.tsx:41
+#: src/models/time-absence-entry.model.tsx:54
+#: src/shared/TimeAbsenceEntryForm.tsx:61
+msgid "Values.TimeAbsenceEntryTypes.Vacation"
+msgstr "Values.TimeAbsenceEntryTypes.Vacation"
+
+#: src/models/time-entry.model.tsx:37
+#: src/models/time-entry.model.tsx:46
+#: src/shared/TimeEntryForm.tsx:70
+msgid "Values.TimeEntryTypes.In"
+msgstr "Values.TimeEntryTypes.In"
+
+#: src/models/time-entry.model.tsx:40
+#: src/models/time-entry.model.tsx:49
+#: src/shared/TimeEntryForm.tsx:71
+msgid "Values.TimeEntryTypes.Out"
+msgstr "Values.TimeEntryTypes.Out"

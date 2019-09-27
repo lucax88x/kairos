@@ -1,18 +1,44 @@
 import DateFnsUtils from '@date-io/date-fns';
 import { Trans } from '@lingui/macro';
-import { Divider, FormControl, FormControlLabel, Grid, InputLabel, makeStyles, MenuItem, Radio, RadioGroup, Select, Typography } from '@material-ui/core';
+import {
+  Divider,
+  FormControl,
+  FormControlLabel,
+  Grid,
+  InputLabel,
+  makeStyles,
+  MenuItem,
+  Radio,
+  RadioGroup,
+  Select,
+  Typography,
+} from '@material-ui/core';
 import SaveIcon from '@material-ui/icons/Save';
-import { KeyboardDateTimePicker, MaterialUiPickersDate, MuiPickersUtilsProvider } from '@material-ui/pickers';
+import {
+  KeyboardDateTimePicker,
+  MaterialUiPickersDate,
+  MuiPickersUtilsProvider,
+} from '@material-ui/pickers';
 import { map } from 'ramda';
 import React, { ChangeEvent, useCallback, useEffect } from 'react';
 import { Link } from 'react-router-dom';
+import { getDatepickerLocale } from '../code/get-datepicker-locale';
 import { isString } from '../code/is';
 import ButtonSpinner from '../components/ButtonSpinner';
+import { Language } from '../models/language-model';
 import { ProfileModel } from '../models/profile.model';
 import { getTransFromType, TimeEntryModel, TimeEntryTypes } from '../models/time-entry.model';
 import { UUID } from '../models/uuid.model';
 import { Routes } from '../routes';
-import { RefreshSelectsTimeEntryAction, SetModel, SetTimeEntrySelectedJobAction, SetTimeEntrySelectedProjectAction, SetTimeEntryTypeAction, SetTimeEntryWhenAction, useTimeEntryFormReducer } from './TimeEntryForm.store';
+import {
+  RefreshSelectsTimeEntryAction,
+  SetModel,
+  SetTimeEntrySelectedJobAction,
+  SetTimeEntrySelectedProjectAction,
+  SetTimeEntryTypeAction,
+  SetTimeEntryWhenAction,
+  useTimeEntryFormReducer,
+} from './TimeEntryForm.store';
 
 const useStyles = makeStyles(theme => ({
   hasPadding: {
@@ -21,6 +47,7 @@ const useStyles = makeStyles(theme => ({
 }));
 
 export interface TimeEntryFormProps {
+  selectedLanguage: Language;
   profile: ProfileModel;
   model: TimeEntryModel;
   isBusy: boolean;
@@ -30,7 +57,7 @@ export interface TimeEntryFormProps {
 export const TimeEntryForm: React.FC<TimeEntryFormProps> = props => {
   const classes = useStyles(props);
 
-  const { isBusy, profile, model, onSave } = props;
+  const { selectedLanguage, isBusy, profile, model, onSave } = props;
 
   const [state, dispatch] = useTimeEntryFormReducer();
   const { id, when, type, jobs, selectedJobId, projects, selectedProjectId } = state;
@@ -128,7 +155,10 @@ export const TimeEntryForm: React.FC<TimeEntryFormProps> = props => {
             />
           </RadioGroup>
         </FormControl>
-        <MuiPickersUtilsProvider utils={DateFnsUtils}>
+        <MuiPickersUtilsProvider
+          utils={DateFnsUtils}
+          locale={getDatepickerLocale(selectedLanguage)}
+        >
           <KeyboardDateTimePicker
             margin="normal"
             ampm={false}

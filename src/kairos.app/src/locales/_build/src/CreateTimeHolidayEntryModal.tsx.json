@@ -1,0 +1,10 @@
+{
+  "CreateTimeHolidayEntry.ModalTitle": {
+    "origin": [
+      [
+        "src/CreateTimeHolidayEntryModal.tsx",
+        10
+      ]
+    ]
+  }
+}

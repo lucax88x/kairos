@@ -1,0 +1,74 @@
+{
+  "TopBar.OpenMenu": {
+    "origin": [
+      [
+        "src/App.tsx",
+        213
+      ]
+    ]
+  },
+  "TopBar.OpenTimeAbsenceEntry": {
+    "origin": [
+      [
+        "src/App.tsx",
+        242
+      ]
+    ]
+  },
+  "TopBar.OpenTimeEntry": {
+    "origin": [
+      [
+        "src/App.tsx",
+        247
+      ]
+    ]
+  },
+  "TopBar.Profile": {
+    "origin": [
+      [
+        "src/App.tsx",
+        256
+      ]
+    ]
+  },
+  "LeftMenu.Dashboard": {
+    "origin": [
+      [
+        "src/App.tsx",
+        286
+      ]
+    ]
+  },
+  "LeftMenu.TimeEntries": {
+    "origin": [
+      [
+        "src/App.tsx",
+        293
+      ]
+    ]
+  },
+  "LeftMenu.TimeAbsenceEntries": {
+    "origin": [
+      [
+        "src/App.tsx",
+        299
+      ]
+    ]
+  },
+  "LeftMenu.TimeHolidayEntries": {
+    "origin": [
+      [
+        "src/App.tsx",
+        305
+      ]
+    ]
+  },
+  "LeftMenu.BulkInsert": {
+    "origin": [
+      [
+        "src/App.tsx",
+        312
+      ]
+    ]
+  }
+}

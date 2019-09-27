@@ -1,13 +1,39 @@
-import { Avatar, Divider, Grid, IconButton, makeStyles, Paper, Typography } from '@material-ui/core';
+import { Trans } from '@lingui/macro';
+import {
+  Avatar,
+  Divider,
+  Grid,
+  IconButton,
+  makeStyles,
+  Paper,
+  Typography,
+} from '@material-ui/core';
 import AddIcon from '@material-ui/icons/Add';
 import { map } from 'ramda';
 import React, { Fragment, useCallback, useEffect } from 'react';
 import ButtonSpinner from '../components/ButtonSpinner';
 import Spinner from '../components/Spinner';
+import { Language } from '../models/language-model';
 import { ProfileModel } from '../models/profile.model';
 import { UserModel } from '../models/user.model';
 import { UUID } from '../models/uuid.model';
-import { AddJobAction, AddProjectAction, DeleteJobAction, DeleteProjectAction, InitializeJobsAction, UpdateJobDayAction, UpdateJobEndDateAction, UpdateJobHolidaysPerYearAction, UpdateJobNameAction, UpdateJobStartDateAction, UpdateProjectAllocationAction, UpdateProjectEndDateAction, UpdateProjectNameAction, UpdateProjectStartDateAction, useProfileReducer } from './Profile.store';
+import {
+  AddJobAction,
+  AddProjectAction,
+  DeleteJobAction,
+  DeleteProjectAction,
+  InitializeJobsAction,
+  UpdateJobDayAction,
+  UpdateJobEndDateAction,
+  UpdateJobHolidaysPerYearAction,
+  UpdateJobNameAction,
+  UpdateJobStartDateAction,
+  UpdateProjectAllocationAction,
+  UpdateProjectEndDateAction,
+  UpdateProjectNameAction,
+  UpdateProjectStartDateAction,
+  useProfileReducer,
+} from './Profile.store';
 import { ProfileJobForm } from './ProfileJobForm';
 
 const useStyles = makeStyles(theme => ({
@@ -15,6 +41,7 @@ const useStyles = makeStyles(theme => ({
 }));
 
 export interface ProfileInputs {
+  selectedLanguage: Language;
   user: UserModel;
   profile: ProfileModel;
   isGetBusy: boolean;
@@ -30,7 +57,7 @@ type ProfileProps = ProfileInputs & ProfileDispatches;
 export const ProfileComponent: React.FC<ProfileProps> = props => {
   const classes = useStyles(props);
 
-  const { profile, isGetBusy, isUpdateBusy, onUpdate, user } = props;
+  const { selectedLanguage, user, profile, isGetBusy, isUpdateBusy, onUpdate } = props;
 
   const [state, dispatch] = useProfileReducer();
 
@@ -113,7 +140,7 @@ export const ProfileComponent: React.FC<ProfileProps> = props => {
             <Grid container justify="space-between" alignItems="center">
               <Grid item>
                 <Typography color="inherit" noWrap display="inline">
-                  Jobs
+                  <Trans>Profile.JobsTitle</Trans>
                 </Typography>
               </Grid>
               <Grid item>
@@ -128,6 +155,7 @@ export const ProfileComponent: React.FC<ProfileProps> = props => {
               job => (
                 <Fragment key={job.id.toString()}>
                   <ProfileJobForm
+                    selectedLanguage={selectedLanguage}
                     job={job}
                     onJobDelete={handleJobDelete}
                     onJobNameChange={handleJobNameChange}
@@ -150,14 +178,14 @@ export const ProfileComponent: React.FC<ProfileProps> = props => {
           ) : (
             <Paper className={classes.paper}>
               <Typography color="inherit" noWrap display="inline">
-                No Jobs defined
+                <Trans>Profile.NoJobsDefined</Trans>
               </Typography>
             </Paper>
           )}
         </Grid>
         <Grid item>
           <ButtonSpinner onClick={handleUpdate} isBusy={isUpdateBusy} disabled={isUpdateBusy}>
-            Update
+            <Trans>Buttons.Update</Trans>
           </ButtonSpinner>
         </Grid>
       </Grid>

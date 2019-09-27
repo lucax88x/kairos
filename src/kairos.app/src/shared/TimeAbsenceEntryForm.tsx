@@ -1,4 +1,5 @@
 import DateFnsUtils from '@date-io/date-fns';
+import { Trans } from '@lingui/macro';
 import {
   Divider,
   FormControl,
@@ -16,10 +17,15 @@ import {
   MuiPickersUtilsProvider,
 } from '@material-ui/pickers';
 import React, { ChangeEvent, useCallback, useEffect, useState } from 'react';
+import { getDatepickerLocale } from '../code/get-datepicker-locale';
 import { isString } from '../code/is';
 import ButtonSpinner from '../components/ButtonSpinner';
-import { TimeAbsenceEntryModel, TimeAbsenceEntryTypes, getTransFromType } from '../models/time-absence-entry.model';
-import { Trans } from '@lingui/macro';
+import { Language } from '../models/language-model';
+import {
+  getTransFromType,
+  TimeAbsenceEntryModel,
+  TimeAbsenceEntryTypes,
+} from '../models/time-absence-entry.model';
 
 const useStyles = makeStyles(theme => ({
   hasPadding: {
@@ -28,6 +34,7 @@ const useStyles = makeStyles(theme => ({
 }));
 
 export interface TimeAbsenceEntryFormProps {
+  selectedLanguage: Language;
   model: TimeAbsenceEntryModel;
   isBusy: boolean;
   onSave: (model: TimeAbsenceEntryModel) => void;
@@ -36,7 +43,7 @@ export interface TimeAbsenceEntryFormProps {
 export const TimeAbsenceEntryForm: React.FC<TimeAbsenceEntryFormProps> = props => {
   const classes = useStyles(props);
 
-  const { model, isBusy, onSave } = props;
+  const { selectedLanguage, model, isBusy, onSave } = props;
 
   const [id, setId] = useState(model.id);
   const [type, setType] = useState(model.type);
@@ -122,7 +129,10 @@ export const TimeAbsenceEntryForm: React.FC<TimeAbsenceEntryFormProps> = props =
           onChange={handleDescriptionChange}
           fullWidth
         />
-        <MuiPickersUtilsProvider utils={DateFnsUtils}>
+        <MuiPickersUtilsProvider
+          utils={DateFnsUtils}
+          locale={getDatepickerLocale(selectedLanguage)}
+        >
           <Grid item xs={12}>
             <DateTimePicker
               autoOk

@@ -4,6 +4,7 @@ import React, { useCallback } from 'react';
 import Spinner from '../components/Spinner';
 import { TimeHolidayEntryModel } from '../models/time-holiday-entry.model';
 import { TimeHolidayEntryForm } from '../shared/TimeHolidayEntryForm';
+import { Language } from '../models/language-model';
 
 const useStyles = makeStyles(theme => ({
   paper: {
@@ -15,6 +16,7 @@ const useStyles = makeStyles(theme => ({
 }));
 
 export interface EditTimeHolidayEntryInputs {
+  selectedLanguage: Language;
   timeHolidayEntry: TimeHolidayEntryModel;
   isGetBusy: boolean;
   isUpdateBusy: boolean;
@@ -29,14 +31,19 @@ type EditTimeHolidayEntryProps = EditTimeHolidayEntryInputs & EditTimeHolidayEnt
 export const EditTimeHolidayEntryComponent: React.FC<EditTimeHolidayEntryProps> = props => {
   const classes = useStyles(props);
 
-  const { timeHolidayEntry, isGetBusy, isUpdateBusy, onUpdate } = props;
+  const { selectedLanguage, timeHolidayEntry, isGetBusy, isUpdateBusy, onUpdate } = props;
 
   return (
     <Grid container spacing={3}>
       <Grid item xs>
         <Paper className={classes.paper}>
           <Spinner show={isGetBusy}>
-            <TimeHolidayEntryForm isBusy={isUpdateBusy} model={timeHolidayEntry} onSave={onUpdate} />
+            <TimeHolidayEntryForm
+              selectedLanguage={selectedLanguage}
+              isBusy={isUpdateBusy}
+              model={timeHolidayEntry}
+              onSave={onUpdate}
+            />
           </Spinner>
         </Paper>
       </Grid>
