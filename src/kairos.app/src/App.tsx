@@ -1,4 +1,4 @@
-import { Trans, t } from '@lingui/macro';
+import { t, Trans } from '@lingui/macro';
 import {
   AppBar,
   Avatar,
@@ -45,6 +45,7 @@ import { Dashboard } from './dashboard/Dashboard';
 import { EditTimeAbsenceEntry } from './edit-time-absence-entry/EditTimeAbsenceEntry.container';
 import { EditTimeEntry } from './edit-time-entry/EditTimeEntry.container';
 import { EditTimeHolidayEntry } from './edit-time-holiday-entry/EditTimeHolidayEntry.container';
+import { i18n } from './i18nLoader';
 import { Language, Languages } from './models/language-model';
 import { UserModel } from './models/user.model';
 import { Profile } from './profile/Profile.container';
@@ -52,7 +53,6 @@ import { Routes } from './routes';
 import { TimeAbsenceEntries } from './time-absence-entries/TimeAbsenceEntries.container';
 import { TimeEntries } from './time-entries/TimeEntries.container';
 import { TimeHolidayEntries } from './time-holiday-entries/TimeHolidayEntries.container';
-import { i18n } from './i18nLoader';
 
 const drawerWidth = 240;
 
@@ -300,7 +300,7 @@ export const AppComponent: React.FC<AppProps> = props => {
         onSelectYear(event.target.value);
       }
     },
-    [setYear],
+    [setYear, onSelectYear],
   );
 
   const handleLanguageChange = useCallback(
@@ -310,7 +310,7 @@ export const AppComponent: React.FC<AppProps> = props => {
         onSelectLanguage(event.target.value);
       }
     },
-    [setYear],
+    [setLanguage, onSelectLanguage],
   );
 
   const getFlag = useCallback(
@@ -558,12 +558,20 @@ export const AppComponent: React.FC<AppProps> = props => {
                     >
                       From developer for developers with love!
                     </Typography>
-                    <a href="https://github.com/lucax88x/kairos" target="_blank">
+                    <a
+                      href="https://github.com/lucax88x/kairos"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                    >
                       <IconButton color="inherit" aria-label="Github">
                         <SimpleIcon type="github" className={classes.footerIcon}></SimpleIcon>
                       </IconButton>
                     </a>
-                    <a href="https://github.com/lucax88x/kairos/stargazers" target="_blank">
+                    <a
+                      href="https://github.com/lucax88x/kairos/stargazers"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                    >
                       <img
                         alt="preview badge"
                         src="https://img.shields.io/github/stars/lucax88x/kairos?style=for-the-badge"
@@ -573,7 +581,7 @@ export const AppComponent: React.FC<AppProps> = props => {
                 </Grid>
                 <Grid item>
                   <Grid container justify="space-between" alignItems="center">
-                    <a href="https://lucax88x.github.io" target="_blank">
+                    <a href="https://lucax88x.github.io" target="_blank" rel="noopener noreferrer">
                       <IconButton color="inherit" aria-label="Github.io">
                         <Avatar
                           className={classes.footerAvatar}
@@ -583,12 +591,16 @@ export const AppComponent: React.FC<AppProps> = props => {
                       </IconButton>
                     </a>
 
-                    <a href="https://github.com/lucax88x" target="_blank">
+                    <a href="https://github.com/lucax88x" target="_blank" rel="noopener noreferrer">
                       <IconButton color="inherit" aria-label="Github">
                         <SimpleIcon type="github" className={classes.footerIcon}></SimpleIcon>
                       </IconButton>
                     </a>
-                    <a href="https://www.linkedin.com/in/luca-trazzi-93217931/" target="_blank">
+                    <a
+                      href="https://www.linkedin.com/in/luca-trazzi-93217931/"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                    >
                       <IconButton color="inherit" aria-label="Linkedin">
                         <SimpleIcon type="linkedin" className={classes.footerIcon}></SimpleIcon>
                       </IconButton>

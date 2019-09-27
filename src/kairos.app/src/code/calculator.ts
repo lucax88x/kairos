@@ -7,7 +7,6 @@ import { filterByInterval, humanDifference } from './functions';
 export function getEnterExitPairs(timeEntries: TimeEntryListModel[], interval: Interval) {
   const filteredByInterval = filterByInterval(interval)(timeEntries);
   const orderedByDate = sortWith([ascend(te => te.when)], filteredByInterval);
-  const differencesByDate: { [date: number]: number } = {};
   const pairs: { enter: Date; exit: Date }[] = [];
 
   for (let i = 0; i < orderedByDate.length; i++) {

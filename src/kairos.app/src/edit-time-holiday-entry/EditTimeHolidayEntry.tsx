@@ -1,5 +1,5 @@
 import { Grid, makeStyles, Paper } from '@material-ui/core';
-import React, { useCallback } from 'react';
+import React from 'react';
 
 import Spinner from '../components/Spinner';
 import { TimeHolidayEntryModel } from '../models/time-holiday-entry.model';

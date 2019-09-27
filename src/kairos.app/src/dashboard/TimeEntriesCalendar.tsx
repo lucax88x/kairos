@@ -112,7 +112,7 @@ export const TimeEntriesCalendarComponent: React.FC<TimeEntriesCalendarEntryProp
 
       return {};
     },
-    [],
+    [classes],
   );
 
   return (

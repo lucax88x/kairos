@@ -57,7 +57,7 @@ export const sharedInitialState: SharedState = {
 
 function getBrowserLanguage(): Language {
   // tslint:disable-next-line: no-any
-  const browserLanguage = navigator.language || (<any>navigator).userLanguage;
+  const browserLanguage = navigator.language || (navigator as any).userLanguage;
 
   // TODO: find some utility to convert from culture to language safely
   switch (browserLanguage) {

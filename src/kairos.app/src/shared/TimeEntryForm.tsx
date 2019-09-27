@@ -64,7 +64,7 @@ export const TimeEntryForm: React.FC<TimeEntryFormProps> = props => {
 
   useEffect(() => {
     dispatch(RefreshSelectsTimeEntryAction(profile));
-  }, [profile]);
+  }, [dispatch, profile]);
 
   const handleSave = useCallback(() => {
     if (!!when) {
@@ -76,7 +76,7 @@ export const TimeEntryForm: React.FC<TimeEntryFormProps> = props => {
 
   const handleTypeChange = useCallback(
     (_, value: string) => dispatch(SetTimeEntryTypeAction(value as TimeEntryTypes)),
-    [],
+    [dispatch],
   );
 
   const handleWhenChange = useCallback(
@@ -84,7 +84,7 @@ export const TimeEntryForm: React.FC<TimeEntryFormProps> = props => {
       dispatch(SetTimeEntryWhenAction(!!when ? when : new Date()));
       dispatch(RefreshSelectsTimeEntryAction(profile));
     },
-    [profile],
+    [dispatch, profile],
   );
 
   const handleJobChange = useCallback(
@@ -94,20 +94,23 @@ export const TimeEntryForm: React.FC<TimeEntryFormProps> = props => {
         dispatch(RefreshSelectsTimeEntryAction(profile));
       }
     },
-    [profile],
+    [dispatch, profile],
   );
 
-  const handleProjectChange = useCallback((event: ChangeEvent<{ value: unknown }>) => {
-    if (isString(event.target.value)) {
-      dispatch(SetTimeEntrySelectedProjectAction(event.target.value));
-    }
-  }, []);
+  const handleProjectChange = useCallback(
+    (event: ChangeEvent<{ value: unknown }>) => {
+      if (isString(event.target.value)) {
+        dispatch(SetTimeEntrySelectedProjectAction(event.target.value));
+      }
+    },
+    [dispatch],
+  );
 
   useEffect(() => {
     if (!model.isEmpty()) {
       dispatch(SetModel(model));
     }
-  }, [model]);
+  }, [dispatch, model]);
 
   if (jobs.length === 0) {
     return (

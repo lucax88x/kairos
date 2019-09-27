@@ -1,13 +1,13 @@
-import { Tab, Tabs, makeStyles, Paper } from '@material-ui/core';
+import { t } from '@lingui/macro';
+import { makeStyles, Tab, Tabs } from '@material-ui/core';
 import BeachAccessIcon from '@material-ui/icons/BeachAccess';
 import TimerIcon from '@material-ui/icons/Timer';
 import WeekendIcon from '@material-ui/icons/Weekend';
 import React, { useCallback, useState } from 'react';
+import { i18n } from '../i18nLoader';
 import { BulkTimeAbsenceEntryInsert } from './BulkTimeAbsenceEntryInsert.container';
 import { BulkTimeEntryInsert } from './BulkTimeEntryInsert.container';
 import { BulkTimeHolidayEntryInsert } from './BulkTimeHolidayEntryInsert.container';
-import { i18n } from '../i18nLoader';
-import { t } from '@lingui/macro';
 
 const useStyles = makeStyles(theme => ({
   root: {

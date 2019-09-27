@@ -2,14 +2,7 @@ import { createStyles, Theme, WithStyles, withStyles } from '@material-ui/core/s
 import TableCell from '@material-ui/core/TableCell';
 import clsx from 'clsx';
 import React from 'react';
-import {
-  AutoSizer,
-  Column,
-  Table,
-  TableCellRenderer,
-  TableHeaderProps,
-  CellRenderer,
-} from 'react-virtualized';
+import { AutoSizer, Column, Table, TableCellRenderer, TableHeaderProps } from 'react-virtualized';
 
 const styles = (theme: Theme) =>
   createStyles({
