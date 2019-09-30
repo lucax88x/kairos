@@ -27,6 +27,7 @@ export class I18nLoaderComponent extends React.Component<I18nLoaderProps, I18nLo
       i18n.load({
         [language]: catalog,
       });
+      i18n.activate(language);
 
       return {
         catalogs: {
