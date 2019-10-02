@@ -12,6 +12,8 @@ import {
 } from './constants';
 import { SharedState } from './state';
 import { enqueueSnackbarAction } from '../notification-manager/actions';
+import { i18n } from '../i18nLoader';
+import { t } from '@lingui/macro';
 
 export const deleteTimeAbsenceEntryAsync = createAsyncAction(
   DELETE_TIME_ABSENCE_ENTRY,
@@ -32,7 +34,7 @@ function* doDeleteTimeAbsenceEntry({
 }
 
 function* doNotifySuccess() {
-  yield put(enqueueSnackbarAction('Time Absence Entry updated!', { variant: 'success' }));
+  yield put(enqueueSnackbarAction(i18n._(t`Messages.AbsenceDeleted`), { variant: 'success' }));
 }
 
 export function* deleteTimeAbsenceEntrySaga() {

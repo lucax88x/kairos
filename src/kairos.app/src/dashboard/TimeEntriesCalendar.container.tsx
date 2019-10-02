@@ -1,9 +1,9 @@
 import { connect } from 'react-redux';
-
 import {
   selectIsGetTimeAbsenceEntriesBusy,
   selectIsGetTimeEntriesBusy,
   selectIsGetTimeHolidayEntriesBusy,
+  selectSelectedLanguage,
   selectTimeAbsenceEntries,
   selectTimeEntries,
   selectTimeHolidayEntries,
@@ -12,6 +12,7 @@ import { State } from '../state';
 import { TimeEntriesCalendarComponent, TimeEntriesCalendarInputs } from './TimeEntriesCalendar';
 
 const mapStateToProps = (state: State): TimeEntriesCalendarInputs => ({
+  selectedLanguage: selectSelectedLanguage(state),
   isGetTimeEntriesBusy: selectIsGetTimeEntriesBusy(state),
   timeEntries: selectTimeEntries(state),
   isGetTimeAbsenceEntriesBusy: selectIsGetTimeAbsenceEntriesBusy(state),

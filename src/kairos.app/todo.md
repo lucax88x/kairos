@@ -1,7 +1,7 @@
-- language
-- docker-compose
 - select all in grids
 - click on calendar goes to edit
 - statistics & dashboard
 - update holiday from country UTF8
 - move grid formatters to shared
+- add type formatter on bulk grid
+- add type formatte ron calendar

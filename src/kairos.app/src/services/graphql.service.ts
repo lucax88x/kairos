@@ -2,6 +2,8 @@ import axios from 'axios';
 import HttpStatus from 'http-status-codes';
 
 import { authService } from '../auth/auth.service';
+import { i18n } from '../i18nLoader';
+import { t } from '@lingui/macro';
 
 export interface GraphQLError {
   message: string;
@@ -35,9 +37,10 @@ function call<R, P = null>(query: string, data?: P): Promise<R> {
         return;
       }
 
-      // TODO: we can inspect 404 or stuffs like that here
-      // result.data.errors[0].extensions.code
-      reject({ message: result.data.errors[0].message });
+      const error = result.data.errors[0];
+      console.error(error);
+
+      reject({ message: i18n._(t`ServerMessages.Error`) });
     } catch (error) {
       console.error(error);
 
@@ -49,7 +52,7 @@ function call<R, P = null>(query: string, data?: P): Promise<R> {
           case HttpStatus.UNAUTHORIZED:
           case HttpStatus.FORBIDDEN:
             authService.logout();
-            reject({ message: 'Unauthorized' });
+            reject({ message: i18n._(t`ServerMessages.Unauthorized`) });
             break;
         }
       }
@@ -57,10 +60,10 @@ function call<R, P = null>(query: string, data?: P): Promise<R> {
       // answer from auth0
       if (!!error.error && error.error === 'login_required') {
         authService.logout();
-        reject({ message: 'Unauthorized' });
+        reject({ message: i18n._(t`ServerMessages.Unauthorized`) });
       }
 
-      reject({ message: 'Error' });
+      reject({ message: i18n._(t`ServerMessages.Error`) });
     }
   });
 }

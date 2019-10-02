@@ -1,11 +1,2 @@
 @import './styles/react-big-calendar-variables.scss';
 @import 'react-big-calendar/lib/sass/styles.scss';
-
-.switch-wrapper {
-  position: relative;
-
-  & > div {
-    width: 100%;
-    position: absolute;
-  }
-}

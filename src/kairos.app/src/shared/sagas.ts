@@ -11,3 +11,4 @@ export { getTimeHolidayEntriesSaga } from './get-time-holiday-entries';
 export { createTimeHolidayEntrySaga } from './create-time-holiday-entry';
 export { deleteTimeHolidayEntrySaga } from './delete-time-holiday-entry';
 export { updateTimeHolidayEntriesByCountrySaga } from './update-time-holiday-entries-by-country';
+export { selectLanguageSaga } from './select-language';

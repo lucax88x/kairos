@@ -11,12 +11,12 @@ import {
   ListItem,
   ListItemIcon,
   ListItemText,
-  Menu,
   MenuItem,
   Select,
   SwipeableDrawer,
   Toolbar,
   Typography,
+  Box,
 } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
 import BeachAccessIcon from '@material-ui/icons/BeachAccess';
@@ -27,6 +27,7 @@ import FastForwardIcon from '@material-ui/icons/FastForward';
 import MenuIcon from '@material-ui/icons/Menu';
 import TimerIcon from '@material-ui/icons/Timer';
 import WeekendIcon from '@material-ui/icons/Weekend';
+import LogoutIcon from '@material-ui/icons/ExitToApp';
 import clsx from 'clsx';
 import { getYear } from 'date-fns';
 import { map } from 'ramda';
@@ -53,6 +54,7 @@ import { Routes } from './routes';
 import { TimeAbsenceEntries } from './time-absence-entries/TimeAbsenceEntries.container';
 import { TimeEntries } from './time-entries/TimeEntries.container';
 import { TimeHolidayEntries } from './time-holiday-entries/TimeHolidayEntries.container';
+import { isIOS } from './code/is-ios';
 
 const drawerWidth = 240;
 
@@ -70,14 +72,14 @@ const useStyles = makeStyles(theme => ({
   logo: {
     width: 40,
   },
-  languageSelect: {
+  topbarSelect: {
     textAlign: 'center',
   },
-  languageOption: {
+  topbarSelectOption: {
     justifyContent: 'center',
     padding: theme.spacing(1),
   },
-  languageOptionFlag: {
+  languageFlag: {
     width: 20,
   },
   footerAvatar: {
@@ -112,8 +114,16 @@ const useStyles = makeStyles(theme => ({
       duration: theme.transitions.duration.leavingScreen,
     }),
   },
-  appBarShift: {
+  appBarLeftShift: {
     marginLeft: drawerWidth,
+    width: `calc(100% - ${drawerWidth}px)`,
+    transition: theme.transitions.create(['width', 'margin'], {
+      easing: theme.transitions.easing.sharp,
+      duration: theme.transitions.duration.enteringScreen,
+    }),
+  },
+  appBarRightShift: {
+    marginRight: drawerWidth,
     width: `calc(100% - ${drawerWidth}px)`,
     transition: theme.transitions.create(['width', 'margin'], {
       easing: theme.transitions.easing.sharp,
@@ -123,14 +133,18 @@ const useStyles = makeStyles(theme => ({
   menuButton: {
     marginRight: 36,
   },
-  menuButtonHidden: {
-    display: 'none',
-  },
   title: {
     flexGrow: 1,
     marginLeft: theme.spacing(2),
   },
-  drawerPaper: {
+  rightDrawer: {
+    width: drawerWidth,
+    flexShrink: 0,
+  },
+  rightDrawerPaper: {
+    width: drawerWidth,
+  },
+  leftDrawerPaper: {
     position: 'relative',
     whiteSpace: 'nowrap',
     width: drawerWidth,
@@ -154,9 +168,21 @@ const useStyles = makeStyles(theme => ({
   content: {
     display: 'flex',
     flexDirection: 'column',
-    flexGrow: 1,
     height: '100vh',
+    flexGrow: 1,
     overflow: 'auto',
+    marginRight: -drawerWidth,
+    transition: theme.transitions.create('margin', {
+      easing: theme.transitions.easing.sharp,
+      duration: theme.transitions.duration.leavingScreen,
+    }),
+  },
+  contentShift: {
+    transition: theme.transitions.create('margin', {
+      easing: theme.transitions.easing.easeOut,
+      duration: theme.transitions.duration.enteringScreen,
+    }),
+    marginRight: 0,
   },
   container: {
     paddingTop: theme.spacing(4),
@@ -185,6 +211,7 @@ export interface AppInputs {
   selectedLanguage: Language;
   selectedYear: number;
   isLeftDrawerOpen: boolean;
+  isRightDrawerOpen: boolean;
   isTimeEntryDrawerOpen: boolean;
   isTimeAbsenceEntryDrawerOpen: boolean;
 }
@@ -194,6 +221,8 @@ export interface AppDispatches {
   onSelectLanguage: (language: Language) => void;
   openLeftDrawer: () => void;
   closeLeftDrawer: () => void;
+  openRightDrawer: () => void;
+  closeRightDrawer: () => void;
   openTimeEntryDrawer: () => void;
   closeTimeEntryDrawer: () => void;
   openTimeAbsenceEntryDrawer: () => void;
@@ -210,8 +239,11 @@ export const AppComponent: React.FC<AppProps> = props => {
     selectedLanguage,
     selectedYear,
     isLeftDrawerOpen,
+    isRightDrawerOpen,
     openLeftDrawer,
     closeLeftDrawer,
+    openRightDrawer,
+    closeRightDrawer,
     isTimeEntryDrawerOpen,
     isTimeAbsenceEntryDrawerOpen,
     openTimeEntryDrawer,
@@ -219,7 +251,6 @@ export const AppComponent: React.FC<AppProps> = props => {
     openTimeAbsenceEntryDrawer,
     closeTimeAbsenceEntryDrawer,
     onLogout,
-    onNavigateToProfile,
     onSelectYear,
     onSelectLanguage,
   } = props;
@@ -227,10 +258,11 @@ export const AppComponent: React.FC<AppProps> = props => {
   const classes = useStyles(props);
 
   const handleLeftDrawerOpen = useCallback(() => openLeftDrawer(), [openLeftDrawer]);
-
   const handleLeftDrawerClose = useCallback(() => closeLeftDrawer(), [closeLeftDrawer]);
 
-  const [userMenuEl, setUserMenuEl] = useState<Element | null>(null);
+  const handleRightDrawerOpen = useCallback(() => openRightDrawer(), [openRightDrawer]);
+  const handleRightDrawerClose = useCallback(() => closeRightDrawer(), [closeRightDrawer]);
+
   const [language, setLanguage] = useState<Language>(selectedLanguage);
   const [year, setYear] = useState<number>(selectedYear);
 
@@ -283,16 +315,6 @@ export const AppComponent: React.FC<AppProps> = props => {
     [closeTimeAbsenceEntryDrawer, shouldSkipSwipe],
   );
 
-  const handleUserMenuOpen = useCallback(
-    (event: React.KeyboardEvent | React.MouseEvent) => setUserMenuEl(event.currentTarget),
-    [setUserMenuEl],
-  );
-
-  const handleUserMenuClose = useCallback(
-    (event: React.KeyboardEvent | React.MouseEvent) => setUserMenuEl(null),
-    [setUserMenuEl],
-  );
-
   const handleYearChange = useCallback(
     (event: ChangeEvent<{ value: unknown }>) => {
       if (isNumber(event.target.value)) {
@@ -317,10 +339,10 @@ export const AppComponent: React.FC<AppProps> = props => {
     (language: Language) => {
       switch (language) {
         case 'it':
-          return <ItalianFlag className={classes.languageOptionFlag} />;
+          return <ItalianFlag className={classes.languageFlag} />;
         default:
         case 'en':
-          return <EnglishFlag className={classes.languageOptionFlag} />;
+          return <EnglishFlag className={classes.languageFlag} />;
       }
     },
     [classes],
@@ -331,25 +353,28 @@ export const AppComponent: React.FC<AppProps> = props => {
       <div className={classes.root}>
         <AppBar
           position="absolute"
-          className={clsx(classes.appBar, isLeftDrawerOpen && classes.appBarShift)}
+          className={clsx(
+            classes.appBar,
+            isLeftDrawerOpen && classes.appBarLeftShift,
+            isRightDrawerOpen && classes.appBarRightShift,
+          )}
         >
           <Toolbar className={classes.toolbar}>
             <Grid container>
-              <Grid container item alignItems={'center'} justify={'flex-start'} spacing={1} xs={6}>
-                <Grid item>
-                  <IconButton
-                    edge="start"
-                    color="inherit"
-                    aria-label={i18n._(t`TopBar.OpenMenu`)}
-                    onClick={handleLeftDrawerOpen}
-                    className={clsx(
-                      classes.menuButton,
-                      isLeftDrawerOpen && classes.menuButtonHidden,
-                    )}
-                  >
-                    <MenuIcon />
-                  </IconButton>
-                </Grid>
+              <Grid container item alignItems={'center'} justify={'flex-start'} xs={6}>
+                {!isLeftDrawerOpen && (
+                  <Grid item>
+                    <IconButton
+                      edge="start"
+                      color="inherit"
+                      aria-label={i18n._(t`TopBar.OpenMenu`)}
+                      onClick={handleLeftDrawerOpen}
+                      className={classes.menuButton}
+                    >
+                      <MenuIcon />
+                    </IconButton>
+                  </Grid>
+                )}
                 <Grid item>
                   <Link to={Routes.Dashboard}>
                     <LogoIcon className={classes.logo} />
@@ -357,97 +382,54 @@ export const AppComponent: React.FC<AppProps> = props => {
                 </Grid>
 
                 <Grid item>
-                  <Typography
-                    component="h1"
-                    variant="h6"
-                    color="inherit"
-                    noWrap
-                    className={classes.title}
-                  >
-                    <Link to={Routes.Dashboard} className={classes.link}>
-                      kairos
-                    </Link>
-                  </Typography>
+                  <Box component="div" display={{ xs: 'none', sm: 'block' }}>
+                    <Typography
+                      component="h1"
+                      variant="h6"
+                      color="inherit"
+                      noWrap
+                      className={classes.title}
+                    >
+                      <Link to={Routes.Dashboard} className={classes.link}>
+                        kairos
+                      </Link>
+                    </Typography>
+                  </Box>
                 </Grid>
               </Grid>
-              <Grid container item alignItems={'center'} justify={'flex-end'} spacing={1} xs={6}>
+              <Grid container item alignItems={'center'} justify={'flex-end'} xs={6}>
                 <Grid item>
-                  <Select
-                    value={year}
-                    onChange={handleYearChange}
-                    inputProps={{
-                      id: 'year',
-                    }}
-                  >
-                    {map(
-                      year => (
-                        <MenuItem key={year} value={year}>
-                          {year}
-                        </MenuItem>
-                      ),
-                      years,
-                    )}
-                  </Select>
+                  <Box component="div" display={{ xs: 'none', sm: 'block' }}>
+                    <IconButton
+                      color="inherit"
+                      aria-label={i18n._(t`TopBar.OpenTimeAbsenceEntry`)}
+                      onClick={handleTimeAbsenceEntryDrawerOpen}
+                    >
+                      <WeekendIcon />
+                    </IconButton>
+                  </Box>
                 </Grid>
                 <Grid item>
-                  <IconButton
-                    color="inherit"
-                    aria-label={i18n._(t`TopBar.OpenTimeAbsenceEntry`)}
-                    onClick={handleTimeAbsenceEntryDrawerOpen}
-                  >
-                    <WeekendIcon />
-                  </IconButton>
+                  <Box component="div" display={{ xs: 'none', sm: 'block' }}>
+                    <IconButton
+                      color="inherit"
+                      aria-label={i18n._(t`TopBar.OpenTimeEntry`)}
+                      onClick={handleTimeEntryDrawerOpen}
+                    >
+                      <TimerIcon />
+                    </IconButton>
+                  </Box>
                 </Grid>
-                <Grid item>
-                  <IconButton
-                    color="inherit"
-                    aria-label={i18n._(t`TopBar.OpenTimeEntry`)}
-                    onClick={handleTimeEntryDrawerOpen}
-                  >
-                    <TimerIcon />
-                  </IconButton>
-                </Grid>
-                <Grid item>
-                  <Avatar
-                    alt={user.name}
-                    src={user.picture}
-                    className={classes.avatar}
-                    onClick={handleUserMenuOpen}
-                  />
-
-                  <Menu
-                    anchorEl={userMenuEl}
-                    keepMounted
-                    open={Boolean(userMenuEl)}
-                    onClose={handleUserMenuClose}
-                  >
-                    <MenuItem onClick={onNavigateToProfile}>
-                      <Trans>TopBar.Profile</Trans>
-                    </MenuItem>
-                    <MenuItem>
-                      <Select
-                        fullWidth
-                        value={language}
-                        onChange={handleLanguageChange}
-                        className={classes.languageSelect}
-                      >
-                        {map(
-                          language => (
-                            <MenuItem
-                              key={language}
-                              value={language}
-                              className={classes.languageOption}
-                            >
-                              {getFlag(language)}
-                            </MenuItem>
-                          ),
-                          Languages,
-                        )}
-                      </Select>
-                    </MenuItem>
-                    <MenuItem onClick={onLogout}>Logout</MenuItem>
-                  </Menu>
-                </Grid>
+                {!isRightDrawerOpen && (
+                  <Grid item>
+                    <Avatar
+                      alt={user.name}
+                      src={user.picture}
+                      className={classes.avatar}
+                      onClick={handleRightDrawerOpen}
+                    />
+                  </Grid>
+                )}
               </Grid>
             </Grid>
           </Toolbar>
@@ -455,7 +437,7 @@ export const AppComponent: React.FC<AppProps> = props => {
         <Drawer
           variant="permanent"
           classes={{
-            paper: clsx(classes.drawerPaper, !isLeftDrawerOpen && classes.drawerPaperClose),
+            paper: clsx(classes.leftDrawerPaper, !isLeftDrawerOpen && classes.drawerPaperClose),
           }}
           open={isLeftDrawerOpen}
         >
@@ -500,36 +482,12 @@ export const AppComponent: React.FC<AppProps> = props => {
             </ListItem>
           </List>
         </Drawer>
-        <SwipeableDrawer
-          anchor="right"
-          open={isTimeEntryDrawerOpen}
-          onClose={handleTimeEntryDrawerClose}
-          onOpen={handleTimeEntryDrawerOpen}
+
+        <div
+          className={clsx(classes.content, {
+            [classes.contentShift]: isRightDrawerOpen,
+          })}
         >
-          <div className={classes.toolbarRightIcon}>
-            <IconButton onClick={handleTimeEntryDrawerClose}>
-              <ChevronRightIcon />
-            </IconButton>
-          </div>
-          <Divider />
-          <CreateTimeEntry />
-        </SwipeableDrawer>
-        <SwipeableDrawer
-          anchor="right"
-          open={isTimeAbsenceEntryDrawerOpen}
-          onClose={handleTimeAbsenceEntryDrawerClose}
-          onOpen={handleTimeAbsenceEntryDrawerOpen}
-        >
-          <div className={classes.toolbarRightIcon}>
-            <IconButton onClick={handleTimeAbsenceEntryDrawerClose}>
-              <ChevronRightIcon />
-            </IconButton>
-          </div>
-          <Divider />
-          <CreateTimeAbsenceEntry />
-        </SwipeableDrawer>
-        <CreateTimeHolidayEntryModal />
-        <div className={classes.content}>
           <main>
             <div className={classes.appBarSpacer} />
             <Container maxWidth="lg" className={classes.container}>
@@ -611,6 +569,126 @@ export const AppComponent: React.FC<AppProps> = props => {
             </Container>
           </footer>
         </div>
+
+        <Drawer
+          variant="persistent"
+          className={classes.rightDrawer}
+          classes={{ paper: clsx(classes.rightDrawerPaper) }}
+          anchor="right"
+          open={isRightDrawerOpen}
+        >
+          <div className={classes.toolbarRightIcon}>
+            <IconButton onClick={handleRightDrawerClose}>
+              <ChevronRightIcon />
+            </IconButton>
+          </div>
+          <Divider />
+          <List>
+            <ListItem button to={Routes.Profile} component={Link}>
+              <ListItemIcon>
+                <Avatar
+                  alt={user.name}
+                  src={user.picture}
+                  // className={classes.avatar}
+                />
+              </ListItemIcon>
+              <ListItemText primary={<Trans>TopBar.Profile</Trans>} />
+            </ListItem>
+            <Divider />
+            <ListItem button onClick={handleTimeEntryDrawerOpen}>
+              <ListItemIcon>
+                <TimerIcon />
+              </ListItemIcon>
+              <ListItemText primary={<Trans>TopBar.OpenTimeEntry</Trans>} />
+            </ListItem>
+            <ListItem button onClick={handleTimeAbsenceEntryDrawerOpen}>
+              <ListItemIcon>
+                <WeekendIcon />
+              </ListItemIcon>
+              <ListItemText primary={<Trans>TopBar.OpenTimeAbsenceEntry</Trans>} />
+            </ListItem>
+            <Divider />
+            <ListItem>
+              <Select
+                fullWidth
+                value={language}
+                onChange={handleLanguageChange}
+                className={classes.topbarSelect}
+              >
+                {map(
+                  language => (
+                    <MenuItem
+                      key={language}
+                      value={language}
+                      className={classes.topbarSelectOption}
+                    >
+                      {getFlag(language)}
+                    </MenuItem>
+                  ),
+                  Languages,
+                )}
+              </Select>
+            </ListItem>
+            <Divider />
+            <ListItem>
+              <Select
+                fullWidth
+                value={year}
+                onChange={handleYearChange}
+                className={classes.topbarSelect}
+              >
+                {map(
+                  year => (
+                    <MenuItem key={year} value={year} className={classes.topbarSelectOption}>
+                      {year}
+                    </MenuItem>
+                  ),
+                  years,
+                )}
+              </Select>
+            </ListItem>
+            <Divider />
+            <ListItem button onClick={onLogout}>
+              <ListItemIcon>
+                <LogoutIcon />
+              </ListItemIcon>
+              <ListItemText primary={<Trans>TopBar.Logout</Trans>} />
+            </ListItem>
+          </List>
+        </Drawer>
+        <SwipeableDrawer
+          anchor="right"
+          open={isTimeEntryDrawerOpen}
+          onClose={handleTimeEntryDrawerClose}
+          onOpen={handleTimeEntryDrawerOpen}
+          disableBackdropTransition={!isIOS}
+          disableDiscovery={isIOS}
+        >
+          <div className={classes.toolbarRightIcon}>
+            <IconButton onClick={handleTimeEntryDrawerClose}>
+              <ChevronRightIcon />
+            </IconButton>
+          </div>
+          <Divider />
+          <CreateTimeEntry />
+        </SwipeableDrawer>
+        <SwipeableDrawer
+          anchor="right"
+          open={isTimeAbsenceEntryDrawerOpen}
+          onClose={handleTimeAbsenceEntryDrawerClose}
+          onOpen={handleTimeAbsenceEntryDrawerOpen}
+          disableBackdropTransition={!isIOS}
+          disableDiscovery={isIOS}
+        >
+          <div className={classes.toolbarRightIcon}>
+            <IconButton onClick={handleTimeAbsenceEntryDrawerClose}>
+              <ChevronRightIcon />
+            </IconButton>
+          </div>
+          <Divider />
+          <CreateTimeAbsenceEntry />
+        </SwipeableDrawer>
+        <CreateTimeHolidayEntryModal />
       </div>
     </>
   );

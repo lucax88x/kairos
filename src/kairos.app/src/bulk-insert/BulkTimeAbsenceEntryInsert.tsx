@@ -27,6 +27,10 @@ const useStyles = makeStyles(theme => ({
     overflow: 'auto',
     height: '250px',
   },
+  center: {
+    display: 'flex',
+    justifyContent: 'center',
+  },
 }));
 
 export interface BulkTimeAbsenceEntryInsertInputs {
@@ -138,12 +142,10 @@ export const BulkTimeAbsenceEntryInsertComponent: React.FC<
           onChange={handleCsvChange}
         />
       </Grid>
-      <Grid item>
-        <Grid container justify="center">
-          <Fab color="primary" onClick={handleParse} disabled={!csv}>
-            <CheckIcon />
-          </Fab>
-        </Grid>
+      <Grid item className={classes.center}>
+        <Fab color="primary" onClick={handleParse} disabled={!csv}>
+          <CheckIcon />
+        </Fab>
       </Grid>
       {!!validModels.length && (
         <>
@@ -230,12 +232,10 @@ export const BulkTimeAbsenceEntryInsertComponent: React.FC<
         </>
       )}
       {!!validModels.length && (
-        <Grid item>
-          <Grid container justify="center">
-            <FabButtonSpinner onClick={handleBulkInsert} isBusy={isBusy} disabled={isBusy}>
-              <SaveIcon />
-            </FabButtonSpinner>
-          </Grid>
+        <Grid item className={classes.center}>
+          <FabButtonSpinner onClick={handleBulkInsert} isBusy={isBusy} disabled={isBusy}>
+            <SaveIcon />
+          </FabButtonSpinner>
         </Grid>
       )}
     </Grid>

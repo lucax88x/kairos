@@ -1,3 +1,4 @@
+import { Trans } from '@lingui/macro';
 import { Avatar, Button, Container, makeStyles, Typography } from '@material-ui/core';
 import LockOutlinedIcon from '@material-ui/icons/LockOutlined';
 import React from 'react';
@@ -40,7 +41,7 @@ export const LoginFormComponent: React.FC<LoginProps> = props => {
           <LockOutlinedIcon />
         </Avatar>
         <Typography component="h1" variant="h5">
-          Sign in
+          <Trans>Login.SignIn</Trans>
         </Typography>
         <form className={classes.form} noValidate>
           <Button
@@ -50,7 +51,7 @@ export const LoginFormComponent: React.FC<LoginProps> = props => {
             className={classes.submit}
             onClick={login}
           >
-            Sign In
+            <Trans>Login.SignIn</Trans>
           </Button>
         </form>
       </div>

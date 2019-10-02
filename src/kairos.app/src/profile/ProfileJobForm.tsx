@@ -290,6 +290,7 @@ export const ProfileJobForm: React.FC<ProfileJobFormProps> = props => {
           <Grid item>
             <Grid
               container
+              item
               justify="space-between"
               alignItems="center"
               className={classes.secondaryPaper}
@@ -306,24 +307,26 @@ export const ProfileJobForm: React.FC<ProfileJobFormProps> = props => {
                 </IconButton>
               </Grid>
             </Grid>
-            {map(
-              project => (
-                <Fragment key={project.id.toString()}>
-                  <ProfileJobProjectForm
-                    selectedLanguage={selectedLanguage}
-                    job={job}
-                    project={project}
-                    onDelete={onProjectDelete}
-                    onNameChange={onProjectNameChange}
-                    onAllocationChange={onProjectAllocationChange}
-                    onStartDateChange={onProjectStartDateChange}
-                    onEndDateChange={onProjectEndDateChange}
-                  />
-                  <Divider />
-                </Fragment>
-              ),
-              job.projects,
-            )}
+            <Grid item>
+              {map(
+                project => (
+                  <Fragment key={project.id.toString()}>
+                    <ProfileJobProjectForm
+                      selectedLanguage={selectedLanguage}
+                      job={job}
+                      project={project}
+                      onDelete={onProjectDelete}
+                      onNameChange={onProjectNameChange}
+                      onAllocationChange={onProjectAllocationChange}
+                      onStartDateChange={onProjectStartDateChange}
+                      onEndDateChange={onProjectEndDateChange}
+                    />
+                    <Divider />
+                  </Fragment>
+                ),
+                job.projects,
+              )}
+            </Grid>
           </Grid>
         </Grid>
       </ExpansionPanelDetails>

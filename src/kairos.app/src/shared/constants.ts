@@ -1,5 +1,6 @@
 export const SELECT_YEAR = '[SHARED] Select year';
 export const SELECT_LANGUAGE = '[SHARED] Select language';
+export const SELECTED_LANGUAGE = '[SHARED] Selected language';
 
 export const GET_COUNTRIES = '[SHARED] Get Countries';
 export const GET_COUNTRIES_SUCCESS = '[SHARED] Get Countries Success';

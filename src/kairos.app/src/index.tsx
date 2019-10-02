@@ -4,10 +4,8 @@ import { ConnectedRouter } from 'connected-react-router';
 import { SnackbarProvider } from 'notistack';
 import React from 'react';
 import ReactDOM from 'react-dom';
-import { spring } from 'react-motion';
 import { Provider } from 'react-redux';
-import { Redirect, Route } from 'react-router-dom';
-import { AnimatedSwitch, IAnimatedSwitchTransition } from 'react-router-transition';
+import { Redirect, Route, Switch } from 'react-router-dom';
 import { PersistGate } from 'redux-persist/integration/react';
 import { App } from './App.container';
 import { LoginForm } from './auth/LoginForm.container';
@@ -34,35 +32,6 @@ const theme = createMuiTheme({
   },
 });
 
-function mapStyles(styles: IAnimatedSwitchTransition) {
-  return {
-    opacity: styles.opacity,
-    transform: `translateX(${styles.offset}px)`,
-  };
-}
-
-function glide(val: number) {
-  return spring(val, {
-    stiffness: 140,
-    damping: 35,
-  });
-}
-
-const pageTransitions = {
-  atEnter: {
-    opacity: 0,
-    offset: 100,
-  },
-  atLeave: {
-    opacity: 0,
-    offset: glide(-100),
-  },
-  atActive: {
-    opacity: 1,
-    offset: glide(0),
-  },
-};
-
 ReactDOM.render(
   <ErrorBoundary>
     <Provider store={store}>
@@ -83,12 +52,12 @@ ReactDOM.render(
             </SnackbarProvider>
 
             <ConnectedRouter history={history}>
-              <AnimatedSwitch {...pageTransitions} mapStyles={mapStyles} className="switch-wrapper">
+              <Switch>
                 <Redirect exact={true} from="/" to={Routes.Dashboard} />
                 <Route path={Routes.Login} component={LoginForm} />
                 <Route path="" component={App} />
                 <Route component={NotFound} />
-              </AnimatedSwitch>
+              </Switch>
             </ConnectedRouter>
           </ThemeProvider>
         </I18nLoader>
@@ -98,6 +67,7 @@ ReactDOM.render(
   document.getElementById('root'),
 );
 
+console.log('prova i18n')
 serviceWorker.register({
   onSuccess: () => {
     store.dispatch(enqueueSnackbarAction('Content is cached for offline use.'));

@@ -7,6 +7,8 @@ import { deleteTimeEntry } from '../services/time-entry/time-entry.service';
 import { DELETE_TIME_ENTRY, DELETE_TIME_ENTRY_FAILURE, DELETE_TIME_ENTRY_SUCCESS } from './constants';
 import { SharedState } from './state';
 import { enqueueSnackbarAction } from '../notification-manager/actions';
+import { i18n } from '../i18nLoader';
+import { t } from '@lingui/macro';
 
 
 export const deleteTimeEntryAsync = createAsyncAction(
@@ -26,7 +28,7 @@ function* doDeleteTimeEntry({ payload: { id } }: ReturnType<typeof deleteTimeEnt
 }
 
 function* doNotifySuccess() {
-  yield put(enqueueSnackbarAction('Time Absence Entry deleted!', { variant: 'success' }));
+  yield put(enqueueSnackbarAction(i18n._(t`Messages.EntryDeleted`), { variant: 'success' }));
 }
 
 export function* deleteTimeEntrySaga() {

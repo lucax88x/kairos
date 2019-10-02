@@ -1,17 +1,15 @@
+import { t } from '@lingui/macro';
 import produce from 'immer';
 import { call, put, takeLatest } from 'redux-saga/effects';
 import { createAsyncAction } from 'typesafe-actions';
-
 import { EditTimeEntryActions } from '../actions';
+import { i18n } from '../i18nLoader';
 import { TimeEntryModel } from '../models/time-entry.model';
-import { updateTimeEntry } from '../services/time-entry/time-entry.service';
-import {
-  UPDATE_TIME_ENTRY,
-  UPDATE_TIME_ENTRY_FAILURE,
-  UPDATE_TIME_ENTRY_SUCCESS,
-} from './constants';
-import { EditTimeEntryState } from './state';
 import { enqueueSnackbarAction } from '../notification-manager/actions';
+import { updateTimeEntry } from '../services/time-entry/time-entry.service';
+import { UPDATE_TIME_ENTRY, UPDATE_TIME_ENTRY_FAILURE, UPDATE_TIME_ENTRY_SUCCESS } from './constants';
+import { EditTimeEntryState } from './state';
+
 
 export const updateTimeEntryAsync = createAsyncAction(
   UPDATE_TIME_ENTRY,
@@ -32,7 +30,7 @@ function* doDeleteTimeEntry({
 }
 
 function* doNotifySuccess() {
-  yield put(enqueueSnackbarAction('Time Entry updated!', { variant: 'success' }));
+  yield put(enqueueSnackbarAction(i18n._(t`Messages.EntryUpdated`), { variant: 'success' }));
 }
 
 export function* updateTimeEntrySaga() {

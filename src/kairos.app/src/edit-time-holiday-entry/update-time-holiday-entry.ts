@@ -1,17 +1,15 @@
+import { i18n } from '@lingui/core';
+import { t } from '@lingui/macro';
 import produce from 'immer';
 import { call, put, takeLatest } from 'redux-saga/effects';
 import { createAsyncAction } from 'typesafe-actions';
-
 import { EditTimeHolidayEntryActions } from '../actions';
 import { TimeHolidayEntryModel } from '../models/time-holiday-entry.model';
-import { updateTimeHolidayEntry } from '../services/time-holiday-entry/time-holiday-entry.service';
-import {
-  UPDATE_TIME_HOLIDAY_ENTRY,
-  UPDATE_TIME_HOLIDAY_ENTRY_FAILURE,
-  UPDATE_TIME_HOLIDAY_ENTRY_SUCCESS,
-} from './constants';
-import { EditTimeHolidayEntryState } from './state';
 import { enqueueSnackbarAction } from '../notification-manager/enqueue-snackbar';
+import { updateTimeHolidayEntry } from '../services/time-holiday-entry/time-holiday-entry.service';
+import { UPDATE_TIME_HOLIDAY_ENTRY, UPDATE_TIME_HOLIDAY_ENTRY_FAILURE, UPDATE_TIME_HOLIDAY_ENTRY_SUCCESS } from './constants';
+import { EditTimeHolidayEntryState } from './state';
+
 
 export const updateTimeHolidayEntryAsync = createAsyncAction(
   UPDATE_TIME_HOLIDAY_ENTRY,
@@ -32,7 +30,7 @@ function* doDeleteTimeHolidayEntry({
 }
 
 function* doNotifySuccess() {
-  yield put(enqueueSnackbarAction('Holiday updated!', { variant: 'success' }));
+  yield put(enqueueSnackbarAction(i18n._(t`Messages.HolidayUpdated`), { variant: 'success' }));
 }
 
 export function* updateTimeHolidayEntrySaga() {

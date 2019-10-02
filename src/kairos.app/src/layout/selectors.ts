@@ -9,6 +9,11 @@ export const selectIsLeftDrawerOpen = createSelector(
   state => state.isLeftDrawerOpen,
 );
 
+export const selectIsRightDrawerOpen = createSelector(
+  selectState,
+  state => state.isRightDrawerOpen,
+);
+
 export const selectIsTimeEntryDrawerOpen = createSelector(
   selectState,
   state => state.isTimeEntryDrawerOpen,

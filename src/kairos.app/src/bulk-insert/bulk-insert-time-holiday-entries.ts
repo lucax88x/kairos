@@ -1,7 +1,9 @@
+import { t } from '@lingui/macro';
 import produce from 'immer';
 import { call, put, takeLatest } from 'redux-saga/effects';
 import { createAsyncAction } from 'typesafe-actions';
 import { BulkInsertActions } from '../actions';
+import { i18n } from '../i18nLoader';
 import { TimeHolidayEntryModel } from '../models/time-holiday-entry.model';
 import { enqueueSnackbarAction } from '../notification-manager/actions';
 import { bulkInsertTimeHolidayEntries } from '../services/time-holiday-entry/time-holiday-entry.service';
@@ -31,7 +33,7 @@ function* doBulkTimeHolidayEntries({
 }
 
 function* doNotifySuccess() {
-  yield put(enqueueSnackbarAction('Holidays saved!', { variant: 'success' }));
+  yield put(enqueueSnackbarAction(i18n._(t`Messages.BulkHolidaysSaved`), { variant: 'success' }));
 }
 
 export function* bulkInsertTimeHolidayEntriesSaga() {

@@ -1,15 +1,13 @@
+import { t } from '@lingui/macro';
 import produce from 'immer';
 import { call, put, takeLatest } from 'redux-saga/effects';
 import { createAsyncAction } from 'typesafe-actions';
 import { BulkInsertActions } from '../actions';
+import { i18n } from '../i18nLoader';
 import { TimeAbsenceEntryModel } from '../models/time-absence-entry.model';
 import { enqueueSnackbarAction } from '../notification-manager/actions';
 import { bulkInsertTimeAbsenceEntries } from '../services/time-absence-entry/time-absence-entry.service';
-import {
-  BULK_INSERT_TIME_ABSENCE_ENTRIES,
-  BULK_INSERT_TIME_ABSENCE_ENTRIES_FAILURE,
-  BULK_INSERT_TIME_ABSENCE_ENTRIES_SUCCESS,
-} from './constants';
+import { BULK_INSERT_TIME_ABSENCE_ENTRIES, BULK_INSERT_TIME_ABSENCE_ENTRIES_FAILURE, BULK_INSERT_TIME_ABSENCE_ENTRIES_SUCCESS } from './constants';
 import { BulkInsertState } from './state';
 
 export const bulkInsertTimeAbsenceEntriesAsync = createAsyncAction(
@@ -31,7 +29,7 @@ function* doBulkTimeAbsenceEntries({
 }
 
 function* doNotifySuccess() {
-  yield put(enqueueSnackbarAction('Absences saved!', { variant: 'success' }));
+  yield put(enqueueSnackbarAction(i18n._(t`Messages.BulkAbsencesSaved`), { variant: 'success' }));
 }
 
 export function* bulkInsertTimeAbsenceEntriesSaga() {

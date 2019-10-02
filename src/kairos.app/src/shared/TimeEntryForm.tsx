@@ -116,14 +116,10 @@ export const TimeEntryForm: React.FC<TimeEntryFormProps> = props => {
     return (
       <div className={classes.hasPadding}>
         <Typography color="inherit" noWrap>
-          <Trans>TimeEntryForm.YouNeedAtLeastOneJob</Trans>
           <Trans
-            id="TimeEntryForm.Profile"
-            components={[<Link to={Routes.Profile}>Profile</Link>]}
+            id="TimeEntryForm.YouNeedAtLeastOneJob"
+            components={[<Link to={Routes.Profile}></Link>]}
           />
-          <Trans>
-            See the <Link to="/more">description</Link> below.
-          </Trans>
         </Typography>
       </div>
     );

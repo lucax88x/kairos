@@ -25,94 +25,94 @@ msgstr "Time Entries"
 msgid "BulkInsert.TimeHolidayEntryTabHeader"
 msgstr "Holidays"
 
-#: src/bulk-insert/BulkTimeAbsenceEntryInsert.tsx:110
-#: src/bulk-insert/BulkTimeAbsenceEntryInsert.tsx:145
+#: src/bulk-insert/BulkTimeAbsenceEntryInsert.tsx:112
+#: src/bulk-insert/BulkTimeAbsenceEntryInsert.tsx:147
 msgid "BulkTimeAbsenceEntryInsert.DescriptionTableHeader"
 msgstr "Description"
 
-#: src/bulk-insert/BulkTimeAbsenceEntryInsert.tsx:122
-#: src/bulk-insert/BulkTimeAbsenceEntryInsert.tsx:157
+#: src/bulk-insert/BulkTimeAbsenceEntryInsert.tsx:124
+#: src/bulk-insert/BulkTimeAbsenceEntryInsert.tsx:159
 msgid "BulkTimeAbsenceEntryInsert.EndTableHeader"
 msgstr "End"
 
-#: src/bulk-insert/BulkTimeAbsenceEntryInsert.tsx:133
+#: src/bulk-insert/BulkTimeAbsenceEntryInsert.tsx:135
 msgid "BulkTimeAbsenceEntryInsert.InvalidEntries"
 msgstr "Invalid Entries"
 
-#: src/bulk-insert/BulkTimeAbsenceEntryInsert.tsx:115
-#: src/bulk-insert/BulkTimeAbsenceEntryInsert.tsx:150
+#: src/bulk-insert/BulkTimeAbsenceEntryInsert.tsx:117
+#: src/bulk-insert/BulkTimeAbsenceEntryInsert.tsx:152
 msgid "BulkTimeAbsenceEntryInsert.StartTableHeader"
 msgstr "Start"
 
-#: src/bulk-insert/BulkTimeAbsenceEntryInsert.tsx:82
+#: src/bulk-insert/BulkTimeAbsenceEntryInsert.tsx:86
 msgid "BulkTimeAbsenceEntryInsert.Title"
 msgstr "Title"
 
-#: src/bulk-insert/BulkTimeAbsenceEntryInsert.tsx:105
-#: src/bulk-insert/BulkTimeAbsenceEntryInsert.tsx:140
+#: src/bulk-insert/BulkTimeAbsenceEntryInsert.tsx:107
+#: src/bulk-insert/BulkTimeAbsenceEntryInsert.tsx:142
 msgid "BulkTimeAbsenceEntryInsert.TypeTableHeader"
 msgstr "Type"
 
-#: src/bulk-insert/BulkTimeAbsenceEntryInsert.tsx:98
+#: src/bulk-insert/BulkTimeAbsenceEntryInsert.tsx:100
 msgid "BulkTimeAbsenceEntryInsert.ValidEntries"
 msgstr "Valid Entries"
 
-#: src/bulk-insert/BulkTimeEntryInsert.tsx:150
+#: src/bulk-insert/BulkTimeEntryInsert.tsx:152
 msgid "BulkTimeEntryInsert.InvalidEntries"
 msgstr "Invalid Entries"
 
-#: src/bulk-insert/BulkTimeEntryInsert.tsx:134
-#: src/bulk-insert/BulkTimeEntryInsert.tsx:169
+#: src/bulk-insert/BulkTimeEntryInsert.tsx:136
+#: src/bulk-insert/BulkTimeEntryInsert.tsx:171
 msgid "BulkTimeEntryInsert.JobTableHeader"
 msgstr "Job"
 
-#: src/bulk-insert/BulkTimeEntryInsert.tsx:140
-#: src/bulk-insert/BulkTimeEntryInsert.tsx:175
+#: src/bulk-insert/BulkTimeEntryInsert.tsx:142
+#: src/bulk-insert/BulkTimeEntryInsert.tsx:177
 msgid "BulkTimeEntryInsert.ProjectTableHeader"
 msgstr "Project"
 
-#: src/bulk-insert/BulkTimeEntryInsert.tsx:99
+#: src/bulk-insert/BulkTimeEntryInsert.tsx:103
 msgid "BulkTimeEntryInsert.Title"
 msgstr "Title"
 
-#: src/bulk-insert/BulkTimeEntryInsert.tsx:122
-#: src/bulk-insert/BulkTimeEntryInsert.tsx:157
+#: src/bulk-insert/BulkTimeEntryInsert.tsx:124
+#: src/bulk-insert/BulkTimeEntryInsert.tsx:159
 msgid "BulkTimeEntryInsert.TypeTableHeader"
 msgstr "Type"
 
-#: src/bulk-insert/BulkTimeEntryInsert.tsx:115
+#: src/bulk-insert/BulkTimeEntryInsert.tsx:117
 msgid "BulkTimeEntryInsert.ValidEntries"
 msgstr "Valid Entries"
 
-#: src/bulk-insert/BulkTimeEntryInsert.tsx:127
-#: src/bulk-insert/BulkTimeEntryInsert.tsx:162
+#: src/bulk-insert/BulkTimeEntryInsert.tsx:129
+#: src/bulk-insert/BulkTimeEntryInsert.tsx:164
 msgid "BulkTimeEntryInsert.WhenTableHeader"
 msgstr "When"
 
-#: src/bulk-insert/BulkTimeHolidayEntryInsert.tsx:101
-#: src/bulk-insert/BulkTimeHolidayEntryInsert.tsx:129
+#: src/bulk-insert/BulkTimeHolidayEntryInsert.tsx:103
+#: src/bulk-insert/BulkTimeHolidayEntryInsert.tsx:131
 msgid "BulkTimeHolidayEntryInsert.DescriptionTableHeader"
 msgstr "Description"
 
-#: src/bulk-insert/BulkTimeHolidayEntryInsert.tsx:117
+#: src/bulk-insert/BulkTimeHolidayEntryInsert.tsx:119
 msgid "BulkTimeHolidayEntryInsert.InvalidEntries"
 msgstr "Invalid Entries"
 
-#: src/bulk-insert/BulkTimeHolidayEntryInsert.tsx:73
+#: src/bulk-insert/BulkTimeHolidayEntryInsert.tsx:77
 msgid "BulkTimeHolidayEntryInsert.Title"
 msgstr "Title"
 
-#: src/bulk-insert/BulkTimeHolidayEntryInsert.tsx:96
-#: src/bulk-insert/BulkTimeHolidayEntryInsert.tsx:124
+#: src/bulk-insert/BulkTimeHolidayEntryInsert.tsx:98
+#: src/bulk-insert/BulkTimeHolidayEntryInsert.tsx:126
 msgid "BulkTimeHolidayEntryInsert.TypeTableHeader"
 msgstr "Type"
 
-#: src/bulk-insert/BulkTimeHolidayEntryInsert.tsx:89
+#: src/bulk-insert/BulkTimeHolidayEntryInsert.tsx:91
 msgid "BulkTimeHolidayEntryInsert.ValidEntries"
 msgstr "Valid Entries"
 
-#: src/bulk-insert/BulkTimeHolidayEntryInsert.tsx:106
-#: src/bulk-insert/BulkTimeHolidayEntryInsert.tsx:134
+#: src/bulk-insert/BulkTimeHolidayEntryInsert.tsx:108
+#: src/bulk-insert/BulkTimeHolidayEntryInsert.tsx:136
 msgid "BulkTimeHolidayEntryInsert.WhenTableHeader"
 msgstr "Invalid Entries"
 
@@ -122,9 +122,57 @@ msgstr "Invalid Entries"
 msgid "Buttons.Create"
 msgstr "Create"
 
-#: src/profile/Profile.tsx:80
+#: src/profile/Profile.tsx:85
 msgid "Buttons.Update"
 msgstr "Update"
+
+#: src/dashboard/TimeEntriesCalendar.tsx:80
+msgid "Calendar.Agenda"
+msgstr "Agenda"
+
+#: src/dashboard/TimeEntriesCalendar.tsx:82
+msgid "Calendar.AllDay"
+msgstr "All day"
+
+#: src/dashboard/TimeEntriesCalendar.tsx:76
+msgid "Calendar.Back"
+msgstr "Back"
+
+#: src/dashboard/TimeEntriesCalendar.tsx:74
+msgid "Calendar.Day"
+msgstr "Day"
+
+#: src/dashboard/TimeEntriesCalendar.tsx:72
+msgid "Calendar.Month"
+msgstr "Month"
+
+#: src/dashboard/TimeEntriesCalendar.tsx:77
+msgid "Calendar.Next"
+msgstr "Next"
+
+#: src/dashboard/TimeEntriesCalendar.tsx:81
+msgid "Calendar.NoEventsInRange"
+msgstr "No Events In Range"
+
+#: src/dashboard/TimeEntriesCalendar.tsx:83
+msgid "Calendar.ShowMore"
+msgstr "More {more}"
+
+#: src/dashboard/TimeEntriesCalendar.tsx:75
+msgid "Calendar.Today"
+msgstr "Today"
+
+#: src/dashboard/TimeEntriesCalendar.tsx:78
+msgid "Calendar.Week"
+msgstr "Week"
+
+#: src/dashboard/TimeEntriesCalendar.tsx:79
+msgid "Calendar.WorkWeek"
+msgstr "Work Week"
+
+#: src/dashboard/TimeEntriesCalendar.tsx:73
+msgid "Calendar.Yesterday"
+msgstr "Yesterday"
 
 #: src/CreateTimeHolidayEntryModal.tsx:10
 msgid "CreateTimeHolidayEntry.ModalTitle"
@@ -156,7 +204,7 @@ msgstr "Friday"
 msgid "Labels.Holidays"
 msgstr "Holidays (days per year)"
 
-#: src/shared/TimeEntryForm.tsx:81
+#: src/shared/TimeEntryForm.tsx:77
 msgid "Labels.Job"
 msgstr "Job"
 
@@ -169,7 +217,7 @@ msgstr "Monday"
 msgid "Labels.Name"
 msgstr "Name"
 
-#: src/shared/TimeEntryForm.tsx:93
+#: src/shared/TimeEntryForm.tsx:89
 msgid "Labels.Project"
 msgstr "Project"
 
@@ -196,36 +244,86 @@ msgstr "Thursday"
 msgid "Labels.Wednesday"
 msgstr "Wednesday"
 
-#: src/App.tsx:312
+#: src/App.tsx:320
 msgid "LeftMenu.BulkInsert"
 msgstr "Bulk Insert"
 
-#: src/App.tsx:286
+#: src/App.tsx:294
 msgid "LeftMenu.Dashboard"
 msgstr "Dashboard"
 
-#: src/App.tsx:299
+#: src/App.tsx:307
 msgid "LeftMenu.TimeAbsenceEntries"
 msgstr "Absences"
 
-#: src/App.tsx:293
+#: src/App.tsx:301
 msgid "LeftMenu.TimeEntries"
 msgstr "Time Entries"
 
-#: src/App.tsx:305
+#: src/App.tsx:313
 msgid "LeftMenu.TimeHolidayEntries"
 msgstr "Holidays"
+
+#: src/auth/LoginForm.tsx:33
+#: src/auth/LoginForm.tsx:37
+msgid "Login.SignIn"
+msgstr "Sign in"
+
+#: src/shared/delete-time-absence-entry.ts:20
+#: src/shared/delete-time-absence-entry.ts:20
+msgid "Messages.AbsenceDeleted"
+msgstr "Absence Deleted"
+
+#: src/edit-time-absence-entry/update-time-absence-entry.ts:20
+#: src/edit-time-absence-entry/update-time-absence-entry.ts:20
+msgid "Messages.AbsenceUpdated"
+msgstr "Absence Updated"
+
+#: src/bulk-insert/bulk-insert-time-absence-entries.ts:20
+#: src/bulk-insert/bulk-insert-time-absence-entries.ts:20
+msgid "Messages.BulkAbsencesSaved"
+msgstr "Saved Absences"
+
+#: src/bulk-insert/bulk-insert-time-entries.ts:20
+#: src/bulk-insert/bulk-insert-time-entries.ts:20
+msgid "Messages.BulkEntriesSaved"
+msgstr "Saved Entries"
+
+#: src/bulk-insert/bulk-insert-time-holiday-entries.ts:20
+#: src/bulk-insert/bulk-insert-time-holiday-entries.ts:20
+msgid "Messages.BulkHolidaysSaved"
+msgstr "Saved Holidays"
+
+#: src/shared/delete-time-entry.ts:20
+#: src/shared/delete-time-entry.ts:20
+msgid "Messages.EntryDeleted"
+msgstr "Entry Deleted"
+
+#: src/edit-time-entry/update-time-entry.ts:20
+#: src/edit-time-entry/update-time-entry.ts:20
+msgid "Messages.EntryUpdated"
+msgstr "Entry Updated"
+
+#: src/shared/delete-time-holiday-entry.ts:20
+#: src/shared/delete-time-holiday-entry.ts:20
+msgid "Messages.HolidayDeleted"
+msgstr "Holiday Deleted"
+
+#: src/edit-time-holiday-entry/update-time-holiday-entry.ts:20
+#: src/edit-time-holiday-entry/update-time-holiday-entry.ts:20
+msgid "Messages.HolidayUpdated"
+msgstr "Holiday Updated"
 
 #: src/profile/ProfileJobForm.tsx:68
 #: src/profile/ProfileJobProjectForm.tsx:65
 msgid "Profile.CurrentDateLabel"
 msgstr "Current Date"
 
-#: src/profile/Profile.tsx:59
+#: src/profile/Profile.tsx:64
 msgid "Profile.JobsTitle"
 msgstr "Jobs"
 
-#: src/profile/Profile.tsx:74
+#: src/profile/Profile.tsx:79
 msgid "Profile.NoJobsDefined"
 msgstr "No defined jobs"
 
@@ -237,19 +335,19 @@ msgstr "Unknown"
 msgid "Profile.UnknownProject"
 msgstr "Unknown"
 
-#: src/shared/TimeEntryForm.tsx:60
-msgid "See the <0>description</0> below."
-msgstr ""
+#: src/services/graphql.service.ts:31
+#: src/services/graphql.service.ts:51
+msgid "ServerMessages.Error"
+msgstr "Error, please retry later"
+
+#: src/services/graphql.service.ts:42
+#: src/services/graphql.service.ts:49
+msgid "ServerMessages.Unauthorized"
+msgstr "Unauthorized"
 
 #: src/time-absence-entries/TimeAbsenceEntries.tsx:33
-#, fuzzy
 msgid "TimeAbsenceEntries.DeleteTimeAbsenceEntryButton"
 msgstr "Delete Absence"
-
-#: src/time-absence-entries/TimeAbsenceEntries.tsx:30
-#, fuzzy
-msgid "TimeAbsenceEntries.UpdateTimeAbsenceEntryButton"
-msgstr "Update Absence"
 
 #: src/time-absence-entries/TimeAbsenceEntries.tsx:64
 msgid "TimeAbsenceEntries.DescriptionTableHeader"
@@ -274,6 +372,10 @@ msgstr "TItle"
 #: src/time-absence-entries/TimeAbsenceEntries.tsx:44
 msgid "TimeAbsenceEntries.TypeTableHeader"
 msgstr "Type"
+
+#: src/time-absence-entries/TimeAbsenceEntries.tsx:30
+msgid "TimeAbsenceEntries.UpdateTimeAbsenceEntryButton"
+msgstr "Update Absence"
 
 #: src/time-entries/TimeEntries.tsx:57
 msgid "TimeEntries.JobTableHeader"
@@ -303,13 +405,9 @@ msgstr "When"
 msgid "TimeEntriesByRange.Title"
 msgstr "Title"
 
-#: src/shared/TimeEntryForm.tsx:59
-msgid "TimeEntryForm.Profile"
-msgstr "Profile"
-
 #: src/shared/TimeEntryForm.tsx:58
 msgid "TimeEntryForm.YouNeedAtLeastOneJob"
-msgstr "You need at least one job"
+msgstr "You need at least one job, connect to <0>Profile</0>"
 
 #: src/time-holiday-entries/TimeHolidayEntries.tsx:82
 msgid "TimeHolidayEntries.CountryLabel"
@@ -361,45 +459,51 @@ msgstr "Vacations"
 
 #: src/dashboard/TimeStatistics.tsx:70
 msgid "TimeStatistics.WorkingHours.SecondaryTitle"
-msgstr "WorkingHours"
+msgstr "Working Hours"
 
 #: src/dashboard/TimeStatistics.tsx:67
 msgid "TimeStatistics.WorkingHours.Title"
 msgstr "Working Hours"
 
-#: src/App.tsx:213
+#: src/App.tsx:434
+msgid "TopBar.Logout"
+msgstr "Logout"
+
+#: src/App.tsx:238
 msgid "TopBar.OpenMenu"
 msgstr "Open Menu"
 
-#: src/App.tsx:242
+#: src/App.tsx:261
+#: src/App.tsx:411
 msgid "TopBar.OpenTimeAbsenceEntry"
 msgstr "Open absence"
 
-#: src/App.tsx:247
+#: src/App.tsx:268
+#: src/App.tsx:405
 msgid "TopBar.OpenTimeEntry"
 msgstr "Open time entry"
 
-#: src/App.tsx:256
+#: src/App.tsx:398
 msgid "TopBar.Profile"
 msgstr "Profile"
 
-#: src/bulk-insert/BulkTimeAbsenceEntryInsert.tsx:55
-#: src/bulk-insert/BulkTimeAbsenceEntryInsert.tsx:56
-#: src/bulk-insert/BulkTimeEntryInsert.tsx:61
-#: src/bulk-insert/BulkTimeHolidayEntryInsert.tsx:50
+#: src/bulk-insert/BulkTimeAbsenceEntryInsert.tsx:59
+#: src/bulk-insert/BulkTimeAbsenceEntryInsert.tsx:60
+#: src/bulk-insert/BulkTimeEntryInsert.tsx:65
+#: src/bulk-insert/BulkTimeHolidayEntryInsert.tsx:54
 msgid "Validation.InvalidDate"
 msgstr "Invalid Date"
 
-#: src/bulk-insert/BulkTimeEntryInsert.tsx:63
+#: src/bulk-insert/BulkTimeEntryInsert.tsx:67
 msgid "Validation.InvalidJob"
 msgstr "Invalid Job"
 
-#: src/bulk-insert/BulkTimeEntryInsert.tsx:64
+#: src/bulk-insert/BulkTimeEntryInsert.tsx:68
 msgid "Validation.InvalidProject"
 msgstr "Invalid Project"
 
-#: src/bulk-insert/BulkTimeAbsenceEntryInsert.tsx:59
-#: src/bulk-insert/BulkTimeEntryInsert.tsx:62
+#: src/bulk-insert/BulkTimeAbsenceEntryInsert.tsx:63
+#: src/bulk-insert/BulkTimeEntryInsert.tsx:66
 msgid "Validation.InvalidType"
 msgstr "Invalid Type"
 
@@ -429,13 +533,12 @@ msgstr "Vacation"
 
 #: src/models/time-entry.model.tsx:37
 #: src/models/time-entry.model.tsx:46
-#: src/shared/TimeEntryForm.tsx:70
+#: src/shared/TimeEntryForm.tsx:66
 msgid "Values.TimeEntryTypes.In"
 msgstr "In"
 
 #: src/models/time-entry.model.tsx:40
 #: src/models/time-entry.model.tsx:49
-#: src/shared/TimeEntryForm.tsx:71
+#: src/shared/TimeEntryForm.tsx:67
 msgid "Values.TimeEntryTypes.Out"
 msgstr "Out"
-

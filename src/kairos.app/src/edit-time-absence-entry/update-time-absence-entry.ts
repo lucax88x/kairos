@@ -1,17 +1,15 @@
+import { t } from '@lingui/macro';
 import produce from 'immer';
 import { call, put, takeLatest } from 'redux-saga/effects';
 import { createAsyncAction } from 'typesafe-actions';
-
 import { EditTimeAbsenceEntryActions } from '../actions';
+import { i18n } from '../i18nLoader';
 import { TimeAbsenceEntryModel } from '../models/time-absence-entry.model';
-import { updateTimeAbsenceEntry } from '../services/time-absence-entry/time-absence-entry.service';
-import {
-  UPDATE_TIME_ABSENCE_ENTRY,
-  UPDATE_TIME_ABSENCE_ENTRY_FAILURE,
-  UPDATE_TIME_ABSENCE_ENTRY_SUCCESS,
-} from './constants';
-import { EditTimeAbsenceEntryState } from './state';
 import { enqueueSnackbarAction } from '../notification-manager/enqueue-snackbar';
+import { updateTimeAbsenceEntry } from '../services/time-absence-entry/time-absence-entry.service';
+import { UPDATE_TIME_ABSENCE_ENTRY, UPDATE_TIME_ABSENCE_ENTRY_FAILURE, UPDATE_TIME_ABSENCE_ENTRY_SUCCESS } from './constants';
+import { EditTimeAbsenceEntryState } from './state';
+
 
 export const updateTimeAbsenceEntryAsync = createAsyncAction(
   UPDATE_TIME_ABSENCE_ENTRY,
@@ -32,7 +30,7 @@ function* doDeleteTimeAbsenceEntry({
 }
 
 function* doNotifySuccess() {
-  yield put(enqueueSnackbarAction('Absence updated!', { variant: 'success' }));
+  yield put(enqueueSnackbarAction(i18n._(t`Messages.AbsenceUpdated`), { variant: 'success' }));
 }
 
 export function* updateTimeAbsenceEntrySaga() {

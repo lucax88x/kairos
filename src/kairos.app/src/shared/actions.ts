@@ -8,7 +8,7 @@ export { getCountriesAsync } from './get-countries';
 export { getTimeAbsenceEntriesAsync } from './get-time-absence-entries';
 export { getTimeEntriesAsync } from './get-time-entries';
 export { getTimeHolidayEntriesAsync } from './get-time-holiday-entries';
-export { selectLanguage } from './select-language';
+export { selectLanguage, selectedLanguage } from './select-language';
 export { selectYear } from './select-year';
 export { updateTimeHolidayEntriesByCountryAsync } from './update-time-holiday-entries-by-country';
 

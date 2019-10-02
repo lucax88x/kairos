@@ -5,8 +5,8 @@ import { Actions } from './actions';
 import { AppComponent, AppDispatches, AppInputs } from './App';
 import { logout } from './auth/logout';
 import { selectUser } from './auth/selectors';
-import { closeLeftDrawerAction, closeTimeAbsenceEntryDrawerAction, closeTimeEntryDrawerAction, openLeftDrawerAction, openTimeAbsenceEntryDrawerAction, openTimeEntryDrawerAction } from './layout/actions';
-import { selectIsLeftDrawerOpen, selectIsTimeAbsenceEntryDrawerOpen, selectIsTimeEntryDrawerOpen } from './layout/selectors';
+import { closeLeftDrawerAction, closeTimeAbsenceEntryDrawerAction, closeTimeEntryDrawerAction, openLeftDrawerAction, openTimeAbsenceEntryDrawerAction, openTimeEntryDrawerAction, openRightDrawerAction, closeRightDrawerAction } from './layout/actions';
+import { selectIsLeftDrawerOpen, selectIsTimeAbsenceEntryDrawerOpen, selectIsTimeEntryDrawerOpen, selectIsRightDrawerOpen } from './layout/selectors';
 import { Language } from './models/language-model';
 import { Routes } from './routes';
 import { selectYear } from './shared/actions';
@@ -19,6 +19,7 @@ const mapStateToProps = (state: State): AppInputs => ({
   selectedLanguage: selectSelectedLanguage(state),
   selectedYear: selectSelectedYear(state),
   isLeftDrawerOpen: selectIsLeftDrawerOpen(state),
+  isRightDrawerOpen: selectIsRightDrawerOpen(state),
   isTimeEntryDrawerOpen: selectIsTimeEntryDrawerOpen(state),
   isTimeAbsenceEntryDrawerOpen: selectIsTimeAbsenceEntryDrawerOpen(state),
 });
@@ -28,6 +29,8 @@ const mapDispatchToProps = (dispatch: Dispatch<Actions>): AppDispatches => ({
   onSelectLanguage: (language: Language) => dispatch(selectLanguage(language)),
   openLeftDrawer: () => dispatch(openLeftDrawerAction()),
   closeLeftDrawer: () => dispatch(closeLeftDrawerAction()),
+  openRightDrawer: () => dispatch(openRightDrawerAction()),
+  closeRightDrawer: () => dispatch(closeRightDrawerAction()),
   openTimeEntryDrawer: () => dispatch(openTimeEntryDrawerAction()),
   closeTimeEntryDrawer: () => dispatch(closeTimeEntryDrawerAction()),
   openTimeAbsenceEntryDrawer: () => dispatch(openTimeAbsenceEntryDrawerAction()),
