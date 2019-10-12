@@ -2,12 +2,11 @@ import { t, Trans } from '@lingui/macro';
 import { Fab, Grid, makeStyles, TextField, Typography } from '@material-ui/core';
 import CheckIcon from '@material-ui/icons/Check';
 import SaveIcon from '@material-ui/icons/Save';
-import { format, isValid, parseISO } from 'date-fns';
-import { split } from 'ramda';
+import { isValid, parseISO } from 'date-fns';
+import { split, map } from 'ramda';
 import React, { ChangeEvent, useCallback, useState } from 'react';
 import { Index } from 'react-virtualized';
-import { formatAsDateTime } from '../code/constants';
-import { isString } from '../code/is';
+import { dateTimeFormatter } from '../code/formatters';
 import FabButtonSpinner from '../components/FabButtonSpinner';
 import { VirtualizedTable } from '../components/VirtualizedTable';
 import { i18n } from '../i18nLoader';
@@ -15,15 +14,12 @@ import { TimeHolidayEntryModel } from '../models/time-holiday-entry.model';
 import { UUID } from '../models/uuid.model';
 
 interface TimeHolidayEntryInvalidModel {
+  id: UUID;
   when: Date | string;
   description: string;
 }
 
 const useStyles = makeStyles(theme => ({
-  scroll: {
-    overflow: 'auto',
-    height: '250px',
-  },
   center: {
     display: 'flex',
     justifyContent: 'center',
@@ -79,6 +75,7 @@ export const BulkTimeHolidayEntryInsertComponent: React.FC<
             validModels.push(new TimeHolidayEntryModel(UUID.Generate(), description, when));
           } else {
             invalidModels.push({
+              id: UUID.Generate(),
               description,
               when: isWhenValid ? when : i18n._(t`Validation.InvalidDate`),
             });
@@ -95,13 +92,6 @@ export const BulkTimeHolidayEntryInsertComponent: React.FC<
   const invalidModelsRowGetter = useCallback(({ index }: Index) => invalidModels[index], [
     invalidModels,
   ]);
-  const dateFormatter = useCallback((date: Date | string) => {
-    if (!isString(date)) {
-      return format(date, formatAsDateTime);
-    }
-
-    return date;
-  }, []);
 
   return (
     <Grid container spacing={2} direction="column" justify="center">
@@ -130,13 +120,11 @@ export const BulkTimeHolidayEntryInsertComponent: React.FC<
       {!!validModels.length && (
         <>
           <Grid item>
-            <Typography component="h1" variant="h6" noWrap>
-              <Trans>BulkTimeHolidayEntryInsert.ValidEntries</Trans>
-            </Typography>
-          </Grid>
-          <Grid item className={classes.scroll}>
             <VirtualizedTable
+              title={i18n._(t`BulkTimeHolidayEntryInsert.ValidEntries`)}
+              height="250px"
               rowCount={validModels.length}
+              rowIds={map(m => m.id.toString(), validModels)}
               noRowsRenderer={noRowsRenderer}
               rowGetter={validModelsRowGetter}
               columns={[
@@ -155,7 +143,7 @@ export const BulkTimeHolidayEntryInsertComponent: React.FC<
                   label: i18n._(t`BulkTimeHolidayEntryInsert.WhenTableHeader`),
                   dataKey: 'when',
                   flexGrow: 1,
-                  formatter: dateFormatter,
+                  formatter: dateTimeFormatter,
                 },
               ]}
             />
@@ -165,13 +153,11 @@ export const BulkTimeHolidayEntryInsertComponent: React.FC<
       {!!invalidModels.length && (
         <>
           <Grid item>
-            <Typography component="h1" variant="h6" noWrap>
-              <Trans>BulkTimeHolidayEntryInsert.InvalidEntries</Trans>
-            </Typography>
-          </Grid>
-          <Grid item className={classes.scroll}>
             <VirtualizedTable
+              title={i18n._(t`BulkTimeHolidayEntryInsert.InvalidEntries`)}
+              height="250px"
               rowCount={invalidModels.length}
+              rowIds={map(m => m.id.toString(), invalidModels)}
               noRowsRenderer={noRowsRenderer}
               rowGetter={invalidModelsRowGetter}
               columns={[
@@ -190,7 +176,7 @@ export const BulkTimeHolidayEntryInsertComponent: React.FC<
                   label: i18n._(t`BulkTimeHolidayEntryInsert.WhenTableHeader`),
                   dataKey: 'when',
                   flexGrow: 1,
-                  formatter: dateFormatter,
+                  formatter: dateTimeFormatter,
                 },
               ]}
             />

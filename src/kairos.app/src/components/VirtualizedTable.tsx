@@ -1,8 +1,18 @@
+import { Checkbox } from '@material-ui/core';
 import { createStyles, Theme, WithStyles, withStyles } from '@material-ui/core/styles';
 import TableCell from '@material-ui/core/TableCell';
 import clsx from 'clsx';
-import React from 'react';
-import { AutoSizer, Column, Table, TableCellRenderer, TableHeaderProps } from 'react-virtualized';
+import { contains, without } from 'ramda';
+import React, { ChangeEvent } from 'react';
+import {
+  AutoSizer,
+  Column,
+  Table,
+  TableCellRenderer,
+  TableHeaderProps,
+  TableHeaderRenderer,
+} from 'react-virtualized';
+import { TableToolbar } from './TableToolbar';
 
 const styles = (theme: Theme) =>
   createStyles({
@@ -45,20 +55,48 @@ type CellRendererFunction = (row: any) => JSX.Element;
 type FormatterFunction = (data: any) => string;
 
 interface MuiVirtualizedTableProps<T> extends WithStyles<typeof styles> {
+  title: string;
+  height?: string;
   columns: ColumnData[];
   headerHeight?: number;
   onRowClick?: () => void;
   rowCount: number;
+  rowIds: string[];
   rowGetter: (row: Row) => T;
   noRowsRenderer: () => JSX.Element;
   rowHeight?: number;
+  onSelect?: (selecteIds: string[]) => void;
+  onDelete?: (selecteIds: string[]) => void;
 }
 
-class MuiVirtualizedTable<T> extends React.PureComponent<MuiVirtualizedTableProps<T>> {
+interface MuiVirtualizedTableState {
+  selectedIds: string[];
+}
+
+class MuiVirtualizedTable<T> extends React.PureComponent<
+  MuiVirtualizedTableProps<T>,
+  MuiVirtualizedTableState
+> {
+  constructor(props: MuiVirtualizedTableProps<T>) {
+    super(props);
+    this.state = { selectedIds: [] };
+  }
   static defaultProps = {
     headerHeight: 48,
     rowHeight: 48,
   };
+
+  static getDerivedStateFromProps(
+    props: { rowIds: string[] },
+    state: MuiVirtualizedTableState,
+  ): MuiVirtualizedTableState | null {
+    const { rowIds } = props;
+
+    if (rowIds.length === 0 && !!state.selectedIds.length) {
+      return { selectedIds: [] };
+    }
+    return null;
+  }
 
   getRowClassName = ({ index }: Row) => {
     const { classes, onRowClick } = this.props;
@@ -66,6 +104,33 @@ class MuiVirtualizedTable<T> extends React.PureComponent<MuiVirtualizedTableProp
     return clsx(classes.tableRow, classes.flexContainer, {
       [classes.tableRowHover]: index !== -1 && onRowClick != null,
     });
+  };
+
+  handleSelectAll = (event: ChangeEvent<HTMLInputElement>) => {
+    let selectedIds: string[] = [];
+    if (this.state.selectedIds.length !== this.props.rowIds.length) {
+      selectedIds = this.props.rowIds;
+    }
+    this.setState({ selectedIds });
+
+    if (!!this.props.onSelect) {
+      this.props.onSelect(selectedIds);
+    }
+  };
+
+  handleSelectedRow = (event: ChangeEvent<HTMLInputElement>) => {
+    const id = event.target.value;
+    let selectedIds = this.state.selectedIds;
+    if (contains(id, selectedIds)) {
+      selectedIds = without([id], selectedIds);
+    } else {
+      selectedIds = [...selectedIds, event.target.value];
+    }
+    this.setState({ selectedIds });
+
+    if (!!this.props.onSelect) {
+      this.props.onSelect(selectedIds);
+    }
   };
 
   cellRenderer = (
@@ -85,9 +150,40 @@ class MuiVirtualizedTable<T> extends React.PureComponent<MuiVirtualizedTableProp
         })}
         variant="body"
         style={{ height: rowHeight }}
-        align={(columnIndex != null && columns[columnIndex].numeric) || false ? 'right' : 'left'}
+        align={
+          (columnIndex != null && columns[columnIndex] && columns[columnIndex].numeric) || false
+            ? 'right'
+            : 'left'
+        }
       >
         {result}
+      </TableCell>
+    );
+  };
+
+  selectCellRenderer: TableCellRenderer = ({ cellData, rowData, columnIndex }) => {
+    const { columns, classes, rowHeight, onRowClick } = this.props;
+    const { selectedIds } = this.state;
+
+    return (
+      <TableCell
+        component="div"
+        className={clsx(classes.tableCell, classes.flexContainer, {
+          [classes.noClick]: onRowClick == null,
+        })}
+        variant="body"
+        style={{ height: rowHeight }}
+        align={
+          (columnIndex != null && columns[columnIndex] && columns[columnIndex].numeric) || false
+            ? 'right'
+            : 'left'
+        }
+      >
+        <Checkbox
+          checked={contains(rowData.id.toString(), selectedIds)}
+          onChange={this.handleSelectedRow}
+          value={rowData.id}
+        />
       </TableCell>
     );
   };
@@ -108,39 +204,97 @@ class MuiVirtualizedTable<T> extends React.PureComponent<MuiVirtualizedTableProp
     );
   };
 
-  render() {
-    const { classes, columns, rowHeight, headerHeight, ...tableProps } = this.props;
+  selectHeaderRenderer: TableHeaderRenderer = () => {
+    const { headerHeight, classes, rowCount } = this.props;
+    const { selectedIds } = this.state;
+
     return (
-      <AutoSizer>
-        {({ height, width }) => (
-          <Table
-            height={height}
-            width={width}
-            rowHeight={rowHeight!}
-            headerHeight={headerHeight!}
-            {...tableProps}
-            rowClassName={this.getRowClassName}
-          >
-            {columns.map(({ dataKey, formatter, cellRenderer, ...other }, index) => {
-              return (
-                <Column
-                  key={dataKey}
-                  headerRenderer={headerProps =>
-                    this.headerRenderer({
-                      ...headerProps,
-                      columnIndex: index,
-                    })
-                  }
-                  className={classes.flexContainer}
-                  cellRenderer={this.cellRenderer(cellRenderer, formatter)}
-                  dataKey={dataKey}
-                  {...other}
-                />
-              );
-            })}
-          </Table>
-        )}
-      </AutoSizer>
+      <TableCell
+        component="div"
+        className={clsx(classes.tableCell, classes.flexContainer, classes.noClick)}
+        variant="head"
+        style={{ height: headerHeight }}
+      >
+        <Checkbox
+          indeterminate={
+            rowCount > 0 && selectedIds.length !== 0 && selectedIds.length !== rowCount
+          }
+          checked={rowCount > 0 && selectedIds.length === rowCount}
+          onChange={this.handleSelectAll}
+        />
+      </TableCell>
+    );
+  };
+
+  handleDelete = () => {
+    const { onDelete } = this.props;
+
+    if (!!onDelete) {
+      onDelete(this.state.selectedIds);
+    }
+  };
+
+  render() {
+    const {
+      classes,
+      title,
+      height,
+      columns,
+      rowHeight,
+      headerHeight,
+      onDelete,
+      ...tableProps
+    } = this.props;
+    return (
+      <>
+        <TableToolbar
+          title={title}
+          numSelected={this.state.selectedIds.length}
+          onDelete={this.handleDelete}
+        />
+        <div style={{ height: !!height ? height : '70vh' }}>
+          <AutoSizer>
+            {({ height, width }) => (
+              <Table
+                height={height}
+                width={width}
+                rowHeight={rowHeight!}
+                headerHeight={headerHeight!}
+                {...tableProps}
+                rowClassName={this.getRowClassName}
+              >
+                {!!onDelete && (
+                  <Column
+                    key="all"
+                    dataKey="all"
+                    width={100}
+                    className={classes.flexContainer}
+                    headerRenderer={this.selectHeaderRenderer}
+                    cellRenderer={this.selectCellRenderer}
+                  />
+                )}
+                {columns.map(({ dataKey, formatter, cellRenderer, ...other }, index) => {
+                  return (
+                    <Column
+                      key={dataKey}
+                      headerRenderer={headerProps =>
+                        this.headerRenderer({
+                          ...headerProps,
+                          columnIndex: index,
+                        })
+                      }
+                      className={classes.flexContainer}
+                      cellRenderer={this.cellRenderer(cellRenderer, formatter)}
+                      dataKey={dataKey}
+                      {...other}
+                    />
+                  );
+                })}
+              </Table>
+            )}
+          </AutoSizer>
+        </div>
+      </>
     );
   }
 }

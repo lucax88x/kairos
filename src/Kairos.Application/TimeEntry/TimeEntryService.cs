@@ -13,7 +13,7 @@ namespace Kairos.Application.TimeEntry
     public class TimeEntryService :
         IRequestHandler<CreateTimeEntries, ImmutableArray<Guid>>,
         IRequestHandler<UpdateTimeEntry, Guid>,
-        IRequestHandler<DeleteTimeEntry, Guid>
+        IRequestHandler<DeleteTimeEntries, ImmutableList<Guid>>
     {
         private readonly IWriteRepository _writeRepository;
         private readonly IAuthProvider _authProvider;
@@ -40,22 +40,25 @@ namespace Kairos.Application.TimeEntry
             return timeEntries.Select(te => te.Id).ToImmutableArray();
         }
 
-        public async Task<Guid> Handle(DeleteTimeEntry request, CancellationToken cancellationToken)
+        public async Task<ImmutableList<Guid>> Handle(DeleteTimeEntries request, CancellationToken cancellationToken)
         {
-            var toDeleteEntry = await _writeRepository.GetOrDefault<Domain.TimeEntry>(request.Id.ToString());
-
-            if (toDeleteEntry == null)
+            foreach (var id in request.Ids)
             {
-                throw new NotFoundItemException();
+                var toDeleteEntry = await _writeRepository.GetOrDefault<Domain.TimeEntry>(id.ToString());
+
+                if (toDeleteEntry == null)
+                {
+                    throw new NotFoundItemException();
+                }
+
+                toDeleteEntry.Delete();
+
+                var events = await _writeRepository.Save(WriteRepository.DefaultKeyTaker, toDeleteEntry);
+
+                foreach (var evt in events) await _mediator.Publish(evt, cancellationToken);
             }
-
-            toDeleteEntry.Delete();
-
-            var events = await _writeRepository.Save(WriteRepository.DefaultKeyTaker, toDeleteEntry);
-
-            foreach (var evt in events) await _mediator.Publish(evt, cancellationToken);
-
-            return request.Id;
+            
+            return request.Ids;
         }
 
         public async Task<Guid> Handle(UpdateTimeEntry request, CancellationToken cancellationToken)

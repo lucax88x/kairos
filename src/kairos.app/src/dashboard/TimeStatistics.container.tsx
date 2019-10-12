@@ -3,7 +3,14 @@ import { connect } from 'react-redux';
 import { Dispatch } from 'redux';
 import { Actions } from '../actions';
 import { TimeEntryListModel } from '../models/time-entry-list.model';
-import { selectIsGetTimeEntriesBusy, selectTimeEntries } from '../shared/selectors';
+import { selectProfile } from '../profile/selectors';
+import {
+  selectIsGetTimeEntriesBusy,
+  selectSelectedLanguage,
+  selectTimeAbsenceEntries,
+  selectTimeEntries,
+  selectTimeHolidayEntries,
+} from '../shared/selectors';
 import { State } from '../state';
 import {
   TimeStatisticsComponent,
@@ -12,7 +19,11 @@ import {
 } from './TimeStatistics';
 
 const mapStateToProps = (state: State): TimeStatisticsInputs => ({
+  selectedLanguage: selectSelectedLanguage(state),
+  profile: selectProfile(state),
   timeEntries: selectTimeEntries(state),
+  absences: selectTimeAbsenceEntries(state),
+  holidays: selectTimeHolidayEntries(state),
   isGetTimeEntriesBusy: selectIsGetTimeEntriesBusy(state),
 });
 

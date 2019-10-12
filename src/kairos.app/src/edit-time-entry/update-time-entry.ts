@@ -17,7 +17,7 @@ export const updateTimeEntryAsync = createAsyncAction(
   UPDATE_TIME_ENTRY_FAILURE,
 )<{ model: TimeEntryModel }, void, string>();
 
-function* doDeleteTimeEntry({
+function* doUpdateTimeEntry({
   payload: { model },
 }: ReturnType<typeof updateTimeEntryAsync.request>) {
   try {
@@ -34,7 +34,7 @@ function* doNotifySuccess() {
 }
 
 export function* updateTimeEntrySaga() {
-  yield takeLatest(UPDATE_TIME_ENTRY, doDeleteTimeEntry);
+  yield takeLatest(UPDATE_TIME_ENTRY, doUpdateTimeEntry);
   yield takeLatest(UPDATE_TIME_ENTRY_SUCCESS, doNotifySuccess);
 }
 

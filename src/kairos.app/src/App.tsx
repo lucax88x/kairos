@@ -24,6 +24,7 @@ import ChevronLeftIcon from '@material-ui/icons/ChevronLeft';
 import ChevronRightIcon from '@material-ui/icons/ChevronRight';
 import DashboardIcon from '@material-ui/icons/Dashboard';
 import FastForwardIcon from '@material-ui/icons/FastForward';
+import InsertDriveFileIcon from '@material-ui/icons/InsertDriveFile';
 import MenuIcon from '@material-ui/icons/Menu';
 import TimerIcon from '@material-ui/icons/Timer';
 import WeekendIcon from '@material-ui/icons/Weekend';
@@ -55,6 +56,7 @@ import { TimeAbsenceEntries } from './time-absence-entries/TimeAbsenceEntries.co
 import { TimeEntries } from './time-entries/TimeEntries.container';
 import { TimeHolidayEntries } from './time-holiday-entries/TimeHolidayEntries.container';
 import { isIOS } from './code/is-ios';
+import { Export } from './export/Export';
 
 const drawerWidth = 240;
 
@@ -203,6 +205,13 @@ const useStyles = makeStyles(theme => ({
     backgroundColor: theme.palette.background.paper,
     padding: theme.spacing(0.5),
     marginTop: 'auto',
+  },
+  footerLinks: {
+    display: 'grid',
+    gridAutoFlow: 'column',
+    gridGap: theme.spacing(2),
+    justifyContent: 'center',
+    alignItems: 'center',
   },
 }));
 
@@ -480,6 +489,12 @@ export const AppComponent: React.FC<AppProps> = props => {
               </ListItemIcon>
               <ListItemText primary={<Trans>LeftMenu.BulkInsert</Trans>} />
             </ListItem>
+            <ListItem button to={Routes.Export} component={Link}>
+              <ListItemIcon>
+                <InsertDriveFileIcon />
+              </ListItemIcon>
+              <ListItemText primary={<Trans>LeftMenu.Export</Trans>} />
+            </ListItem>
           </List>
         </Drawer>
 
@@ -500,6 +515,7 @@ export const AppComponent: React.FC<AppProps> = props => {
               <Route path={Routes.EditTimeAbsenceEntry} component={EditTimeAbsenceEntry} />
               <Route path={Routes.EditTimeHolidayEntry} component={EditTimeHolidayEntry} />
               <Route path={Routes.BulkInsert} component={BulkInsert} />
+              <Route path={Routes.Export} component={Export} />
             </Container>
           </main>
 
@@ -507,7 +523,7 @@ export const AppComponent: React.FC<AppProps> = props => {
             <Container maxWidth="lg">
               <Grid container direction="row" justify="space-between" alignItems="center">
                 <Grid item>
-                  <Grid container justify="space-between" alignItems="center">
+                  <div className={classes.footerLinks}>
                     <Typography
                       variant="subtitle1"
                       align="center"
@@ -535,10 +551,20 @@ export const AppComponent: React.FC<AppProps> = props => {
                         src="https://img.shields.io/github/stars/lucax88x/kairos?style=for-the-badge"
                       ></img>
                     </a>
-                  </Grid>
+                    <a
+                      href="https://github.com/lucax88x/kairos/issues"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                    >
+                      <img
+                        alt="preview badge"
+                        src="https://img.shields.io/github/issues/lucax88x/kairos?style=for-the-badge"
+                      ></img>
+                    </a>
+                  </div>
                 </Grid>
                 <Grid item>
-                  <Grid container justify="space-between" alignItems="center">
+                  <div className={classes.footerLinks}>
                     <a href="https://lucax88x.github.io" target="_blank" rel="noopener noreferrer">
                       <IconButton color="inherit" aria-label="Github.io">
                         <Avatar
@@ -563,7 +589,7 @@ export const AppComponent: React.FC<AppProps> = props => {
                         <SimpleIcon type="linkedin" className={classes.footerIcon}></SimpleIcon>
                       </IconButton>
                     </a>
-                  </Grid>
+                  </div>
                 </Grid>
               </Grid>
             </Container>

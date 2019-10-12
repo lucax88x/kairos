@@ -1,19 +1,19 @@
 import { t, Trans } from '@lingui/macro';
-import { Button, IconButton, makeStyles, Typography } from '@material-ui/core';
+import { Button, IconButton, makeStyles } from '@material-ui/core';
 import CreateIcon from '@material-ui/icons/Create';
 import DeleteIcon from '@material-ui/icons/Delete';
-import { format } from 'date-fns';
+import { map } from 'ramda';
 import React, { useCallback } from 'react';
 import { Index } from 'react-virtualized';
-import { formatAsDateTime } from '../code/constants';
+import { absenceTypeFormatter, dateTimeFormatter } from '../code/formatters';
 import Spinner from '../components/Spinner';
 import { VirtualizedTable } from '../components/VirtualizedTable';
 import { i18n } from '../i18nLoader';
-import { getTextFromType, TimeAbsenceEntryModel, TimeAbsenceEntryTypes } from '../models/time-absence-entry.model';
+import { TimeAbsenceEntryModel } from '../models/time-absence-entry.model';
+import { UUID } from '../models/uuid.model';
 
 const useStyles = makeStyles(theme => ({
   container: {
-    height: '70vh',
     width: '100%',
     marginBottom: theme.spacing(1),
   },
@@ -22,13 +22,13 @@ const useStyles = makeStyles(theme => ({
 export interface TimeAbsenceEntriesInputs {
   timeAbsenceEntries: TimeAbsenceEntryModel[];
   isGetTimeAbsenceEntriesBusy: boolean;
-  isDeleteTimeAbsenceEntryBusy: boolean;
+  isDeleteTimeAbsenceEntriesBusy: boolean;
 }
 
 export interface TimeAbsenceEntriesDispatches {
   onCreate: () => void;
   onUpdate: (item: TimeAbsenceEntryModel) => void;
-  onDelete: (item: TimeAbsenceEntryModel) => void;
+  onDelete: (ids: UUID[]) => void;
 }
 
 type TimeAbsenceEntriesProps = TimeAbsenceEntriesInputs & TimeAbsenceEntriesDispatches;
@@ -37,7 +37,7 @@ export const TimeAbsenceEntriesComponent: React.FC<TimeAbsenceEntriesProps> = pr
   const {
     timeAbsenceEntries,
     isGetTimeAbsenceEntriesBusy,
-    isDeleteTimeAbsenceEntryBusy,
+    isDeleteTimeAbsenceEntriesBusy,
     onCreate,
     onUpdate,
     onDelete,
@@ -46,7 +46,9 @@ export const TimeAbsenceEntriesComponent: React.FC<TimeAbsenceEntriesProps> = pr
   const classes = useStyles(props);
 
   const handleUpdate = useCallback((model: TimeAbsenceEntryModel) => onUpdate(model), [onUpdate]);
-  const handleDelete = useCallback((model: TimeAbsenceEntryModel) => onDelete(model), [onDelete]);
+  const handleDelete = useCallback((model: TimeAbsenceEntryModel) => onDelete([model.id]), [
+    onDelete,
+  ]);
 
   const noRowsRenderer = useCallback(
     () => <p>{isGetTimeAbsenceEntriesBusy ? '' : <Trans>TimeAbsenceEntries.NoItems</Trans>}</p>,
@@ -55,8 +57,6 @@ export const TimeAbsenceEntriesComponent: React.FC<TimeAbsenceEntriesProps> = pr
   const rowGetter = useCallback(({ index }: Index) => timeAbsenceEntries[index], [
     timeAbsenceEntries,
   ]);
-  const typeFormatter = useCallback((type: TimeAbsenceEntryTypes) => getTextFromType(type), []);
-  const dateFormatter = useCallback((data: Date) => format(data, formatAsDateTime), []);
   const updateCellRenderer = useCallback(
     model => (
       <IconButton
@@ -82,14 +82,15 @@ export const TimeAbsenceEntriesComponent: React.FC<TimeAbsenceEntriesProps> = pr
     [handleDelete],
   );
 
+  const handleDeleteSelected = useCallback(ids => onDelete(ids), [onDelete]);
+
   return (
-    <Spinner show={isGetTimeAbsenceEntriesBusy || isDeleteTimeAbsenceEntryBusy}>
-      <Typography component="h2" variant="h6" gutterBottom>
-        <Trans>TimeAbsenceEntries.Title</Trans>
-      </Typography>
+    <Spinner show={isGetTimeAbsenceEntriesBusy || isDeleteTimeAbsenceEntriesBusy}>
       <div className={classes.container}>
         <VirtualizedTable
+          title={i18n._(t`TimeAbsenceEntries.Title`)}
           rowCount={timeAbsenceEntries.length}
+          rowIds={map(m => m.id.toString(), timeAbsenceEntries)}
           noRowsRenderer={noRowsRenderer}
           rowGetter={rowGetter}
           columns={[
@@ -97,21 +98,21 @@ export const TimeAbsenceEntriesComponent: React.FC<TimeAbsenceEntriesProps> = pr
               width: 100,
               label: i18n._(t`TimeAbsenceEntries.TypeTableHeader`),
               dataKey: 'type',
-              formatter: typeFormatter,
+              formatter: absenceTypeFormatter,
             },
             {
               width: 200,
               label: i18n._(t`TimeAbsenceEntries.StartTableHeader`),
               dataKey: 'start',
               flexGrow: 1,
-              formatter: dateFormatter,
+              formatter: dateTimeFormatter,
             },
             {
               width: 200,
               label: i18n._(t`TimeAbsenceEntries.EndTableHeader`),
               dataKey: 'end',
               flexGrow: 1,
-              formatter: dateFormatter,
+              formatter: dateTimeFormatter,
             },
             {
               width: 200,
@@ -131,6 +132,7 @@ export const TimeAbsenceEntriesComponent: React.FC<TimeAbsenceEntriesProps> = pr
               cellRenderer: deleteCellRenderer,
             },
           ]}
+          onDelete={handleDeleteSelected}
         />
       </div>
       <Button variant="contained" color="primary" onClick={onCreate}>

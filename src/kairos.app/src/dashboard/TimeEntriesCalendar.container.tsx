@@ -1,4 +1,6 @@
+import { push } from 'connected-react-router';
 import { connect } from 'react-redux';
+import { Dispatch } from 'redux';
 import {
   selectIsGetTimeAbsenceEntriesBusy,
   selectIsGetTimeEntriesBusy,
@@ -9,7 +11,12 @@ import {
   selectTimeHolidayEntries,
 } from '../shared/selectors';
 import { State } from '../state';
-import { TimeEntriesCalendarComponent, TimeEntriesCalendarInputs } from './TimeEntriesCalendar';
+import {
+  TimeEntriesCalendarComponent,
+  TimeEntriesCalendarDispatches,
+  TimeEntriesCalendarInputs,
+} from './TimeEntriesCalendar';
+import { Actions } from '../actions';
 
 const mapStateToProps = (state: State): TimeEntriesCalendarInputs => ({
   selectedLanguage: selectSelectedLanguage(state),
@@ -21,4 +28,11 @@ const mapStateToProps = (state: State): TimeEntriesCalendarInputs => ({
   timeHolidayEntries: selectTimeHolidayEntries(state),
 });
 
-export const TimeEntriesCalendar = connect(mapStateToProps)(TimeEntriesCalendarComponent);
+const mapDispatchToProps = (dispatch: Dispatch<Actions>): TimeEntriesCalendarDispatches => ({
+  onNavigate: (url: string) => dispatch(push(url)),
+});
+
+export const TimeEntriesCalendar = connect(
+  mapStateToProps,
+  mapDispatchToProps,
+)(TimeEntriesCalendarComponent);

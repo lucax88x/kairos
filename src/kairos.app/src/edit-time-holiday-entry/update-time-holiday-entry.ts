@@ -17,7 +17,7 @@ export const updateTimeHolidayEntryAsync = createAsyncAction(
   UPDATE_TIME_HOLIDAY_ENTRY_FAILURE,
 )<{ model: TimeHolidayEntryModel }, void, string>();
 
-function* doDeleteTimeHolidayEntry({
+function* doUpdateTimeHolidayEntry({
   payload: { model },
 }: ReturnType<typeof updateTimeHolidayEntryAsync.request>) {
   try {
@@ -34,7 +34,7 @@ function* doNotifySuccess() {
 }
 
 export function* updateTimeHolidayEntrySaga() {
-  yield takeLatest(UPDATE_TIME_HOLIDAY_ENTRY, doDeleteTimeHolidayEntry);
+  yield takeLatest(UPDATE_TIME_HOLIDAY_ENTRY, doUpdateTimeHolidayEntry);
   yield takeLatest(UPDATE_TIME_HOLIDAY_ENTRY_SUCCESS, doNotifySuccess);
 }
 

@@ -2,13 +2,12 @@ import { t, Trans } from '@lingui/macro';
 import { Fab, Grid, makeStyles, TextField, Typography } from '@material-ui/core';
 import CheckIcon from '@material-ui/icons/Check';
 import SaveIcon from '@material-ui/icons/Save';
-import { format, isValid, parseISO } from 'date-fns';
-import { split } from 'ramda';
+import { isValid, parseISO } from 'date-fns';
+import { split, map } from 'ramda';
 import indexOf from 'ramda/es/indexOf';
 import React, { ChangeEvent, useCallback, useState } from 'react';
 import { Index } from 'react-virtualized';
-import { formatAsDateTime } from '../code/constants';
-import { isString } from '../code/is';
+import { absenceTypeFormatter, dateTimeFormatter } from '../code/formatters';
 import FabButtonSpinner from '../components/FabButtonSpinner';
 import { VirtualizedTable } from '../components/VirtualizedTable';
 import { i18n } from '../i18nLoader';
@@ -16,6 +15,7 @@ import { TimeAbsenceEntryModel, TimeAbsenceEntryTypes } from '../models/time-abs
 import { UUID } from '../models/uuid.model';
 
 interface TimeAbsenceEntryInvalidModel {
+  id: UUID;
   start: Date | string;
   end: Date | string;
   description: string;
@@ -23,10 +23,6 @@ interface TimeAbsenceEntryInvalidModel {
 }
 
 const useStyles = makeStyles(theme => ({
-  scroll: {
-    overflow: 'auto',
-    height: '250px',
-  },
   center: {
     display: 'flex',
     justifyContent: 'center',
@@ -95,6 +91,7 @@ export const BulkTimeAbsenceEntryInsertComponent: React.FC<
             );
           } else {
             invalidModels.push({
+              id: UUID.Generate(),
               description,
               start: isStartValid ? start : i18n._(t`Validation.InvalidDate`),
               end: isEndValid ? end : i18n._(t`Validation.InvalidDate`),
@@ -115,13 +112,6 @@ export const BulkTimeAbsenceEntryInsertComponent: React.FC<
   const invalidModelsRowGetter = useCallback(({ index }: Index) => invalidModels[index], [
     invalidModels,
   ]);
-  const dateFormatter = useCallback((date: Date | string) => {
-    if (!isString(date)) {
-      return format(date, formatAsDateTime);
-    }
-
-    return date;
-  }, []);
 
   return (
     <Grid container spacing={2} direction="column" justify="center">
@@ -150,13 +140,11 @@ export const BulkTimeAbsenceEntryInsertComponent: React.FC<
       {!!validModels.length && (
         <>
           <Grid item>
-            <Typography component="h1" variant="h6" noWrap>
-              <Trans>BulkTimeAbsenceEntryInsert.ValidEntries</Trans>
-            </Typography>
-          </Grid>
-          <Grid item className={classes.scroll}>
             <VirtualizedTable
+              title={i18n._(t`BulkTimeAbsenceEntryInsert.ValidEntries`)}
+              height="250px"
               rowCount={validModels.length}
+              rowIds={map(m => m.id.toString(), validModels)}
               noRowsRenderer={noRowsRenderer}
               rowGetter={validModelsRowGetter}
               columns={[
@@ -164,6 +152,7 @@ export const BulkTimeAbsenceEntryInsertComponent: React.FC<
                   width: 100,
                   label: i18n._(t`BulkTimeAbsenceEntryInsert.TypeTableHeader`),
                   dataKey: 'type',
+                  formatter: absenceTypeFormatter,
                 },
                 {
                   width: 200,
@@ -175,14 +164,14 @@ export const BulkTimeAbsenceEntryInsertComponent: React.FC<
                   label: i18n._(t`BulkTimeAbsenceEntryInsert.StartTableHeader`),
                   dataKey: 'start',
                   flexGrow: 1,
-                  formatter: dateFormatter,
+                  formatter: dateTimeFormatter,
                 },
                 {
                   width: 200,
                   label: i18n._(t`BulkTimeAbsenceEntryInsert.EndTableHeader`),
                   dataKey: 'end',
                   flexGrow: 1,
-                  formatter: dateFormatter,
+                  formatter: dateTimeFormatter,
                 },
               ]}
             />
@@ -192,13 +181,11 @@ export const BulkTimeAbsenceEntryInsertComponent: React.FC<
       {!!invalidModels.length && (
         <>
           <Grid item>
-            <Typography component="h1" variant="h6" noWrap>
-              <Trans>BulkTimeAbsenceEntryInsert.InvalidEntries</Trans>
-            </Typography>
-          </Grid>
-          <Grid item className={classes.scroll}>
             <VirtualizedTable
+              title={i18n._(t`BulkTimeAbsenceEntryInsert.InvalidEntries`)}
+              height="250px"
               rowCount={invalidModels.length}
+              rowIds={map(m => m.id.toString(), invalidModels)}
               noRowsRenderer={noRowsRenderer}
               rowGetter={invalidModelsRowGetter}
               columns={[
@@ -206,6 +193,7 @@ export const BulkTimeAbsenceEntryInsertComponent: React.FC<
                   width: 100,
                   label: i18n._(t`BulkTimeAbsenceEntryInsert.TypeTableHeader`),
                   dataKey: 'type',
+                  formatter: absenceTypeFormatter,
                 },
                 {
                   width: 200,
@@ -217,14 +205,14 @@ export const BulkTimeAbsenceEntryInsertComponent: React.FC<
                   label: i18n._(t`BulkTimeAbsenceEntryInsert.StartTableHeader`),
                   dataKey: 'start',
                   flexGrow: 1,
-                  formatter: dateFormatter,
+                  formatter: dateTimeFormatter,
                 },
                 {
                   width: 200,
                   label: i18n._(t`BulkTimeAbsenceEntryInsert.EndTableHeader`),
                   dataKey: 'end',
                   flexGrow: 1,
-                  formatter: dateFormatter,
+                  formatter: dateTimeFormatter,
                 },
               ]}
             />

@@ -14,7 +14,7 @@ namespace Kairos.Application.TimeHolidayEntry
 {
     public class TimeHolidayEntryService :
         IRequestHandler<CreateTimeHolidayEntries, ImmutableArray<Guid>>,
-        IRequestHandler<DeleteTimeHolidayEntry, Guid>,
+        IRequestHandler<DeleteTimeHolidayEntries, ImmutableList<Guid>>,
         IRequestHandler<UpdateTimeHolidayEntry, Guid>,
         IRequestHandler<UpdateTimeHolidayEntriesByCountry, ImmutableArray<Guid>>
     {
@@ -44,22 +44,26 @@ namespace Kairos.Application.TimeHolidayEntry
             return timeHolidayEntries.Select(te => te.Id).ToImmutableArray();
         }
 
-        public async Task<Guid> Handle(DeleteTimeHolidayEntry request, CancellationToken cancellationToken)
+        public async Task<ImmutableList<Guid>> Handle(DeleteTimeHolidayEntries request, CancellationToken cancellationToken)
         {
-            var toDeleteEntry = await _writeRepository.GetOrDefault<Domain.TimeHolidayEntry>(request.Id.ToString());
-
-            if (toDeleteEntry == null)
+            foreach (var id in request.Ids)
             {
-                throw new NotFoundItemException();
+                var toDeleteEntry =
+                    await _writeRepository.GetOrDefault<Domain.TimeHolidayEntry>(id.ToString());
+
+                if (toDeleteEntry == null)
+                {
+                    throw new NotFoundItemException();
+                }
+
+                toDeleteEntry.Delete();
+
+                var events = await _writeRepository.Save(WriteRepository.DefaultKeyTaker, toDeleteEntry);
+
+                foreach (var evt in events) await _mediator.Publish(evt, cancellationToken);
             }
 
-            toDeleteEntry.Delete();
-
-            var events = await _writeRepository.Save(WriteRepository.DefaultKeyTaker, toDeleteEntry);
-
-            foreach (var evt in events) await _mediator.Publish(evt, cancellationToken);
-
-            return request.Id;
+            return request.Ids;
         }
 
         public async Task<Guid> Handle(UpdateTimeHolidayEntry request, CancellationToken cancellationToken)

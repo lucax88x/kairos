@@ -12,6 +12,7 @@ import { layoutReducers } from './layout/reducers';
 import { notificationManagerReducers } from './notification-manager/reducers';
 import { profileReducers } from './profile/reducers';
 import { sharedReducers } from './shared/reducers';
+import { exportReducers } from './export/reducers';
 import { State } from './state';
 
 const basePersistConfig = {
@@ -37,4 +38,5 @@ export const rootReducers = (history: History<any>) =>
     editTimeHolidayEntry: editTimeHolidayEntryReducers,
     editTimeAbsenceEntry: editTimeAbsenceEntryReducers,
     bulkInsert: bulkInsertReducers,
+    export: exportReducers,
   });

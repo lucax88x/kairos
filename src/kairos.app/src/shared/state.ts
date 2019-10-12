@@ -18,13 +18,13 @@ export interface SharedState {
       getCountries: boolean;
       getTimeEntries: boolean;
       createTimeEntry: boolean;
-      deleteTimeEntry: boolean;
+      deleteTimeEntries: boolean;
       getTimeAbsenceEntries: boolean;
       createTimeAbsenceEntry: boolean;
-      deleteTimeAbsenceEntry: boolean;
+      deleteTimeAbsenceEntries: boolean;
       getTimeHolidayEntries: boolean;
       createTimeHolidayEntry: boolean;
-      deleteTimeHolidayEntry: boolean;
+      deleteTimeHolidayEntries: boolean;
       updateTimeHolidayEntriesByCountry: boolean;
     };
   };
@@ -43,13 +43,13 @@ export const sharedInitialState: SharedState = {
       getCountries: false,
       getTimeEntries: false,
       createTimeEntry: false,
-      deleteTimeEntry: false,
+      deleteTimeEntries: false,
       getTimeAbsenceEntries: false,
       createTimeAbsenceEntry: false,
-      deleteTimeAbsenceEntry: false,
+      deleteTimeAbsenceEntries: false,
       getTimeHolidayEntries: false,
       createTimeHolidayEntry: false,
-      deleteTimeHolidayEntry: false,
+      deleteTimeHolidayEntries: false,
       updateTimeHolidayEntriesByCountry: false,
     },
   },

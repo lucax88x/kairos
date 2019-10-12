@@ -1,8 +1,9 @@
 import DateFnsUtils from '@date-io/date-fns';
-import { Divider, Grid, makeStyles, TextField } from '@material-ui/core';
+import { Trans } from '@lingui/react';
+import { Divider, makeStyles, TextField } from '@material-ui/core';
 import SaveIcon from '@material-ui/icons/Save';
 import {
-  DateTimePicker,
+  KeyboardDateTimePicker,
   MaterialUiPickersDate,
   MuiPickersUtilsProvider,
 } from '@material-ui/pickers';
@@ -13,6 +14,14 @@ import { Language } from '../models/language-model';
 import { TimeHolidayEntryModel } from '../models/time-holiday-entry.model';
 
 const useStyles = makeStyles(theme => ({
+  container: {
+    display: 'grid',
+    padding: theme.spacing(3),
+    gridGap: theme.spacing(1),
+  },
+  selfCenter: {
+    justifySelf: 'center',
+  },
   hasPadding: {
     padding: theme.spacing(3),
   },
@@ -56,52 +65,36 @@ export const TimeHolidayEntryForm: React.FC<TimeHolidayEntryFormProps> = props =
   const handleWhenChange = useCallback((date: MaterialUiPickersDate) => setWhen(date), [setWhen]);
 
   return (
-    <Grid container direction="column">
-      <Grid
-        className={classes.hasPadding}
-        container
-        direction="column"
-        justify="center"
-        alignItems="center"
-      >
-        <TextField
-          autoFocus
-          margin="dense"
-          id="description"
-          label="Description"
-          type="text"
-          value={description}
-          onChange={handleDescriptionChange}
+    <div className={classes.container}>
+      <TextField
+        autoFocus
+        margin="dense"
+        id="description"
+        label={<Trans>Labels.Description</Trans>}
+        type="text"
+        value={description}
+        onChange={handleDescriptionChange}
+        fullWidth
+      />
+      <MuiPickersUtilsProvider utils={DateFnsUtils} locale={getDatepickerLocale(selectedLanguage)}>
+        <KeyboardDateTimePicker
+          autoOk
+          ampm={false}
+          value={when}
+          onChange={handleWhenChange}
+          label={<Trans>Labels.When</Trans>}
           fullWidth
         />
-        <MuiPickersUtilsProvider
-          utils={DateFnsUtils}
-          locale={getDatepickerLocale(selectedLanguage)}
-        >
-          <Grid item xs={12}>
-            <DateTimePicker
-              autoOk
-              ampm={false}
-              value={when}
-              onChange={handleWhenChange}
-              label="Start"
-              fullWidth
-            />
-          </Grid>
-        </MuiPickersUtilsProvider>
-      </Grid>
+      </MuiPickersUtilsProvider>
       <Divider />
-      <Grid
-        container
-        direction="column"
-        justify="center"
-        alignItems="center"
-        className={classes.hasPadding}
+      <ButtonSpinner
+        onClick={handleSave}
+        isBusy={isBusy}
+        disabled={!when || isBusy}
+        className={classes.selfCenter}
       >
-        <ButtonSpinner onClick={handleSave} isBusy={isBusy} disabled={!when || isBusy}>
-          <SaveIcon />
-        </ButtonSpinner>
-      </Grid>
-    </Grid>
+        <SaveIcon />
+      </ButtonSpinner>
+    </div>
   );
 };

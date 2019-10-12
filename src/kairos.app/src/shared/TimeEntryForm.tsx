@@ -27,7 +27,7 @@ import { isString } from '../code/is';
 import ButtonSpinner from '../components/ButtonSpinner';
 import { Language } from '../models/language-model';
 import { ProfileModel } from '../models/profile.model';
-import { getTransFromType, TimeEntryModel, TimeEntryTypes } from '../models/time-entry.model';
+import { getTransFromEntryType, TimeEntryModel, TimeEntryTypes } from '../models/time-entry.model';
 import { UUID } from '../models/uuid.model';
 import { Routes } from '../routes';
 import {
@@ -41,6 +41,14 @@ import {
 } from './TimeEntryForm.store';
 
 const useStyles = makeStyles(theme => ({
+  container: {
+    display: 'grid',
+    padding: theme.spacing(3),
+    gridGap: theme.spacing(1),
+  },
+  selfCenter: {
+    justifySelf: 'center',
+  },
   hasPadding: {
     padding: theme.spacing(3),
   },
@@ -126,49 +134,38 @@ export const TimeEntryForm: React.FC<TimeEntryFormProps> = props => {
   }
 
   return (
-    <Grid container direction="column">
-      <Grid
-        className={classes.hasPadding}
-        container
-        direction="column"
-        justify="center"
-        alignItems="center"
-      >
-        <FormControl component="fieldset">
-          <RadioGroup
-            aria-label="timeEntryType"
-            name="timeEntryType"
-            row
-            value={type}
-            onChange={handleTypeChange}
-          >
-            <FormControlLabel
-              value={TimeEntryTypes.IN}
-              control={<Radio />}
-              label={<Trans>Values.TimeEntryTypes.In</Trans>}
-            />
-            <FormControlLabel
-              value={TimeEntryTypes.OUT}
-              control={<Radio />}
-              label={<Trans>Values.TimeEntryTypes.Out</Trans>}
-            />
-          </RadioGroup>
-        </FormControl>
-        <MuiPickersUtilsProvider
-          utils={DateFnsUtils}
-          locale={getDatepickerLocale(selectedLanguage)}
+    <div className={classes.container}>
+      <FormControl component="fieldset" className={classes.selfCenter}>
+        <RadioGroup
+          aria-label="timeEntryType"
+          name="timeEntryType"
+          row
+          value={type}
+          onChange={handleTypeChange}
         >
-          <KeyboardDateTimePicker
-            margin="normal"
-            ampm={false}
-            autoOk
-            value={when}
-            onChange={handleWhenChange}
-            KeyboardButtonProps={{
-              'aria-label': 'change date',
-            }}
+          <FormControlLabel
+            value={TimeEntryTypes.IN}
+            control={<Radio />}
+            label={<Trans>Values.TimeEntryTypes.In</Trans>}
           />
-        </MuiPickersUtilsProvider>
+          <FormControlLabel
+            value={TimeEntryTypes.OUT}
+            control={<Radio />}
+            label={<Trans>Values.TimeEntryTypes.Out</Trans>}
+          />
+        </RadioGroup>
+      </FormControl>
+      <MuiPickersUtilsProvider utils={DateFnsUtils} locale={getDatepickerLocale(selectedLanguage)}>
+        <KeyboardDateTimePicker
+          fullWidth
+          margin="normal"
+          ampm={false}
+          autoOk
+          value={when}
+          onChange={handleWhenChange}
+        />
+      </MuiPickersUtilsProvider>
+      <div>
         {jobs.length > 1 && (
           <FormControl fullWidth>
             <InputLabel htmlFor="job">
@@ -192,45 +189,38 @@ export const TimeEntryForm: React.FC<TimeEntryFormProps> = props => {
             </Select>
           </FormControl>
         )}
-        <FormControl fullWidth>
-          <InputLabel htmlFor="project">
-            <Trans>Labels.Project</Trans>
-          </InputLabel>
-          <Select
-            value={selectedProjectId}
-            onChange={handleProjectChange}
-            disabled={projects.length === 1}
-            inputProps={{
-              id: 'project',
-            }}
-          >
-            {map(
-              project => (
-                <MenuItem key={project.id.toString()} value={project.id.toString()}>
-                  {project.name}
-                </MenuItem>
-              ),
-              projects,
-            )}
-          </Select>
-        </FormControl>
-      </Grid>
-      <Divider />
-      <Grid
-        container
-        direction="column"
-        justify="center"
-        alignItems="center"
-        className={classes.hasPadding}
-      >
-        <ButtonSpinner
-          onClick={handleSave}
-          isBusy={isBusy}
-          disabled={!when || !selectedJobId || !selectedProjectId || isBusy}
+      </div>
+      <FormControl fullWidth>
+        <InputLabel htmlFor="project">
+          <Trans>Labels.Project</Trans>
+        </InputLabel>
+        <Select
+          value={selectedProjectId}
+          onChange={handleProjectChange}
+          disabled={projects.length === 1}
+          inputProps={{
+            id: 'project',
+          }}
         >
-          {model.isEmpty() ? getTransFromType(type) : <SaveIcon />}
-        </ButtonSpinner>
-      </Grid>
-    </Grid>
+          {map(
+            project => (
+              <MenuItem key={project.id.toString()} value={project.id.toString()}>
+                {project.name}
+              </MenuItem>
+            ),
+            projects,
+          )}
+        </Select>
+      </FormControl>
+      <Divider />
+      <ButtonSpinner
+        onClick={handleSave}
+        isBusy={isBusy}
+        disabled={!when || !selectedJobId || !selectedProjectId || isBusy}
+        className={classes.selfCenter}
+      >
+        {model.isEmpty() ? getTransFromEntryType(type) : <SaveIcon />}
+      </ButtonSpinner>
+    </div>
   );
 };

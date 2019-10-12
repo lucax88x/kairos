@@ -15,8 +15,9 @@ const useStyles = makeStyles(theme => ({
     padding: theme.spacing(3),
   },
   root: {
-    display: 'flex',
+    display: 'grid',
     alignItems: 'center',
+    justifyItems: 'center',
   },
   wrapper: {
     position: 'relative',

@@ -17,7 +17,7 @@ export const updateTimeAbsenceEntryAsync = createAsyncAction(
   UPDATE_TIME_ABSENCE_ENTRY_FAILURE,
 )<{ model: TimeAbsenceEntryModel }, void, string>();
 
-function* doDeleteTimeAbsenceEntry({
+function* doUpdateTimeAbsenceEntry({
   payload: { model },
 }: ReturnType<typeof updateTimeAbsenceEntryAsync.request>) {
   try {
@@ -34,7 +34,7 @@ function* doNotifySuccess() {
 }
 
 export function* updateTimeAbsenceEntrySaga() {
-  yield takeLatest(UPDATE_TIME_ABSENCE_ENTRY, doDeleteTimeAbsenceEntry);
+  yield takeLatest(UPDATE_TIME_ABSENCE_ENTRY, doUpdateTimeAbsenceEntry);
   yield takeLatest(UPDATE_TIME_ABSENCE_ENTRY_SUCCESS, doNotifySuccess);
 }
 

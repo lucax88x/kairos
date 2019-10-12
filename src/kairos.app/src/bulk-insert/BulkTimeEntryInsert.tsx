@@ -2,12 +2,12 @@ import { t, Trans } from '@lingui/macro';
 import { Fab, Grid, makeStyles, TextField, Typography } from '@material-ui/core';
 import CheckIcon from '@material-ui/icons/Check';
 import SaveIcon from '@material-ui/icons/Save';
-import { format, isValid, parseISO } from 'date-fns';
-import { chain, indexBy, split } from 'ramda';
+import { isValid, parseISO } from 'date-fns';
+import { chain, indexBy, split, map } from 'ramda';
 import indexOf from 'ramda/es/indexOf';
 import React, { ChangeEvent, useCallback, useMemo, useState } from 'react';
 import { Index } from 'react-virtualized';
-import { formatAsDateTime } from '../code/constants';
+import { dateTimeFormatter, entryTypeFormatter } from '../code/formatters';
 import { isString } from '../code/is';
 import FabButtonSpinner from '../components/FabButtonSpinner';
 import { VirtualizedTable } from '../components/VirtualizedTable';
@@ -18,6 +18,7 @@ import { TimeEntryModel, TimeEntryTypes } from '../models/time-entry.model';
 import { UUID } from '../models/uuid.model';
 
 interface TimeEntryInvalidModel {
+  id: UUID;
   when: Date | string;
   type: TimeEntryTypes | string;
   job: UUID | string;
@@ -25,10 +26,6 @@ interface TimeEntryInvalidModel {
 }
 
 const useStyles = makeStyles(theme => ({
-  scroll: {
-    overflow: 'auto',
-    height: '250px',
-  },
   center: {
     display: 'flex',
     justifyContent: 'center',
@@ -108,6 +105,7 @@ export const BulkTimeEntryInsertComponent: React.FC<BulkTimeEntryInsertProps> = 
             );
           } else {
             invalidModels.push({
+              id: UUID.Generate(),
               when: isWhenValid ? when : i18n._(t`Validation.InvalidDate`),
               type: isTypeValid ? (type as TimeEntryTypes) : i18n._(t`Validation.InvalidType`),
               job: isJobValid ? job.id : i18n._(t`Validation.InvalidJob`),
@@ -126,13 +124,6 @@ export const BulkTimeEntryInsertComponent: React.FC<BulkTimeEntryInsertProps> = 
   const invalidModelsRowGetter = useCallback(({ index }: Index) => invalidModels[index], [
     invalidModels,
   ]);
-  const dateFormatter = useCallback((date: Date | string) => {
-    if (!isString(date)) {
-      return format(date, formatAsDateTime);
-    }
-
-    return date;
-  }, []);
   const jobFormatter = useCallback(
     (jobId: UUID | string) => {
       if (!isString(jobId)) {
@@ -179,13 +170,11 @@ export const BulkTimeEntryInsertComponent: React.FC<BulkTimeEntryInsertProps> = 
       {!!validModels.length && (
         <>
           <Grid item>
-            <Typography component="h1" variant="h6" noWrap>
-              <Trans>BulkTimeEntryInsert.ValidEntries</Trans>
-            </Typography>
-          </Grid>
-          <Grid item className={classes.scroll}>
             <VirtualizedTable
+              title={i18n._(t`TimeHolidayEntries.Title`)}
+              height="250px"
               rowCount={validModels.length}
+              rowIds={map(m => m.id.toString(), validModels)}
               noRowsRenderer={noRowsRenderer}
               rowGetter={validModelsRowGetter}
               columns={[
@@ -193,13 +182,14 @@ export const BulkTimeEntryInsertComponent: React.FC<BulkTimeEntryInsertProps> = 
                   width: 100,
                   label: i18n._(t`BulkTimeEntryInsert.TypeTableHeader`),
                   dataKey: 'type',
+                  formatter: entryTypeFormatter,
                 },
                 {
                   width: 200,
                   label: i18n._(t`BulkTimeEntryInsert.WhenTableHeader`),
                   dataKey: 'when',
                   flexGrow: 1,
-                  formatter: dateFormatter,
+                  formatter: dateTimeFormatter,
                 },
                 {
                   width: 200,
@@ -221,13 +211,11 @@ export const BulkTimeEntryInsertComponent: React.FC<BulkTimeEntryInsertProps> = 
       {!!invalidModels.length && (
         <>
           <Grid item>
-            <Typography component="h1" variant="h6" noWrap>
-              <Trans>BulkTimeEntryInsert.InvalidEntries</Trans>
-            </Typography>
-          </Grid>
-          <Grid item className={classes.scroll}>
             <VirtualizedTable
+              title={i18n._(t`BulkTimeEntryInsert.InvalidEntries`)}
+              height="250px"
               rowCount={invalidModels.length}
+              rowIds={map(m => m.id.toString(), invalidModels)}
               noRowsRenderer={noRowsRenderer}
               rowGetter={invalidModelsRowGetter}
               columns={[
@@ -235,13 +223,14 @@ export const BulkTimeEntryInsertComponent: React.FC<BulkTimeEntryInsertProps> = 
                   width: 100,
                   label: i18n._(t`BulkTimeEntryInsert.TypeTableHeader`),
                   dataKey: 'type',
+                  formatter: entryTypeFormatter,
                 },
                 {
                   width: 200,
                   label: i18n._(t`BulkTimeEntryInsert.WhenTableHeader`),
                   dataKey: 'when',
                   flexGrow: 1,
-                  formatter: dateFormatter,
+                  formatter: dateTimeFormatter,
                 },
                 {
                   width: 200,

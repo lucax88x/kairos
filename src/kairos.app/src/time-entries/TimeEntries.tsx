@@ -1,11 +1,11 @@
 import { t, Trans } from '@lingui/macro';
-import { Button, IconButton, makeStyles, Typography } from '@material-ui/core';
+import { Button, IconButton, makeStyles } from '@material-ui/core';
 import CreateIcon from '@material-ui/icons/Create';
 import DeleteIcon from '@material-ui/icons/Delete';
-import { format } from 'date-fns';
+import { map } from 'ramda';
 import React, { useCallback } from 'react';
 import { Index } from 'react-virtualized';
-import { formatAsDateTime } from '../code/constants';
+import { dateTimeFormatter, entryTypeFormatter } from '../code/formatters';
 import Spinner from '../components/Spinner';
 import { VirtualizedTable } from '../components/VirtualizedTable';
 import { i18n } from '../i18nLoader';
@@ -14,11 +14,10 @@ import {
   TimeEntryListModel,
   TimeEntryListProjectModel,
 } from '../models/time-entry-list.model';
-import { getTextFromType, TimeEntryTypes } from '../models/time-entry.model';
+import { UUID } from '../models/uuid.model';
 
 const useStyles = makeStyles(theme => ({
   container: {
-    height: '70vh',
     width: '100%',
     marginBottom: theme.spacing(1),
   },
@@ -27,13 +26,13 @@ const useStyles = makeStyles(theme => ({
 export interface TimeEntriesInputs {
   timeEntries: TimeEntryListModel[];
   isGetTimeEntriesBusy: boolean;
-  isDeleteTimeEntryBusy: boolean;
+  isDeleteTimeEntriesBusy: boolean;
 }
 
 export interface TimeEntriesDispatches {
   onCreate: () => void;
   onUpdate: (item: TimeEntryListModel) => void;
-  onDelete: (item: TimeEntryListModel) => void;
+  onDelete: (ids: UUID[]) => void;
 }
 
 type TimeEntriesProps = TimeEntriesInputs & TimeEntriesDispatches;
@@ -42,7 +41,7 @@ export const TimeEntriesComponent: React.FC<TimeEntriesProps> = props => {
   const {
     timeEntries,
     isGetTimeEntriesBusy,
-    isDeleteTimeEntryBusy,
+    isDeleteTimeEntriesBusy,
     onCreate,
     onUpdate,
     onDelete,
@@ -51,15 +50,13 @@ export const TimeEntriesComponent: React.FC<TimeEntriesProps> = props => {
   const classes = useStyles(props);
 
   const handleUpdate = useCallback((model: TimeEntryListModel) => onUpdate(model), [onUpdate]);
-  const handleDelete = useCallback((model: TimeEntryListModel) => onDelete(model), [onDelete]);
+  const handleDelete = useCallback((model: TimeEntryListModel) => onDelete([model.id]), [onDelete]);
 
   const noRowsRenderer = useCallback(
     () => <p>{isGetTimeEntriesBusy ? '' : <Trans>TimeEntries.NoItems</Trans>}</p>,
     [isGetTimeEntriesBusy],
   );
   const rowGetter = useCallback(({ index }: Index) => timeEntries[index], [timeEntries]);
-  const typeFormatter = useCallback((type: TimeEntryTypes) => getTextFromType(type), []);
-  const dateFormatter = useCallback((data: Date) => format(data, formatAsDateTime), []);
   const jobFormatter = useCallback((job: TimeEntryListJobModel) => job.name, []);
   const projectFormatter = useCallback((project: TimeEntryListProjectModel) => project.name, []);
   const updateCellRenderer = useCallback(
@@ -79,14 +76,15 @@ export const TimeEntriesComponent: React.FC<TimeEntriesProps> = props => {
     [handleDelete],
   );
 
+  const handleDeleteSelected = useCallback(ids => onDelete(ids), [onDelete]);
+
   return (
-    <Spinner show={isGetTimeEntriesBusy || isDeleteTimeEntryBusy}>
-      <Typography component="h2" variant="h6" gutterBottom>
-        <Trans>TimeEntries.Title</Trans>
-      </Typography>
+    <Spinner show={isGetTimeEntriesBusy || isDeleteTimeEntriesBusy}>
       <div className={classes.container}>
         <VirtualizedTable
+          title={i18n._(t`TimeEntries.Title`)}
           rowCount={timeEntries.length}
+          rowIds={map(m => m.id.toString(), timeEntries)}
           noRowsRenderer={noRowsRenderer}
           rowGetter={rowGetter}
           columns={[
@@ -94,14 +92,14 @@ export const TimeEntriesComponent: React.FC<TimeEntriesProps> = props => {
               width: 100,
               label: i18n._(t`TimeEntries.TypeTableHeader`),
               dataKey: 'type',
-              formatter: typeFormatter,
+              formatter: entryTypeFormatter,
             },
             {
               width: 200,
               label: i18n._(t`TimeEntries.WhenTableHeader`),
               dataKey: 'when',
               flexGrow: 1,
-              formatter: dateFormatter,
+              formatter: dateTimeFormatter,
             },
             {
               width: 200,
@@ -128,6 +126,7 @@ export const TimeEntriesComponent: React.FC<TimeEntriesProps> = props => {
               cellRenderer: deleteCellRenderer,
             },
           ]}
+          onDelete={handleDeleteSelected}
         />
       </div>
       <Button variant="contained" color="primary" onClick={onCreate}>

@@ -80,16 +80,16 @@ namespace Kairos.Web.Api.GraphQL
                     return new CreateOrUpdateOutputs(ids);
                 });
 
-            FieldAsync<CreateOrUpdateOutputType>(
-                "deleteTimeEntry",
+            FieldAsync<CreateOrUpdateOutputsType>(
+                "deleteTimeEntries",
                 arguments: new QueryArguments(
-                    new QueryArgument<IdGraphType> {Name = "id"}
+                    new QueryArgument<ListGraphType<NonNullGraphType<IdGraphType>>> {Name = "ids"}
                 ),
                 resolve: async context =>
                 {
-                    var input = context.GetArgument<Guid>("id");
-                    var id = await _mediator.Send(new DeleteTimeEntry(input));
-                    return new CreateOrUpdateOutput(id);
+                    var input = context.GetArgument<IEnumerable<Guid>>("ids");
+                    var ids = await _mediator.Send(new DeleteTimeEntries(input));
+                    return new CreateOrUpdateOutputs(ids);
                 });
         }
 
@@ -136,16 +136,16 @@ namespace Kairos.Web.Api.GraphQL
                     return new CreateOrUpdateOutputs(ids);
                 });
 
-            FieldAsync<CreateOrUpdateOutputType>(
-                "deleteTimeAbsenceEntry",
+            FieldAsync<CreateOrUpdateOutputsType>(
+                "deleteTimeAbsenceEntries",
                 arguments: new QueryArguments(
-                    new QueryArgument<IdGraphType> {Name = "id"}
+                    new QueryArgument<ListGraphType<NonNullGraphType<IdGraphType>>> {Name = "ids"}
                 ),
                 resolve: async context =>
                 {
-                    var input = context.GetArgument<Guid>("id");
-                    var id = await _mediator.Send(new DeleteTimeAbsenceEntry(input));
-                    return new CreateOrUpdateOutput(id);
+                    var input = context.GetArgument<IEnumerable<Guid>>("ids");
+                    var ids = await _mediator.Send(new DeleteTimeAbsenceEntries(input));
+                    return new CreateOrUpdateOutputs(ids);
                 });
         }
 
@@ -190,16 +190,16 @@ namespace Kairos.Web.Api.GraphQL
                     return new CreateOrUpdateOutputs(ids);
                 });
 
-            FieldAsync<CreateOrUpdateOutputType>(
-                "deleteTimeHolidayEntry",
+            FieldAsync<CreateOrUpdateOutputsType>(
+                "deleteTimeHolidayEntries",
                 arguments: new QueryArguments(
-                    new QueryArgument<IdGraphType> {Name = "id"}
+                    new QueryArgument<ListGraphType<NonNullGraphType<IdGraphType>>> {Name = "ids"}
                 ),
                 resolve: async context =>
                 {
-                    var input = context.GetArgument<Guid>("id");
-                    var id = await _mediator.Send(new DeleteTimeHolidayEntry(input));
-                    return new CreateOrUpdateOutput(id);
+                    var input = context.GetArgument<IEnumerable<Guid>>("ids");
+                    var ids = await _mediator.Send(new DeleteTimeHolidayEntries(input));
+                    return new CreateOrUpdateOutputs(ids);
                 });
 
             FieldAsync<CreateOrUpdateOutputsType>(

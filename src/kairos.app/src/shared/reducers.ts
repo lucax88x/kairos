@@ -3,9 +3,9 @@ import { SharedActions } from '../actions';
 import { createTimeAbsenceEntryReducer } from './create-time-absence-entry';
 import { createTimeEntryReducer } from './create-time-entry';
 import { createTimeHolidayEntryReducer } from './create-time-holiday-entry';
-import { deleteTimeAbsenceEntryReducer } from './delete-time-absence-entry';
-import { deleteTimeEntryReducer } from './delete-time-entry';
-import { deleteTimeHolidayEntryReducer } from './delete-time-holiday-entry';
+import { deleteTimeAbsenceEntriesReducer } from './delete-time-absence-entries';
+import { deleteTimeEntriesReducer } from './delete-time-entries';
+import { deleteTimeHolidayEntriesReducer } from './delete-time-holiday-entries';
 import { getCountriesReducer } from './get-countries';
 import { getTimeAbsenceEntriesReducer } from './get-time-absence-entries';
 import { getTimeEntriesReducer } from './get-time-entries';
@@ -19,13 +19,13 @@ const reducers = [
   getCountriesReducer,
   getTimeEntriesReducer,
   createTimeEntryReducer,
-  deleteTimeEntryReducer,
+  deleteTimeEntriesReducer,
   getTimeAbsenceEntriesReducer,
   createTimeAbsenceEntryReducer,
-  deleteTimeAbsenceEntryReducer,
+  deleteTimeAbsenceEntriesReducer,
   getTimeHolidayEntriesReducer,
   createTimeHolidayEntryReducer,
-  deleteTimeHolidayEntryReducer,
+  deleteTimeHolidayEntriesReducer,
   selectYearReducer,
   selectLanguageReducer,
   updateTimeHolidayEntriesByCountryReducer,

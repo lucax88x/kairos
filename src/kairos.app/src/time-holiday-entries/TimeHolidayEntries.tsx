@@ -1,22 +1,21 @@
 import { t, Trans } from '@lingui/macro';
-import { Button, Grid, IconButton, makeStyles, Typography } from '@material-ui/core';
+import { Button, Grid, IconButton, makeStyles } from '@material-ui/core';
 import CreateIcon from '@material-ui/icons/Create';
 import DeleteIcon from '@material-ui/icons/Delete';
-import { format } from 'date-fns';
 import { map } from 'ramda';
 import React, { useCallback, useMemo, useState } from 'react';
 import { Index } from 'react-virtualized';
-import { formatAsDate } from '../code/constants';
+import { dateTimeFormatter } from '../code/formatters';
 import { Autocomplete, AutocompleteSuggestion } from '../components/Autocomplete';
 import Spinner from '../components/Spinner';
 import { VirtualizedTable } from '../components/VirtualizedTable';
 import { i18n } from '../i18nLoader';
 import { CountryModel } from '../models/country.model';
 import { TimeHolidayEntryModel } from '../models/time-holiday-entry.model';
+import { UUID } from '../models/uuid.model';
 
 const useStyles = makeStyles(theme => ({
   container: {
-    height: '70vh',
     width: '100%',
     marginBottom: theme.spacing(1),
   },
@@ -26,14 +25,15 @@ export interface TimeHolidayEntriesInputs {
   timeHolidayEntries: TimeHolidayEntryModel[];
   countries: CountryModel[];
   isGetTimeHolidayEntriesBusy: boolean;
-  isDeleteTimeHolidayEntryBusy: boolean;
+  isDeleteTimeHolidayEntriesBusy: boolean;
+  isUpdateTimeHolidayEntriesByCountryBusy: boolean;
   isGetCountriesBusy: boolean;
 }
 
 export interface TimeHolidayEntriesDispatches {
   onCreate: () => void;
   onUpdate: (item: TimeHolidayEntryModel) => void;
-  onDelete: (item: TimeHolidayEntryModel) => void;
+  onDelete: (ids: UUID[]) => void;
   onUpdateHolidays: (countryCode: string) => void;
 }
 
@@ -44,7 +44,8 @@ export const TimeHolidayEntriesComponent: React.FC<TimeHolidayEntriesProps> = pr
     timeHolidayEntries,
     countries,
     isGetTimeHolidayEntriesBusy,
-    isDeleteTimeHolidayEntryBusy,
+    isDeleteTimeHolidayEntriesBusy,
+    isUpdateTimeHolidayEntriesByCountryBusy,
     isGetCountriesBusy,
     onCreate,
     onUpdate,
@@ -57,7 +58,9 @@ export const TimeHolidayEntriesComponent: React.FC<TimeHolidayEntriesProps> = pr
   const [country, setCountry] = useState('');
 
   const handleUpdate = useCallback((model: TimeHolidayEntryModel) => onUpdate(model), [onUpdate]);
-  const handleDelete = useCallback((model: TimeHolidayEntryModel) => onDelete(model), [onDelete]);
+  const handleDelete = useCallback((model: TimeHolidayEntryModel) => onDelete([model.id]), [
+    onDelete,
+  ]);
   const handleCountryChange = useCallback(
     (suggestion: AutocompleteSuggestion) => setCountry(suggestion.value),
     [setCountry],
@@ -74,7 +77,6 @@ export const TimeHolidayEntriesComponent: React.FC<TimeHolidayEntriesProps> = pr
   const rowGetter = useCallback(({ index }: Index) => timeHolidayEntries[index], [
     timeHolidayEntries,
   ]);
-  const dateFormatter = useCallback((data: Date) => !!data && format(data, formatAsDate), []);
   const updateCellRenderer = useCallback(
     model => (
       <IconButton
@@ -105,14 +107,16 @@ export const TimeHolidayEntriesComponent: React.FC<TimeHolidayEntriesProps> = pr
     [countries],
   );
 
+  const handleDeleteSelected = useCallback(ids => onDelete(ids), [onDelete]);
+
   return (
-    <Spinner show={isGetTimeHolidayEntriesBusy || isDeleteTimeHolidayEntryBusy}>
-      <Typography component="h2" variant="h6" gutterBottom>
-        Holidays
-      </Typography>
+    <Spinner show={isGetTimeHolidayEntriesBusy || isDeleteTimeHolidayEntriesBusy || isUpdateTimeHolidayEntriesByCountryBusy}>
       <div className={classes.container}>
         <VirtualizedTable
+          title={i18n._(t`TimeHolidayEntries.Title`)}
+          height="50vh"
           rowCount={timeHolidayEntries.length}
+          rowIds={map(m => m.id.toString(), timeHolidayEntries)}
           noRowsRenderer={noRowsRenderer}
           rowGetter={rowGetter}
           columns={[
@@ -121,7 +125,7 @@ export const TimeHolidayEntriesComponent: React.FC<TimeHolidayEntriesProps> = pr
               label: i18n._(t`TimeHolidayEntries.WhenTableHeader`),
               dataKey: 'when',
               flexGrow: 1,
-              formatter: dateFormatter,
+              formatter: dateTimeFormatter,
             },
             {
               width: 100,
@@ -142,6 +146,7 @@ export const TimeHolidayEntriesComponent: React.FC<TimeHolidayEntriesProps> = pr
               cellRenderer: deleteCellRenderer,
             },
           ]}
+          onDelete={handleDeleteSelected}
         />
       </div>
       <Button variant="contained" color="primary" onClick={onCreate}>

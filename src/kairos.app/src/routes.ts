@@ -9,4 +9,5 @@ export class Routes {
   static EditTimeAbsenceEntry = '/absence/:id';
   static EditTimeHolidayEntry = '/holiday/:id';
   static BulkInsert = '/bulk-insert';
+  static Export = '/export';
 }

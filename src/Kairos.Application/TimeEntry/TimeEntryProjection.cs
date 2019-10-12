@@ -1,6 +1,7 @@
 using System.Collections.Immutable;
 using System.Threading;
 using System.Threading.Tasks;
+using Kairos.Application.TimeEntry.Dtos;
 using Kairos.Application.TimeEntry.Queries;
 using Kairos.Domain.Events.TimeEntry;
 using Kairos.Infra.Read.TimeEntry;
@@ -13,7 +14,8 @@ namespace Kairos.Application.TimeEntry
         INotificationHandler<TimeEntryUpdated>,
         INotificationHandler<TimeEntryDeleted>,
         IRequestHandler<GetTimeEntryById, TimeEntryAggregationReadDto>,
-        IRequestHandler<GetTimeEntries, ImmutableList<TimeEntryAggregationReadDto>>
+        IRequestHandler<GetTimeEntries, ImmutableList<TimeEntryAggregationReadDto>>,
+        IRequestHandler<GetTimeEntriesReport, ReportModel>
     {
         private readonly ITimeEntryReadRepository _timeEntryReadRepository;
 
@@ -46,6 +48,10 @@ namespace Kairos.Application.TimeEntry
             CancellationToken cancellationToken)
         {
             return await _timeEntryReadRepository.Get(request.User, request.Year);
+        }
+
+        public async Task<ReportModel> Handle(GetTimeEntriesReport request, CancellationToken cancellationToken)
+        {
         }
     }
 }

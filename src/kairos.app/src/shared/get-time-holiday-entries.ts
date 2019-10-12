@@ -8,7 +8,7 @@ import { TimeHolidayEntryModel } from '../models/time-holiday-entry.model';
 import { getTimeHolidayEntries } from '../services/time-holiday-entry/time-holiday-entry.service';
 import {
   CREATE_TIME_HOLIDAY_ENTRY_SUCCESS,
-  DELETE_TIME_HOLIDAY_ENTRY_SUCCESS,
+  DELETE_TIME_HOLIDAY_ENTRIES_SUCCESS,
   SELECT_YEAR,
   UPDATE_TIME_HOLIDAY_ENTRIES_BY_COUNTRY_SUCCESS,
 } from '../shared/constants';
@@ -52,7 +52,7 @@ export function* getTimeHolidayEntriesSaga() {
     [
       LOCATION_CHANGE,
       CREATE_TIME_HOLIDAY_ENTRY_SUCCESS,
-      DELETE_TIME_HOLIDAY_ENTRY_SUCCESS,
+      DELETE_TIME_HOLIDAY_ENTRIES_SUCCESS,
       UPDATE_TIME_HOLIDAY_ENTRIES_BY_COUNTRY_SUCCESS,
       SELECT_YEAR,
     ],

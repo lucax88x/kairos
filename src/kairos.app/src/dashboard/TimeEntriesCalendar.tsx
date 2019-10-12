@@ -3,21 +3,32 @@ import { endOfDay, endOfYear, startOfDay, startOfYear } from 'date-fns';
 import moment from 'moment';
 import { join, map } from 'ramda';
 import React, { useCallback, useEffect, useState } from 'react';
-import { Calendar, Event, momentLocalizer, Messages } from 'react-big-calendar';
-import { getEnterExitPairs } from '../code/calculator';
+import { Calendar, Event, Messages, momentLocalizer } from 'react-big-calendar';
+import { getEnterExitEvents } from '../code/calculator';
 import { Themes } from '../code/variables';
 import Spinner from '../components/Spinner';
+import { i18n } from '../i18nLoader';
 import { Language } from '../models/language-model';
-import { TimeAbsenceEntryModel } from '../models/time-absence-entry.model';
+import { getTextFromAbsenceType, TimeAbsenceEntryModel } from '../models/time-absence-entry.model';
 import { TimeEntryListModel } from '../models/time-entry-list.model';
 import { TimeHolidayEntryModel } from '../models/time-holiday-entry.model';
-import { i18n } from '../i18nLoader';
+import { Routes } from '../routes';
 
 const localizer = momentLocalizer(moment);
+
+enum EventType {
+  Holiday = -1,
+  Absence = 0,
+  Work = 1,
+}
 
 const useStyles = makeStyles({
   calendar: {
     minHeight: '400px',
+    '& a': {
+      color: Themes.First.color,
+      padding: '2px 5px',
+    },
   },
   work: {
     backgroundColor: Themes.First.backgroundColor,
@@ -46,13 +57,11 @@ export interface TimeEntriesCalendarInputs {
   timeHolidayEntries: TimeHolidayEntryModel[];
 }
 
-enum EventType {
-  Holiday = -1,
-  Absence = 0,
-  Work = 1,
+export interface TimeEntriesCalendarDispatches {
+  onNavigate: (url: string) => void;
 }
 
-type TimeEntriesCalendarEntryProps = TimeEntriesCalendarInputs;
+type TimeEntriesCalendarEntryProps = TimeEntriesCalendarInputs & TimeEntriesCalendarDispatches;
 
 export const TimeEntriesCalendarComponent: React.FC<TimeEntriesCalendarEntryProps> = props => {
   const classes = useStyles(props);
@@ -65,18 +74,24 @@ export const TimeEntriesCalendarComponent: React.FC<TimeEntriesCalendarEntryProp
     timeAbsenceEntries,
     isGetTimeHolidayEntriesBusy,
     timeHolidayEntries,
+    onNavigate,
   } = props;
 
   const [events, setEvents] = useState<Event[]>([]);
 
   useEffect(() => {
-    const pairs = getEnterExitPairs(timeEntries, {
+    const pairs = getEnterExitEvents(timeEntries, {
       start: startOfYear(new Date()),
       end: endOfYear(new Date()),
     });
 
     const entries = map(
-      ({ enter, exit }) => ({ start: enter, end: exit, title: 'Work', resource: EventType.Work }),
+      ({ enter, exit, title, id }) => ({
+        start: enter,
+        end: exit,
+        title,
+        resource: { type: EventType.Work, id },
+      }),
       pairs,
     );
 
@@ -84,8 +99,8 @@ export const TimeEntriesCalendarComponent: React.FC<TimeEntriesCalendarEntryProp
       ab => ({
         start: ab.start,
         end: ab.end,
-        title: join(' ', [ab.type, ab.description]),
-        resource: EventType.Absence,
+        title: join(' ', [getTextFromAbsenceType(ab.type), ab.description]),
+        resource: { type: EventType.Absence, id: ab.id },
       }),
       timeAbsenceEntries,
     );
@@ -95,7 +110,7 @@ export const TimeEntriesCalendarComponent: React.FC<TimeEntriesCalendarEntryProp
         start: startOfDay(hol.when),
         end: endOfDay(hol.when),
         title: hol.description,
-        resource: EventType.Holiday,
+        resource: { type: EventType.Holiday, id: hol.id },
       }),
       timeHolidayEntries,
     );
@@ -105,13 +120,14 @@ export const TimeEntriesCalendarComponent: React.FC<TimeEntriesCalendarEntryProp
 
   const eventPropGetter = useCallback(
     (event: Event, start: string | Date, end: string | Date, isSelected: boolean) => {
-      if (event.resource === EventType.Work) {
+      const { type } = event.resource;
+      if (type === EventType.Work) {
         return { className: classes.work };
       }
-      if (event.resource === EventType.Absence) {
+      if (type === EventType.Absence) {
         return { className: classes.absence };
       }
-      if (event.resource === EventType.Holiday) {
+      if (type === EventType.Holiday) {
         return { className: classes.holiday };
       }
 
@@ -135,6 +151,26 @@ export const TimeEntriesCalendarComponent: React.FC<TimeEntriesCalendarEntryProp
     showMore: more => i18n._('Calendar.ShowMore', { more }),
   };
 
+  const handleOnDoubleClick = useCallback(
+    (event: Event) => {
+      const { type, id } = event.resource;
+      switch (type as EventType) {
+        case EventType.Work:
+          onNavigate(Routes.EditTimeEntry.replace(':id', id.toString()));
+          break;
+        case EventType.Absence:
+          onNavigate(Routes.EditTimeAbsenceEntry.replace(':id', id.toString()));
+          break;
+        case EventType.Holiday:
+          onNavigate(Routes.EditTimeHolidayEntry.replace(':id', id.toString()));
+          break;
+        default:
+          break;
+      }
+    },
+    [onNavigate],
+  );
+
   return (
     <Spinner
       show={isGetTimeEntriesBusy || isGetTimeAbsenceEntriesBusy || isGetTimeHolidayEntriesBusy}
@@ -146,6 +182,7 @@ export const TimeEntriesCalendarComponent: React.FC<TimeEntriesCalendarEntryProp
         events={events}
         eventPropGetter={eventPropGetter}
         messages={messages}
+        onDoubleClickEvent={handleOnDoubleClick}
       />
     </Spinner>
   );

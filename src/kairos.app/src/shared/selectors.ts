@@ -59,9 +59,9 @@ export const selectIsCreateTimeEntryBusy = createSelector(
   busy => busy.createTimeEntry,
 );
 
-export const selectIsDeleteTimeEntryBusy = createSelector(
+export const selectIsDeleteTimeEntriesBusy = createSelector(
   selectBusy,
-  busy => busy.deleteTimeEntry,
+  busy => busy.deleteTimeEntries,
 );
 
 export const selectIsGetTimeAbsenceEntriesBusy = createSelector(
@@ -74,9 +74,9 @@ export const selectIsCreateTimeAbsenceEntryBusy = createSelector(
   busy => busy.createTimeAbsenceEntry,
 );
 
-export const selectIsDeleteTimeAbsenceEntryBusy = createSelector(
+export const selectIsDeleteTimeAbsenceEntriesBusy = createSelector(
   selectBusy,
-  busy => busy.deleteTimeAbsenceEntry,
+  busy => busy.deleteTimeAbsenceEntries,
 );
 
 export const selectIsGetTimeHolidayEntriesBusy = createSelector(
@@ -89,7 +89,12 @@ export const selectIsCreateTimeHolidayEntryBusy = createSelector(
   busy => busy.createTimeHolidayEntry,
 );
 
-export const selectIsDeleteTimeHolidayEntryBusy = createSelector(
+export const selectIsDeleteTimeHolidayEntriesBusy = createSelector(
   selectBusy,
-  busy => busy.deleteTimeHolidayEntry,
+  busy => busy.deleteTimeHolidayEntries,
+);
+
+export const selectIsUpdateTimeHolidayEntriesByCountry = createSelector(
+  selectBusy,
+  busy => busy.updateTimeHolidayEntriesByCountry,
 );

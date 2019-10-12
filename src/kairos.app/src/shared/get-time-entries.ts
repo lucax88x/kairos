@@ -6,7 +6,7 @@ import { SharedActions } from '../actions';
 import { Route } from '../models/route.model';
 import { TimeEntryListModel } from '../models/time-entry-list.model';
 import { getTimeEntries } from '../services/time-entry/time-entry.service';
-import { CREATE_TIME_ENTRY_SUCCESS, DELETE_TIME_ENTRY_SUCCESS, SELECT_YEAR } from '../shared/constants';
+import { CREATE_TIME_ENTRY_SUCCESS, DELETE_TIME_ENTRIES_SUCCESS, SELECT_YEAR } from '../shared/constants';
 import { selectDashboardRoute, selectTimeEntriesRoute } from '../shared/router.selectors';
 import { GET_TIME_ENTRIES, GET_TIME_ENTRIES_FAILURE, GET_TIME_ENTRIES_SUCCESS } from './constants';
 import { selectSelectedYear } from './selectors';
@@ -41,7 +41,7 @@ function* doGetTimeEntries() {
 
 export function* getTimeEntriesSaga() {
   yield takeLatest(
-    [LOCATION_CHANGE, CREATE_TIME_ENTRY_SUCCESS, DELETE_TIME_ENTRY_SUCCESS, SELECT_YEAR],
+    [LOCATION_CHANGE, CREATE_TIME_ENTRY_SUCCESS, DELETE_TIME_ENTRIES_SUCCESS, SELECT_YEAR],
     doGetTimeEntriesOnOtherActions,
   );
   yield takeLatest(GET_TIME_ENTRIES, doGetTimeEntries);

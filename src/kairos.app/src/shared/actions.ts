@@ -1,9 +1,9 @@
 export { createTimeAbsenceEntryAsync } from './create-time-absence-entry';
 export { createTimeEntryAsync } from './create-time-entry';
 export { createTimeHolidayEntryAsync } from './create-time-holiday-entry';
-export { deleteTimeAbsenceEntryAsync } from './delete-time-absence-entry';
-export { deleteTimeEntryAsync } from './delete-time-entry';
-export { deleteTimeHolidayEntryAsync } from './delete-time-holiday-entry';
+export { deleteTimeAbsenceEntriesAsync } from './delete-time-absence-entries';
+export { deleteTimeEntriesAsync } from './delete-time-entries';
+export { deleteTimeHolidayEntriesAsync } from './delete-time-holiday-entries';
 export { getCountriesAsync } from './get-countries';
 export { getTimeAbsenceEntriesAsync } from './get-time-absence-entries';
 export { getTimeEntriesAsync } from './get-time-entries';

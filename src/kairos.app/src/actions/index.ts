@@ -10,6 +10,7 @@ import * as editTimeEntryActions from '../edit-time-entry/actions';
 import * as layoutActions from '../layout/actions';
 import * as notificationManagerActions from '../notification-manager/actions';
 import * as sharedActions from '../shared/actions';
+import * as exportActions from '../export/actions';
 
 export type LayoutActions = ActionType<typeof layoutActions>;
 export type SharedActions = ActionType<typeof sharedActions>;
@@ -20,6 +21,7 @@ export type EditTimeEntryActions = ActionType<typeof editTimeEntryActions>;
 export type EditTimeAbsenceEntryActions = ActionType<typeof editTimeAbsenceEntryActions>;
 export type EditTimeHolidayEntryActions = ActionType<typeof editTimeHolidayEntryActions>;
 export type BulkInsertActions = ActionType<typeof bulkInsertActions>;
+export type ExportActions = ActionType<typeof exportActions>;
 
 export type Actions =
   | RouterAction
@@ -31,4 +33,5 @@ export type Actions =
   | EditTimeAbsenceEntryActions
   | EditTimeHolidayEntryActions
   | AuthActions
-  | BulkInsertActions;
+  | BulkInsertActions
+  | ExportActions;

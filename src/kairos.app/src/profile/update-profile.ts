@@ -1,12 +1,14 @@
 import produce from 'immer';
 import { call, put, takeLatest } from 'redux-saga/effects';
 import { createAsyncAction } from 'typesafe-actions';
-
 import { ProfileActions } from '../actions';
+import { i18n } from '../i18nLoader';
 import { ProfileModel } from '../models/profile.model';
+import { enqueueSnackbarAction } from '../notification-manager/actions';
 import { updateProfile } from '../services/profile/profile.service';
 import { UPDATE_PROFILE, UPDATE_PROFILE_FAILURE, UPDATE_PROFILE_SUCCESS } from './constants';
 import { ProfileState } from './state';
+import { t } from '@lingui/macro';
 
 export const updateProfileAsync = createAsyncAction(
   UPDATE_PROFILE,
@@ -24,7 +26,12 @@ function* doUpdateProfile({ payload: { model } }: ReturnType<typeof updateProfil
   }
 }
 
+function* doNotifySuccess() {
+  yield put(enqueueSnackbarAction(i18n._(t`Messages.ProfileSaved`), { variant: 'success' }));
+}
+
 export function* updateProfileSaga() {
+  yield takeLatest(UPDATE_PROFILE_SUCCESS, doNotifySuccess);
   yield takeLatest(UPDATE_PROFILE, doUpdateProfile);
 }
 

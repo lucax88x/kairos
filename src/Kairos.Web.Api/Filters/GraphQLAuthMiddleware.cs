@@ -25,7 +25,7 @@ namespace Kairos.Web.Api.Filters
                     var header = context.Request.GetTypedHeaders();
                     var uriReferer = header.Referer;
 
-                    if (uriReferer.LocalPath == "/ui/playground")
+                    if (uriReferer != null && uriReferer.LocalPath == "/ui/playground")
                     {
                         await _next.Invoke(context);
                         return;

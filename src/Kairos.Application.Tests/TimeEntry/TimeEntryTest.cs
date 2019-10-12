@@ -46,9 +46,9 @@ namespace Kairos.Application.Tests.TimeEntry
         public async Task should_create_time_entry()
         {
             // GIVEN
-            var command = new CreateTimeEntries(new TimeEntryModel(DateTimeOffset.UtcNow, 
+            var command = new CreateTimeEntries(new TimeEntryModel(DateTimeOffset.UtcNow,
                 (int) TimeEntryType.In,
-                UserProfileScenarioBuilder.Job1, 
+                UserProfileScenarioBuilder.Job1,
                 UserProfileScenarioBuilder.Project1));
 
             // WHEN           
@@ -71,7 +71,7 @@ namespace Kairos.Application.Tests.TimeEntry
             var existingId = await _sandbox.Scenario.TimeEntry.With("2019/01/01", TimeEntryType.In);
             _sandbox.ClearMediator();
 
-            var command = new DeleteTimeEntry(existingId);
+            var command = new DeleteTimeEntries(new[] {existingId});
 
             // WHEN           
             await _sandbox.Mediator!.Send(command);
@@ -82,13 +82,13 @@ namespace Kairos.Application.Tests.TimeEntry
             await _sandbox.Should!.Redis!.NotExists.Set("time-entry", existingId);
             await _sandbox.Should!.Redis!.NotExists.SortedSet("time-entry", "by-when");
         }
-        
+
         [Fact(Skip = "TODO")]
         public async Task should_not_allow_to_create_time_entry_on_inexistent_job_or_project()
         {
             await Task.CompletedTask;
         }
-        
+
         [Fact(Skip = "TODO")]
         public async Task should_not_allow_to_create_time_entry_on_a_job_or_project_which_are_outside_the_date()
         {

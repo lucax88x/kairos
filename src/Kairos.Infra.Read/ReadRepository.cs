@@ -75,7 +75,7 @@ namespace Kairos.Infra.Read
 
             var value = await _database.ExecuteAsync("JSON.SET", new object[] {WithPrefix(key), path, json}, flags);
 
-            if (value.IsNull) throw new NotFoundItemException();
+            if (value == null || value.IsNull) throw new NotFoundItemException();
         }
 
         public async Task SetRemove(Guid id, string path = ".", CommandFlags flags = CommandFlags.None)
@@ -87,7 +87,7 @@ namespace Kairos.Infra.Read
         {
             var value = await _database.ExecuteAsync("JSON.DEL", new object[] {WithPrefix(key), path}, flags);
 
-            if (value.IsNull) throw new NotFoundItemException();
+            if (value == null || value.IsNull) throw new NotFoundItemException();
         }
 
         public async Task<bool> Exists(Guid id, string path = ".", CommandFlags flags = CommandFlags.None)
@@ -97,9 +97,9 @@ namespace Kairos.Infra.Read
 
         public async Task<bool> Exists(string key, string path = ".", CommandFlags flags = CommandFlags.None)
         {
-            var value = await _database.ExecuteAsync("JSON.GET", new object[] {WithPrefix(key), path}, flags);
+            var value = await _database.ExecuteAsync("JSON.GET", new object[] {WithPrefix(key), "noescape", path}, flags);
 
-            return !value.IsNull;
+            return value != null && !value.IsNull;
         }
 
         public async Task<T> Get<T>(Guid id, string path = ".", CommandFlags flags = CommandFlags.None)
@@ -109,9 +109,10 @@ namespace Kairos.Infra.Read
 
         public async Task<T> Get<T>(string key, string path = ".", CommandFlags flags = CommandFlags.None)
         {
-            var value = await _database.ExecuteAsync("JSON.GET", new object[] {WithPrefix(key), path}, flags);
+            var value = await _database.ExecuteAsync("JSON.GET", new object[] {WithPrefix(key), "noescape", path},
+                flags);
 
-            if (value.IsNull) throw new NotFoundItemException();
+            if (value == null || value.IsNull) throw new NotFoundItemException();
 
             return _serializer.Deserialize<T>(Encoding.UTF8.GetString((byte[]) value));
         }
@@ -132,10 +133,12 @@ namespace Kairos.Infra.Read
             for (var i = 0; i < keys.Count; i++)
             {
                 parameters[i] = WithPrefix(keys[i]);
-            }
+            }    
 
             parameters[keys.Count] = path;
 
+            // NOESCAPE STILL NOT SUPPORTED 
+            // https://github.com/RedisJSON/RedisJSON/issues/120
             var values = await _database.ExecuteAsync("JSON.MGET", parameters, flags);
 
             var array = (byte[][]) values;

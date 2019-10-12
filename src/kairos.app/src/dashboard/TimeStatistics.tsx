@@ -11,10 +11,20 @@ import {
 } from '@material-ui/core';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 import React, { memo, useCallback, useMemo } from 'react';
+import {
+  getWorkingHoursStatistics,
+  TimeStatisticTile,
+  getVacationStatistics,
+  getIllnessStatistics,
+} from '../code/calculator';
 import { mapIndexed } from '../code/ramda.curried';
 import { Themes } from '../code/variables';
 import Spinner from '../components/Spinner';
+import { TimeAbsenceEntryModel } from '../models/time-absence-entry.model';
 import { TimeEntryListModel } from '../models/time-entry-list.model';
+import { TimeHolidayEntryModel } from '../models/time-holiday-entry.model';
+import { ProfileModel } from '../models/profile.model';
+import { Language } from '../models/language-model';
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -48,7 +58,11 @@ const useStyles = makeStyles(theme => ({
 }));
 
 export interface TimeStatisticsInputs {
+  selectedLanguage: Language;
+  profile: ProfileModel;
   timeEntries: TimeEntryListModel[];
+  absences: TimeAbsenceEntryModel[];
+  holidays: TimeHolidayEntryModel[];
   isGetTimeEntriesBusy: boolean;
 }
 
@@ -58,44 +72,31 @@ export interface TimeStatisticsDispatches {
 
 type TimeStatisticsProps = TimeStatisticsInputs & TimeStatisticsDispatches;
 
-interface TimeStatisticTile {
-  title: string;
-  subtitle?: string;
-  text: string;
-}
-
 export const TimeStatisticsComponent: React.FC<TimeStatisticsProps> = memo(props => {
   const classes = useStyles(props);
 
-  const { isGetTimeEntriesBusy } = props;
+  const {
+    isGetTimeEntriesBusy,
+    selectedLanguage,
+    profile,
+    timeEntries,
+    absences,
+    holidays,
+  } = props;
 
   const workingHourTiles: TimeStatisticTile[] = useMemo(
-    () => [
-      { title: 'remaining today', subtitle: 'Monday, 16', text: '8h' },
-      { title: 'remaining this week', subtitle: '12 -> 19', text: '30' },
-      { title: 'remaining this month', subtitle: 'August', text: '30' },
-      { title: 'done this month', subtitle: 'August', text: '50' },
-      { title: 'done previous month', subtitle: 'July', text: '30' },
-      { title: 'done all previous months', text: '30' },
-      { title: 'done this year', subtitle: '2019', text: '250' },
-      { title: 'done previous year', subtitle: '2018', text: '30' },
-      { title: 'done all previous years', text: '30' },
-    ],
-    [],
+    () => getWorkingHoursStatistics(selectedLanguage, profile, timeEntries, absences, holidays),
+    [selectedLanguage, profile, timeEntries, absences, holidays],
   );
 
   const vacationTiles: TimeStatisticTile[] = useMemo(
-    () => [
-      { title: 'remaining this year', subtitle: '2019', text: '0' },
-      { title: 'done this year', subtitle: '2019', text: '30' },
-      { title: 'remaining previous years', text: '30' },
-    ],
-    [],
+    () => getVacationStatistics(selectedLanguage, absences),
+    [selectedLanguage, absences],
   );
 
   const illnessTiles: TimeStatisticTile[] = useMemo(
-    () => [{ title: 'done this year', subtitle: '2019', text: '5d' }],
-    [],
+    () => getIllnessStatistics(selectedLanguage, absences),
+    [selectedLanguage, absences],
   );
 
   const generateTiles = useCallback(

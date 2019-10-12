@@ -40,7 +40,8 @@ namespace Kairos.Web.Api
 
             services.AddMvc(options =>
                 {
-                    options.Filters.AddService(typeof(ApiExceptionFilter));
+                    options.Filters.Add(typeof(ApiExceptionFilter)); // By type
+
                     options.EnableEndpointRouting = false;
                 })
                 .AddNewtonsoftJson()
@@ -63,13 +64,11 @@ namespace Kairos.Web.Api
                 options.Authority = domain;
                 options.Audience = audience;
             });
-            
-            // kestrel
-            services.Configure<KestrelServerOptions>(options =>
-            {
-                options.AllowSynchronousIO = true;
-            });
 
+            // kestrel
+            services.Configure<KestrelServerOptions>(options => { options.AllowSynchronousIO = true; });
+
+            services.AddControllers();
         }
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
@@ -84,7 +83,11 @@ namespace Kairos.Web.Api
             app.UseAuthentication();
             app.UseMiddleware<GraphQlAuthMiddleware>();
 
+            app.UseRouting();
+
             app.UseMvc();
+
+            app.UseEndpoints(endpoints => { endpoints.MapControllers(); });
 
             app.UseGraphQL<ISchema>();
 

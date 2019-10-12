@@ -7,7 +7,7 @@ import { UUID } from '../../models/uuid.model';
 import { mutation, query } from '../graphql.service';
 import { createTimeHolidayEntriesMutation } from './mutations/create-time-holiday-entries';
 import { createTimeHolidayEntryMutation } from './mutations/create-time-holiday-entry';
-import { deleteTimeHolidayEntryMutation } from './mutations/delete-time-holiday-entry';
+import { deleteTimeHolidayEntriesMutation } from './mutations/delete-time-holiday-entries';
 import { updateTimeHolidayEntriesByCountryMutation } from './mutations/update-time-holiday-entries-by-country';
 import { updateTimeHolidayEntryMutation } from './mutations/update-time-holiday-entry';
 import { getTimeHolidayEntriesQuery } from './queries/get-time-holiday-entries';
@@ -37,8 +37,8 @@ export async function createTimeHolidayEntry(model: TimeHolidayEntryModel) {
   await mutation(createTimeHolidayEntryMutation, { timeHolidayEntry: model });
 }
 
-export async function deleteTimeHolidayEntry(id: UUID) {
-  await mutation(deleteTimeHolidayEntryMutation, { id: id.value });
+export async function deleteTimeHolidayEntries(ids: UUID[]) {
+  await mutation(deleteTimeHolidayEntriesMutation, { ids: map(id => id.toString(), ids) });
 }
 
 export async function updateTimeHolidayEntry(model: TimeHolidayEntryModel) {

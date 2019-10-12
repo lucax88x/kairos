@@ -4,7 +4,6 @@ import {
   ExpansionPanel,
   ExpansionPanelDetails,
   ExpansionPanelSummary,
-  Grid,
   IconButton,
   makeStyles,
   TextField,
@@ -27,6 +26,28 @@ import { ProjectModel } from '../models/project.model';
 import { UUID } from '../models/uuid.model';
 
 const useStyles = makeStyles(theme => ({
+  rows: {
+    width: '100%',
+    display: 'grid',
+    gridGap: theme.spacing(1),
+    alignItems: 'center',
+  },
+  columns: {
+    width: '100%',
+    display: 'grid',
+    gridAutoFlow: 'column',
+    gridGap: theme.spacing(1),
+    alignItems: 'center',
+  },
+  between: {
+    justifyContent: 'space-between',
+  },
+  selfCenter: {
+    justifySelf: 'center',
+  },
+  noGap: {
+    gridGap: 0,
+  },
   heading: {
     fontSize: theme.typography.pxToRem(15),
     flexBasis: '33.33%',
@@ -113,47 +134,39 @@ export const ProfileJobProjectForm: React.FC<ProfileJobProjectFormProps> = props
   return (
     <ExpansionPanel className={classes.secondaryPaper}>
       <ExpansionPanelSummary expandIcon={<ExpandMoreIcon />}>
-        <Grid container alignItems={'center'} justify={'space-between'}>
-          <Grid item>
-            <Typography className={classes.heading}>
-              {!!project.name ? project.name : i18n._(t`Profile.UnknownProject`)}
-            </Typography>
-          </Grid>
-          <Grid item>
-            <Typography className={classes.secondaryHeading}>
-              {`${format(project.start, formatAsDate)} - ${
-                !!project.end
-                  ? format(project.end, formatAsDate)
-                  : i18n._(t`Profile.CurrentDateLabel`)
-              } - ${project.allocation}%`}
-            </Typography>
-          </Grid>
-          <Grid item>
-            <IconButton
-              color="inherit"
-              aria-label="Delete entry"
-              onClick={handleDelete}
-              disabled={job.projects.length === 1}
-            >
-              <DeleteIcon />
-            </IconButton>
-          </Grid>
-        </Grid>
+        <div className={classes.columns}>
+          <Typography className={classes.heading}>
+            {!!project.name ? project.name : i18n._(t`Profile.UnknownProject`)}
+          </Typography>
+          <Typography className={classes.secondaryHeading}>
+            {`${format(project.start, formatAsDate)} - ${
+              !!project.end
+                ? format(project.end, formatAsDate)
+                : i18n._(t`Profile.CurrentDateLabel`)
+            } - ${project.allocation}%`}
+          </Typography>
+          <IconButton
+            color="inherit"
+            aria-label="Delete entry"
+            onClick={handleDelete}
+            disabled={job.projects.length === 1}
+          >
+            <DeleteIcon />
+          </IconButton>
+        </div>
       </ExpansionPanelSummary>
       <ExpansionPanelDetails>
-        <Grid container>
-          <Grid container item alignItems={'center'} justify={'space-between'}>
-            <Grid item xs={5}>
-              <TextField
-                fullWidth
-                margin="dense"
-                label={<Trans>Labels.Name</Trans>}
-                type="text"
-                value={project.name}
-                onChange={handleNameChange}
-              />
-            </Grid>
-            <Grid item xs={5}>
+        <div className={classes.rows}>
+          <div className={classes.columns}>
+            <TextField
+              fullWidth
+              margin="dense"
+              label={<Trans>Labels.Name</Trans>}
+              type="text"
+              value={project.name}
+              onChange={handleNameChange}
+            />
+            <div>
               <Typography gutterBottom>
                 <Trans>Labels.Allocation</Trans>
               </Typography>
@@ -168,36 +181,32 @@ export const ProfileJobProjectForm: React.FC<ProfileJobProjectFormProps> = props
                 value={project.allocation}
                 onChange={handleAllocationChange}
               />
-            </Grid>
-          </Grid>
-          <Grid container item alignItems={'center'} justify={'space-between'}>
+            </div>
+          </div>
+          <div className={classes.columns}>
             <MuiPickersUtilsProvider
               utils={DateFnsUtils}
               locale={getDatepickerLocale(selectedLanguage)}
             >
-              <Grid item xs={5}>
-                <DatePicker
-                  autoOk
-                  fullWidth
-                  value={project.start}
-                  // maxDate={end}
-                  onChange={handleStartDateChange}
-                  label={<Trans>Labels.Start</Trans>}
-                />
-              </Grid>
-              <Grid item xs={5}>
-                <DatePicker
-                  autoOk
-                  fullWidth
-                  value={project.end}
-                  // minDate={start}
-                  onChange={handleEndDateChange}
-                  label={<Trans>Labels.End</Trans>}
-                />
-              </Grid>
+              <DatePicker
+                autoOk
+                fullWidth
+                value={project.start}
+                // maxDate={end}
+                onChange={handleStartDateChange}
+                label={<Trans>Labels.Start</Trans>}
+              />
+              <DatePicker
+                autoOk
+                fullWidth
+                value={project.end}
+                // minDate={start}
+                onChange={handleEndDateChange}
+                label={<Trans>Labels.End</Trans>}
+              />
             </MuiPickersUtilsProvider>
-          </Grid>
-        </Grid>
+          </div>
+        </div>
       </ExpansionPanelDetails>
     </ExpansionPanel>
   );

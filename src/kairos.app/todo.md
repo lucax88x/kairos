@@ -1,7 +1,10 @@
-- select all in grids
-- click on calendar goes to edit
+-- migrate to REJSON2
+
+- report
+- confirm on delete
+
 - statistics & dashboard
-- update holiday from country UTF8
-- move grid formatters to shared
-- add type formatter on bulk grid
-- add type formatte ron calendar
+
+- what If I enter dap and exit another??
+- what if remove a job / project with entries?
+- when you change allocation percentual, we cannot have more than 100% of total

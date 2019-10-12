@@ -56,7 +56,7 @@ export interface TimeAbsenceEntryOutModel {
   type: TimeAbsenceEntryTypes;
 }
 
-export function getTextFromType(type: TimeAbsenceEntryTypes) {
+export function getTextFromAbsenceType(type: TimeAbsenceEntryTypes) {
   switch (type) {
     case TimeAbsenceEntryTypes.COMPENSATION:
       return i18n._(t`Values.TimeAbsenceEntryTypes.Compensation`);
@@ -70,7 +70,7 @@ export function getTextFromType(type: TimeAbsenceEntryTypes) {
   }
 }
 
-export function getTransFromType(type: TimeAbsenceEntryTypes) {
+export function getTransFromAbsenceType(type: TimeAbsenceEntryTypes) {
   switch (type) {
     case TimeAbsenceEntryTypes.COMPENSATION:
       return <Trans>Values.TimeAbsenceEntryTypes.Compensation</Trans>;

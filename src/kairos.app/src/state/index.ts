@@ -5,6 +5,7 @@ import { BulkInsertState } from '../bulk-insert/state';
 import { EditTimeAbsenceEntryState } from '../edit-time-absence-entry/state';
 import { EditTimeEntryState } from '../edit-time-entry/state';
 import { EditTimeHolidayEntryState } from '../edit-time-holiday-entry/state';
+import { ExportState } from '../export/state';
 import { LayoutState } from '../layout/state';
 import { NotificationManagerState } from '../notification-manager/state';
 import { ProfileState } from '../profile/state';
@@ -21,6 +22,7 @@ export interface State {
   editTimeAbsenceEntry: EditTimeAbsenceEntryState;
   editTimeHolidayEntry: EditTimeHolidayEntryState;
   bulkInsert: BulkInsertState;
+  export: ExportState;
 }
 
 export type States =
@@ -32,4 +34,5 @@ export type States =
   | NotificationManagerState
   | EditTimeEntryState
   | EditTimeAbsenceEntryState
-  | BulkInsertState;
+  | BulkInsertState
+  | ExportState;

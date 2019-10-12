@@ -5,7 +5,6 @@ import {
   ExpansionPanel,
   ExpansionPanelDetails,
   ExpansionPanelSummary,
-  Grid,
   IconButton,
   makeStyles,
   TextField,
@@ -26,8 +25,31 @@ import { JobModel } from '../models/job.model';
 import { UUID } from '../models/uuid.model';
 import { ProfileJobProjectForm } from './ProfileJobProjectForm';
 import { Language } from '../models/language-model';
+import clsx from 'clsx';
 
 const useStyles = makeStyles(theme => ({
+  rows: {
+    width: '100%',
+    display: 'grid',
+    gridGap: theme.spacing(1),
+    alignItems: 'center',
+  },
+  columns: {
+    width: '100%',
+    display: 'grid',
+    gridAutoFlow: 'column',
+    gridGap: theme.spacing(1),
+    alignItems: 'center',
+  },
+  between: {
+    justifyContent: 'space-between',
+  },
+  selfCenter: {
+    justifySelf: 'center',
+  },
+  noGap: {
+    gridGap: 0,
+  },
   paper: { padding: theme.spacing(3) },
   heading: {
     fontSize: theme.typography.pxToRem(15),
@@ -139,175 +161,133 @@ export const ProfileJobForm: React.FC<ProfileJobFormProps> = props => {
   return (
     <ExpansionPanel>
       <ExpansionPanelSummary expandIcon={<ExpandMoreIcon />}>
-        <Grid container alignItems={'center'} justify={'space-between'}>
-          <Grid item>
-            <Typography className={classes.heading}>
-              {!!job.name ? job.name : i18n._(t`Profile.UnknownJob`)}
-            </Typography>
-          </Grid>
-          <Grid item>
-            <Typography className={classes.secondaryHeading}>
-              {`${format(job.start, formatAsDate)} - ${
-                !!job.end ? format(job.end, formatAsDate) : i18n._(t`Profile.CurrentDateLabel`)
-              }`}
-            </Typography>
-          </Grid>
-          <Grid item>
-            <IconButton color="inherit" aria-label="Delete entry" onClick={handleJobDelete}>
-              <DeleteIcon />
-            </IconButton>
-          </Grid>
-        </Grid>
+        <div className={clsx(classes.columns, classes.between)}>
+          <Typography className={classes.heading}>
+            {!!job.name ? job.name : i18n._(t`Profile.UnknownJob`)}
+          </Typography>
+          <Typography className={classes.secondaryHeading}>
+            {`${format(job.start, formatAsDate)} - ${
+              !!job.end ? format(job.end, formatAsDate) : i18n._(t`Profile.CurrentDateLabel`)
+            }`}
+          </Typography>
+          <IconButton color="inherit" aria-label="Delete entry" onClick={handleJobDelete}>
+            <DeleteIcon />
+          </IconButton>
+        </div>
       </ExpansionPanelSummary>
       <ExpansionPanelDetails>
-        <Grid container direction="column" spacing={3}>
-          <Grid container item>
-            <Grid container item alignItems={'center'} justify={'space-between'} spacing={2}>
-              <Grid item xs={3}>
-                <TextField
-                  margin="dense"
-                  fullWidth
-                  label={<Trans>Labels.Name</Trans>}
-                  type="text"
-                  value={job.name}
-                  onChange={handleJobNameChange}
-                />
-              </Grid>
-              <MuiPickersUtilsProvider
-                utils={DateFnsUtils}
-                locale={getDatepickerLocale(selectedLanguage)}
-              >
-                <Grid item xs={3}>
-                  <DatePicker
-                    autoOk
-                    fullWidth
-                    value={job.start}
-                    // maxDate={end}
-                    onChange={handleJobStartDateChange}
-                    label={<Trans>Labels.Start</Trans>}
-                  />
-                </Grid>
-                <Grid item xs={3}>
-                  <DatePicker
-                    autoOk
-                    fullWidth
-                    value={job.end}
-                    // minDate={start}
-                    onChange={handleJobEndDateChange}
-                    label={<Trans>Labels.End</Trans>}
-                  />
-                </Grid>
-              </MuiPickersUtilsProvider>
-              <Grid item xs={3}>
-                <TextField
-                  margin="dense"
-                  fullWidth
-                  label={<Trans>Labels.Holidays</Trans>}
-                  inputProps={{ min: 0, max: 365, step: 1 }}
-                  type="number"
-                  value={job.holidaysPerYear}
-                  onChange={handleHolidaysPerYear}
-                />
-              </Grid>
-            </Grid>
-            <Grid container item alignItems={'center'} justify={'space-between'}>
-              <Grid item>
-                <TextField
-                  label={<Trans>Labels.Monday</Trans>}
-                  inputProps={{ min: 0, max: 23.59, step: 0.1 }}
-                  type="number"
-                  value={job.monday}
-                  onChange={handleMondayChange}
-                />
-              </Grid>
-              <Grid item>
-                <TextField
-                  margin="dense"
-                  label={<Trans>Labels.Thursday</Trans>}
-                  inputProps={{ min: 0, max: 23.59, step: 0.1 }}
-                  type="number"
-                  value={job.tuesday}
-                  onChange={handleTuesdayChange}
-                />
-              </Grid>
-              <Grid item>
-                <TextField
-                  margin="dense"
-                  label={<Trans>Labels.Wednesday</Trans>}
-                  inputProps={{ min: 0, max: 23.59, step: 0.1 }}
-                  type="number"
-                  value={job.wednesday}
-                  onChange={handleWednesdayChange}
-                />
-              </Grid>
-              <Grid item>
-                <TextField
-                  margin="dense"
-                  label={<Trans>Labels.Thursday</Trans>}
-                  inputProps={{ min: 0, max: 23.59, step: 0.1 }}
-                  type="number"
-                  value={job.thursday}
-                  onChange={handleThursdayChange}
-                />
-              </Grid>
-              <Grid item>
-                <TextField
-                  margin="dense"
-                  label={<Trans>Labels.Friday</Trans>}
-                  inputProps={{ min: 0, max: 23.59, step: 0.1 }}
-                  type="number"
-                  value={job.friday}
-                  onChange={handleFridayChange}
-                />
-              </Grid>
-              <Grid item>
-                <TextField
-                  margin="dense"
-                  label={<Trans>Labels.Saturday</Trans>}
-                  inputProps={{ min: 0, max: 23.59, step: 0.1 }}
-                  type="number"
-                  value={job.saturday}
-                  onChange={handleSaturdayChange}
-                />
-              </Grid>
-              <Grid item>
-                <TextField
-                  margin="dense"
-                  label={<Trans>Labels.Sunday</Trans>}
-                  inputProps={{ min: 0, max: 23.59, step: 0.1 }}
-                  type="number"
-                  value={job.sunday}
-                  onChange={handleSundayChange}
-                />
-              </Grid>
-            </Grid>
-          </Grid>
-
-          <Grid item>
-            <Divider />
-          </Grid>
-
-          <Grid item>
-            <Grid
-              container
-              item
-              justify="space-between"
-              alignItems="center"
-              className={classes.secondaryPaper}
+        <div className={classes.rows}>
+          <div className={classes.columns}>
+            <TextField
+              margin="dense"
+              fullWidth
+              label={<Trans>Labels.Name</Trans>}
+              type="text"
+              value={job.name}
+              onChange={handleJobNameChange}
+            />
+            <MuiPickersUtilsProvider
+              utils={DateFnsUtils}
+              locale={getDatepickerLocale(selectedLanguage)}
             >
-              <Grid item>
-                <Typography color="inherit" noWrap display="inline">
-                  Projects
-                </Typography>
-              </Grid>
+              <DatePicker
+                autoOk
+                fullWidth
+                value={job.start}
+                // maxDate={end}
+                onChange={handleJobStartDateChange}
+                label={<Trans>Labels.Start</Trans>}
+              />
+              <DatePicker
+                autoOk
+                fullWidth
+                value={job.end}
+                // minDate={start}
+                onChange={handleJobEndDateChange}
+                label={<Trans>Labels.End</Trans>}
+              />
+            </MuiPickersUtilsProvider>
+            <TextField
+              margin="dense"
+              fullWidth
+              label={<Trans>Labels.Holidays</Trans>}
+              inputProps={{ min: 0, max: 365, step: 1 }}
+              type="number"
+              value={job.holidaysPerYear}
+              onChange={handleHolidaysPerYear}
+            />
+          </div>
+          <div className={classes.columns}>
+            <TextField
+              label={<Trans>Labels.Monday</Trans>}
+              inputProps={{ min: 0, max: 23.59, step: 0.1 }}
+              type="number"
+              value={job.monday}
+              onChange={handleMondayChange}
+            />
+            <TextField
+              margin="dense"
+              label={<Trans>Labels.Thursday</Trans>}
+              inputProps={{ min: 0, max: 23.59, step: 0.1 }}
+              type="number"
+              value={job.tuesday}
+              onChange={handleTuesdayChange}
+            />
+            <TextField
+              margin="dense"
+              label={<Trans>Labels.Wednesday</Trans>}
+              inputProps={{ min: 0, max: 23.59, step: 0.1 }}
+              type="number"
+              value={job.wednesday}
+              onChange={handleWednesdayChange}
+            />
+            <TextField
+              margin="dense"
+              label={<Trans>Labels.Thursday</Trans>}
+              inputProps={{ min: 0, max: 23.59, step: 0.1 }}
+              type="number"
+              value={job.thursday}
+              onChange={handleThursdayChange}
+            />
+            <TextField
+              margin="dense"
+              label={<Trans>Labels.Friday</Trans>}
+              inputProps={{ min: 0, max: 23.59, step: 0.1 }}
+              type="number"
+              value={job.friday}
+              onChange={handleFridayChange}
+            />
+            <TextField
+              margin="dense"
+              label={<Trans>Labels.Saturday</Trans>}
+              inputProps={{ min: 0, max: 23.59, step: 0.1 }}
+              type="number"
+              value={job.saturday}
+              onChange={handleSaturdayChange}
+            />
+            <TextField
+              margin="dense"
+              label={<Trans>Labels.Sunday</Trans>}
+              inputProps={{ min: 0, max: 23.59, step: 0.1 }}
+              type="number"
+              value={job.sunday}
+              onChange={handleSundayChange}
+            />
+          </div>
 
-              <Grid item>
-                <IconButton onClick={handleProjectAdd}>
-                  <AddIcon />
-                </IconButton>
-              </Grid>
-            </Grid>
-            <Grid item>
+          <Divider />
+
+          <div className={clsx(classes.rows, classes.secondaryPaper)}>
+            <div className={clsx(classes.columns, classes.between)}>
+              <Typography color="inherit" noWrap display="inline">
+                <Trans>Profile.Projects</Trans>
+              </Typography>
+              <IconButton onClick={handleProjectAdd}>
+                <AddIcon />
+              </IconButton>
+            </div>
+
+            <div className={clsx(classes.rows, classes.noGap)}>
               {map(
                 project => (
                   <Fragment key={project.id.toString()}>
@@ -326,9 +306,9 @@ export const ProfileJobForm: React.FC<ProfileJobFormProps> = props => {
                 ),
                 job.projects,
               )}
-            </Grid>
-          </Grid>
-        </Grid>
+            </div>
+          </div>
+        </div>
       </ExpansionPanelDetails>
     </ExpansionPanel>
   );

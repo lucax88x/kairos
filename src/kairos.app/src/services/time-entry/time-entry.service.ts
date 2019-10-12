@@ -5,7 +5,7 @@ import { UUID } from '../../models/uuid.model';
 import { mutation, query } from '../graphql.service';
 import { createTimeEntriesMutation } from './mutations/create-time-entries';
 import { createTimeEntryMutation } from './mutations/create-time-entry';
-import { deleteTimeEntryMutation } from './mutations/delete-time-entry';
+import { deleteTimeEntriesMutation } from './mutations/delete-time-entries';
 import { updateTimeEntryMutation } from './mutations/update-time-entry';
 import { getTimeEntriesQuery } from './queries/get-time-entries';
 import { getTimeEntryQuery } from './queries/get-time-entry';
@@ -29,8 +29,8 @@ export async function createTimeEntry(model: TimeEntryModel) {
   await mutation(createTimeEntryMutation, { timeEntry: model });
 }
 
-export async function deleteTimeEntry(id: UUID) {
-  await mutation(deleteTimeEntryMutation, { id: id.value });
+export async function deleteTimeEntries(ids: UUID[]) {
+  await mutation(deleteTimeEntriesMutation, { ids: map(id => id.toString(), ids) });
 }
 
 export async function updateTimeEntry(model: TimeEntryModel) {
@@ -39,4 +39,8 @@ export async function updateTimeEntry(model: TimeEntryModel) {
 
 export async function bulkInsertTimeEntries(models: TimeEntryModel[]) {
   await mutation(createTimeEntriesMutation, { timeEntries: models });
+}
+
+export async function exportTimeEntries(start: Date, end: Date) {
+  await mutation(createTimeEntriesMutation, { start, end });
 }

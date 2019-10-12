@@ -6,7 +6,7 @@ import { SharedActions } from '../actions';
 import { Route } from '../models/route.model';
 import { TimeAbsenceEntryModel } from '../models/time-absence-entry.model';
 import { getTimeAbsenceEntries } from '../services/time-absence-entry/time-absence-entry.service';
-import { CREATE_TIME_ABSENCE_ENTRY_SUCCESS, DELETE_TIME_ABSENCE_ENTRY_SUCCESS, SELECT_YEAR } from '../shared/constants';
+import { CREATE_TIME_ABSENCE_ENTRY_SUCCESS, DELETE_TIME_ABSENCE_ENTRIES_SUCCESS, SELECT_YEAR } from '../shared/constants';
 import { selectDashboardRoute, selectTimeAbsenceEntriesRoute } from '../shared/router.selectors';
 import { GET_TIME_ABSENCE_ENTRIES, GET_TIME_ABSENCE_ENTRIES_FAILURE, GET_TIME_ABSENCE_ENTRIES_SUCCESS } from './constants';
 import { selectSelectedYear } from './selectors';
@@ -45,7 +45,7 @@ export function* getTimeAbsenceEntriesSaga() {
     [
       LOCATION_CHANGE,
       CREATE_TIME_ABSENCE_ENTRY_SUCCESS,
-      DELETE_TIME_ABSENCE_ENTRY_SUCCESS,
+      DELETE_TIME_ABSENCE_ENTRIES_SUCCESS,
       SELECT_YEAR,
     ],
     doGetTimeAbsenceEntriesOnOtherActions,

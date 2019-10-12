@@ -1,13 +1,5 @@
 import { Trans } from '@lingui/macro';
-import {
-  Avatar,
-  Divider,
-  Grid,
-  IconButton,
-  makeStyles,
-  Paper,
-  Typography,
-} from '@material-ui/core';
+import { Avatar, Divider, IconButton, makeStyles, Paper, Typography } from '@material-ui/core';
 import AddIcon from '@material-ui/icons/Add';
 import { map } from 'ramda';
 import React, { Fragment, useCallback, useEffect } from 'react';
@@ -35,8 +27,30 @@ import {
   useProfileReducer,
 } from './Profile.store';
 import { ProfileJobForm } from './ProfileJobForm';
+import clsx from 'clsx';
 
 const useStyles = makeStyles(theme => ({
+  rows: {
+    display: 'grid',
+    gridGap: theme.spacing(1),
+    alignItems: 'center',
+  },
+  columns: {
+    display: 'grid',
+    gridAutoFlow: 'column',
+    gridGap: theme.spacing(1),
+    justifyContent: 'left',
+    alignItems: 'center',
+  },
+  noGap: {
+    gridGap: 0,
+  },
+  between: {
+    justifyContent: 'space-between',
+  },
+  selfCenter: {
+    justifySelf: 'center',
+  },
   paper: { padding: theme.spacing(2, 3) },
 }));
 
@@ -125,36 +139,27 @@ export const ProfileComponent: React.FC<ProfileProps> = props => {
 
   return (
     <Spinner show={isGetBusy || isUpdateBusy}>
-      <Grid container spacing={3} direction="column">
-        <Grid item>
-          <Paper className={classes.paper}>
-            <Grid container alignItems="center" spacing={2}>
-              <Grid item>
-                <Avatar alt={user.given_name} src={user.picture} />
-              </Grid>
-              <Grid item>
-                <Typography component="h1" variant="h6" color="inherit" noWrap>
-                  {user.name}
-                </Typography>
-              </Grid>
-            </Grid>
-          </Paper>
-        </Grid>
-        <Grid item>
-          <Paper className={classes.paper}>
-            <Grid container justify="space-between" alignItems="center">
-              <Grid item>
-                <Typography color="inherit" noWrap display="inline">
-                  <Trans>Profile.JobsTitle</Trans>
-                </Typography>
-              </Grid>
-              <Grid item>
-                <IconButton onClick={handleAddJob}>
-                  <AddIcon />
-                </IconButton>
-              </Grid>
-            </Grid>
-          </Paper>
+      <div className={classes.rows}>
+        <Paper className={classes.paper}>
+          <div className={classes.columns}>
+            <Avatar alt={user.given_name} src={user.picture} />
+            <Typography component="h1" variant="h6" color="inherit" noWrap>
+              {user.name}
+            </Typography>
+          </div>
+        </Paper>
+        <Paper className={classes.paper}>
+          <div className={clsx(classes.columns, classes.between)}>
+            <Typography color="inherit" noWrap display="inline">
+              <Trans>Profile.JobsTitle</Trans>
+            </Typography>
+            <IconButton onClick={handleAddJob}>
+              <AddIcon />
+            </IconButton>
+          </div>
+        </Paper>
+
+        <div className={clsx(classes.rows, classes.noGap)}>
           {!!state.jobs.length ? (
             map(
               job => (
@@ -187,13 +192,12 @@ export const ProfileComponent: React.FC<ProfileProps> = props => {
               </Typography>
             </Paper>
           )}
-        </Grid>
-        <Grid item>
-          <ButtonSpinner onClick={handleUpdate} isBusy={isUpdateBusy} disabled={isUpdateBusy}>
-            <Trans>Buttons.Update</Trans>
-          </ButtonSpinner>
-        </Grid>
-      </Grid>
+        </div>
+
+        <ButtonSpinner onClick={handleUpdate} isBusy={isUpdateBusy} disabled={isUpdateBusy}>
+          <Trans>Buttons.Update</Trans>
+        </ButtonSpinner>
+      </div>
     </Spinner>
   );
 };

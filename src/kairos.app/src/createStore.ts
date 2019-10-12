@@ -6,7 +6,6 @@ import { createLogger } from 'redux-logger';
 import { persistStore } from 'redux-persist';
 import createSagaMiddleware from 'redux-saga';
 import { Actions } from './actions';
-import './assets/fonts/roboto/index.scss';
 import './index.scss';
 import { rootReducers } from './reducers';
 import { rootSagas } from './sagas';

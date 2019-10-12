@@ -53,7 +53,7 @@ export interface TimeEntryOutModel {
   project: Partial<ProjectOutModel>;
 }
 
-export function getTextFromType(type: TimeEntryTypes) {
+export function getTextFromEntryType(type: TimeEntryTypes) {
   switch (type) {
     case TimeEntryTypes.IN:
       return i18n._(t`Values.TimeEntryTypes.In`);
@@ -63,7 +63,7 @@ export function getTextFromType(type: TimeEntryTypes) {
   }
 }
 
-export function getTransFromType(type: TimeEntryTypes) {
+export function getTransFromEntryType(type: TimeEntryTypes) {
   switch (type) {
     case TimeEntryTypes.IN:
       return <Trans>Values.TimeEntryTypes.In</Trans>;

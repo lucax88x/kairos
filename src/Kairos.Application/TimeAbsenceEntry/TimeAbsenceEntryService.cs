@@ -15,7 +15,7 @@ namespace Kairos.Application.TimeAbsenceEntry
     public class TimeAbsenceEntryService : 
         IRequestHandler<CreateTimeAbsenceEntries, ImmutableArray<Guid>>,
         IRequestHandler<UpdateTimeAbsenceEntry, Guid>,
-        IRequestHandler<DeleteTimeAbsenceEntry, Guid>
+        IRequestHandler<DeleteTimeAbsenceEntries, ImmutableList<Guid>>
     {
         private readonly IWriteRepository _writeRepository;
         private readonly IAuthProvider _authProvider;
@@ -44,22 +44,26 @@ namespace Kairos.Application.TimeAbsenceEntry
                             return timeAbsenceEntries.Select(te => te.Id).ToImmutableArray();
         }
 
-        public async Task<Guid> Handle(DeleteTimeAbsenceEntry request, CancellationToken cancellationToken)
+        public async Task<ImmutableList<Guid>> Handle(DeleteTimeAbsenceEntries request, CancellationToken cancellationToken)
         {
-            var toDeleteEntry = await _writeRepository.GetOrDefault<Domain.TimeAbsenceEntry>(request.Id.ToString());
-
-            if (toDeleteEntry == null)
+            foreach (var id in request.Ids)
             {
-                throw new NotFoundItemException();
+                var toDeleteEntry =
+                    await _writeRepository.GetOrDefault<Domain.TimeAbsenceEntry>(id.ToString());
+
+                if (toDeleteEntry == null)
+                {
+                    throw new NotFoundItemException();
+                }
+
+                toDeleteEntry.Delete();
+
+                var events = await _writeRepository.Save(WriteRepository.DefaultKeyTaker, toDeleteEntry);
+
+                foreach (var evt in events) await _mediator.Publish(evt, cancellationToken);
             }
-            
-            toDeleteEntry.Delete();
 
-            var events = await _writeRepository.Save(WriteRepository.DefaultKeyTaker, toDeleteEntry);
-
-            foreach (var evt in events) await _mediator.Publish(evt, cancellationToken);
-
-            return request.Id;
+            return request.Ids;
         }
         
         public async Task<Guid> Handle(UpdateTimeAbsenceEntry request, CancellationToken cancellationToken)
