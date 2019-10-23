@@ -1,0 +1,42 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: web-api
+  namespace: kairos
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      run: web-api
+  volumes:
+    - name: web-api-logs-pv
+      persistentVolumeClaim:
+        claimName: web-api-logs-pv-claim      
+  template:
+    metadata:
+      labels:
+        run: web-api
+    spec:
+      containers:
+        - name: web-api
+          image: tutum/hello-world
+          # image: %REGISTRY/kairos/web.api:%VERSION
+          imagePullPolicy: IfNotPresent
+          ports:
+            - containerPort: 80
+          volumeMounts:
+            - name: web-api-logs-pv
+              mountPath: /Kairos.Web.Api/logs
+              subPath: webapilogs
+          env:
+            - name: Kairos_WriteRepository__ConnectionString
+              valueFrom:
+                secretKeyRef:
+                  name: web-api-secret
+                  key: write-db-connectionstring
+          envFrom:
+            - configMapRef:
+                name: web-api-config
+
+      # imagePullSecrets:
+      #   - name: acr-secret

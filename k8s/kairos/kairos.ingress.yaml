@@ -15,10 +15,10 @@ spec:
     # - host: kairos.garaio-rem.ch
      - http:
         paths:
-          # - path: /api
-          #   backend:
-          #     serviceName: web-graphql
-          #     servicePort: 80
+          - path: /graphql
+            backend:
+              serviceName: web-api
+              servicePort: 80
           - path: /
             backend:
               serviceName: web-app
