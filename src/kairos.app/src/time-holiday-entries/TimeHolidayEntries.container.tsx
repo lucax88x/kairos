@@ -6,7 +6,7 @@ import { openTimeHolidayEntryModalAction } from '../layout/actions';
 import { TimeHolidayEntryModel } from '../models/time-holiday-entry.model';
 import { UUID } from '../models/uuid.model';
 import { updateTimeHolidayEntriesByCountryAsync } from '../shared/actions';
-import { deleteTimeHolidayEntriesAsync } from '../shared/delete-time-holiday-entries';
+import { tryDeleteTimeHolidayEntriesAction } from '../shared/delete-time-holiday-entries';
 import {
   selectCountries,
   selectIsDeleteTimeHolidayEntriesBusy,
@@ -34,7 +34,7 @@ const mapStateToProps = (state: State): TimeHolidayEntriesInputs => ({
 const mapDispatchToProps = (dispatch: Dispatch<Actions>): TimeHolidayEntriesDispatches => ({
   onCreate: () => dispatch(openTimeHolidayEntryModalAction()),
   onUpdate: (model: TimeHolidayEntryModel) => dispatch(push(`/holiday/${model.id}`)),
-  onDelete: (ids: UUID[]) => dispatch(deleteTimeHolidayEntriesAsync.request({ ids })),
+  onDelete: (ids: UUID[]) => dispatch(tryDeleteTimeHolidayEntriesAction(ids)),
   onUpdateHolidays: (countryCode: string) =>
     dispatch(updateTimeHolidayEntriesByCountryAsync.request({ countryCode })),
 });

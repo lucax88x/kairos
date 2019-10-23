@@ -6,13 +6,11 @@ namespace Kairos.Application.TimeAbsenceEntry.Queries
 {
     public class GetTimeAbsenceEntries : Query<ImmutableArray<TimeAbsenceEntryReadDto>>
     {
-        public GetTimeAbsenceEntries(string user, int year)
+        public GetTimeAbsenceEntries(int year)
         {
-            User = user;
             Year = year;
         }
 
-        public string User { get; }
         public int Year { get; }
     }
 }

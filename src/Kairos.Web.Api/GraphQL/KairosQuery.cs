@@ -18,12 +18,10 @@ namespace Kairos.Web.Api.GraphQL
     public class KairosQuery : ObjectGraphType
     {
         private readonly IMediator _mediator;
-        private readonly IAuthProvider _authProvider;
 
-        public KairosQuery(IMediator mediator, IAuthProvider authProvider)
+        public KairosQuery(IMediator mediator)
         {
             _mediator = mediator;
-            _authProvider = authProvider;
             Name = nameof(KairosQuery);
 
             SetCountry();
@@ -62,7 +60,7 @@ namespace Kairos.Web.Api.GraphQL
                 {
                     var year = context.GetArgument<int>("year");
 
-                    return await _mediator.Send(new GetTimeEntries(_authProvider.GetUser(), year));
+                    return await _mediator.Send(new GetTimeEntries(year));
                 });
         }
 
@@ -87,7 +85,7 @@ namespace Kairos.Web.Api.GraphQL
                 {
                     var year = context.GetArgument<int>("year");
 
-                    return await _mediator.Send(new GetTimeAbsenceEntries(_authProvider.GetUser(), year));
+                    return await _mediator.Send(new GetTimeAbsenceEntries(year));
                 });
         }
 
@@ -112,7 +110,7 @@ namespace Kairos.Web.Api.GraphQL
                 {
                     var year = context.GetArgument<int>("year");
 
-                    return await _mediator.Send(new GetTimeHolidayEntries(_authProvider.GetUser(), year));
+                    return await _mediator.Send(new GetTimeHolidayEntries(year));
                 });
         }
 

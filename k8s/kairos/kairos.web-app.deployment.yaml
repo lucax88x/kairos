@@ -1,0 +1,25 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: web-app
+  namespace: kairos
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      run: web-app
+  template:
+    metadata:
+      labels:
+        run: web-app
+    spec:
+      containers:
+        - name: web-app
+          image: tutum/hello-world
+          # image: %REGISTRY/kairos/web.app:%VERSION
+          imagePullPolicy: IfNotPresent
+          ports:
+            - containerPort: 80
+
+      # imagePullSecrets:
+      #   - name: acr-secret

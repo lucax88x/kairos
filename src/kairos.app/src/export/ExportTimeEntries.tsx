@@ -1,7 +1,7 @@
 import DateFnsUtils from '@date-io/date-fns';
 import { Trans } from '@lingui/macro';
 import { makeStyles, Typography } from '@material-ui/core';
-import SaveIcon from '@material-ui/icons/Save';
+import InsertDriveFileIcon from '@material-ui/icons/InsertDriveFile';
 import {
   KeyboardDateTimePicker,
   MaterialUiPickersDate,
@@ -10,7 +10,7 @@ import {
 import { endOfMonth, startOfMonth } from 'date-fns';
 import React, { useCallback, useState } from 'react';
 import { getDatepickerLocale } from '../code/get-datepicker-locale';
-import FabButtonSpinner from '../components/FabButtonSpinner';
+import ButtonSpinner from '../components/ButtonSpinner';
 import { Language } from '../models/language-model';
 
 const useStyles = makeStyles(theme => ({
@@ -86,13 +86,10 @@ export const ExportTimeEntriesComponent: React.FC<ExportTimeEntriesProps> = prop
           />
         </div>
       </MuiPickersUtilsProvider>
-      <FabButtonSpinner
-        onClick={handleExport}
-        isBusy={isBusy}
-        disabled={isBusy || (!!start && !!end)}
-      >
-        <SaveIcon />
-      </FabButtonSpinner>
+      <ButtonSpinner onClick={handleExport} isBusy={isBusy} disabled={isBusy || !start || !end}>
+        <InsertDriveFileIcon />
+        <Trans>ExportTimeEntries.Export</Trans>
+      </ButtonSpinner>
     </div>
   );
 };

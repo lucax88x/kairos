@@ -1,8 +1,5 @@
 -- migrate to REJSON2
 
-- report
-- confirm on delete
-
 - statistics & dashboard
 
 - what If I enter dap and exit another??

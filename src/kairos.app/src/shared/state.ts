@@ -27,6 +27,15 @@ export interface SharedState {
       deleteTimeHolidayEntries: boolean;
       updateTimeHolidayEntriesByCountry: boolean;
     };
+    modal: {
+      confirmation: boolean;
+    };
+    confirmation: {
+      title: string | null;
+      message: string | null;
+      approveButton: string | null;
+      rejectButton: string | null;
+    };
   };
 }
 
@@ -51,6 +60,15 @@ export const sharedInitialState: SharedState = {
       createTimeHolidayEntry: false,
       deleteTimeHolidayEntries: false,
       updateTimeHolidayEntriesByCountry: false,
+    },
+    modal: {
+      confirmation: false,
+    },
+    confirmation: {
+      title: null,
+      message: null,
+      approveButton: null,
+      rejectButton: null,
     },
   },
 };

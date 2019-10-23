@@ -1,0 +1,29 @@
+apiVersion: extensions/v1beta1
+kind: Ingress
+metadata:
+  name: ingress
+  namespace: kairos
+  annotations:
+    kubernetes.io/ingress.class: "kairos-nginx"
+
+spec:
+  # tls:
+  #   - hosts:
+  #       - kairos.garaio-rem.ch
+  #     secretName: kairos-garaio-rem-ch-tls
+  rules:
+    # - host: kairos.garaio-rem.ch
+     - http:
+        paths:
+          # - path: /api
+          #   backend:
+          #     serviceName: web-graphql
+          #     servicePort: 80
+          - path: /
+            backend:
+              serviceName: web-app
+              servicePort: 80
+          # - path: /.well-known/acme-challenge/
+          #   backend:
+          #     serviceName: letsencrypt
+          #     servicePort: 80

@@ -11,6 +11,10 @@ import {
   UPDATE_TIME_ABSENCE_ENTRY_FAILURE,
 } from '../edit-time-absence-entry/constants';
 import { GET_TIME_ENTRY_FAILURE, UPDATE_TIME_ENTRY_FAILURE } from '../edit-time-entry/constants';
+import {
+  EXPORT_TIME_ABSENCE_ENTRIES_FAILURE,
+  EXPORT_TIME_ENTRIES_FAILURE,
+} from '../export/constants';
 import { enqueueSnackbarAction } from '../notification-manager/actions';
 import { UPDATE_PROFILE_FAILURE } from '../profile/constants';
 import {
@@ -54,6 +58,8 @@ export function* notifyError() {
       UPDATE_PROFILE_FAILURE,
       GET_COUNTRIES_FAILURE,
       UPDATE_TIME_HOLIDAY_ENTRIES_BY_COUNTRY_FAILURE,
+      EXPORT_TIME_ENTRIES_FAILURE,
+      EXPORT_TIME_ABSENCE_ENTRIES_FAILURE,
     ],
     doNotifyError,
   );

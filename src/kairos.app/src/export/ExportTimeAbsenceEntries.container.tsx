@@ -1,17 +1,23 @@
 import { connect } from 'react-redux';
 import { Dispatch } from 'redux';
 import { Actions } from '../actions';
+import { selectSelectedLanguage } from '../shared/selectors';
 import { State } from '../state';
 import { exportTimeAbsenceEntriesAsync } from './export-time-absence-entries';
-import { ExportTimeAbsenceEntriesComponent, ExportTimeAbsenceEntriesDispatches, ExportTimeAbsenceEntriesInputs } from './ExportTimeAbsenceEntries';
+import {
+  ExportTimeAbsenceEntriesComponent,
+  ExportTimeAbsenceEntriesDispatches,
+  ExportTimeAbsenceEntriesInputs,
+} from './ExportTimeAbsenceEntries';
 import { selectIsExportTimeAbsenceEntriesBusy } from './selectors';
 
 const mapStateToProps = (state: State): ExportTimeAbsenceEntriesInputs => ({
+  selectedLanguage: selectSelectedLanguage(state),
   isBusy: selectIsExportTimeAbsenceEntriesBusy(state),
 });
 
 const mapDispatchToProps = (dispatch: Dispatch<Actions>): ExportTimeAbsenceEntriesDispatches => ({
-  onExport: models => dispatch(exportTimeAbsenceEntriesAsync.request({ models })),
+  onExport: (start, end) => dispatch(exportTimeAbsenceEntriesAsync.request({ start, end })),
 });
 
 export const ExportTimeAbsenceEntries = connect(

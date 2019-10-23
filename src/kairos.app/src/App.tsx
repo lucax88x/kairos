@@ -55,6 +55,7 @@ import { Routes } from './routes';
 import { TimeAbsenceEntries } from './time-absence-entries/TimeAbsenceEntries.container';
 import { TimeEntries } from './time-entries/TimeEntries.container';
 import { TimeHolidayEntries } from './time-holiday-entries/TimeHolidayEntries.container';
+import { ConfirmationModal } from './shared/ConfirmationModal.container';
 import { isIOS } from './code/is-ios';
 import { Export } from './export/Export';
 
@@ -715,6 +716,7 @@ export const AppComponent: React.FC<AppProps> = props => {
           <CreateTimeAbsenceEntry />
         </SwipeableDrawer>
         <CreateTimeHolidayEntryModal />
+        <ConfirmationModal />
       </div>
     </>
   );

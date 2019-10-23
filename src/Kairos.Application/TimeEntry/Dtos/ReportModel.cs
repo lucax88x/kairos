@@ -1,5 +1,4 @@
 ﻿using System.IO;
-using System.Net.Mime;
 
 namespace Kairos.Application.TimeEntry.Dtos
 {

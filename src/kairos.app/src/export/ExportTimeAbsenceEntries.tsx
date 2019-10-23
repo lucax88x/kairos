@@ -1,231 +1,95 @@
-import { t, Trans } from '@lingui/macro';
-import { Fab, Grid, makeStyles, TextField, Typography } from '@material-ui/core';
-import CheckIcon from '@material-ui/icons/Check';
-import SaveIcon from '@material-ui/icons/Save';
-import { isValid, parseISO } from 'date-fns';
-import { split, map } from 'ramda';
-import indexOf from 'ramda/es/indexOf';
-import React, { ChangeEvent, useCallback, useState } from 'react';
-import { Index } from 'react-virtualized';
-import { absenceTypeFormatter, dateTimeFormatter } from '../code/formatters';
-import FabButtonSpinner from '../components/FabButtonSpinner';
-import { VirtualizedTable } from '../components/VirtualizedTable';
-import { i18n } from '../i18nLoader';
-import { TimeAbsenceEntryModel, TimeAbsenceEntryTypes } from '../models/time-absence-entry.model';
-import { UUID } from '../models/uuid.model';
-
-interface TimeAbsenceEntryInvalidModel {
-  id: UUID;
-  start: Date | string;
-  end: Date | string;
-  description: string;
-  type: TimeAbsenceEntryTypes | string;
-}
+import DateFnsUtils from '@date-io/date-fns';
+import { Trans } from '@lingui/macro';
+import { makeStyles, Typography } from '@material-ui/core';
+import InsertDriveFileIcon from '@material-ui/icons/InsertDriveFile';
+import {
+  KeyboardDateTimePicker,
+  MaterialUiPickersDate,
+  MuiPickersUtilsProvider,
+} from '@material-ui/pickers';
+import { endOfMonth, startOfMonth } from 'date-fns';
+import React, { useCallback, useState } from 'react';
+import { getDatepickerLocale } from '../code/get-datepicker-locale';
+import ButtonSpinner from '../components/ButtonSpinner';
+import { Language } from '../models/language-model';
 
 const useStyles = makeStyles(theme => ({
-  center: {
-    display: 'flex',
+  rows: {
+    display: 'grid',
     justifyContent: 'center',
+    alignItems: 'center',
+    gridGap: theme.spacing(3),
+  },
+  columns: {
+    display: 'grid',
+    justifyContent: 'center',
+    alignItems: 'center',
+    gridAutoFlow: 'column',
+    gridGap: theme.spacing(3),
   },
 }));
 
 export interface ExportTimeAbsenceEntriesInputs {
+  selectedLanguage: Language;
   isBusy: boolean;
 }
 
 export interface ExportTimeAbsenceEntriesDispatches {
-  onExport: (models: TimeAbsenceEntryModel[]) => void;
+  onExport: (start: Date, end: Date) => void;
 }
 
-type ExportTimeAbsenceEntriesProps = ExportTimeAbsenceEntriesInputs &
-  ExportTimeAbsenceEntriesDispatches;
+type ExportTimeAbsenceEntriesProps = ExportTimeAbsenceEntriesInputs & ExportTimeAbsenceEntriesDispatches;
 
-export const ExportTimeAbsenceEntriesComponent: React.FC<
-  ExportTimeAbsenceEntriesProps
-> = props => {
+export const ExportTimeAbsenceEntriesComponent: React.FC<ExportTimeAbsenceEntriesProps> = props => {
   const classes = useStyles(props);
 
-  const { isBusy, onExport } = props;
+  const { selectedLanguage, isBusy, onExport } = props;
 
-  const [csv, setCsv] = useState('');
-  const [validModels, setValidModels] = useState<TimeAbsenceEntryModel[]>([]);
-  const [invalidModels, setInvalidModels] = useState<TimeAbsenceEntryInvalidModel[]>([]);
+  const [start, setStart] = useState<Date | null>(startOfMonth(new Date()));
+  const [end, setEnd] = useState<Date | null>(endOfMonth(new Date()));
 
-  const handleExport = useCallback(() => onExport(validModels), [
-    onExport,
-    validModels,
+  const handleStartChange = useCallback((date: MaterialUiPickersDate) => setStart(date), [
+    setStart,
   ]);
+  const handleEndChange = useCallback((date: MaterialUiPickersDate) => setEnd(date), [setEnd]);
 
-  const handleCsvChange = useCallback(
-    (event: ChangeEvent<HTMLInputElement>) => setCsv(event.currentTarget.value),
-    [setCsv],
-  );
-
-  const handleParse = useCallback(() => {
-    const validModels: TimeAbsenceEntryModel[] = [];
-    const invalidModels: TimeAbsenceEntryInvalidModel[] = [];
-    if (!!csv) {
-      const lines = split('\n', csv);
-      const splitByComma = split(',');
-      for (let i = 0; i < lines.length; i++) {
-        const cells = splitByComma(lines[i]);
-        if (cells.length >= 4) {
-          const start = parseISO(cells[0]);
-          const end = parseISO(cells[1]);
-          const description = cells[2];
-          const type = cells[3];
-
-          const isStartValid = isValid(start);
-          const isEndValid = isValid(end);
-          const isTypeValid =
-            indexOf(type, [TimeAbsenceEntryTypes.VACATION, TimeAbsenceEntryTypes.ILLNESS]) !== -1;
-          if (isStartValid && isEndValid && isTypeValid) {
-            validModels.push(
-              new TimeAbsenceEntryModel(
-                UUID.Generate(),
-                description,
-                start,
-                end,
-                type as TimeAbsenceEntryTypes,
-              ),
-            );
-          } else {
-            invalidModels.push({
-              id: UUID.Generate(),
-              description,
-              start: isStartValid ? start : i18n._(t`Validation.InvalidDate`),
-              end: isEndValid ? end : i18n._(t`Validation.InvalidDate`),
-              type: isTypeValid
-                ? (type as TimeAbsenceEntryTypes)
-                : i18n._(t`Validation.InvalidType`),
-            });
-          }
-        }
-      }
-    }
-    setValidModels(validModels);
-    setInvalidModels(invalidModels);
-  }, [setValidModels, setInvalidModels, csv]);
-
-  const noRowsRenderer = useCallback(() => <p>Empty or Invalid CSV</p>, []);
-  const validModelsRowGetter = useCallback(({ index }: Index) => validModels[index], [validModels]);
-  const invalidModelsRowGetter = useCallback(({ index }: Index) => invalidModels[index], [
-    invalidModels,
+  const handleExport = useCallback(() => onExport(start as Date, end as Date), [
+    onExport,
+    start,
+    end,
   ]);
 
   return (
-    <Grid container spacing={2} direction="column" justify="center">
-      <Grid item>
-        <Typography component="h1" variant="h6" noWrap>
-          <Trans>ExportTimeAbsenceEntries.Title</Trans>
-        </Typography>
-      </Grid>
-      <Grid item>
-        <TextField
-          placeholder="START(dd/mm/yyyy hh:MM),END(dd/mm/yyyy hh:MM),DESCRIPTION,TYPE(VACATION/ILLNESS)"
-          multiline
-          variant="filled"
-          rows={4}
-          rowsMax={12}
-          fullWidth
-          value={csv}
-          onChange={handleCsvChange}
-        />
-      </Grid>
-      <Grid item className={classes.center}>
-        <Fab color="primary" onClick={handleParse} disabled={!csv}>
-          <CheckIcon />
-        </Fab>
-      </Grid>
-      {!!validModels.length && (
-        <>
-          <Grid item>
-            <VirtualizedTable
-              title={i18n._(t`ExportTimeAbsenceEntries.ValidEntries`)}
-              height="250px"
-              rowCount={validModels.length}
-              rowIds={map(m => m.id.toString(), validModels)}
-              noRowsRenderer={noRowsRenderer}
-              rowGetter={validModelsRowGetter}
-              columns={[
-                {
-                  width: 100,
-                  label: i18n._(t`ExportTimeAbsenceEntries.TypeTableHeader`),
-                  dataKey: 'type',
-                  formatter: absenceTypeFormatter,
-                },
-                {
-                  width: 200,
-                  label: i18n._(t`ExportTimeAbsenceEntries.DescriptionTableHeader`),
-                  dataKey: 'description',
-                },
-                {
-                  width: 200,
-                  label: i18n._(t`ExportTimeAbsenceEntries.StartTableHeader`),
-                  dataKey: 'start',
-                  flexGrow: 1,
-                  formatter: dateTimeFormatter,
-                },
-                {
-                  width: 200,
-                  label: i18n._(t`ExportTimeAbsenceEntries.EndTableHeader`),
-                  dataKey: 'end',
-                  flexGrow: 1,
-                  formatter: dateTimeFormatter,
-                },
-              ]}
-            />
-          </Grid>
-        </>
-      )}
-      {!!invalidModels.length && (
-        <>
-          <Grid item>
-            <VirtualizedTable
-              title={i18n._(t`ExportTimeAbsenceEntries.InvalidEntries`)}
-              height="250px"
-              rowCount={invalidModels.length}
-              rowIds={map(m => m.id.toString(), invalidModels)}
-              noRowsRenderer={noRowsRenderer}
-              rowGetter={invalidModelsRowGetter}
-              columns={[
-                {
-                  width: 100,
-                  label: i18n._(t`ExportTimeAbsenceEntries.TypeTableHeader`),
-                  dataKey: 'type',
-                  formatter: absenceTypeFormatter,
-                },
-                {
-                  width: 200,
-                  label: i18n._(t`ExportTimeAbsenceEntries.DescriptionTableHeader`),
-                  dataKey: 'description',
-                },
-                {
-                  width: 200,
-                  label: i18n._(t`ExportTimeAbsenceEntries.StartTableHeader`),
-                  dataKey: 'start',
-                  flexGrow: 1,
-                  formatter: dateTimeFormatter,
-                },
-                {
-                  width: 200,
-                  label: i18n._(t`ExportTimeAbsenceEntries.EndTableHeader`),
-                  dataKey: 'end',
-                  flexGrow: 1,
-                  formatter: dateTimeFormatter,
-                },
-              ]}
-            />
-          </Grid>
-        </>
-      )}
-      {!!validModels.length && (
-        <Grid item className={classes.center}>
-          <FabButtonSpinner onClick={handleExport} isBusy={isBusy} disabled={isBusy}>
-            <SaveIcon />
-          </FabButtonSpinner>
-        </Grid>
-      )}
-    </Grid>
+    <div className={classes.rows}>
+      <Typography component="h1" variant="h6" noWrap>
+        <Trans>ExportTimeAbsenceEntries.Title</Trans>
+      </Typography>
+      <MuiPickersUtilsProvider utils={DateFnsUtils} locale={getDatepickerLocale(selectedLanguage)}>
+        <div className={classes.columns}>
+          <KeyboardDateTimePicker
+            autoOk
+            ampm={false}
+            value={start}
+            maxDate={end}
+            onChange={handleStartChange}
+            label={<Trans>Labels.Start</Trans>}
+            fullWidth
+          />
+          <KeyboardDateTimePicker
+            autoOk
+            ampm={false}
+            value={end}
+            minDate={start}
+            onChange={handleEndChange}
+            label={<Trans>Labels.End</Trans>}
+            fullWidth
+          />
+        </div>
+      </MuiPickersUtilsProvider>
+      <ButtonSpinner onClick={handleExport} isBusy={isBusy} disabled={isBusy || !start || !end}>
+        <InsertDriveFileIcon />
+        <Trans>ExportTimeAbsenceEntries.Export</Trans>
+      </ButtonSpinner>
+    </div>
   );
 };

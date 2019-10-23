@@ -11,31 +11,37 @@ import {
   isTuesday,
   isWednesday,
   isWithinInterval,
+  startOfDay,
 } from 'date-fns';
-import { ascend, filter, sortWith } from 'ramda';
+import { ascend, filter, sortWith, flatten } from 'ramda';
 import { i18n } from '../i18nLoader';
 import { JobModel } from '../models/job.model';
+import { Language } from '../models/language-model';
 import { ProfileModel } from '../models/profile.model';
 import { TimeAbsenceEntryModel } from '../models/time-absence-entry.model';
 import { TimeEntryListModel } from '../models/time-entry-list.model';
 import { TimeEntryTypes } from '../models/time-entry.model';
 import { TimeHolidayEntryModel } from '../models/time-holiday-entry.model';
 import { UUID } from '../models/uuid.model';
-import { filterByInterval, humanDifference } from './functions';
-import { Language } from '../models/language-model';
+import { formatAsDate } from './constants';
 import { formatDate } from './formatters';
+import { filterByInterval, humanDifference } from './functions';
 
-export interface CalendarEvent {
+export interface TimeEntryPair {
+  enterId: UUID;
+  job: string;
+  project: string;
   enter: Date;
   exit: Date;
-  title: string;
-  id: UUID;
 }
 
-export function getEnterExitEvents(timeEntries: TimeEntryListModel[], interval: Interval) {
+export function getTimeEntryPairsById(
+  timeEntries: TimeEntryListModel[],
+  interval: Interval,
+): { [id: string]: TimeEntryPair[] } {
   const filteredByInterval = filterByInterval(interval)(timeEntries);
   const orderedByDate = sortWith([ascend(te => te.when)], filteredByInterval);
-  const events: CalendarEvent[] = [];
+  const pairsById: { [id: string]: TimeEntryPair[] } = {};
 
   for (let i = 0; i < orderedByDate.length; i++) {
     const enter = orderedByDate[i];
@@ -44,41 +50,82 @@ export function getEnterExitEvents(timeEntries: TimeEntryListModel[], interval: 
       const [exit, toSkip] = getNearestExit(i, orderedByDate);
       i += toSkip;
 
-      const title = `${enter.job.name} - ${enter.project.name}`;
+      const id = `${enter.job.id}_${enter.project.id}`;
+      const pair = {
+        enterId: enter.id,
+        enter: enter.when,
+        job: enter.job.name,
+        project: enter.project.name,
+      };
+
+      if (!pairsById[id]) {
+        pairsById[id] = [];
+      }
 
       if (!exit.isEmpty()) {
-        events.push({ enter: enter.when, exit: exit.when, title, id: enter.id });
+        pairsById[id].push({
+          ...pair,
+          exit: exit.when,
+        });
       } else {
-        events.push({ enter: enter.when, exit: endOfDay(enter.when), title, id: enter.id });
+        pairsById[id].push({
+          ...pair,
+          exit: endOfDay(enter.when),
+        });
       }
     }
   }
-  return events;
+  return pairsById;
 }
 
-export function getDifferencesByRange(timeEntries: TimeEntryListModel[], interval: Interval) {
-  const pairs = getEnterExitEvents(timeEntries, interval);
+export function getDifferencesByRangeByIdAndDate(timeEntries: TimeEntryListModel[], interval: Interval) {
+  const pairsById = getTimeEntryPairsById(timeEntries, interval);
 
-  const differencesByDate: { [date: number]: number } = {};
+  const differencesByIdAndDate: { [id: string]: { [date: number]: number } } = {};
 
-  for (const { enter, exit } of pairs) {
-    const date = getDate(enter);
+  for (const id in pairsById) {
+    const pairs = pairsById[id];
 
-    const diff = Math.abs(enter.getTime() - exit.getTime());
+    if (!differencesByIdAndDate[id]) {
+      differencesByIdAndDate[id] = {};
+    }
 
-    differencesByDate[date] = !!differencesByDate[date] ? differencesByDate[date] + diff : diff;
+    for (const { enter, exit } of pairs) {
+      const date = getDate(enter);
+
+      const diff = Math.abs(enter.getTime() - exit.getTime());
+
+      differencesByIdAndDate[id][date] = !!differencesByIdAndDate[date]
+        ? differencesByIdAndDate[id][date] + diff
+        : diff;
+    }
   }
+
+  return differencesByIdAndDate;
+}
+
+export function getHumanDifferencesByRange(timeEntries: TimeEntryListModel[], interval: Interval) {
+  const differencesByIdAndDate = getDifferencesByRangeByIdAndDate(timeEntries, interval);
+
+  for(const id in differencesByIdAndDate){
+    for(const date in differencesByIdAndDate[id]){
+      const difference = differencesByIdAndDate[id][date];
+    }
+  }
+
 
   const days = eachDayOfInterval(interval);
 
-  const result: { [date: number]: string } = {};
+  const result: { [date: string]: string } = {};
   for (let i = 0; i < days.length; i++) {
-    const date = getDate(days[i]);
+    const day = days[i];
+    const date = getDate(day);
+    const key = format(day, formatAsDate);
 
     if (!!differencesByDate[date]) {
-      result[date] = humanDifference(new Date(0), new Date(differencesByDate[date]));
+      result[key] = humanDifference(new Date(0), new Date(differencesByDate[date]));
     } else {
-      result[date] = humanDifference(new Date(0), new Date(0));
+      result[key] = humanDifference(new Date(0), new Date(0));
     }
   }
   return result;
@@ -107,6 +154,7 @@ export interface TimeStatisticTile {
 }
 
 export function getWorkingHoursStatistics(
+  date: Date,
   language: Language,
   profile: ProfileModel,
   entries: TimeEntryListModel[],
@@ -127,30 +175,54 @@ export function getWorkingHoursStatistics(
 
   const statistics: TimeStatisticTile[] = [];
 
-  const today = new Date();
   const maxDate = new Date(8640000000000000);
 
-  const todayJobs = filter(
+  const dateJobs = filter(
     job =>
-      isWithinInterval(today, {
+      isWithinInterval(date, {
         start: job.start,
         end: !!job.end ? job.end : maxDate,
       }),
     profile.jobs,
   );
 
-  for (const job of todayJobs) {
-    const todayProjects = filter(
+  const differencesByDate = getHumanDifferencesByRange(entries, {
+    start: startOfDay(date),
+    end: endOfDay(date),
+  });
+
+  console.log(differencesByDate);
+
+  // const todayHoliday = filter(
+  //   holiday =>
+  //     isWithinInterval(date, {
+  //       start: startOfDay(holiday.when),
+  //       end: endOfDay(holiday.when),
+  //     }),
+  //   holidays,
+  // );
+
+  // const todayAbsences = filter(
+  //   absence =>
+  //     isWithinInterval(date, {
+  //       start: absence.start,
+  //       end: !!absence.end ? absence.end : maxDate,
+  //     }),
+  //   absences,
+  // );
+
+  for (const job of dateJobs) {
+    const dateProjects = filter(
       project =>
-        isWithinInterval(today, {
+        isWithinInterval(date, {
           start: project.start,
           end: !!project.end ? project.end : maxDate,
         }),
       job.projects,
     );
 
-    for (const project of todayProjects) {
-      const workingHours = getDayWorkingHours(today, job);
+    for (const project of dateProjects) {
+      const workingHours = getDayWorkingHours(date, job);
       const projectWorkingHours = (workingHours * project.allocation) / 100;
 
       statistics.push({
@@ -160,7 +232,7 @@ export function getWorkingHoursStatistics(
             values: { project: project.name },
           },
         ),
-        subtitle: formatDate(today, language, 'MMMM MM'),
+        subtitle: formatDate(date, language, 'MMMM dd'),
         text: `${projectWorkingHours}h`,
       });
     }

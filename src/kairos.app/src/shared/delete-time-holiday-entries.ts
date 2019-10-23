@@ -1,31 +1,48 @@
 import { t } from '@lingui/macro';
 import produce from 'immer';
 import { call, put, takeLatest } from 'redux-saga/effects';
-import { createAsyncAction } from 'typesafe-actions';
+import { createAsyncAction, action } from 'typesafe-actions';
 import { SharedActions } from '../actions';
 import { i18n } from '../i18nLoader';
 import { TimeHolidayEntryModel } from '../models/time-holiday-entry.model';
 import { enqueueSnackbarAction } from '../notification-manager/actions';
 import { deleteTimeHolidayEntries } from '../services/time-holiday-entry/time-holiday-entry.service';
 import {
+  TRY_DELETE_TIME_HOLIDAY_ENTRIES,
   DELETE_TIME_HOLIDAY_ENTRIES,
   DELETE_TIME_HOLIDAY_ENTRIES_FAILURE,
   DELETE_TIME_HOLIDAY_ENTRIES_SUCCESS,
 } from './constants';
 import { SharedState } from './state';
 import { UUID } from '../models/uuid.model';
+import { askForConfirmation } from './ask-for-confirmation';
+
+export const tryDeleteTimeHolidayEntriesAction = (ids: UUID[]) => action(TRY_DELETE_TIME_HOLIDAY_ENTRIES, ids);
 
 export const deleteTimeHolidayEntriesAsync = createAsyncAction(
   DELETE_TIME_HOLIDAY_ENTRIES,
   DELETE_TIME_HOLIDAY_ENTRIES_SUCCESS,
   DELETE_TIME_HOLIDAY_ENTRIES_FAILURE,
-)<{ ids: UUID[] }, void, string>();
+)<void, void, string>();
 
 function* doDeleteTimeHolidayEntries({
-  payload: { ids },
-}: ReturnType<typeof deleteTimeHolidayEntriesAsync.request>) {
+  payload,
+}: ReturnType<typeof tryDeleteTimeHolidayEntriesAction>) {
+  const confirmed = yield call(askForConfirmation, {
+    title: null,
+    message: i18n._(t`ConfirmationModal.DeleteHolidays`),
+    rejectButton: null,
+    approveButton: null,
+  });
+
+  if (!confirmed) {
+    return;
+  }
+  
   try {
-    yield call(deleteTimeHolidayEntries, ids);
+    yield put(deleteTimeHolidayEntriesAsync.request());
+
+    yield call(deleteTimeHolidayEntries, payload);
 
     yield put(deleteTimeHolidayEntriesAsync.success());
   } catch (error) {
@@ -38,7 +55,7 @@ function* doNotifySuccess() {
 }
 
 export function* deleteTimeHolidayEntriesSaga() {
-  yield takeLatest(DELETE_TIME_HOLIDAY_ENTRIES, doDeleteTimeHolidayEntries);
+  yield takeLatest(TRY_DELETE_TIME_HOLIDAY_ENTRIES, doDeleteTimeHolidayEntries);
   yield takeLatest(DELETE_TIME_HOLIDAY_ENTRIES_SUCCESS, doNotifySuccess);
 }
 

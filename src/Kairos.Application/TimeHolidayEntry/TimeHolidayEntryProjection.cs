@@ -16,10 +16,12 @@ namespace Kairos.Application.TimeHolidayEntry
         IRequestHandler<GetTimeHolidayEntries, ImmutableArray<TimeHolidayEntryReadDto>>
     {
         private readonly ITimeHolidayEntryReadRepository _timeHolidayEntryReadRepository;
+        private readonly IAuthProvider _authProvider;
 
-        public TimeHolidayEntryProjection(ITimeHolidayEntryReadRepository timeHolidayEntryReadRepository)
+        public TimeHolidayEntryProjection(ITimeHolidayEntryReadRepository timeHolidayEntryReadRepository, IAuthProvider authProvider)
         {
             _timeHolidayEntryReadRepository = timeHolidayEntryReadRepository;
+            _authProvider = authProvider;
         }
 
         public async Task Handle(TimeHolidayEntryAdded notification, CancellationToken cancellationToken)
@@ -46,7 +48,7 @@ namespace Kairos.Application.TimeHolidayEntry
         public async Task<ImmutableArray<TimeHolidayEntryReadDto>> Handle(GetTimeHolidayEntries request,
             CancellationToken cancellationToken)
         {
-            return await _timeHolidayEntryReadRepository.Get(request.User, request.Year);
+            return await _timeHolidayEntryReadRepository.Get(_authProvider.GetUser(), request.Year);
         }
     }
 }

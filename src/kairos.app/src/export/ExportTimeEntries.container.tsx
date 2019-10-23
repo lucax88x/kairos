@@ -1,7 +1,7 @@
 import { connect } from 'react-redux';
 import { Dispatch } from 'redux';
 import { Actions } from '../actions';
-import { selectProfile } from '../profile/selectors';
+import { selectSelectedLanguage } from '../shared/selectors';
 import { State } from '../state';
 import { exportTimeEntriesAsync } from './export-time-entries';
 import {
@@ -10,12 +10,10 @@ import {
   ExportTimeEntriesInputs,
 } from './ExportTimeEntries';
 import { selectIsExportTimeEntriesBusy } from './selectors';
-import { selectSelectedLanguage } from '../shared/selectors';
 
 const mapStateToProps = (state: State): ExportTimeEntriesInputs => ({
   selectedLanguage: selectSelectedLanguage(state),
   isBusy: selectIsExportTimeEntriesBusy(state),
-
 });
 
 const mapDispatchToProps = (dispatch: Dispatch<Actions>): ExportTimeEntriesDispatches => ({

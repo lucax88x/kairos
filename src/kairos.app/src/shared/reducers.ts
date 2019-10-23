@@ -1,5 +1,7 @@
 import { reduce } from 'ramda';
 import { SharedActions } from '../actions';
+import { openConfirmationModalReducer } from './ask-for-confirmation';
+import { closeConfirmationModalReducer } from './close-confirmation-modal';
 import { createTimeAbsenceEntryReducer } from './create-time-absence-entry';
 import { createTimeEntryReducer } from './create-time-entry';
 import { createTimeHolidayEntryReducer } from './create-time-holiday-entry';
@@ -10,8 +12,8 @@ import { getCountriesReducer } from './get-countries';
 import { getTimeAbsenceEntriesReducer } from './get-time-absence-entries';
 import { getTimeEntriesReducer } from './get-time-entries';
 import { getTimeHolidayEntriesReducer } from './get-time-holiday-entries';
-import { selectYearReducer } from './select-year';
 import { selectLanguageReducer } from './select-language';
+import { selectYearReducer } from './select-year';
 import { sharedInitialState, SharedState } from './state';
 import { updateTimeHolidayEntriesByCountryReducer } from './update-time-holiday-entries-by-country';
 
@@ -29,6 +31,8 @@ const reducers = [
   selectYearReducer,
   selectLanguageReducer,
   updateTimeHolidayEntriesByCountryReducer,
+  openConfirmationModalReducer,
+  closeConfirmationModalReducer,
 ];
 
 export const sharedReducers = (state = sharedInitialState, action: SharedActions): SharedState =>

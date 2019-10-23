@@ -12,7 +12,7 @@ import {
 import Slider from '@material-ui/core/Slider';
 import DeleteIcon from '@material-ui/icons/Delete';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
-import { DatePicker, MaterialUiPickersDate, MuiPickersUtilsProvider } from '@material-ui/pickers';
+import { DatePicker, MaterialUiPickersDate, MuiPickersUtilsProvider, KeyboardDatePicker } from '@material-ui/pickers';
 import { endOfDay, format } from 'date-fns';
 import React, { ChangeEvent, useCallback } from 'react';
 import { formatAsDate } from '../code/constants';
@@ -44,6 +44,9 @@ const useStyles = makeStyles(theme => ({
   },
   selfCenter: {
     justifySelf: 'center',
+  },
+  selfEnd: {
+    justifySelf: 'end',
   },
   noGap: {
     gridGap: 0,
@@ -145,14 +148,16 @@ export const ProfileJobProjectForm: React.FC<ProfileJobProjectFormProps> = props
                 : i18n._(t`Profile.CurrentDateLabel`)
             } - ${project.allocation}%`}
           </Typography>
-          <IconButton
-            color="inherit"
-            aria-label="Delete entry"
-            onClick={handleDelete}
-            disabled={job.projects.length === 1}
-          >
-            <DeleteIcon />
-          </IconButton>
+          <div className={classes.selfEnd}>
+            <IconButton
+              color="inherit"
+              aria-label="Delete entry"
+              onClick={handleDelete}
+              disabled={job.projects.length === 1}
+            >
+              <DeleteIcon />
+            </IconButton>
+          </div>
         </div>
       </ExpansionPanelSummary>
       <ExpansionPanelDetails>
@@ -188,7 +193,7 @@ export const ProfileJobProjectForm: React.FC<ProfileJobProjectFormProps> = props
               utils={DateFnsUtils}
               locale={getDatepickerLocale(selectedLanguage)}
             >
-              <DatePicker
+              <KeyboardDatePicker
                 autoOk
                 fullWidth
                 value={project.start}
@@ -196,7 +201,7 @@ export const ProfileJobProjectForm: React.FC<ProfileJobProjectFormProps> = props
                 onChange={handleStartDateChange}
                 label={<Trans>Labels.Start</Trans>}
               />
-              <DatePicker
+              <KeyboardDatePicker
                 autoOk
                 fullWidth
                 value={project.end}

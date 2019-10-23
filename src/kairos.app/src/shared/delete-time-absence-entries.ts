@@ -1,11 +1,12 @@
 import produce from 'immer';
 import { call, put, takeLatest } from 'redux-saga/effects';
-import { createAsyncAction } from 'typesafe-actions';
+import { createAsyncAction, action } from 'typesafe-actions';
 
 import { SharedActions } from '../actions';
 import { TimeAbsenceEntryModel } from '../models/time-absence-entry.model';
 import { deleteTimeAbsenceEntries } from '../services/time-absence-entry/time-absence-entry.service';
 import {
+  TRY_DELETE_TIME_ABSENCE_ENTRIES,
   DELETE_TIME_ABSENCE_ENTRIES,
   DELETE_TIME_ABSENCE_ENTRIES_FAILURE,
   DELETE_TIME_ABSENCE_ENTRIES_SUCCESS,
@@ -15,18 +16,34 @@ import { enqueueSnackbarAction } from '../notification-manager/actions';
 import { i18n } from '../i18nLoader';
 import { t } from '@lingui/macro';
 import { UUID } from '../models/uuid.model';
+import { askForConfirmation } from './ask-for-confirmation';
+
+export const tryDeleteTimeAbsenceEntriesAction = (ids: UUID[]) => action(TRY_DELETE_TIME_ABSENCE_ENTRIES, ids);
 
 export const deleteTimeAbsenceEntriesAsync = createAsyncAction(
   DELETE_TIME_ABSENCE_ENTRIES,
   DELETE_TIME_ABSENCE_ENTRIES_SUCCESS,
   DELETE_TIME_ABSENCE_ENTRIES_FAILURE,
-)<{ ids: UUID[] }, void, string>();
+)<void, void, string>();
 
 function* doDeleteTimeAbsenceEntries({
-  payload: { ids },
-}: ReturnType<typeof deleteTimeAbsenceEntriesAsync.request>) {
+  payload,
+}: ReturnType<typeof tryDeleteTimeAbsenceEntriesAction>) {
+  const confirmed = yield call(askForConfirmation, {
+    title: null,
+    message: i18n._(t`ConfirmationModal.DeleteAbsences`),
+    rejectButton: null,
+    approveButton: null,
+  });
+
+  if (!confirmed) {
+    return;
+  }
+
   try {
-    yield call(deleteTimeAbsenceEntries, ids);
+    yield put(deleteTimeAbsenceEntriesAsync.request());
+    
+    yield call(deleteTimeAbsenceEntries, payload);
 
     yield put(deleteTimeAbsenceEntriesAsync.success());
   } catch (error) {
@@ -39,7 +56,7 @@ function* doNotifySuccess() {
 }
 
 export function* deleteTimeAbsenceEntriesSaga() {
-  yield takeLatest(DELETE_TIME_ABSENCE_ENTRIES, doDeleteTimeAbsenceEntries);
+  yield takeLatest(TRY_DELETE_TIME_ABSENCE_ENTRIES, doDeleteTimeAbsenceEntries);
   yield takeLatest(DELETE_TIME_ABSENCE_ENTRIES_SUCCESS, doNotifySuccess);
 }
 

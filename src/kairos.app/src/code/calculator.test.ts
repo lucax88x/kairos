@@ -1,22 +1,30 @@
 import { TimeEntryModel, TimeEntryTypes } from '../models/time-entry.model';
 import { UUID } from '../models/uuid.model';
-import { getDifferencesByRange } from './calculator';
+import { getDifferencesByRangeByIdAndDate, getWorkingHoursStatistics } from './calculator';
+import {
+  TimeEntryListModel,
+  TimeEntryListJobModel,
+  TimeEntryListProjectModel,
+} from '../models/time-entry-list.model';
+import { JobModel } from '../models/job.model';
+import { ProjectModel } from '../models/project.model';
+import { ProfileModel } from '../models/profile.model';
 
 it('should get differences with only 2 entries', () => {
   // given
   const start = new Date('January 1 2019 00:00');
   const end = new Date('January 31 2019 23:59');
 
-  const timeEntries: TimeEntryModel[] = [
+  const timeEntries: TimeEntryListModel[] = [
     buildTimeEntry(TimeEntryTypes.IN, 'January 1 2019 08:30'),
     buildTimeEntry(TimeEntryTypes.OUT, 'January 1 2019 09:30'),
   ];
 
   // when
-  const result = getDifferencesByRange(timeEntries, { start, end });
+  const result = getDifferencesByRangeByIdAndDate(timeEntries, { start, end });
 
   // then
-  expect(result['1']).toBe('01:00:00');
+  expect(result[1]).toBe('01:00:00');
 });
 
 it('should get differences with only 2 entries even if not ordered', () => {
@@ -24,16 +32,16 @@ it('should get differences with only 2 entries even if not ordered', () => {
   const start = new Date('January 1 2019 00:00');
   const end = new Date('January 31 2019 23:59');
 
-  const timeEntries: TimeEntryModel[] = [
+  const timeEntries: TimeEntryListModel[] = [
     buildTimeEntry(TimeEntryTypes.OUT, 'January 1 2019 09:30'),
     buildTimeEntry(TimeEntryTypes.IN, 'January 1 2019 08:30'),
   ];
 
   // when
-  const result = getDifferencesByRange(timeEntries, { start, end });
+  const result = getDifferencesByRangeByIdAndDate(timeEntries, { start, end });
 
   // then
-  expect(result['1']).toBe('01:00:00');
+  expect(result[1]).toBe('01:00:00');
 });
 
 it('should get differences with 4 entries in the same day', () => {
@@ -41,7 +49,7 @@ it('should get differences with 4 entries in the same day', () => {
   const start = new Date('January 1 2019 00:00');
   const end = new Date('January 31 2019 23:59');
 
-  const timeEntries: TimeEntryModel[] = [
+  const timeEntries: TimeEntryListModel[] = [
     buildTimeEntry(TimeEntryTypes.IN, 'January 1 2019 08:00'),
     buildTimeEntry(TimeEntryTypes.OUT, 'January 1 2019 12:00'),
     buildTimeEntry(TimeEntryTypes.IN, 'January 1 2019 14:00'),
@@ -49,10 +57,10 @@ it('should get differences with 4 entries in the same day', () => {
   ];
 
   // when
-  const result = getDifferencesByRange(timeEntries, { start, end });
+  const result = getDifferencesByRangeByIdAndDate(timeEntries, { start, end });
 
   // then
-  expect(result['1']).toBe('08:00:00');
+  expect(result[1]).toBe('08:00:00');
 });
 
 it('should get multiple differences with multiple days', () => {
@@ -60,7 +68,7 @@ it('should get multiple differences with multiple days', () => {
   const start = new Date('January 1 2019 00:00');
   const end = new Date('January 31 2019 23:59');
 
-  const timeEntries: TimeEntryModel[] = [
+  const timeEntries: TimeEntryListModel[] = [
     buildTimeEntry(TimeEntryTypes.IN, 'January 1 2019 08:00'),
     buildTimeEntry(TimeEntryTypes.OUT, 'January 1 2019 12:00'),
     buildTimeEntry(TimeEntryTypes.IN, 'January 4 2019 09:00'),
@@ -68,11 +76,11 @@ it('should get multiple differences with multiple days', () => {
   ];
 
   // when
-  const result = getDifferencesByRange(timeEntries, { start, end });
+  const result = getDifferencesByRangeByIdAndDate(timeEntries, { start, end });
 
   // then
-  expect(result['1']).toBe('04:00:00');
-  expect(result['4']).toBe('00:10:00');
+  expect(result[1]).toBe('04:00:00');
+  expect(result[4]).toBe('00:10:00');
 });
 
 it('should not consider double IN', () => {
@@ -80,17 +88,17 @@ it('should not consider double IN', () => {
   const start = new Date('January 1 2019 00:00');
   const end = new Date('January 31 2019 23:59');
 
-  const timeEntries: TimeEntryModel[] = [
+  const timeEntries: TimeEntryListModel[] = [
     buildTimeEntry(TimeEntryTypes.IN, 'January 1 2019 08:00'),
     buildTimeEntry(TimeEntryTypes.IN, 'January 1 2019 14:00'),
     buildTimeEntry(TimeEntryTypes.OUT, 'January 1 2019 18:00'),
   ];
 
   // when
-  const result = getDifferencesByRange(timeEntries, { start, end });
+  const result = getDifferencesByRangeByIdAndDate(timeEntries, { start, end });
 
   // then
-  expect(result['1']).toBe('10:00:00');
+  expect(result[1]).toBe('10:00:00');
 });
 
 it('should not consider double OUT', () => {
@@ -98,17 +106,17 @@ it('should not consider double OUT', () => {
   const start = new Date('January 1 2019 00:00');
   const end = new Date('January 31 2019 23:59');
 
-  const timeEntries: TimeEntryModel[] = [
+  const timeEntries: TimeEntryListModel[] = [
     buildTimeEntry(TimeEntryTypes.IN, 'January 1 2019 08:00'),
     buildTimeEntry(TimeEntryTypes.OUT, 'January 1 2019 14:00'),
     buildTimeEntry(TimeEntryTypes.OUT, 'January 1 2019 18:00'),
   ];
 
   // when
-  const result = getDifferencesByRange(timeEntries, { start, end });
+  const result = getDifferencesByRangeByIdAndDate(timeEntries, { start, end });
 
   // then
-  expect(result['1']).toBe('06:00:00');
+  expect(result[1]).toBe('06:00:00');
 });
 
 it('should get max difference when there is no out', () => {
@@ -116,13 +124,15 @@ it('should get max difference when there is no out', () => {
   const start = new Date('January 1 2019 00:00');
   const end = new Date('January 31 2019 23:59');
 
-  const timeEntries: TimeEntryModel[] = [buildTimeEntry(TimeEntryTypes.IN, 'January 1 2019 08:00')];
+  const timeEntries: TimeEntryListModel[] = [
+    buildTimeEntry(TimeEntryTypes.IN, 'January 1 2019 08:00'),
+  ];
 
   // when
-  const result = getDifferencesByRange(timeEntries, { start, end });
+  const result = getDifferencesByRangeByIdAndDate(timeEntries, { start, end });
 
   // then
-  expect(result['1']).toBe('23:59:59');
+  expect(result[1]).toBe('23:59:59');
 });
 
 it('should get min difference when there is no in', () => {
@@ -130,17 +140,71 @@ it('should get min difference when there is no in', () => {
   const start = new Date('January 1 2019 00:00');
   const end = new Date('January 31 2019 23:59');
 
-  const timeEntries: TimeEntryModel[] = [
+  const timeEntries: TimeEntryListModel[] = [
     buildTimeEntry(TimeEntryTypes.OUT, 'January 1 2019 12:00'),
   ];
 
   // when
-  const result = getDifferencesByRange(timeEntries, { start, end });
+  const result = getDifferencesByRangeByIdAndDate(timeEntries, { start, end });
 
   // then
-  expect(result['1']).toBe('00:00:00');
+  expect(result[1]).toBe('00:00:00');
+});
+
+it.only('build working hour statistics', () => {
+  // given
+  const timeEntries: TimeEntryListModel[] = [
+    buildTimeEntry(TimeEntryTypes.IN, 'January 1 2019 08:30'),
+    buildTimeEntry(TimeEntryTypes.OUT, 'January 1 2019 09:30'),
+  ];
+
+  // when
+  const result = getWorkingHoursStatistics(
+    new Date('January 1 2019 00:00'),
+    'en',
+    profile,
+    timeEntries,
+    [],
+    [],
+  );
+  console.log(result);
+
+  // then
+  expect(result[0]).toBe({ title: 'TimeStatistics.RemainingToday', subtitle: 'January 01', text: '7h' });
 });
 
 const buildTimeEntry = function(type: TimeEntryTypes, date: string) {
-  return new TimeEntryModel(UUID.Generate(), new Date(date), type);
+  return new TimeEntryListModel(
+    UUID.Generate(),
+    new Date(date),
+    type,
+    new TimeEntryListJobModel(''),
+    new TimeEntryListProjectModel(''),
+  );
 };
+
+const profile = new ProfileModel(UUID.Generate(), [
+  new JobModel(
+    UUID.Generate(),
+    'test-job',
+    new Date('January 1 2019 00:00'),
+    new Date('March 31 2019 23:59'),
+    20,
+    8,
+    8,
+    8,
+    8,
+    8,
+    8,
+    8,
+    [
+      new ProjectModel(
+        UUID.Generate(),
+        'test-project',
+        new Date('January 1 2019 00:00'),
+        new Date('March 31 2019 23:59'),
+        100,
+      ),
+    ],
+  ),
+]);

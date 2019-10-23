@@ -174,9 +174,64 @@ msgstr "Work Week"
 msgid "Calendar.Yesterday"
 msgstr "Yesterday"
 
+#: src/shared/ConfirmationModal.tsx:14
+msgid "ConfirmationModal.Approve"
+msgstr "Confirm"
+
+#: src/shared/delete-time-absence-entries.ts:15
+#: src/shared/delete-time-absence-entries.ts:15
+msgid "ConfirmationModal.DeleteAbsences"
+msgstr "Are you sure you want to delete the selected absences?"
+
+#: src/shared/delete-time-entries.ts:15
+#: src/shared/delete-time-entries.ts:15
+msgid "ConfirmationModal.DeleteEntries"
+msgstr "Are you sure you want to delete the selected entries?"
+
+#: src/shared/delete-time-holiday-entries.ts:15
+#: src/shared/delete-time-holiday-entries.ts:15
+msgid "ConfirmationModal.DeleteHolidays"
+msgstr "Are you sure you want to delete the selected holidays?"
+
+#: src/shared/ConfirmationModal.tsx:8
+msgid "ConfirmationModal.Message"
+msgstr "Are you sure?"
+
+#: src/shared/ConfirmationModal.tsx:11
+msgid "ConfirmationModal.Reject"
+msgstr "Abort"
+
+#: src/shared/ConfirmationModal.tsx:7
+msgid "ConfirmationModal.Title"
+msgstr "Confirm"
+
 #: src/CreateTimeHolidayEntryModal.tsx:10
 msgid "CreateTimeHolidayEntry.ModalTitle"
 msgstr "Create Holiday"
+
+#: src/export/Export.tsx:24
+msgid "Export.TimeAbsenceEntryTabHeader"
+msgstr "Absences"
+
+#: src/export/Export.tsx:23
+msgid "Export.TimeEntryTabHeader"
+msgstr "Entries"
+
+#: src/export/ExportTimeAbsenceEntries.tsx:51
+msgid "ExportTimeAbsenceEntries.Export"
+msgstr "Export"
+
+#: src/export/ExportTimeAbsenceEntries.tsx:41
+msgid "ExportTimeAbsenceEntries.Title"
+msgstr "Export absences"
+
+#: src/export/ExportTimeEntries.tsx:51
+msgid "ExportTimeEntries.Export"
+msgstr "Export"
+
+#: src/export/ExportTimeEntries.tsx:41
+msgid "ExportTimeEntries.Title"
+msgstr "Export entries"
 
 #: src/shared/TimeAbsenceEntryForm.tsx:59
 msgid "Label.Type"
@@ -191,6 +246,8 @@ msgstr "Allocation"
 msgid "Labels.Description"
 msgstr "Description"
 
+#: src/export/ExportTimeAbsenceEntries.tsx:46
+#: src/export/ExportTimeEntries.tsx:46
 #: src/profile/ProfileJobForm.tsx:105
 #: src/profile/ProfileJobProjectForm.tsx:109
 #: src/shared/TimeAbsenceEntryForm.tsx:81
@@ -205,7 +262,7 @@ msgstr "Friday"
 msgid "Labels.Holidays"
 msgstr "Holidays (days per year)"
 
-#: src/shared/TimeEntryForm.tsx:85
+#: src/shared/TimeEntryForm.tsx:83
 msgid "Labels.Job"
 msgstr "Job"
 
@@ -218,7 +275,7 @@ msgstr "Monday"
 msgid "Labels.Name"
 msgstr "Name"
 
-#: src/shared/TimeEntryForm.tsx:98
+#: src/shared/TimeEntryForm.tsx:96
 msgid "Labels.Project"
 msgstr "Project"
 
@@ -226,6 +283,8 @@ msgstr "Project"
 msgid "Labels.Saturday"
 msgstr "Saturday"
 
+#: src/export/ExportTimeAbsenceEntries.tsx:45
+#: src/export/ExportTimeEntries.tsx:45
 #: src/profile/ProfileJobForm.tsx:102
 #: src/profile/ProfileJobProjectForm.tsx:106
 #: src/shared/TimeAbsenceEntryForm.tsx:80
@@ -249,23 +308,27 @@ msgstr "Wednesday"
 msgid "Labels.When"
 msgstr "When"
 
-#: src/App.tsx:320
+#: src/App.tsx:330
 msgid "LeftMenu.BulkInsert"
 msgstr "Bulk Insert"
 
-#: src/App.tsx:294
+#: src/App.tsx:304
 msgid "LeftMenu.Dashboard"
 msgstr "Dashboard"
 
-#: src/App.tsx:307
+#: src/App.tsx:336
+msgid "LeftMenu.Export"
+msgstr "Export"
+
+#: src/App.tsx:317
 msgid "LeftMenu.TimeAbsenceEntries"
 msgstr "Absences"
 
-#: src/App.tsx:301
+#: src/App.tsx:311
 msgid "LeftMenu.TimeEntries"
 msgstr "Time Entries"
 
-#: src/App.tsx:313
+#: src/App.tsx:323
 msgid "LeftMenu.TimeHolidayEntries"
 msgstr "Holidays"
 
@@ -274,8 +337,8 @@ msgstr "Holidays"
 msgid "Login.SignIn"
 msgstr "Sign in"
 
-#: src/shared/delete-time-absence-entries.ts:20
-#: src/shared/delete-time-absence-entries.ts:20
+#: src/shared/delete-time-absence-entries.ts:32
+#: src/shared/delete-time-absence-entries.ts:32
 msgid "Messages.AbsenceDeleted"
 msgstr "Absence Deleted"
 
@@ -299,8 +362,8 @@ msgstr "Saved Entries"
 msgid "Messages.BulkHolidaysSaved"
 msgstr "Saved Holidays"
 
-#: src/shared/delete-time-entries.ts:20
-#: src/shared/delete-time-entries.ts:20
+#: src/shared/delete-time-entries.ts:32
+#: src/shared/delete-time-entries.ts:32
 msgid "Messages.EntryDeleted"
 msgstr "Entry Deleted"
 
@@ -309,8 +372,18 @@ msgstr "Entry Deleted"
 msgid "Messages.EntryUpdated"
 msgstr "Entry Updated"
 
-#: src/shared/delete-time-holiday-entries.ts:20
-#: src/shared/delete-time-holiday-entries.ts:20
+#: src/export/export-time-absence-entries.ts:20
+#: src/export/export-time-absence-entries.ts:20
+msgid "Messages.ExportAbsencesSaved"
+msgstr "Absences exported"
+
+#: src/export/export-time-entries.ts:20
+#: src/export/export-time-entries.ts:20
+msgid "Messages.ExportEntriesSaved"
+msgstr "Entries exported"
+
+#: src/shared/delete-time-holiday-entries.ts:32
+#: src/shared/delete-time-holiday-entries.ts:32
 msgid "Messages.HolidayDeleted"
 msgstr "Holiday Deleted"
 
@@ -349,6 +422,14 @@ msgstr "Unknown"
 msgid "Profile.UnknownProject"
 msgstr "Unknown"
 
+#: src/services/api.service.ts:37
+#: src/services/api.service.ts:43
+#: src/services/api.service.ts:46
+#: src/services/api.service.ts:50
+#: src/services/api.service.ts:37
+#: src/services/api.service.ts:43
+#: src/services/api.service.ts:46
+#: src/services/api.service.ts:50
 #: src/services/graphql.service.ts:31
 #: src/services/graphql.service.ts:51
 msgid "ServerMessages.Error"
@@ -492,25 +573,25 @@ msgstr "Working Hours"
 msgid "TimeStatistics.WorkingHours.Title"
 msgstr "Working Hours"
 
-#: src/App.tsx:434
+#: src/App.tsx:454
 msgid "TopBar.Logout"
 msgstr "Logout"
 
-#: src/App.tsx:238
+#: src/App.tsx:248
 msgid "TopBar.OpenMenu"
 msgstr "Open Menu"
 
-#: src/App.tsx:261
-#: src/App.tsx:411
+#: src/App.tsx:271
+#: src/App.tsx:431
 msgid "TopBar.OpenTimeAbsenceEntry"
 msgstr "Open absence"
 
-#: src/App.tsx:268
-#: src/App.tsx:405
+#: src/App.tsx:278
+#: src/App.tsx:425
 msgid "TopBar.OpenTimeEntry"
 msgstr "Open time entry"
 
-#: src/App.tsx:398
+#: src/App.tsx:418
 msgid "TopBar.Profile"
 msgstr "Profile"
 

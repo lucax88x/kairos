@@ -1,5 +1,4 @@
 import { createSelector } from 'reselect';
-
 import { State } from '../state';
 
 const selectState = (state: State) => state.shared;
@@ -42,6 +41,16 @@ export const selectUi = createSelector(
 export const selectBusy = createSelector(
   selectUi,
   ui => ui.busy,
+);
+
+export const selectModal = createSelector(
+  selectUi,
+  ui => ui.modal,
+);
+
+export const selectConfirmation = createSelector(
+  selectUi,
+  ui => ui.confirmation,
 );
 
 export const selectIsGetCountriesBusy = createSelector(
@@ -97,4 +106,29 @@ export const selectIsDeleteTimeHolidayEntriesBusy = createSelector(
 export const selectIsUpdateTimeHolidayEntriesByCountry = createSelector(
   selectBusy,
   busy => busy.updateTimeHolidayEntriesByCountry,
+);
+
+export const selectIsConfirmationModalOpen = createSelector(
+  selectModal,
+  modal => modal.confirmation,
+);
+
+export const selectConfirmationApproveButton = createSelector(
+  selectConfirmation,
+  confirmation => confirmation.approveButton,
+);
+
+export const selectConfirmationRejectButton = createSelector(
+  selectConfirmation,
+  confirmation => confirmation.rejectButton,
+);
+
+export const selectConfirmationMessage = createSelector(
+  selectConfirmation,
+  confirmation => confirmation.message,
+);
+
+export const selectConfirmationTitle = createSelector(
+  selectConfirmation,
+  confirmation => confirmation.title,
 );

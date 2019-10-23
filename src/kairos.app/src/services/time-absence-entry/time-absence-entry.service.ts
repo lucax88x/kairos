@@ -11,6 +11,7 @@ import { deleteTimeAbsenceEntriesMutation } from './mutations/delete-time-absenc
 import { updateTimeAbsenceEntryMutation } from './mutations/update-time-absence-entry';
 import { getTimeAbsenceEntriesQuery } from './queries/get-time-absence-entries';
 import { getTimeAbsenceEntryQuery } from './queries/get-time-absence-entry';
+import { downloadFile } from '../api.service';
 
 export async function getTimeAbsenceEntry(id: UUID) {
   const result = await query<{ timeAbsenceEntry: TimeAbsenceEntryOutModel }>(
@@ -48,6 +49,6 @@ export async function bulkInsertTimeAbsenceEntries(models: TimeAbsenceEntryModel
   await mutation(createTimeAbsenceEntriesMutation, { timeAbsenceEntries: models });
 }
 
-export async function exportTimeAbsenceEntries(models: TimeAbsenceEntryModel[]) {
-  await mutation(createTimeAbsenceEntriesMutation, { timeAbsenceEntries: models });
+export async function exportTimeAbsenceEntries(start: Date, end: Date) {
+  await downloadFile(`exportTimeAbsenceEntries/${start.toISOString()}/${end.toISOString()}`);
 }

@@ -5,7 +5,6 @@
   "author": "lucatrazzi <lucax88x@gmail.com>",
   "license": "MIT",
   "scripts": {
-    "postinstall": "cd src/kairos.app && yarn install",
     "build": "yarn frontend:build && yarn backend:build",
     "frontend:prettier": "cd src/kairos.app && yarn prettier",
     "frontend:lint": "cd src/kairos.app && yarn lint",
@@ -18,6 +17,10 @@
     "docker:up": "docker-compose -f docker-compose.dev.yml up -d",
     "docker:down": "docker-compose -f docker-compose.dev.yml down",
     "docker:logs": "docker-compose -f docker-compose.dev.yml logs",
-    "docker:logs:watch": "docker-compose -f docker-compose.dev.yml logs -f -t"
+    "docker:logs:watch": "docker-compose -f docker-compose.dev.yml logs -f -t",
+    "docker:build": "sh ./scripts/docker.build.sh",
+    "registry:login": "sh ./scripts/registry.login.sh",
+    "docker:push": "sh ./scripts/docker.push.sh",
+    "k8s:deploy": "bash ./scripts/k8s.deploy.sh"
   }
 }

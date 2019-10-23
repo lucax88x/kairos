@@ -13,7 +13,7 @@ import {
 import AddIcon from '@material-ui/icons/Add';
 import DeleteIcon from '@material-ui/icons/Delete';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
-import { DatePicker, MaterialUiPickersDate, MuiPickersUtilsProvider } from '@material-ui/pickers';
+import { DatePicker, MaterialUiPickersDate, MuiPickersUtilsProvider, KeyboardDatePicker } from '@material-ui/pickers';
 import { endOfDay, format } from 'date-fns';
 import { map } from 'ramda';
 import React, { ChangeEvent, Fragment, useCallback } from 'react';
@@ -190,7 +190,7 @@ export const ProfileJobForm: React.FC<ProfileJobFormProps> = props => {
               utils={DateFnsUtils}
               locale={getDatepickerLocale(selectedLanguage)}
             >
-              <DatePicker
+              <KeyboardDatePicker
                 autoOk
                 fullWidth
                 value={job.start}
@@ -198,7 +198,7 @@ export const ProfileJobForm: React.FC<ProfileJobFormProps> = props => {
                 onChange={handleJobStartDateChange}
                 label={<Trans>Labels.Start</Trans>}
               />
-              <DatePicker
+              <KeyboardDatePicker
                 autoOk
                 fullWidth
                 value={job.end}

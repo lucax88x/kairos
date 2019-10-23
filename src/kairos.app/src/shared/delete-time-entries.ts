@@ -1,25 +1,45 @@
+import { t } from '@lingui/macro';
 import produce from 'immer';
 import { call, put, takeLatest } from 'redux-saga/effects';
-import { createAsyncAction } from 'typesafe-actions';
+import { action, createAsyncAction } from 'typesafe-actions';
 import { SharedActions } from '../actions';
-import { UUID } from '../models/uuid.model';
-import { deleteTimeEntries } from '../services/time-entry/time-entry.service';
-import { DELETE_TIME_ENTRIES, DELETE_TIME_ENTRIES_FAILURE, DELETE_TIME_ENTRIES_SUCCESS } from './constants';
-import { SharedState } from './state';
-import { enqueueSnackbarAction } from '../notification-manager/actions';
 import { i18n } from '../i18nLoader';
-import { t } from '@lingui/macro';
+import { UUID } from '../models/uuid.model';
+import { enqueueSnackbarAction } from '../notification-manager/actions';
+import { deleteTimeEntries } from '../services/time-entry/time-entry.service';
+import { askForConfirmation } from './ask-for-confirmation';
+import {
+  DELETE_TIME_ENTRIES,
+  DELETE_TIME_ENTRIES_FAILURE,
+  DELETE_TIME_ENTRIES_SUCCESS,
+  TRY_DELETE_TIME_ENTRIES,
+} from './constants';
+import { SharedState } from './state';
 
+export const tryDeleteTimeEntriesAction = (ids: UUID[]) => action(TRY_DELETE_TIME_ENTRIES, ids);
 
 export const deleteTimeEntriesAsync = createAsyncAction(
   DELETE_TIME_ENTRIES,
   DELETE_TIME_ENTRIES_SUCCESS,
   DELETE_TIME_ENTRIES_FAILURE,
-)<{ ids: UUID[] }, void, string>();
+)<void, void, string>();
 
-function* doDeleteTimeEntries({ payload: { ids } }: ReturnType<typeof deleteTimeEntriesAsync.request>) {
+function* doTryDeleteTimeEntries({ payload }: ReturnType<typeof tryDeleteTimeEntriesAction>) {
+  const confirmed = yield call(askForConfirmation, {
+    title: null,
+    message: i18n._(t`ConfirmationModal.DeleteEntries`),
+    rejectButton: null,
+    approveButton: null,
+  });
+
+  if (!confirmed) {
+    return;
+  }
+  
   try {
-    yield call(deleteTimeEntries, ids);
+    yield put(deleteTimeEntriesAsync.request());
+  
+    yield call(deleteTimeEntries, payload);
 
     yield put(deleteTimeEntriesAsync.success());
   } catch (error) {
@@ -32,7 +52,7 @@ function* doNotifySuccess() {
 }
 
 export function* deleteTimeEntriesSaga() {
-  yield takeLatest(DELETE_TIME_ENTRIES, doDeleteTimeEntries);
+  yield takeLatest(TRY_DELETE_TIME_ENTRIES, doTryDeleteTimeEntries);
   yield takeLatest(DELETE_TIME_ENTRIES_SUCCESS, doNotifySuccess);
 }
 

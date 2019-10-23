@@ -7,20 +7,24 @@ import { i18n } from '../i18nLoader';
 import { TimeAbsenceEntryModel } from '../models/time-absence-entry.model';
 import { enqueueSnackbarAction } from '../notification-manager/actions';
 import { exportTimeAbsenceEntries } from '../services/time-absence-entry/time-absence-entry.service';
-import { EXPORT_TIME_ABSENCE_ENTRIES, EXPORT_TIME_ABSENCE_ENTRIES_FAILURE, EXPORT_TIME_ABSENCE_ENTRIES_SUCCESS } from './constants';
+import {
+  EXPORT_TIME_ABSENCE_ENTRIES,
+  EXPORT_TIME_ABSENCE_ENTRIES_FAILURE,
+  EXPORT_TIME_ABSENCE_ENTRIES_SUCCESS,
+} from './constants';
 import { ExportState } from './state';
 
 export const exportTimeAbsenceEntriesAsync = createAsyncAction(
   EXPORT_TIME_ABSENCE_ENTRIES,
   EXPORT_TIME_ABSENCE_ENTRIES_SUCCESS,
   EXPORT_TIME_ABSENCE_ENTRIES_FAILURE,
-)<{ models: TimeAbsenceEntryModel[] }, void, string>();
+)<{ start: Date; end: Date }, void, string>();
 
 function* doExportTimeAbsenceEntries({
-  payload: { models },
+  payload: { start, end },
 }: ReturnType<typeof exportTimeAbsenceEntriesAsync.request>) {
   try {
-    yield call(exportTimeAbsenceEntries, models);
+    yield call(exportTimeAbsenceEntries, start, end);
 
     yield put(exportTimeAbsenceEntriesAsync.success());
   } catch (error) {

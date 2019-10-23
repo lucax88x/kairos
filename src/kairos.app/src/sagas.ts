@@ -9,6 +9,7 @@ import * as editTimeEntrySagas from './edit-time-entry/sagas';
 import * as layoutSagas from './layout/sagas';
 import * as profileSagas from './profile/sagas';
 import * as sharedSagas from './shared/sagas';
+import * as exportSagas from './export/sagas';
 
 // tslint:disable-next-line: no-any
 export const featureSagas: any[] = [
@@ -20,6 +21,7 @@ export const featureSagas: any[] = [
   editTimeHolidayEntrySagas,
   bulkInsertSagas,
   profileSagas,
+  exportSagas,
 ];
 
 const sagas = map(module => values(module), featureSagas);

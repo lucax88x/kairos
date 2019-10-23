@@ -1,3 +1,4 @@
+import { t } from '@lingui/macro';
 import { createMuiTheme, CssBaseline } from '@material-ui/core';
 import { ThemeProvider } from '@material-ui/styles';
 import { ConnectedRouter } from 'connected-react-router';
@@ -13,6 +14,7 @@ import { Themes } from './code/variables';
 import { ErrorBoundary } from './components/ErrorBoundary';
 import { SpinnerIcon } from './components/SpinnerIcon';
 import { history, persistor, store } from './createStore';
+import { i18n } from './i18nLoader';
 import { I18nLoader } from './i18nLoader.container';
 import './index.scss';
 import { NotFound } from './NotFound';
@@ -67,17 +69,15 @@ ReactDOM.render(
   document.getElementById('root'),
 );
 
-console.log('prova i18n')
 serviceWorker.register({
   onSuccess: () => {
-    store.dispatch(enqueueSnackbarAction('Content is cached for offline use.'));
+    store.dispatch(enqueueSnackbarAction(i18n._(t`Messages.ContentIsCached`)));
   },
   onUpdate: () => {
     store.dispatch(
-      enqueueSnackbarAction(
-        'New content is available and will be used when all tabs for this page are closed.',
-        { variant: 'warning' },
-      ),
+      enqueueSnackbarAction(i18n._(t`Messages.NewContentAvailablePleaseRefresh`), {
+        variant: 'warning',
+      }),
     );
   },
 });

@@ -10,7 +10,7 @@ export class ProjectModel {
     public name = '',
     public start = new Date(),
     public end: Date | null = null,
-    public allocation: number = 20,
+    public allocation: number = 100,
   ) {}
 
   static fromOutModel(outModel: ProjectOutModel) {

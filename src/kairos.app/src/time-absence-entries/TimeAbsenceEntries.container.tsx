@@ -5,7 +5,7 @@ import { Dispatch } from 'redux';
 import { Actions } from '../actions';
 import { openTimeAbsenceEntryDrawerAction } from '../layout/actions';
 import { TimeAbsenceEntryModel } from '../models/time-absence-entry.model';
-import { deleteTimeAbsenceEntriesAsync } from '../shared/delete-time-absence-entries';
+import { deleteTimeAbsenceEntriesAsync, tryDeleteTimeAbsenceEntriesAction } from '../shared/delete-time-absence-entries';
 import {
   selectIsDeleteTimeAbsenceEntriesBusy,
   selectIsGetTimeAbsenceEntriesBusy,
@@ -28,7 +28,7 @@ const mapStateToProps = (state: State): TimeAbsenceEntriesInputs => ({
 const mapDispatchToProps = (dispatch: Dispatch<Actions>): TimeAbsenceEntriesDispatches => ({
   onCreate: () => dispatch(openTimeAbsenceEntryDrawerAction()),
   onUpdate: (model: TimeAbsenceEntryModel) => dispatch(push(`/absence/${model.id}`)),
-  onDelete: (ids: UUID[]) => dispatch(deleteTimeAbsenceEntriesAsync.request({ ids })),
+  onDelete: (ids: UUID[]) => dispatch(tryDeleteTimeAbsenceEntriesAction(ids)),
 });
 
 export const TimeAbsenceEntries = connect(
