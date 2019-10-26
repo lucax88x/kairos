@@ -7,6 +7,9 @@ case $ENVIRONMENT in
     LOCAL)
         REGISTRY='192.168.205.100'
     ;;
+    PROD)
+        REGISTRY='registry.kairos.rocks'
+    ;;
     *)
         echo Wrong Environment $ENVIRONMENT
         exit 1

@@ -21,6 +21,7 @@
     "docker:build": "sh ./scripts/docker.build.sh",
     "registry:login": "sh ./scripts/registry.login.sh",
     "docker:push": "sh ./scripts/docker.push.sh",
-    "k8s:deploy": "bash ./scripts/k8s.deploy.sh"
+    "deploy:ssh": "ssh lucatrazzi@kairos.rocks",
+    "k8s:deploy": "sh ./scripts/k8s.deploy.sh"
   }
 }

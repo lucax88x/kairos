@@ -4,16 +4,16 @@ metadata:
   name: ingress
   namespace: kairos
   annotations:
-    kubernetes.io/ingress.class: "kairos-nginx"
+    kubernetes.io/ingress.class: "nginx"
 
 spec:
-  # tls:
-  #   - hosts:
-  #       - kairos.garaio-rem.ch
-  #     secretName: kairos-garaio-rem-ch-tls
+  tls:
+    - hosts:
+        - kairos.rocks
+      secretName: kairos-tls
   rules:
-    # - host: kairos.garaio-rem.ch
-     - http:
+    - host: kairos.rocks
+      http:
         paths:
           - path: /graphql
             backend:
@@ -23,7 +23,7 @@ spec:
             backend:
               serviceName: web-app
               servicePort: 80
-          # - path: /.well-known/acme-challenge/
-          #   backend:
-          #     serviceName: letsencrypt
-          #     servicePort: 80
+          - path: /.well-known/acme-challenge/
+            backend:
+              serviceName: letsencrypt
+              servicePort: 80
