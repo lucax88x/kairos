@@ -6,7 +6,7 @@ ENVIRONMENT=${2:-'DEV'}
 case $ENVIRONMENT in
     LOCAL)
         REGISTRY='192.168.205.100'
-        WRITE_DB_CONNECTIONSTRING='ConnectTo=tcp:\/\/admin:changeit@eventstore:1113; HeartBeatTimeout=500'
+        WRITE_DB_CONNECTIONSTRING='ConnectTo=tcp:\/\/admin:changeit@event-store:1113; HeartBeatTimeout=500'
         READ_DB_ENDPOINT='redis'
         READ_DB_DATABASE='1'
         AUTH_DOMAIN='https:\/\/kairos.eu.auth0.com\/'
@@ -14,7 +14,7 @@ case $ENVIRONMENT in
     ;;
     PROD)
         REGISTRY='registry.kairos.rocks'
-        WRITE_DB_CONNECTIONSTRING='ConnectTo=tcp:\/\/admin:changeit@eventstore:1113; HeartBeatTimeout=500'
+        WRITE_DB_CONNECTIONSTRING='ConnectTo=tcp:\/\/admin:changeit@event-store:1113; HeartBeatTimeout=500'
         READ_DB_ENDPOINT='redis'
         READ_DB_DATABASE='1'
         AUTH_DOMAIN='https:\/\/kairos.eu.auth0.com\/'

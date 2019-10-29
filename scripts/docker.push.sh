@@ -7,7 +7,7 @@ case $ENVIRONMENT in
     LOCAL)
         REGISTRY='192.168.205.100'
     ;;
-    PROD)
+    PROD) ciao
         REGISTRY='registry.kairos.rocks'
     ;;
     *)

@@ -4,7 +4,7 @@ metadata:
   name: event-store
   namespace: kairos
   labels:
-    app: event-store
+    run: event-store
 spec:
   type: NodePort
   ports:
@@ -13,4 +13,4 @@ spec:
   - name: port2
     port: 2113
   selector:
-   app: event-store
+   run: event-store

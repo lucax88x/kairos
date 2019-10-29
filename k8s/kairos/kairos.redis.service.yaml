@@ -4,10 +4,10 @@ metadata:
   name: redis
   namespace: kairos
   labels:
-    app: redis
+    run: redis
 spec:
   type: NodePort
   ports:
    - port: 6379
   selector:
-   app: redis
+   run: redis
