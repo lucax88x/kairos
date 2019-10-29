@@ -19,12 +19,12 @@ esac
 echo pushing ${VERSION} to registry ${REGISTRY}
 
 docker push ${REGISTRY}/kairos/web.app:${VERSION}
-# docker push ${REGISTRY}/kairos/web.api:${VERSION}
+docker push ${REGISTRY}/kairos/web.api:${VERSION}
 
 docker tag ${REGISTRY}/kairos/web.app:${VERSION} ${REGISTRY}/kairos/web.app:latest
-# docker tag ${REGISTRY}/kairos/web.api:${VERSION} ${REGISTRY}/kairos/web.api:latest
+docker tag ${REGISTRY}/kairos/web.api:${VERSION} ${REGISTRY}/kairos/web.api:latest
 
 docker push ${REGISTRY}/kairos/web.app:latest
-# docker push ${REGISTRY}/kairos/web.api:latest
+docker push ${REGISTRY}/kairos/web.api:latest
 
 echo pushed

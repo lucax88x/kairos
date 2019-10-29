@@ -17,6 +17,6 @@ case $ENVIRONMENT in
 esac
 
 echo building ${VERSION} for registry ${REGISTRY}
-docker build -f ./src/codebase/Kairos.Web.App/Dockerfile -t ${REGISTRY}/kairos/web.app:${VERSION} .
-# docker build -f ./src/codebase/Kairos.Web.Api/Dockerfile -t ${REGISTRY}/kairos/web.api:${VERSION} .
+docker build -f ./src/Kairos.Web.App/Dockerfile -t ${REGISTRY}/kairos/web.app:${VERSION} .
+docker build -f ./src/Kairos.Web.Api/Dockerfile -t ${REGISTRY}/kairos/web.api:${VERSION} .
 echo built

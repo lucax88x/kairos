@@ -15,11 +15,9 @@ spec:
     spec:
       containers:
         - name: web-app
-          image: tutum/hello-world
-          # image: %REGISTRY/kairos/web.app:%VERSION
+          image: %REGISTRY/kairos/web.app:%VERSION
           imagePullPolicy: IfNotPresent
           ports:
             - containerPort: 80
-
-      # imagePullSecrets:
-      #   - name: acr-secret
+      imagePullSecrets:
+        - name: regcred

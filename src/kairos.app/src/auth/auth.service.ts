@@ -5,14 +5,13 @@ import { Auth0UserModel, UserModel } from '../models/user.model';
 
 const domain = 'kairos.eu.auth0.com';
 const clientId = 'saJwYatwe1Fr2R0bmmGeTPk477XVgp1c';
-const audience = 'http://localhost:3000';
 
 class AuthService {
   initOptions: Auth0ClientOptions = {
     domain,
     client_id: clientId,
     redirect_uri: window.location.origin,
-    audience,
+    audience: window.location.origin,
   };
 
   auth0ClientPromise: Promise<Auth0Client>;
@@ -56,7 +55,7 @@ class AuthService {
   async logout() {
     const auth0Client = await this.auth0ClientPromise;
 
-    await auth0Client.logout({ client_id: clientId, returnTo: 'http://localhost:3000/login' });
+    await auth0Client.logout({ client_id: clientId, returnTo: `${window.location.origin}/login` });
   }
 
   async getToken(): Promise<string> {

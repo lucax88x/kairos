@@ -3,7 +3,8 @@ import { makeStyles, Typography } from '@material-ui/core';
 import { eachDayOfInterval, endOfMonth, getDate, startOfMonth } from 'date-fns';
 import { map } from 'ramda';
 import React, { memo, useCallback, useMemo } from 'react';
-import { getDifferencesByRangeByIdAndDate } from '../code/calculator';
+
+import { getDifferencesByRange } from '../code/calculator';
 import Spinner from '../components/Spinner';
 import { TimeEntryListModel } from '../models/time-entry-list.model';
 
@@ -65,7 +66,8 @@ export const TimeEntriesByRangeComponent: React.FC<TimeEntriesByRangeProps> = me
       const start = startOfMonth(date);
       const end = endOfMonth(date);
 
-      const differencesByRange = getDifferencesByRangeByIdAndDate(timeEntries, { start, end });
+      const differencesByRange = getDifferencesByRange(timeEntries, { start, end });
+      // const differencesByRange = getDifferencesByRangeByIdAndDate(timeEntries, { start, end });
 
       const days = eachDayOfInterval({ start, end });
 

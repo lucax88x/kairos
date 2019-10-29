@@ -6,7 +6,7 @@ WORKDIR /build
 
 RUN yarn
 
-WORKDIR /build/src/codebase/Kairos.App
+WORKDIR /build/src/kairos.app
 
 RUN yarn
 
@@ -18,14 +18,14 @@ FROM mcr.microsoft.com/dotnet/core/sdk:3.0 AS server-compiler
     
 COPY --from=app-compiler /build ./build
 
-WORKDIR /build/src/codebase/Kairos.Web.App
+WORKDIR /build/src/Kairos.Web.App
 
 RUN dotnet restore
 RUN dotnet publish --no-restore -c Release -o out
 
 FROM mcr.microsoft.com/dotnet/core/aspnet:3.0
 
-COPY --from=server-compiler /build/src/codebase/Kairos.Web.App/out ./Kairos.Web.App
+COPY --from=server-compiler /build/src/Kairos.Web.App/out ./Kairos.Web.App
 
 WORKDIR /Kairos.Web.App
 

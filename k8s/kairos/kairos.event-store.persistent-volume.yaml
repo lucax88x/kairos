@@ -1,0 +1,14 @@
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: event-store-pv-claim
+  namespace: kairos
+  labels:
+    app: event-store
+spec:
+  storageClassName: managed-nfs-storage
+  accessModes:
+  - ReadWriteOnce
+  resources:
+    requests:
+      storage: 50Gi

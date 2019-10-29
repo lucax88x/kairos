@@ -1,0 +1,36 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: event-store
+  namespace: kairos
+spec:
+  replicas: 1
+  strategy:
+    type: Recreate
+  selector:
+    matchLabels:
+      run: event-store
+  template:
+    metadata:
+      labels:
+        run: event-store
+    spec:
+      volumes:
+        - name: event-store-pv
+          persistentVolumeClaim:
+            claimName: event-store-pv-claim
+            
+      containers:
+        - name: event-store
+          image: eventstore/eventstore:latest
+          imagePullPolicy: IfNotPresent
+          ports:
+            - containerPort: 2113
+            - containerPort: 1113
+          volumeMounts:
+            - mountPath: /var/lib/eventstore
+              name: event-store-pv
+              subPath: lib
+            - mountPath: /var/log/eventstore
+              name: event-store-pv
+              subPath: log

@@ -126,51 +126,51 @@ msgstr "Create"
 msgid "Buttons.Update"
 msgstr "Update"
 
-#: src/dashboard/TimeEntriesCalendar.tsx:92
+#: src/dashboard/TimeEntriesCalendar.tsx:93
 msgid "Calendar.Agenda"
 msgstr "Agenda"
 
-#: src/dashboard/TimeEntriesCalendar.tsx:94
+#: src/dashboard/TimeEntriesCalendar.tsx:95
 msgid "Calendar.AllDay"
 msgstr "All day"
 
-#: src/dashboard/TimeEntriesCalendar.tsx:88
+#: src/dashboard/TimeEntriesCalendar.tsx:89
 msgid "Calendar.Back"
 msgstr "Back"
 
-#: src/dashboard/TimeEntriesCalendar.tsx:86
+#: src/dashboard/TimeEntriesCalendar.tsx:87
 msgid "Calendar.Day"
 msgstr "Day"
 
-#: src/dashboard/TimeEntriesCalendar.tsx:84
+#: src/dashboard/TimeEntriesCalendar.tsx:85
 msgid "Calendar.Month"
 msgstr "Month"
 
-#: src/dashboard/TimeEntriesCalendar.tsx:89
+#: src/dashboard/TimeEntriesCalendar.tsx:90
 msgid "Calendar.Next"
 msgstr "Next"
 
-#: src/dashboard/TimeEntriesCalendar.tsx:93
+#: src/dashboard/TimeEntriesCalendar.tsx:94
 msgid "Calendar.NoEventsInRange"
 msgstr "No Events In Range"
 
-#: src/dashboard/TimeEntriesCalendar.tsx:95
+#: src/dashboard/TimeEntriesCalendar.tsx:96
 msgid "Calendar.ShowMore"
 msgstr "More {more}"
 
-#: src/dashboard/TimeEntriesCalendar.tsx:87
+#: src/dashboard/TimeEntriesCalendar.tsx:88
 msgid "Calendar.Today"
 msgstr "Today"
 
-#: src/dashboard/TimeEntriesCalendar.tsx:90
+#: src/dashboard/TimeEntriesCalendar.tsx:91
 msgid "Calendar.Week"
 msgstr "Week"
 
-#: src/dashboard/TimeEntriesCalendar.tsx:91
+#: src/dashboard/TimeEntriesCalendar.tsx:92
 msgid "Calendar.WorkWeek"
 msgstr "Work Week"
 
-#: src/dashboard/TimeEntriesCalendar.tsx:85
+#: src/dashboard/TimeEntriesCalendar.tsx:86
 msgid "Calendar.Yesterday"
 msgstr "Yesterday"
 
@@ -237,7 +237,7 @@ msgstr "Export entries"
 msgid "Label.Type"
 msgstr "Type"
 
-#: src/profile/ProfileJobProjectForm.tsx:97
+#: src/profile/ProfileJobProjectForm.tsx:102
 msgid "Labels.Allocation"
 msgstr "Allocation"
 
@@ -249,7 +249,7 @@ msgstr "Description"
 #: src/export/ExportTimeAbsenceEntries.tsx:46
 #: src/export/ExportTimeEntries.tsx:46
 #: src/profile/ProfileJobForm.tsx:105
-#: src/profile/ProfileJobProjectForm.tsx:109
+#: src/profile/ProfileJobProjectForm.tsx:114
 #: src/shared/TimeAbsenceEntryForm.tsx:81
 msgid "Labels.End"
 msgstr "End"
@@ -271,7 +271,7 @@ msgid "Labels.Monday"
 msgstr "Monday"
 
 #: src/profile/ProfileJobForm.tsx:98
-#: src/profile/ProfileJobProjectForm.tsx:94
+#: src/profile/ProfileJobProjectForm.tsx:99
 msgid "Labels.Name"
 msgstr "Name"
 
@@ -286,7 +286,7 @@ msgstr "Saturday"
 #: src/export/ExportTimeAbsenceEntries.tsx:45
 #: src/export/ExportTimeEntries.tsx:45
 #: src/profile/ProfileJobForm.tsx:102
-#: src/profile/ProfileJobProjectForm.tsx:106
+#: src/profile/ProfileJobProjectForm.tsx:111
 #: src/shared/TimeAbsenceEntryForm.tsx:80
 msgid "Labels.Start"
 msgstr "Start"
@@ -362,6 +362,10 @@ msgstr "Saved Entries"
 msgid "Messages.BulkHolidaysSaved"
 msgstr "Saved Holidays"
 
+#: src/index.tsx:63
+msgid "Messages.ContentIsCached"
+msgstr "Content is cached for offline use."
+
 #: src/shared/delete-time-entries.ts:32
 #: src/shared/delete-time-entries.ts:32
 msgid "Messages.EntryDeleted"
@@ -392,13 +396,17 @@ msgstr "Holiday Deleted"
 msgid "Messages.HolidayUpdated"
 msgstr "Holiday Updated"
 
+#: src/index.tsx:66
+msgid "Messages.NewContentAvailablePleaseRefresh"
+msgstr "New content is available and will be used when all tabs for this page are closed."
+
 #: src/profile/update-profile.ts:20
 #: src/profile/update-profile.ts:20
 msgid "Messages.ProfileSaved"
 msgstr "Profile Saved"
 
 #: src/profile/ProfileJobForm.tsx:88
-#: src/profile/ProfileJobProjectForm.tsx:84
+#: src/profile/ProfileJobProjectForm.tsx:87
 msgid "Profile.CurrentDateLabel"
 msgstr "Current Date"
 
@@ -418,7 +426,7 @@ msgstr "Projects"
 msgid "Profile.UnknownJob"
 msgstr "Unknown"
 
-#: src/profile/ProfileJobProjectForm.tsx:79
+#: src/profile/ProfileJobProjectForm.tsx:82
 msgid "Profile.UnknownProject"
 msgstr "Unknown"
 
@@ -500,7 +508,7 @@ msgstr "Type"
 msgid "TimeEntries.WhenTableHeader"
 msgstr "When"
 
-#: src/dashboard/TimeEntriesByRange.tsx:51
+#: src/dashboard/TimeEntriesByRange.tsx:52
 msgid "TimeEntriesByRange.Title"
 msgstr "Entries"
 
@@ -553,7 +561,7 @@ msgstr "When you are sick"
 msgid "TimeStatistics.Illness.Title"
 msgstr "Illness"
 
-#: src/code/calculator.ts:89
+#: src/code/calculator.ts:337
 msgid "TimeStatistics.RemainingToday"
 msgstr "Remaining Today: {project}"
 

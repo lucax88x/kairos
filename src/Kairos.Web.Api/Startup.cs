@@ -33,10 +33,8 @@ namespace Kairos.Web.Api
 
         public void ConfigureServices(IServiceCollection services)
         {
-//            var domain = Configuration["Auth:Domain"];
-//            var audience = Configuration["Auth:Audience"];
-            var domain = "https://kairos.eu.auth0.com/";
-            var audience = "http://localhost:3000";
+            var domain = Configuration["Auth:Domain"];
+            var audience = Configuration["Auth:Audience"];
 
             services.AddMvc(options =>
                 {

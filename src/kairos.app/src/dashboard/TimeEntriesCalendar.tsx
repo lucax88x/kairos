@@ -4,7 +4,8 @@ import moment from 'moment';
 import { join, map } from 'ramda';
 import React, { useCallback, useEffect, useState } from 'react';
 import { Calendar, Event, Messages, momentLocalizer } from 'react-big-calendar';
-import { getTimeEntryPairsById } from '../code/calculator';
+
+import { getEnterExitEvents } from '../code/calculator';
 import { Themes } from '../code/variables';
 import Spinner from '../components/Spinner';
 import { i18n } from '../i18nLoader';
@@ -80,7 +81,8 @@ export const TimeEntriesCalendarComponent: React.FC<TimeEntriesCalendarEntryProp
   const [events, setEvents] = useState<Event[]>([]);
 
   useEffect(() => {
-    const pairs = getTimeEntryPairsById(timeEntries, {
+    // const pairs = getTimeEntryPairsById(timeEntries, {
+    const pairs = getEnterExitEvents(timeEntries, {
       start: startOfYear(new Date()),
       end: endOfYear(new Date()),
     });
