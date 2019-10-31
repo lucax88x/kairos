@@ -1,9 +1,10 @@
 import { t } from '@lingui/macro';
-import { createMuiTheme, CssBaseline } from '@material-ui/core';
+import { Button, createMuiTheme, CssBaseline } from '@material-ui/core';
+import CloseIcon from '@material-ui/icons/Close';
 import { ThemeProvider } from '@material-ui/styles';
 import { ConnectedRouter } from 'connected-react-router';
 import { SnackbarProvider } from 'notistack';
-import React from 'react';
+import React, { useCallback } from 'react';
 import ReactDOM from 'react-dom';
 import { Provider } from 'react-redux';
 import { Redirect, Route, Switch } from 'react-router-dom';
@@ -34,40 +35,61 @@ const theme = createMuiTheme({
   },
 });
 
-ReactDOM.render(
-  <ErrorBoundary>
-    <Provider store={store}>
-      <PersistGate loading={<SpinnerIcon />} persistor={persistor}>
-        <I18nLoader>
-          <ThemeProvider theme={theme}>
-            <CssBaseline />
-            <SnackbarProvider
-              maxSnack={3}
-              preventDuplicate={true}
-              autoHideDuration={5000}
-              anchorOrigin={{
-                vertical: 'top',
-                horizontal: 'right',
-              }}
-            >
-              <NotificationManager />
-            </SnackbarProvider>
+const Index: React.FC = () => {
+  const notistackRef = React.createRef<{ handleDismissSnack: (key: string) => void }>();
 
-            <ConnectedRouter history={history}>
-              <Switch>
-                <Redirect exact={true} from="/" to={Routes.Dashboard} />
-                <Route path={Routes.Login} component={LoginForm} />
-                <Route path="" component={App} />
-                <Route component={NotFound} />
-              </Switch>
-            </ConnectedRouter>
-          </ThemeProvider>
-        </I18nLoader>
-      </PersistGate>
-    </Provider>
-  </ErrorBoundary>,
-  document.getElementById('root'),
-);
+  const onClickDismiss = useCallback(
+    (key: string) => !!notistackRef.current && notistackRef.current.handleDismissSnack(key),
+    [notistackRef],
+  );
+
+  const snackbarAction = useCallback(
+    (key: string) => (
+      <Button onClick={() => onClickDismiss(key)}>
+        <CloseIcon />
+      </Button>
+    ),
+    [onClickDismiss],
+  );
+
+  return (
+    <ErrorBoundary>
+      <Provider store={store}>
+        <PersistGate loading={<SpinnerIcon />} persistor={persistor}>
+          <I18nLoader>
+            <ThemeProvider theme={theme}>
+              <CssBaseline />
+              <SnackbarProvider
+                ref={notistackRef}
+                maxSnack={3}
+                preventDuplicate={true}
+                autoHideDuration={5000}
+                anchorOrigin={{
+                  vertical: 'top',
+                  horizontal: 'right',
+                }}
+                action={snackbarAction}
+              >
+                <NotificationManager />
+              </SnackbarProvider>
+
+              <ConnectedRouter history={history}>
+                <Switch>
+                  <Redirect exact={true} from="/" to={Routes.Dashboard} />
+                  <Route path={Routes.Login} component={LoginForm} />
+                  <Route path="" component={App} />
+                  <Route component={NotFound} />
+                </Switch>
+              </ConnectedRouter>
+            </ThemeProvider>
+          </I18nLoader>
+        </PersistGate>
+      </Provider>
+    </ErrorBoundary>
+  );
+};
+
+ReactDOM.render(<Index />, document.getElementById('root'));
 
 serviceWorker.register({
   onSuccess: () => {

@@ -40,7 +40,7 @@ class AuthService {
   async login() {
     const auth0Client = await this.auth0ClientPromise;
 
-    await auth0Client.loginWithPopup();
+    await auth0Client.loginWithRedirect();
 
     const authenticated = await auth0Client.isAuthenticated();
 

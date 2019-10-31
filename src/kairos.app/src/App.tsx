@@ -94,7 +94,31 @@ const useStyles = makeStyles(theme => ({
     height: 24,
   },
   toolbar: {
-    paddingRight: 24, // keep right padding when drawer closed
+    paddingRight: 16,
+    paddingLeft: 16,
+    [theme.breakpoints.up('md')]: {
+      paddingRight: 24,
+      paddingLeft: 24,
+    },
+  },
+  toolbarContent: {
+    width: '100%',
+    display: 'grid',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    gridAutoFlow: 'column',
+  },
+  toolbarContentLeft: {
+    display: 'grid',
+    alignItems: 'center',
+    justifyContent: 'center',
+    gridAutoFlow: 'column',
+  },
+  toolbarContentRight: {
+    display: 'grid',
+    alignItems: 'center',
+    justifyContent: 'center',
+    gridAutoFlow: 'column',
   },
   toolbarLeftIcon: {
     display: 'grid',
@@ -132,9 +156,6 @@ const useStyles = makeStyles(theme => ({
       easing: theme.transitions.easing.sharp,
       duration: theme.transitions.duration.enteringScreen,
     }),
-  },
-  menuButton: {
-    marginRight: 36,
   },
   title: {
     flexGrow: 1,
@@ -204,15 +225,21 @@ const useStyles = makeStyles(theme => ({
   },
   footer: {
     backgroundColor: theme.palette.background.paper,
-    padding: theme.spacing(0.5),
     marginTop: 'auto',
+  },
+  footerRoot: {
+    padding: 2,
   },
   footerLinks: {
     display: 'grid',
     gridAutoFlow: 'column',
-    gridGap: theme.spacing(2),
     justifyContent: 'center',
     alignItems: 'center',
+    gridGap: 0,
+
+    [theme.breakpoints.up('md')]: {
+      gridGap: theme.spacing(2),
+    },
   },
 }));
 
@@ -370,78 +397,55 @@ export const AppComponent: React.FC<AppProps> = props => {
           )}
         >
           <Toolbar className={classes.toolbar}>
-            <Grid container>
-              <Grid container item alignItems={'center'} justify={'flex-start'} xs={6}>
+            <div className={classes.toolbarContent}>
+              <div className={classes.toolbarContentLeft}>
                 {!isLeftDrawerOpen && (
-                  <Grid item>
-                    <IconButton
-                      edge="start"
-                      color="inherit"
-                      aria-label={i18n._(t`TopBar.OpenMenu`)}
-                      onClick={handleLeftDrawerOpen}
-                      className={classes.menuButton}
-                    >
-                      <MenuIcon />
-                    </IconButton>
-                  </Grid>
+                  <IconButton
+                    edge="start"
+                    color="inherit"
+                    aria-label={i18n._(t`TopBar.OpenMenu`)}
+                    onClick={handleLeftDrawerOpen}
+                  >
+                    <MenuIcon />
+                  </IconButton>
                 )}
-                <Grid item>
-                  <Link to={Routes.Dashboard}>
-                    <LogoIcon className={classes.logo} />
-                  </Link>
-                </Grid>
-
-                <Grid item>
-                  <Box component="div" display={{ xs: 'none', sm: 'block' }}>
-                    <Typography
-                      component="h1"
-                      variant="h6"
-                      color="inherit"
-                      noWrap
-                      className={classes.title}
-                    >
-                      <Link to={Routes.Dashboard} className={classes.link}>
-                        kairos
-                      </Link>
-                    </Typography>
-                  </Box>
-                </Grid>
-              </Grid>
-              <Grid container item alignItems={'center'} justify={'flex-end'} xs={6}>
-                <Grid item>
-                  <Box component="div" display={{ xs: 'none', sm: 'block' }}>
-                    <IconButton
-                      color="inherit"
-                      aria-label={i18n._(t`TopBar.OpenTimeAbsenceEntry`)}
-                      onClick={handleTimeAbsenceEntryDrawerOpen}
-                    >
-                      <WeekendIcon />
-                    </IconButton>
-                  </Box>
-                </Grid>
-                <Grid item>
-                  <Box component="div" display={{ xs: 'none', sm: 'block' }}>
-                    <IconButton
-                      color="inherit"
-                      aria-label={i18n._(t`TopBar.OpenTimeEntry`)}
-                      onClick={handleTimeEntryDrawerOpen}
-                    >
-                      <TimerIcon />
-                    </IconButton>
-                  </Box>
-                </Grid>
+                <Link to={Routes.Dashboard}>
+                  <LogoIcon className={classes.logo} />
+                </Link>
+                <Box component="div" display={{ xs: 'none', sm: 'block' }}>
+                  <Typography
+                    component="h1"
+                    variant="h6"
+                    color="inherit"
+                    noWrap
+                    className={classes.title}
+                  >
+                    <Link to={Routes.Dashboard} className={classes.link}>
+                      kairos
+                    </Link>
+                  </Typography>
+                </Box>
+              </div>
+              <div className={classes.toolbarContentRight}>
                 {!isRightDrawerOpen && (
-                  <Grid item>
-                    <Avatar
-                      alt={user.name}
-                      src={user.picture}
-                      className={classes.avatar}
-                      onClick={handleRightDrawerOpen}
-                    />
-                  </Grid>
+                  <IconButton
+                    color="inherit"
+                    aria-label={i18n._(t`TopBar.OpenTimeAbsenceEntry`)}
+                    onClick={handleTimeAbsenceEntryDrawerOpen}
+                  >
+                    <WeekendIcon />
+                  </IconButton>
                 )}
-              </Grid>
-            </Grid>
+                {!isRightDrawerOpen && (
+                  <Avatar
+                    alt={user.name}
+                    src={user.picture}
+                    className={classes.avatar}
+                    onClick={handleRightDrawerOpen}
+                  />
+                )}
+              </div>
+            </div>
           </Toolbar>
         </AppBar>
         <Drawer
@@ -521,18 +525,20 @@ export const AppComponent: React.FC<AppProps> = props => {
           </main>
 
           <footer className={classes.footer}>
-            <Container maxWidth="lg">
+            <Container maxWidth="lg" className={classes.footerRoot}>
               <Grid container direction="row" justify="space-between" alignItems="center">
                 <Grid item>
                   <div className={classes.footerLinks}>
-                    <Typography
-                      variant="subtitle1"
-                      align="center"
-                      color="textSecondary"
-                      component="p"
-                    >
-                      From developer for developers with love!
-                    </Typography>
+                    <Box component="div" display={{ xs: 'none', md: 'block' }}>
+                      <Typography
+                        variant="subtitle1"
+                        align="center"
+                        color="textSecondary"
+                        component="p"
+                      >
+                        From developer for developers with love!
+                      </Typography>
+                    </Box>
                     <a
                       href="https://github.com/lucax88x/kairos"
                       target="_blank"
@@ -552,16 +558,18 @@ export const AppComponent: React.FC<AppProps> = props => {
                         src="https://img.shields.io/github/stars/lucax88x/kairos?style=for-the-badge"
                       ></img>
                     </a>
-                    <a
-                      href="https://github.com/lucax88x/kairos/issues"
-                      target="_blank"
-                      rel="noopener noreferrer"
-                    >
-                      <img
-                        alt="preview badge"
-                        src="https://img.shields.io/github/issues/lucax88x/kairos?style=for-the-badge"
-                      ></img>
-                    </a>
+                    <Box component="div" display={{ xs: 'none', sm: 'block' }}>
+                      <a
+                        href="https://github.com/lucax88x/kairos/issues"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                      >
+                        <img
+                          alt="preview badge"
+                          src="https://img.shields.io/github/issues/lucax88x/kairos?style=for-the-badge"
+                        ></img>
+                      </a>
+                    </Box>
                   </div>
                 </Grid>
                 <Grid item>
