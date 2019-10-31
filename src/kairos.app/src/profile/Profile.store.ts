@@ -137,6 +137,7 @@ function reducer(
         const jobIndex = indexById(action.payload.jobId)(state.jobs);
 
         draft.jobs[jobIndex].projects.push(new ProjectModel());
+
         console.log('with remaining allocation!');
         break;
       }

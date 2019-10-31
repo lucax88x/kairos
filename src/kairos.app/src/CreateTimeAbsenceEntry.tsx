@@ -21,7 +21,7 @@ export const CreateTimeAbsenceEntryComponent: React.FC<CreateTimeAbsenceEntryPro
     <TimeAbsenceEntryForm
       selectedLanguage={selectedLanguage}
       isBusy={isBusy}
-      model={new TimeAbsenceEntryModel()}
+      model={TimeAbsenceEntryModel.empty}
       onSave={onCreate}
     />
   );

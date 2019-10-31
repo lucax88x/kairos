@@ -12,7 +12,11 @@ import {
 import Slider from '@material-ui/core/Slider';
 import DeleteIcon from '@material-ui/icons/Delete';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
-import { DatePicker, MaterialUiPickersDate, MuiPickersUtilsProvider, KeyboardDatePicker } from '@material-ui/pickers';
+import {
+  MaterialUiPickersDate,
+  MuiPickersUtilsProvider,
+  KeyboardDatePicker,
+} from '@material-ui/pickers';
 import { endOfDay, format } from 'date-fns';
 import React, { ChangeEvent, useCallback } from 'react';
 import { formatAsDate } from '../code/constants';
@@ -36,6 +40,16 @@ const useStyles = makeStyles(theme => ({
     width: '100%',
     display: 'grid',
     gridAutoFlow: 'column',
+    gridGap: theme.spacing(1),
+    alignItems: 'center',
+  },
+  responsiveColumns: {
+    width: '100%',
+    display: 'grid',
+    gridAutoFlow: 'row',
+    [theme.breakpoints.up('sm')]: {
+      gridAutoFlow: 'column',
+    },
     gridGap: theme.spacing(1),
     alignItems: 'center',
   },
@@ -162,7 +176,7 @@ export const ProfileJobProjectForm: React.FC<ProfileJobProjectFormProps> = props
       </ExpansionPanelSummary>
       <ExpansionPanelDetails>
         <div className={classes.rows}>
-          <div className={classes.columns}>
+          <div className={classes.responsiveColumns}>
             <TextField
               fullWidth
               margin="dense"
@@ -188,7 +202,7 @@ export const ProfileJobProjectForm: React.FC<ProfileJobProjectFormProps> = props
               />
             </div>
           </div>
-          <div className={classes.columns}>
+          <div className={classes.responsiveColumns}>
             <MuiPickersUtilsProvider
               utils={DateFnsUtils}
               locale={getDatepickerLocale(selectedLanguage)}

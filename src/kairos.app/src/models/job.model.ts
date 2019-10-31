@@ -1,4 +1,4 @@
-import { parseISO } from 'date-fns';
+import { parseISO, startOfDay } from 'date-fns';
 import { immerable } from 'immer';
 import { map } from 'ramda';
 import { ProjectModel, ProjectOutModel } from './project.model';
@@ -10,7 +10,7 @@ export class JobModel {
   constructor(
     public id = UUID.Generate(),
     public name = '',
-    public start = new Date(),
+    public start = startOfDay(new Date()),
     public end: Date | null = null,
     public holidaysPerYear: number = 20,
     public monday: number = 8.5,
@@ -21,7 +21,7 @@ export class JobModel {
     public saturday: number = 8.5,
     public sunday: number = 8.5,
     public projects: ProjectModel[] = [
-      new ProjectModel(UUID.Generate(), 'default', new Date(), new Date()),
+      new ProjectModel(UUID.Generate(), 'default', startOfDay(new Date()), null, 100),
     ],
   ) {}
 

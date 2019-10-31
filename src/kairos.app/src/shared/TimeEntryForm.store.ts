@@ -32,8 +32,7 @@ const initialState: State = {
   selectedProjectId: UUID.Empty,
 };
 
-export const SetModel = (model: TimeEntryModel) =>
-  action('SET_MODEL', { model });
+export const SetModel = (model: TimeEntryModel) => action('SET_MODEL', { model });
 export const RefreshSelectsTimeEntryAction = (profile: ProfileModel) =>
   action('REFRESH_SELECTS', { profile });
 export const SetTimeEntryTypeAction = (type: TimeEntryTypes) => action('SET_TYPE', { type });
@@ -65,6 +64,11 @@ function reducer(
         break;
       }
       case 'REFRESH_SELECTS': {
+        draft.jobs = [];
+        draft.projects = [];
+        draft.selectedProjectId = UUID.Empty;
+        draft.selectedProjectId = UUID.Empty;
+
         const maxDate = new Date(8640000000000000);
         const date = !!state.when ? state.when : new Date();
         const jobs = filter(
@@ -106,6 +110,7 @@ function reducer(
             draft.selectedProjectId = selectedProject.id.toString();
           }
         }
+
         break;
       }
 

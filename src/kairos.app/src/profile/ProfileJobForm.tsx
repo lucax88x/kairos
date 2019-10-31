@@ -41,6 +41,16 @@ const useStyles = makeStyles(theme => ({
     gridGap: theme.spacing(1),
     alignItems: 'center',
   },
+  responsiveColumns: {
+    width: '100%',
+    display: 'grid',
+    gridAutoFlow: 'row',
+    [theme.breakpoints.up('sm')]: {
+      gridAutoFlow: 'column',
+    },
+    gridGap: theme.spacing(1),
+    alignItems: 'center',
+  },
   between: {
     justifyContent: 'space-between',
   },
@@ -177,7 +187,7 @@ export const ProfileJobForm: React.FC<ProfileJobFormProps> = props => {
       </ExpansionPanelSummary>
       <ExpansionPanelDetails>
         <div className={classes.rows}>
-          <div className={classes.columns}>
+          <div className={classes.responsiveColumns}>
             <TextField
               margin="dense"
               fullWidth
@@ -217,7 +227,7 @@ export const ProfileJobForm: React.FC<ProfileJobFormProps> = props => {
               onChange={handleHolidaysPerYear}
             />
           </div>
-          <div className={classes.columns}>
+          <div className={classes.responsiveColumns}>
             <TextField
               label={<Trans>Labels.Monday</Trans>}
               inputProps={{ min: 0, max: 23.59, step: 0.1 }}

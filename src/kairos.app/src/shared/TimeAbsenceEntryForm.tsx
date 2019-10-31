@@ -1,14 +1,38 @@
 import DateFnsUtils from '@date-io/date-fns';
 import { Trans } from '@lingui/macro';
-import { Divider, FormControl, InputLabel, makeStyles, MenuItem, Select, TextField } from '@material-ui/core';
+import {
+  Divider,
+  FormControl,
+  InputLabel,
+  makeStyles,
+  MenuItem,
+  Select,
+  TextField,
+} from '@material-ui/core';
 import SaveIcon from '@material-ui/icons/Save';
-import { KeyboardDateTimePicker, MaterialUiPickersDate, MuiPickersUtilsProvider } from '@material-ui/pickers';
-import React, { ChangeEvent, useCallback, useEffect, useState } from 'react';
+import {
+  KeyboardDateTimePicker,
+  MaterialUiPickersDate,
+  MuiPickersUtilsProvider,
+} from '@material-ui/pickers';
+import React, { ChangeEvent, useCallback, useEffect } from 'react';
 import { getDatepickerLocale } from '../code/get-datepicker-locale';
 import { isString } from '../code/is';
 import ButtonSpinner from '../components/ButtonSpinner';
 import { Language } from '../models/language-model';
-import { getTransFromAbsenceType, TimeAbsenceEntryModel, TimeAbsenceEntryTypes } from '../models/time-absence-entry.model';
+import {
+  getTransFromAbsenceType,
+  TimeAbsenceEntryModel,
+  TimeAbsenceEntryTypes,
+} from '../models/time-absence-entry.model';
+import {
+  SetModel,
+  SetTimeAbsenceEntryDescriptionAction,
+  SetTimeAbsenceEntryEndAction,
+  SetTimeAbsenceEntryStartAction,
+  SetTimeAbsenceEntryTypeAction,
+  useTimeAbsenceEntryFormReducer,
+} from './TimeAbsenceEntryForm.store';
 
 const useStyles = makeStyles(theme => ({
   container: {
@@ -22,6 +46,9 @@ const useStyles = makeStyles(theme => ({
   hasPadding: {
     padding: theme.spacing(3),
   },
+  marginLeft: {
+    marginLeft: theme.spacing(1),
+  },
 }));
 
 export interface TimeAbsenceEntryFormProps {
@@ -34,23 +61,10 @@ export interface TimeAbsenceEntryFormProps {
 export const TimeAbsenceEntryForm: React.FC<TimeAbsenceEntryFormProps> = props => {
   const classes = useStyles(props);
 
-  const { selectedLanguage, model, isBusy, onSave } = props;
+  const { selectedLanguage, isBusy, model, onSave } = props;
 
-  const [id, setId] = useState(model.id);
-  const [type, setType] = useState(model.type);
-  const [description, setDescription] = useState<string>(model.description);
-  const [start, setStart] = useState<Date | null>(model.start);
-  const [end, setEnd] = useState<Date | null>(model.end);
-
-  useEffect(() => {
-    if (!model.isEmpty()) {
-      setId(model.id);
-      setType(model.type);
-      setDescription(model.description);
-      setStart(model.start);
-      setEnd(model.end);
-    }
-  }, [model]);
+  const [state, dispatch] = useTimeAbsenceEntryFormReducer();
+  const { id, type, description, start, end } = state;
 
   const handleSave = useCallback(() => {
     if (!!start && !!end) {
@@ -61,20 +75,35 @@ export const TimeAbsenceEntryForm: React.FC<TimeAbsenceEntryFormProps> = props =
   const handleTypeChange = useCallback(
     (event: ChangeEvent<{ value: unknown }>) => {
       if (isString(event.target.value)) {
-        setType(event.target.value as TimeAbsenceEntryTypes);
+        dispatch(SetTimeAbsenceEntryTypeAction(event.target.value as TimeAbsenceEntryTypes));
       }
     },
-    [setType],
+    [dispatch],
+  );
+
+  const handleStartChange = useCallback(
+    (date: MaterialUiPickersDate) =>
+      dispatch(SetTimeAbsenceEntryStartAction(!!date ? date : new Date())),
+    [dispatch],
+  );
+
+  const handleEndChange = useCallback(
+    (date: MaterialUiPickersDate) =>
+      dispatch(SetTimeAbsenceEntryEndAction(!!date ? date : new Date())),
+    [dispatch],
   );
 
   const handleDescriptionChange = useCallback(
-    (event: ChangeEvent<HTMLInputElement>) => setDescription(event.currentTarget.value),
-    [setDescription],
+    (event: ChangeEvent<HTMLInputElement>) =>
+      dispatch(SetTimeAbsenceEntryDescriptionAction(event.currentTarget.value)),
+    [dispatch],
   );
-  const handleStartChange = useCallback((date: MaterialUiPickersDate) => setStart(date), [
-    setStart,
-  ]);
-  const handleEndChange = useCallback((date: MaterialUiPickersDate) => setEnd(date), [setEnd]);
+
+  useEffect(() => {
+    if (!model.isEmpty()) {
+      dispatch(SetModel(model));
+    }
+  }, [dispatch, model]);
 
   return (
     <div className={classes.container}>
@@ -140,7 +169,17 @@ export const TimeAbsenceEntryForm: React.FC<TimeAbsenceEntryFormProps> = props =
         disabled={!start || !end || start > end || isBusy}
         className={classes.selfCenter}
       >
-        {model.isEmpty() ? getTransFromAbsenceType(type) : <SaveIcon />}
+        {model.isEmpty() ? (
+          <>
+            {getTransFromAbsenceType(type)}
+            <SaveIcon className={classes.marginLeft} />
+          </>
+        ) : (
+          <>
+            <Trans>Buttons.Update</Trans>
+            <SaveIcon className={classes.marginLeft} />
+          </>
+        )}
       </ButtonSpinner>
     </div>
   );

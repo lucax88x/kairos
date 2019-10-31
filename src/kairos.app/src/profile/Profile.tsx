@@ -9,6 +9,7 @@ import { Language } from '../models/language-model';
 import { ProfileModel } from '../models/profile.model';
 import { UserModel } from '../models/user.model';
 import { UUID } from '../models/uuid.model';
+import SaveIcon from '@material-ui/icons/Save';
 import {
   AddJobAction,
   AddProjectAction,
@@ -51,7 +52,12 @@ const useStyles = makeStyles(theme => ({
   selfCenter: {
     justifySelf: 'center',
   },
-  paper: { padding: theme.spacing(2, 3) },
+  paper: {
+    padding: theme.spacing(2, 3),
+  },
+  marginLeft: {
+    marginLeft: theme.spacing(1),
+  },
 }));
 
 export interface ProfileInputs {
@@ -196,6 +202,7 @@ export const ProfileComponent: React.FC<ProfileProps> = props => {
 
         <ButtonSpinner onClick={handleUpdate} isBusy={isUpdateBusy} disabled={isUpdateBusy}>
           <Trans>Buttons.Update</Trans>
+          <SaveIcon className={classes.marginLeft} />
         </ButtonSpinner>
       </div>
     </Spinner>

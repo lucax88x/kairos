@@ -52,6 +52,9 @@ const useStyles = makeStyles(theme => ({
   hasPadding: {
     padding: theme.spacing(3),
   },
+  marginLeft: {
+    marginLeft: theme.spacing(1),
+  },
 }));
 
 export interface TimeEntryFormProps {
@@ -120,7 +123,7 @@ export const TimeEntryForm: React.FC<TimeEntryFormProps> = props => {
     }
   }, [dispatch, model]);
 
-  if (jobs.length === 0) {
+  if (profile.jobs.length === 0) {
     return (
       <div className={classes.hasPadding}>
         <Typography color="inherit" noWrap>
@@ -216,10 +219,22 @@ export const TimeEntryForm: React.FC<TimeEntryFormProps> = props => {
       <ButtonSpinner
         onClick={handleSave}
         isBusy={isBusy}
-        disabled={!when || !selectedJobId || !selectedProjectId || isBusy}
+        disabled={
+          !when || selectedJobId === UUID.Empty || selectedProjectId === UUID.Empty || isBusy
+        }
         className={classes.selfCenter}
       >
-        {model.isEmpty() ? getTransFromEntryType(type) : <SaveIcon />}
+        {model.isEmpty() ? (
+          <>
+            {getTransFromEntryType(type)}
+            <SaveIcon className={classes.marginLeft} />
+          </>
+        ) : (
+          <>
+            <Trans>Buttons.Update</Trans>
+            <SaveIcon className={classes.marginLeft} />
+          </>
+        )}
       </ButtonSpinner>
     </div>
   );

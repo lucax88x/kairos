@@ -1,7 +1,7 @@
 import { t } from '@lingui/macro';
 import { Button, createMuiTheme, CssBaseline } from '@material-ui/core';
 import CloseIcon from '@material-ui/icons/Close';
-import { ThemeProvider } from '@material-ui/styles';
+import { ThemeProvider, makeStyles } from '@material-ui/styles';
 import { ConnectedRouter } from 'connected-react-router';
 import { SnackbarProvider } from 'notistack';
 import React, { useCallback } from 'react';
@@ -23,6 +23,11 @@ import { enqueueSnackbarAction } from './notification-manager/enqueue-snackbar';
 import { NotificationManager } from './notification-manager/NotificationManager.container';
 import { Routes } from './routes';
 import * as serviceWorker from './serviceWorker';
+
+const useStyles = makeStyles(() => ({
+  success: { color: 'white' },
+  error: { color: 'white' },
+}));
 
 const theme = createMuiTheme({
   palette: {
@@ -52,6 +57,8 @@ const Index: React.FC = () => {
     [onClickDismiss],
   );
 
+  const classes = useStyles();
+
   return (
     <ErrorBoundary>
       <Provider store={store}>
@@ -62,13 +69,19 @@ const Index: React.FC = () => {
               <SnackbarProvider
                 ref={notistackRef}
                 maxSnack={3}
+                classes={{
+                  variantSuccess: classes.success,
+                  variantError: classes.error,
+                }}
                 preventDuplicate={true}
                 autoHideDuration={5000}
                 anchorOrigin={{
                   vertical: 'top',
                   horizontal: 'right',
                 }}
+                style={{ top: '150px' }}
                 action={snackbarAction}
+                
               >
                 <NotificationManager />
               </SnackbarProvider>

@@ -1,4 +1,4 @@
-import { parseISO } from 'date-fns';
+import { parseISO, startOfDay } from 'date-fns';
 import { immerable } from 'immer';
 import { UUID } from './uuid.model';
 
@@ -8,7 +8,7 @@ export class ProjectModel {
   constructor(
     public id = UUID.Generate(),
     public name = '',
-    public start = new Date(),
+    public start = startOfDay(new Date()),
     public end: Date | null = null,
     public allocation: number = 100,
   ) {}

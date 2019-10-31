@@ -1,5 +1,5 @@
 import { t, Trans } from '@lingui/macro';
-import { Button, Grid, IconButton, makeStyles } from '@material-ui/core';
+import { Button, Grid, IconButton, makeStyles, Divider } from '@material-ui/core';
 import CreateIcon from '@material-ui/icons/Create';
 import DeleteIcon from '@material-ui/icons/Delete';
 import { map } from 'ramda';
@@ -17,7 +17,11 @@ import { UUID } from '../models/uuid.model';
 const useStyles = makeStyles(theme => ({
   container: {
     width: '100%',
-    marginBottom: theme.spacing(1),
+    display: 'grid',
+    gridGap: theme.spacing(1),
+  },
+  justifySelfStart: {
+    justifySelf: 'self-start',
   },
 }));
 
@@ -110,7 +114,13 @@ export const TimeHolidayEntriesComponent: React.FC<TimeHolidayEntriesProps> = pr
   const handleDeleteSelected = useCallback(ids => onDelete(ids), [onDelete]);
 
   return (
-    <Spinner show={isGetTimeHolidayEntriesBusy || isDeleteTimeHolidayEntriesBusy || isUpdateTimeHolidayEntriesByCountryBusy}>
+    <Spinner
+      show={
+        isGetTimeHolidayEntriesBusy ||
+        isDeleteTimeHolidayEntriesBusy ||
+        isUpdateTimeHolidayEntriesByCountryBusy
+      }
+    >
       <div className={classes.container}>
         <VirtualizedTable
           title={i18n._(t`TimeHolidayEntries.Title`)}
@@ -148,33 +158,38 @@ export const TimeHolidayEntriesComponent: React.FC<TimeHolidayEntriesProps> = pr
           ]}
           onDelete={handleDeleteSelected}
         />
+        <Button
+          variant="contained"
+          color="primary"
+          onClick={onCreate}
+          className={classes.justifySelfStart}
+        >
+          <Trans>Buttons.Create</Trans>
+        </Button>
+        <Divider />
+        <Grid container alignItems={'center'} justify={'space-between'}>
+          <Grid item>
+            <Autocomplete
+              isBusy={isGetCountriesBusy}
+              data={countriesSuggestion}
+              label={i18n._(t`TimeHolidayEntries.CountryLabel`)}
+              placeholder={i18n._(t`TimeHolidayEntries.SearchForCountry`)}
+              value={country}
+              onSelectSuggestion={handleCountryChange}
+            />
+          </Grid>
+          <Grid item>
+            <Button
+              variant="contained"
+              color="primary"
+              onClick={handleUpdateHolidays}
+              disabled={!country}
+            >
+              <Trans>TimeHolidayEntries.UpdateHolidaysFromCountryButton</Trans>
+            </Button>
+          </Grid>
+        </Grid>
       </div>
-      <Button variant="contained" color="primary" onClick={onCreate}>
-        <Trans>Buttons.Create</Trans>
-      </Button>
-      <hr></hr>
-      <Grid container alignItems={'center'} justify={'space-between'}>
-        <Grid item>
-          <Autocomplete
-            isBusy={isGetCountriesBusy}
-            data={countriesSuggestion}
-            label={i18n._(t`TimeHolidayEntries.CountryLabel`)}
-            placeholder={i18n._(t`TimeHolidayEntries.SearchForCountry`)}
-            value={country}
-            onSelectSuggestion={handleCountryChange}
-          />
-        </Grid>
-        <Grid item>
-          <Button
-            variant="contained"
-            color="primary"
-            onClick={handleUpdateHolidays}
-            disabled={!country}
-          >
-            <Trans>TimeHolidayEntries.UpdateHolidaysFromCountryButton</Trans>
-          </Button>
-        </Grid>
-      </Grid>
     </Spinner>
   );
 };
