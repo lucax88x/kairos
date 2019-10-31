@@ -1,34 +1,16 @@
 import { t, Trans } from '@lingui/macro';
-import {
-  AppBar,
-  Avatar,
-  Container,
-  Divider,
-  Drawer,
-  Grid,
-  IconButton,
-  List,
-  ListItem,
-  ListItemIcon,
-  ListItemText,
-  MenuItem,
-  Select,
-  SwipeableDrawer,
-  Toolbar,
-  Typography,
-  Box,
-} from '@material-ui/core';
+import { AppBar, Avatar, Box, Container, Divider, Drawer, Grid, IconButton, List, ListItem, ListItemIcon, ListItemText, MenuItem, Select, SwipeableDrawer, Toolbar, Typography } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
 import BeachAccessIcon from '@material-ui/icons/BeachAccess';
 import ChevronLeftIcon from '@material-ui/icons/ChevronLeft';
 import ChevronRightIcon from '@material-ui/icons/ChevronRight';
 import DashboardIcon from '@material-ui/icons/Dashboard';
+import LogoutIcon from '@material-ui/icons/ExitToApp';
 import FastForwardIcon from '@material-ui/icons/FastForward';
 import InsertDriveFileIcon from '@material-ui/icons/InsertDriveFile';
 import MenuIcon from '@material-ui/icons/Menu';
 import TimerIcon from '@material-ui/icons/Timer';
 import WeekendIcon from '@material-ui/icons/Weekend';
-import LogoutIcon from '@material-ui/icons/ExitToApp';
 import clsx from 'clsx';
 import { getYear } from 'date-fns';
 import { map } from 'ramda';
@@ -39,6 +21,7 @@ import { ReactComponent as ItalianFlag } from './assets/images/it.svg';
 import { ReactComponent as LogoIcon } from './assets/images/logo.svg';
 import { BulkInsert } from './bulk-insert/BulkInsert';
 import { isLanguage, isNumber } from './code/is';
+import { isIOS } from './code/is-ios';
 import { SimpleIcon } from './components/SimpleIcon';
 import { CreateTimeAbsenceEntry } from './CreateTimeAbsenceEntry.container';
 import { CreateTimeEntry } from './CreateTimeEntry.container';
@@ -47,17 +30,16 @@ import { Dashboard } from './dashboard/Dashboard';
 import { EditTimeAbsenceEntry } from './edit-time-absence-entry/EditTimeAbsenceEntry.container';
 import { EditTimeEntry } from './edit-time-entry/EditTimeEntry.container';
 import { EditTimeHolidayEntry } from './edit-time-holiday-entry/EditTimeHolidayEntry.container';
+import { Export } from './export/Export';
 import { i18n } from './i18nLoader';
 import { Language, Languages } from './models/language-model';
 import { UserModel } from './models/user.model';
 import { Profile } from './profile/Profile.container';
 import { Routes } from './routes';
+import { ConfirmationModal } from './shared/ConfirmationModal.container';
 import { TimeAbsenceEntries } from './time-absence-entries/TimeAbsenceEntries.container';
 import { TimeEntries } from './time-entries/TimeEntries.container';
 import { TimeHolidayEntries } from './time-holiday-entries/TimeHolidayEntries.container';
-import { ConfirmationModal } from './shared/ConfirmationModal.container';
-import { isIOS } from './code/is-ios';
-import { Export } from './export/Export';
 
 const drawerWidth = 240;
 
@@ -169,8 +151,6 @@ const useStyles = makeStyles(theme => ({
     width: drawerWidth,
   },
   leftDrawerPaper: {
-    position: 'relative',
-    whiteSpace: 'nowrap',
     width: drawerWidth,
     transition: theme.transitions.create('width', {
       easing: theme.transitions.easing.sharp,
@@ -200,13 +180,6 @@ const useStyles = makeStyles(theme => ({
       easing: theme.transitions.easing.sharp,
       duration: theme.transitions.duration.leavingScreen,
     }),
-  },
-  contentShift: {
-    transition: theme.transitions.create('margin', {
-      easing: theme.transitions.easing.easeOut,
-      duration: theme.transitions.duration.enteringScreen,
-    }),
-    marginRight: 0,
   },
   container: {
     paddingTop: theme.spacing(4),
@@ -449,7 +422,7 @@ export const AppComponent: React.FC<AppProps> = props => {
           </Toolbar>
         </AppBar>
         <Drawer
-          variant="permanent"
+          variant="persistent"
           classes={{
             paper: clsx(classes.leftDrawerPaper, !isLeftDrawerOpen && classes.drawerPaperClose),
           }}
@@ -504,9 +477,7 @@ export const AppComponent: React.FC<AppProps> = props => {
         </Drawer>
 
         <div
-          className={clsx(classes.content, {
-            [classes.contentShift]: isRightDrawerOpen,
-          })}
+          className={classes.content}
         >
           <main>
             <div className={classes.appBarSpacer} />
