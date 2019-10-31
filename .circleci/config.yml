@@ -1,29 +1,70 @@
-version: 2
-jobs:
-  build:
+version: 2.1
+
+orbs:
+  kubernetes: circleci/kubernetes@0.10.0
+
+executors:
+  docker-publisher:
     docker:
-      - image: lucax88x/dotnetcore-yarn-docker-compose:latest
+      - image: circleci/buildpack-deps:stretch
+jobs:
+  # build:
+  #   machine:
+  #     image: lucax88x/dotnetcore-yarn-docker-compose:latest
 
+  #   steps:
+  #     - checkout
+
+  #     # - setup_remote_docker
+
+  #     - restore_cache:
+  #         keys:
+  #           - root-node_modules-{{ checksum "package.json" }}
+  #           - root-node_modules-
+
+  #     - run: yarn
+
+  #     - save_cache:
+  #         paths:
+  #           - node_modules
+  #           - src/kairos.app/node_modules
+  #         key: root-node_modules-{{ checksum "package.json" }}
+
+  #     # - run: yarn docker:start
+  #     # - run: yarn backend:test
+  #     - run: yarn frontend:lint
+  #     - run: yarn frontend:prettier
+  #     - run: yarn frontend:test
+  deploy:
+    executor: docker-publisher
     steps:
+      - setup_remote_docker
+      - kubernetes/install-kubectl
+      - kubernetes/install-kubeconfig:
+          kubeconfig: K8S_CONFIG
+
       - checkout
+      - run:
+          name: Login to registry
+          command: docker login registry.kairos.rocks --username $DOCKER_USERNAME --password $DOCKER_PASSWORD
+      - run:
+          name: Build Docker Images
+          command: sh ./scripts/docker.build.sh $CIRCLE_BUILD_NUM PROD
+      - run:
+          name: Push Docker Images
+          command: sh ./scripts/docker.push.sh $CIRCLE_BUILD_NUM PROD
+      - run:
+          name: Deploying on k8s
+          command: sh ./scripts/k8s.deploy.sh $CIRCLE_BUILD_NUM PROD
 
-      # - setup_remote_docker            
-
-      - restore_cache:
-          keys:
-            - root-node_modules-{{ checksum "package.json" }}
-            - root-node_modules-
-
-      - run: yarn
-
-      - save_cache:
-          paths:
-            - node_modules
-            - src/kairos.app/node_modules
-          key: root-node_modules-{{ checksum "package.json" }}
-
-      - run: yarn docker:start
-      - run: yarn backend:test
-      - run: yarn frontend:lint
-      - run: yarn frontend:prettier
-      - run: yarn frontend:test
+workflows:
+  build-and-deploy:
+    jobs:
+      # - build
+      - deploy
+      # - deploy:
+      # requires:
+      #   - build
+      # filters:
+      #   branches:
+      #     only: sequential-branch-filter
