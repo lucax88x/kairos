@@ -1,5 +1,23 @@
 import { t, Trans } from '@lingui/macro';
-import { AppBar, Avatar, Box, Container, Divider, Drawer, Grid, IconButton, List, ListItem, ListItemIcon, ListItemText, MenuItem, Select, SwipeableDrawer, Toolbar, Typography } from '@material-ui/core';
+import {
+  AppBar,
+  Avatar,
+  Box,
+  Container,
+  Divider,
+  Drawer,
+  Grid,
+  IconButton,
+  List,
+  ListItem,
+  ListItemIcon,
+  ListItemText,
+  MenuItem,
+  Select,
+  SwipeableDrawer,
+  Toolbar,
+  Typography,
+} from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
 import BeachAccessIcon from '@material-ui/icons/BeachAccess';
 import ChevronLeftIcon from '@material-ui/icons/ChevronLeft';
@@ -403,6 +421,15 @@ export const AppComponent: React.FC<AppProps> = props => {
                 {!isRightDrawerOpen && (
                   <IconButton
                     color="inherit"
+                    aria-label={i18n._(t`TopBar.OpenTimeEntry`)}
+                    onClick={handleTimeEntryDrawerOpen}
+                  >
+                    <TimerIcon />
+                  </IconButton>
+                )}
+                {!isRightDrawerOpen && (
+                  <IconButton
+                    color="inherit"
                     aria-label={i18n._(t`TopBar.OpenTimeAbsenceEntry`)}
                     onClick={handleTimeAbsenceEntryDrawerOpen}
                   >
@@ -476,9 +503,7 @@ export const AppComponent: React.FC<AppProps> = props => {
           </List>
         </Drawer>
 
-        <div
-          className={classes.content}
-        >
+        <div className={classes.content}>
           <main>
             <div className={classes.appBarSpacer} />
             <Container maxWidth="lg" className={classes.container}>
