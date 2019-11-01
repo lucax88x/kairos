@@ -78,7 +78,7 @@ export const BulkTimeAbsenceEntryInsertComponent: React.FC<
           const isStartValid = isValid(start);
           const isEndValid = isValid(end);
           const isTypeValid =
-            indexOf(type, [TimeAbsenceEntryTypes.VACATION, TimeAbsenceEntryTypes.ILLNESS]) !== -1;
+            indexOf(type, [TimeAbsenceEntryTypes.VACATION, TimeAbsenceEntryTypes.ILLNESS, TimeAbsenceEntryTypes.COMPENSATION, TimeAbsenceEntryTypes.PERMIT]) !== -1;
           if (isStartValid && isEndValid && isTypeValid) {
             validModels.push(
               new TimeAbsenceEntryModel(

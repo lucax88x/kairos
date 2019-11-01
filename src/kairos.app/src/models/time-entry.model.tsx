@@ -57,9 +57,10 @@ export function getTextFromEntryType(type: TimeEntryTypes) {
   switch (type) {
     case TimeEntryTypes.IN:
       return i18n._(t`Values.TimeEntryTypes.In`);
-    default:
     case TimeEntryTypes.OUT:
       return i18n._(t`Values.TimeEntryTypes.Out`);
+    default:
+      return i18n._(t`Validation.InvalidType`);
   }
 }
 
@@ -67,8 +68,9 @@ export function getTransFromEntryType(type: TimeEntryTypes) {
   switch (type) {
     case TimeEntryTypes.IN:
       return <Trans>Values.TimeEntryTypes.In</Trans>;
-    default:
     case TimeEntryTypes.OUT:
       return <Trans>Values.TimeEntryTypes.Out</Trans>;
+    default:
+      return <Trans>Validation.InvalidType</Trans>;
   }
 }

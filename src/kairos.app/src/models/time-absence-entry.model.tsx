@@ -64,9 +64,10 @@ export function getTextFromAbsenceType(type: TimeAbsenceEntryTypes) {
       return i18n._(t`Values.TimeAbsenceEntryTypes.Permit`);
     case TimeAbsenceEntryTypes.VACATION:
       return i18n._(t`Values.TimeAbsenceEntryTypes.Vacation`);
-    default:
     case TimeAbsenceEntryTypes.ILLNESS:
       return i18n._(t`Values.TimeAbsenceEntryTypes.Illness`);
+    default:
+      return i18n._(t`Validation.InvalidType`);
   }
 }
 
@@ -78,8 +79,9 @@ export function getTransFromAbsenceType(type: TimeAbsenceEntryTypes) {
       return <Trans>Values.TimeAbsenceEntryTypes.Permit</Trans>;
     case TimeAbsenceEntryTypes.VACATION:
       return <Trans>Values.TimeAbsenceEntryTypes.Vacation</Trans>;
-    default:
     case TimeAbsenceEntryTypes.ILLNESS:
       return <Trans>Values.TimeAbsenceEntryTypes.Illness</Trans>;
+    default:
+      return <Trans>Validation.InvalidType</Trans>;
   }
 }
