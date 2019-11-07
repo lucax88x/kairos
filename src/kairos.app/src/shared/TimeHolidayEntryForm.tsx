@@ -3,11 +3,12 @@ import { Trans } from '@lingui/react';
 import { Divider, makeStyles, TextField } from '@material-ui/core';
 import SaveIcon from '@material-ui/icons/Save';
 import {
-  KeyboardDateTimePicker,
+  KeyboardDatePicker,
   MaterialUiPickersDate,
   MuiPickersUtilsProvider,
 } from '@material-ui/pickers';
 import React, { ChangeEvent, useCallback, useEffect, useState } from 'react';
+import { formatAsDate } from '../code/constants';
 import { getDatepickerLocale } from '../code/get-datepicker-locale';
 import ButtonSpinner from '../components/ButtonSpinner';
 import { Language } from '../models/language-model';
@@ -77,12 +78,12 @@ export const TimeHolidayEntryForm: React.FC<TimeHolidayEntryFormProps> = props =
         fullWidth
       />
       <MuiPickersUtilsProvider utils={DateFnsUtils} locale={getDatepickerLocale(selectedLanguage)}>
-        <KeyboardDateTimePicker
+        <KeyboardDatePicker
           autoOk
-          ampm={false}
           value={when}
           onChange={handleWhenChange}
           label={<Trans>Labels.When</Trans>}
+          format={formatAsDate}
           fullWidth
         />
       </MuiPickersUtilsProvider>

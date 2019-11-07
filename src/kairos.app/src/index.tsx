@@ -1,5 +1,15 @@
 import { t } from '@lingui/macro';
-import { Button, createMuiTheme, CssBaseline } from '@material-ui/core';
+import {
+  Button,
+  createMuiTheme,
+  CssBaseline,
+  Container,
+  Grid,
+  Box,
+  Typography,
+  IconButton,
+  Avatar,
+} from '@material-ui/core';
 import CloseIcon from '@material-ui/icons/Close';
 import { ThemeProvider, makeStyles } from '@material-ui/styles';
 import { ConnectedRouter } from 'connected-react-router';
@@ -23,11 +33,7 @@ import { enqueueSnackbarAction } from './notification-manager/enqueue-snackbar';
 import { NotificationManager } from './notification-manager/NotificationManager.container';
 import { Routes } from './routes';
 import * as serviceWorker from './serviceWorker';
-
-const useStyles = makeStyles(() => ({
-  success: { color: 'white' },
-  error: { color: 'white' },
-}));
+import { SimpleIcon } from './components/SimpleIcon';
 
 const theme = createMuiTheme({
   palette: {
@@ -38,7 +44,59 @@ const theme = createMuiTheme({
     },
     secondary: { main: Themes.Second.backgroundColor, contrastText: Themes.Second.color },
   },
+  overrides: {
+    MuiButton: {
+      textPrimary: {
+        color: Themes.First.color,
+      },
+    },
+  },
 });
+
+const useStyles = makeStyles(() => ({
+  success: { color: 'white' },
+  error: { color: 'white' },
+  root: {
+    display: 'grid',
+    height: '100vh',
+    width: '100vw',
+  },
+  footerAvatar: {
+    width: 24,
+    height: 24,
+  },
+  footerIcon: {
+    width: 24,
+    height: 24,
+  },
+  footerRoot: {
+    backgroundColor: theme.palette.background.paper,
+    marginTop: 'auto',
+  },
+  footerContainer: {
+    padding: theme.spacing(1),
+  },
+  footer: {
+    display: 'grid',
+    alignItems: 'center',
+    gridGap: theme.spacing(1),
+    gridAutoFlow: 'column',
+  },
+  footerLinks: {
+    display: 'grid',
+    gridAutoFlow: 'column',
+    justifyContent: 'center',
+    alignItems: 'center',
+    gridGap: theme.spacing(1),
+
+    [theme.breakpoints.up('md')]: {
+      gridGap: theme.spacing(2),
+    },
+  },
+  footerLink: {
+    display: 'grid',
+  },
+}));
 
 const Index: React.FC = () => {
   const notistackRef = React.createRef<{ handleDismissSnack: (key: string) => void }>();
@@ -81,19 +139,110 @@ const Index: React.FC = () => {
                 }}
                 style={{ top: '150px' }}
                 action={snackbarAction}
-                
               >
                 <NotificationManager />
               </SnackbarProvider>
 
-              <ConnectedRouter history={history}>
-                <Switch>
-                  <Redirect exact={true} from="/" to={Routes.Dashboard} />
-                  <Route path={Routes.Login} component={LoginForm} />
-                  <Route path="" component={App} />
-                  <Route component={NotFound} />
-                </Switch>
-              </ConnectedRouter>
+              <div className={classes.root}>
+                <ConnectedRouter history={history}>
+                  <Switch>
+                    <Redirect exact={true} from="/" to={Routes.Dashboard} />
+                    <Route path={Routes.Login} component={LoginForm} />
+                    <Route path="" component={App} />
+                    <Route component={NotFound} />
+                  </Switch>
+                </ConnectedRouter>
+
+                <footer className={classes.footerRoot}>
+                  <Container maxWidth="lg" className={classes.footerContainer}>
+                    <div className={classes.footer}>
+                      <div className={classes.footerLinks}>
+                        <Box component="div" display={{ xs: 'none', md: 'block' }}>
+                          <Typography
+                            variant="subtitle1"
+                            align="center"
+                            color="textSecondary"
+                            component="p"
+                          >
+                            From developer for developers with love!
+                          </Typography>
+                        </Box>
+                        <a
+                          href="https://github.com/lucax88x/kairos"
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className={classes.footerLink}
+                        >
+                          <IconButton color="inherit" aria-label="Github">
+                            <SimpleIcon type="github" className={classes.footerIcon}></SimpleIcon>
+                          </IconButton>
+                        </a>
+                        <a
+                          href="https://github.com/lucax88x/kairos/stargazers"
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className={classes.footerLink}
+                        >
+                          <img
+                            alt="preview badge"
+                            src="https://img.shields.io/github/stars/lucax88x/kairos?style=for-the-badge"
+                          ></img>
+                        </a>
+                        <Box component="div" display={{ xs: 'none', sm: 'block' }}>
+                          <a
+                            href="https://github.com/lucax88x/kairos/issues"
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className={classes.footerLink}
+                          >
+                            <img
+                              alt="preview badge"
+                              src="https://img.shields.io/github/issues/lucax88x/kairos?style=for-the-badge"
+                            ></img>
+                          </a>
+                        </Box>
+                      </div>
+                      <div className={classes.footerLinks}>
+                        <a
+                          href="https://lucax88x.github.io"
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className={classes.footerLink}
+                        >
+                          <IconButton color="inherit" aria-label="Github.io">
+                            <Avatar
+                              className={classes.footerAvatar}
+                              alt={'lucatrazzi'}
+                              src={'https://lucax88x.github.io/img/author.jpg'}
+                            />
+                          </IconButton>
+                        </a>
+
+                        <a
+                          href="https://github.com/lucax88x"
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className={classes.footerLink}
+                        >
+                          <IconButton color="inherit" aria-label="Github">
+                            <SimpleIcon type="github" className={classes.footerIcon}></SimpleIcon>
+                          </IconButton>
+                        </a>
+                        <a
+                          href="https://www.linkedin.com/in/luca-trazzi-93217931/"
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className={classes.footerLink}
+                        >
+                          <IconButton color="inherit" aria-label="Linkedin">
+                            <SimpleIcon type="linkedin" className={classes.footerIcon}></SimpleIcon>
+                          </IconButton>
+                        </a>
+                      </div>
+                    </div>
+                  </Container>
+                </footer>
+              </div>
             </ThemeProvider>
           </I18nLoader>
         </PersistGate>

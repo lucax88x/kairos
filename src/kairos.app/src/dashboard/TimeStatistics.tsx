@@ -50,7 +50,7 @@ const useStyles = makeStyles(theme => ({
   gridTileContent: {
     width: '100%',
     height: '100%',
-    display: 'flex',
+    display: 'grid',
     paddingTop: '2em',
     justifyContent: 'center',
     fontSize: '1.5rem',

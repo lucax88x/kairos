@@ -33,6 +33,7 @@ import {
   SetTimeAbsenceEntryTypeAction,
   useTimeAbsenceEntryFormReducer,
 } from './TimeAbsenceEntryForm.store';
+import { formatAsDateTime } from '../code/constants';
 
 const useStyles = makeStyles(theme => ({
   container: {
@@ -150,6 +151,7 @@ export const TimeAbsenceEntryForm: React.FC<TimeAbsenceEntryFormProps> = props =
           maxDate={end}
           onChange={handleStartChange}
           label={<Trans>Labels.Start</Trans>}
+          format={formatAsDateTime}
           fullWidth
         />
         <KeyboardDateTimePicker
@@ -159,6 +161,7 @@ export const TimeAbsenceEntryForm: React.FC<TimeAbsenceEntryFormProps> = props =
           minDate={start}
           onChange={handleEndChange}
           label={<Trans>Labels.End</Trans>}
+          format={formatAsDateTime}
           fullWidth
         />
       </MuiPickersUtilsProvider>

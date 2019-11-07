@@ -1,11 +1,11 @@
 import { t, Trans } from '@lingui/macro';
-import { Button, Grid, IconButton, makeStyles, Divider } from '@material-ui/core';
+import { Button, Divider, Grid, IconButton, makeStyles } from '@material-ui/core';
 import CreateIcon from '@material-ui/icons/Create';
 import DeleteIcon from '@material-ui/icons/Delete';
 import { map } from 'ramda';
 import React, { useCallback, useMemo, useState } from 'react';
 import { Index } from 'react-virtualized';
-import { dateTimeFormatter } from '../code/formatters';
+import { dateFormatter } from '../code/formatters';
 import { Autocomplete, AutocompleteSuggestion } from '../components/Autocomplete';
 import Spinner from '../components/Spinner';
 import { VirtualizedTable } from '../components/VirtualizedTable';
@@ -135,7 +135,7 @@ export const TimeHolidayEntriesComponent: React.FC<TimeHolidayEntriesProps> = pr
               label: i18n._(t`TimeHolidayEntries.WhenTableHeader`),
               dataKey: 'when',
               flexGrow: 1,
-              formatter: dateTimeFormatter,
+              formatter: dateFormatter,
             },
             {
               width: 100,

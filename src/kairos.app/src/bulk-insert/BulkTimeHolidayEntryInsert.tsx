@@ -21,7 +21,7 @@ interface TimeHolidayEntryInvalidModel {
 
 const useStyles = makeStyles(theme => ({
   center: {
-    display: 'flex',
+    display: 'grid',
     justifyContent: 'center',
   },
 }));
@@ -81,6 +81,13 @@ export const BulkTimeHolidayEntryInsertComponent: React.FC<
             });
           }
         }
+        else{
+          invalidModels.push({
+            id: UUID.Generate(),
+            description: '',
+            when: i18n._(t`Validation.InvalidDate`),
+          });
+        }
       }
     }
     setValidModels(validModels);
@@ -129,11 +136,6 @@ export const BulkTimeHolidayEntryInsertComponent: React.FC<
               rowGetter={validModelsRowGetter}
               columns={[
                 {
-                  width: 100,
-                  label: i18n._(t`BulkTimeHolidayEntryInsert.TypeTableHeader`),
-                  dataKey: 'type',
-                },
-                {
                   width: 200,
                   label: i18n._(t`BulkTimeHolidayEntryInsert.DescriptionTableHeader`),
                   dataKey: 'description',
@@ -161,11 +163,6 @@ export const BulkTimeHolidayEntryInsertComponent: React.FC<
               noRowsRenderer={noRowsRenderer}
               rowGetter={invalidModelsRowGetter}
               columns={[
-                {
-                  width: 100,
-                  label: i18n._(t`BulkTimeHolidayEntryInsert.TypeTableHeader`),
-                  dataKey: 'type',
-                },
                 {
                   width: 200,
                   label: i18n._(t`BulkTimeHolidayEntryInsert.DescriptionTableHeader`),

@@ -4,13 +4,13 @@ interface Theme {
 }
 
 export class Themes {
-  // https://coolors.co/474a2c-636940-417b4e-7fb68d-b4e7ce
+  // https://coolors.co/0a2239-53a2be-1d84b5-132e32-176087
 
-  static First = { backgroundColor: '#474A2C', color: 'white' };
-  static Second = { backgroundColor: '#636940', color: 'white' };
-  static Third = { backgroundColor: '#417B4E', color: 'white' };
-  static Fourth = { backgroundColor: '#7FB68D', color: '#333' };
-  static Fifth = { backgroundColor: '#B4E7CE', color: '#333' };
+  static First = { backgroundColor: '#0A2239', color: 'white' };
+  static Second = { backgroundColor: '#53A2BE', color: 'white' };
+  static Third = { backgroundColor: '#1D84B5', color: 'white' };
+  static Fourth = { backgroundColor: '#132E32', color: '#333' };
+  static Fifth = { backgroundColor: '#176087', color: '#333' };
 
   static Wheel = [Themes.First, Themes.Second, Themes.Third, Themes.Fourth, Themes.Fifth];
 

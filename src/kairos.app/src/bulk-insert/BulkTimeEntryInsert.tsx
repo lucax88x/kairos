@@ -27,7 +27,7 @@ interface TimeEntryInvalidModel {
 
 const useStyles = makeStyles(theme => ({
   center: {
-    display: 'flex',
+    display: 'grid',
     justifyContent: 'center',
   },
 }));
@@ -112,6 +112,14 @@ export const BulkTimeEntryInsertComponent: React.FC<BulkTimeEntryInsertProps> = 
               project: isProjectValid ? project.id : i18n._(t`Validation.InvalidProject`),
             });
           }
+        } else {
+          invalidModels.push({
+            id: UUID.Generate(),
+            when: i18n._(t`Validation.InvalidDate`),
+            type: i18n._(t`Validation.InvalidType`),
+            job: i18n._(t`Validation.InvalidJob`),
+            project: i18n._(t`Validation.InvalidProject`),
+          });
         }
       }
     }

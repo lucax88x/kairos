@@ -1,5 +1,5 @@
 import { t } from '@lingui/macro';
-import { makeStyles, Tab, Tabs } from '@material-ui/core';
+import { makeStyles, Tab, Tabs, Paper } from '@material-ui/core';
 import BeachAccessIcon from '@material-ui/icons/BeachAccess';
 import TimerIcon from '@material-ui/icons/Timer';
 import WeekendIcon from '@material-ui/icons/Weekend';
@@ -8,6 +8,11 @@ import { i18n } from '../i18nLoader';
 import { BulkTimeAbsenceEntryInsert } from './BulkTimeAbsenceEntryInsert.container';
 import { BulkTimeEntryInsert } from './BulkTimeEntryInsert.container';
 import { BulkTimeHolidayEntryInsert } from './BulkTimeHolidayEntryInsert.container';
+import { connect } from 'react-redux';
+import { State } from '../state';
+import { selectProfile } from '../profile/selectors';
+import { ProfileModel } from '../models/profile.model';
+import { YouNeedAtLeastOneJob } from '../components/YouNeedAtLeastOneJob';
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -16,16 +21,33 @@ const useStyles = makeStyles(theme => ({
   tabContent: {
     padding: theme.spacing(1),
   },
+  paper: {
+    padding: theme.spacing(1),
+  },
 }));
 
-export const BulkInsert: React.FC = props => {
+interface BulkInsertInputs {
+  profile: ProfileModel;
+}
+
+const BulkInsertComponent: React.FC<BulkInsertInputs> = props => {
   const classes = useStyles(props);
+  const { profile } = props;
 
   const [tab, setTab] = useState(0);
   const handleChangeTab = useCallback(
     (event: React.ChangeEvent<{}>, newTab: number) => setTab(newTab),
     [setTab],
   );
+
+  if (profile.jobs.length === 0) {
+    return (
+      <Paper className={classes.paper}>
+        <YouNeedAtLeastOneJob />
+      </Paper>
+    );
+  }
+
   return (
     <div className={classes.root}>
       <Tabs value={tab} onChange={handleChangeTab} centered>
@@ -41,3 +63,9 @@ export const BulkInsert: React.FC = props => {
     </div>
   );
 };
+
+const mapStateToProps = (state: State): BulkInsertInputs => ({
+  profile: selectProfile(state),
+});
+
+export const BulkInsert = connect(mapStateToProps)(BulkInsertComponent);

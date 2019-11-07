@@ -18,10 +18,10 @@ export class JobModel {
     public wednesday: number = 8.5,
     public thursday: number = 8.5,
     public friday: number = 8.5,
-    public saturday: number = 8.5,
-    public sunday: number = 8.5,
+    public saturday: number = 0,
+    public sunday: number = 0,
     public projects: ProjectModel[] = [
-      new ProjectModel(UUID.Generate(), 'default', startOfDay(new Date()), null, 100),
+      new ProjectModel(UUID.Generate(), 'Default', startOfDay(new Date()), null, 100),
     ],
   ) {}
 
