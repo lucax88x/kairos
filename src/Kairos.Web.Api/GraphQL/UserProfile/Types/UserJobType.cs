@@ -22,7 +22,6 @@ namespace Kairos.Web.Api.GraphQL.UserProfile.Types
             Field(d => d.Friday).Description("Friday working hours");
             Field(d => d.Saturday).Description("Saturday working hours");
             Field(d => d.Sunday).Description("Sunday working hours");
-            Field(d => d.Projects, type: typeof(ListGraphType<UserProjectType>)).Description("List of projects of job");
         }
     }
 }

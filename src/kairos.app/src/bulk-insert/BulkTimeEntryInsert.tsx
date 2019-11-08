@@ -3,7 +3,7 @@ import { Fab, Grid, makeStyles, TextField, Typography } from '@material-ui/core'
 import CheckIcon from '@material-ui/icons/Check';
 import SaveIcon from '@material-ui/icons/Save';
 import { isValid, parseISO } from 'date-fns';
-import { chain, indexBy, split, map } from 'ramda';
+import { indexBy, map, split } from 'ramda';
 import indexOf from 'ramda/es/indexOf';
 import React, { ChangeEvent, useCallback, useMemo, useState } from 'react';
 import { Index } from 'react-virtualized';
@@ -13,7 +13,6 @@ import FabButtonSpinner from '../components/FabButtonSpinner';
 import { VirtualizedTable } from '../components/VirtualizedTable';
 import { i18n } from '../i18nLoader';
 import { ProfileModel } from '../models/profile.model';
-import { ProjectModel } from '../models/project.model';
 import { TimeEntryModel, TimeEntryTypes } from '../models/time-entry.model';
 import { UUID } from '../models/uuid.model';
 
@@ -22,7 +21,6 @@ interface TimeEntryInvalidModel {
   when: Date | string;
   type: TimeEntryTypes | string;
   job: UUID | string;
-  project: UUID | string;
 }
 
 const useStyles = makeStyles(theme => ({
@@ -64,19 +62,6 @@ export const BulkTimeEntryInsertComponent: React.FC<BulkTimeEntryInsertProps> = 
 
   const indexedJobsByName = useMemo(() => indexBy(job => job.name, profile.jobs), [profile]);
   const indexedJobsById = useMemo(() => indexBy(job => job.id.toString(), profile.jobs), [profile]);
-  const indexedProjectsByName = useMemo(
-    () =>
-      indexBy((project: ProjectModel) => project.name, chain(job => job.projects, profile.jobs)),
-    [profile],
-  );
-  const indexedProjectsById = useMemo(
-    () =>
-      indexBy(
-        (project: ProjectModel) => project.id.toString(),
-        chain(job => job.projects, profile.jobs),
-      ),
-    [profile],
-  );
 
   const handleParse = useCallback(() => {
     const validModels: TimeEntryModel[] = [];
@@ -86,22 +71,19 @@ export const BulkTimeEntryInsertComponent: React.FC<BulkTimeEntryInsertProps> = 
       const splitByComma = split(',');
       for (let i = 0; i < lines.length; i++) {
         const cells = splitByComma(lines[i]);
-        if (cells.length >= 4) {
+        if (cells.length >= 3) {
           const when = parseISO(cells[0]);
           const type = cells[1];
           const jobName = cells[2];
-          const projectName = cells[3];
 
           const job = indexedJobsByName[jobName.toString()];
-          const project = indexedProjectsByName[projectName.toString()];
 
           const isWhenValid = isValid(when);
           const isTypeValid = indexOf(type, [TimeEntryTypes.IN, TimeEntryTypes.OUT]) !== -1;
           const isJobValid = !!job;
-          const isProjectValid = !!project;
-          if (isWhenValid && isTypeValid && isJobValid && isProjectValid) {
+          if (isWhenValid && isTypeValid && isJobValid) {
             validModels.push(
-              new TimeEntryModel(UUID.Generate(), when, type as TimeEntryTypes, job.id, project.id),
+              new TimeEntryModel(UUID.Generate(), when, type as TimeEntryTypes, job.id),
             );
           } else {
             invalidModels.push({
@@ -109,7 +91,6 @@ export const BulkTimeEntryInsertComponent: React.FC<BulkTimeEntryInsertProps> = 
               when: isWhenValid ? when : i18n._(t`Validation.InvalidDate`),
               type: isTypeValid ? (type as TimeEntryTypes) : i18n._(t`Validation.InvalidType`),
               job: isJobValid ? job.id : i18n._(t`Validation.InvalidJob`),
-              project: isProjectValid ? project.id : i18n._(t`Validation.InvalidProject`),
             });
           }
         } else {
@@ -118,14 +99,13 @@ export const BulkTimeEntryInsertComponent: React.FC<BulkTimeEntryInsertProps> = 
             when: i18n._(t`Validation.InvalidDate`),
             type: i18n._(t`Validation.InvalidType`),
             job: i18n._(t`Validation.InvalidJob`),
-            project: i18n._(t`Validation.InvalidProject`),
           });
         }
       }
     }
     setValidModels(validModels);
     setInvalidModels(invalidModels);
-  }, [indexedJobsByName, indexedProjectsByName, setValidModels, setInvalidModels, csv]);
+  }, [indexedJobsByName, setValidModels, setInvalidModels, csv]);
 
   const noRowsRenderer = useCallback(() => <p>Empty or Invalid CSV</p>, []);
   const validModelsRowGetter = useCallback(({ index }: Index) => validModels[index], [validModels]);
@@ -141,15 +121,6 @@ export const BulkTimeEntryInsertComponent: React.FC<BulkTimeEntryInsertProps> = 
     },
     [indexedJobsById],
   );
-  const projectFormatter = useCallback(
-    (projectId: UUID | string) => {
-      if (!isString(projectId)) {
-        return indexedProjectsById[projectId.toString()].name;
-      }
-      return projectId;
-    },
-    [indexedProjectsById],
-  );
 
   return (
     <Grid container spacing={2} direction="column" justify="center">
@@ -160,7 +131,7 @@ export const BulkTimeEntryInsertComponent: React.FC<BulkTimeEntryInsertProps> = 
       </Grid>
       <Grid item>
         <TextField
-          placeholder="DATE(dd/mm/yyyy hh:MM),TYPE(IN/OUT),JOB,PROJECT"
+          placeholder="DATE(dd/mm/yyyy hh:MM),TYPE(IN/OUT),JOB"
           multiline
           variant="filled"
           rows={4}
@@ -205,12 +176,6 @@ export const BulkTimeEntryInsertComponent: React.FC<BulkTimeEntryInsertProps> = 
                   dataKey: 'job',
                   formatter: jobFormatter,
                 },
-                {
-                  width: 200,
-                  label: i18n._(t`BulkTimeEntryInsert.ProjectTableHeader`),
-                  dataKey: 'project',
-                  formatter: projectFormatter,
-                },
               ]}
             />
           </Grid>
@@ -245,12 +210,6 @@ export const BulkTimeEntryInsertComponent: React.FC<BulkTimeEntryInsertProps> = 
                   label: i18n._(t`BulkTimeEntryInsert.JobTableHeader`),
                   dataKey: 'job',
                   formatter: jobFormatter,
-                },
-                {
-                  width: 200,
-                  label: i18n._(t`BulkTimeEntryInsert.ProjectTableHeader`),
-                  dataKey: 'project',
-                  formatter: projectFormatter,
                 },
               ]}
             />

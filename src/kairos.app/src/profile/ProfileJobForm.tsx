@@ -1,31 +1,20 @@
 import DateFnsUtils from '@date-io/date-fns';
 import { t, Trans } from '@lingui/macro';
-import {
-  Divider,
-  ExpansionPanel,
-  ExpansionPanelDetails,
-  ExpansionPanelSummary,
-  IconButton,
-  makeStyles,
-  TextField,
-  Typography,
-} from '@material-ui/core';
-import AddIcon from '@material-ui/icons/Add';
+import { ExpansionPanel, ExpansionPanelDetails, ExpansionPanelSummary, IconButton, makeStyles, TextField, Typography } from '@material-ui/core';
 import DeleteIcon from '@material-ui/icons/Delete';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
-import { DatePicker, MaterialUiPickersDate, MuiPickersUtilsProvider, KeyboardDatePicker } from '@material-ui/pickers';
-import { endOfDay, format } from 'date-fns';
-import { map } from 'ramda';
-import React, { ChangeEvent, Fragment, useCallback } from 'react';
+import { KeyboardDatePicker, MaterialUiPickersDate, MuiPickersUtilsProvider } from '@material-ui/pickers';
+import clsx from 'clsx';
+import { endOfDay } from 'date-fns';
+import React, { ChangeEvent, useCallback } from 'react';
 import { formatAsDate } from '../code/constants';
+import { formatDate } from '../code/formatters';
 import { getDatepickerLocale } from '../code/get-datepicker-locale';
 import { Themes } from '../code/variables';
 import { i18n } from '../i18nLoader';
 import { JobModel } from '../models/job.model';
-import { UUID } from '../models/uuid.model';
-import { ProfileJobProjectForm } from './ProfileJobProjectForm';
 import { Language } from '../models/language-model';
-import clsx from 'clsx';
+import { UUID } from '../models/uuid.model';
 
 const useStyles = makeStyles(theme => ({
   rows: {
@@ -89,13 +78,6 @@ export interface ProfileJobFormDispatches {
   onJobEndDateChange: (jobId: UUID, date: Date) => void;
   onJobHolidaysPerYearChange: (jobId: UUID, days: number) => void;
   onJobDayChange: (jobId: UUID, day: string, hours: number) => void;
-
-  onProjectAdd: (jobId: UUID) => void;
-  onProjectDelete: (jobId: UUID, projectId: UUID) => void;
-  onProjectNameChange: (jobId: UUID, projectId: UUID, name: string) => void;
-  onProjectAllocationChange: (jobId: UUID, projectId: UUID, allocation: number) => void;
-  onProjectStartDateChange: (jobId: UUID, projectId: UUID, date: Date) => void;
-  onProjectEndDateChange: (jobId: UUID, projectId: UUID, date: Date) => void;
 }
 
 type ProfileJobFormProps = ProfileJobFormInputs & ProfileJobFormDispatches;
@@ -112,13 +94,6 @@ export const ProfileJobForm: React.FC<ProfileJobFormProps> = props => {
     onJobEndDateChange,
     onJobHolidaysPerYearChange,
     onJobDayChange,
-
-    onProjectAdd,
-    onProjectDelete,
-    onProjectNameChange,
-    onProjectAllocationChange,
-    onProjectStartDateChange,
-    onProjectEndDateChange,
   } = props;
 
   const handleJobDelete = useCallback(() => onJobDelete(job.id), [onJobDelete, job]);
@@ -166,8 +141,6 @@ export const ProfileJobForm: React.FC<ProfileJobFormProps> = props => {
   const handleSaturdayChange = useCallback(handleJobDayChange('saturday'), [handleJobDayChange]);
   const handleSundayChange = useCallback(handleJobDayChange('sunday'), [handleJobDayChange]);
 
-  const handleProjectAdd = useCallback(() => onProjectAdd(job.id), [onProjectAdd, job]);
-
   return (
     <ExpansionPanel>
       <ExpansionPanelSummary expandIcon={<ExpandMoreIcon />}>
@@ -176,8 +149,10 @@ export const ProfileJobForm: React.FC<ProfileJobFormProps> = props => {
             {!!job.name ? job.name : i18n._(t`Profile.UnknownJob`)}
           </Typography>
           <Typography className={classes.secondaryHeading}>
-            {`${format(job.start, formatAsDate)} - ${
-              !!job.end ? format(job.end, formatAsDate) : i18n._(t`Profile.CurrentDateLabel`)
+            {`${formatDate(job.start, selectedLanguage, formatAsDate)} - ${
+              !!job.end
+                ? formatDate(job.end, selectedLanguage, formatAsDate)
+                : i18n._(t`Profile.CurrentDateLabel`)
             }`}
           </Typography>
           <IconButton color="inherit" aria-label="Delete entry" onClick={handleJobDelete}>
@@ -207,12 +182,14 @@ export const ProfileJobForm: React.FC<ProfileJobFormProps> = props => {
                 // maxDate={end}
                 onChange={handleJobStartDateChange}
                 label={<Trans>Labels.Start</Trans>}
+                invalidDateMessage={<Trans>Validation.InvalidDate</Trans>}
               />
               <KeyboardDatePicker
                 autoOk
                 fullWidth
                 value={job.end}
                 // minDate={start}
+                invalidDateMessage={<Trans>Validation.InvalidDate</Trans>}
                 onChange={handleJobEndDateChange}
                 label={<Trans>Labels.End</Trans>}
               />
@@ -283,40 +260,6 @@ export const ProfileJobForm: React.FC<ProfileJobFormProps> = props => {
               value={job.sunday}
               onChange={handleSundayChange}
             />
-          </div>
-
-          <Divider />
-
-          <div className={clsx(classes.rows, classes.secondaryPaper)}>
-            <div className={clsx(classes.columns, classes.between)}>
-              <Typography color="inherit" noWrap display="inline">
-                <Trans>Profile.Projects</Trans>
-              </Typography>
-              <IconButton onClick={handleProjectAdd}>
-                <AddIcon />
-              </IconButton>
-            </div>
-
-            <div className={clsx(classes.rows, classes.noGap)}>
-              {map(
-                project => (
-                  <Fragment key={project.id.toString()}>
-                    <ProfileJobProjectForm
-                      selectedLanguage={selectedLanguage}
-                      job={job}
-                      project={project}
-                      onDelete={onProjectDelete}
-                      onNameChange={onProjectNameChange}
-                      onAllocationChange={onProjectAllocationChange}
-                      onStartDateChange={onProjectStartDateChange}
-                      onEndDateChange={onProjectEndDateChange}
-                    />
-                    <Divider />
-                  </Fragment>
-                ),
-                job.projects,
-              )}
-            </div>
           </div>
         </div>
       </ExpansionPanelDetails>

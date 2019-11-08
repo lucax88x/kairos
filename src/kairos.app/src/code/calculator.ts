@@ -113,7 +113,6 @@
 //     }
 //   }
 
-
 //   const days = eachDayOfInterval(interval);
 
 //   const result: { [date: string]: string } = {};
@@ -336,7 +335,7 @@ export function getEnterExitEvents(timeEntries: TimeEntryListModel[], interval: 
       const [exit, toSkip] = getNearestExit(i, orderedByDate);
       i += toSkip;
 
-      const title = `${enter.job.name} - ${enter.project.name}`;
+      const title = `${enter.job.name}`;
 
       if (!exit.isEmpty()) {
         events.push({ enter: enter.when, exit: exit.when, title, id: enter.id });
@@ -432,31 +431,17 @@ export function getWorkingHoursStatistics(
   );
 
   for (const job of todayJobs) {
-    const todayProjects = filter(
-      project =>
-        isWithinInterval(today, {
-          start: project.start,
-          end: !!project.end ? project.end : maxDate,
-        }),
-      job.projects,
-    );
-
-    for (const project of todayProjects) {
-      const workingHours = getDayWorkingHours(today, job);
-      const projectWorkingHours = (workingHours * project.allocation) / 100;
-
-      statistics.push({
-        title: i18n._(
-          /*i18n*/ {
-            id: 'TimeStatistics.RemainingToday',
-            values: { project: project.name },
-          },
-        ),
-        subtitle: formatDate(today, language, 'MMMM MM'),
-        text: `${projectWorkingHours}h`,
-      });
-    }
-  }
+                                 // statistics.push({
+                                 //   title: i18n._(
+                                 //     /*i18n*/ {
+                                 //       id: 'TimeStatistics.RemainingToday',
+                                 //       values: { project: project.name },
+                                 //     },
+                                 //   ),
+                                 //   subtitle: formatDate(today, language, 'MMMM MM'),
+                                 //   text: `${projectWorkingHours}h`,
+                                 // });
+                               }
 
   return statistics;
 }

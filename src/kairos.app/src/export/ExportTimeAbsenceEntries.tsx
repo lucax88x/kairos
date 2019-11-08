@@ -74,6 +74,7 @@ export const ExportTimeAbsenceEntriesComponent: React.FC<ExportTimeAbsenceEntrie
             maxDate={end}
             onChange={handleStartChange}
             label={<Trans>Labels.Start</Trans>}
+            invalidDateMessage={<Trans>Validation.InvalidDate</Trans>}
             format={formatAsDateTime}
             fullWidth
           />
@@ -84,6 +85,7 @@ export const ExportTimeAbsenceEntriesComponent: React.FC<ExportTimeAbsenceEntrie
             minDate={start}
             onChange={handleEndChange}
             label={<Trans>Labels.End</Trans>}
+            invalidDateMessage={<Trans>Validation.InvalidDate</Trans>}
             format={formatAsDateTime}
             fullWidth
           />

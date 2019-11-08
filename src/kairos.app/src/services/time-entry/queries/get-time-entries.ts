@@ -6,8 +6,5 @@ export const getTimeEntriesQuery = `query ($year: Int!) {
     job {
       name
     }
-    project {
-      name
-    }
   }
 }`;

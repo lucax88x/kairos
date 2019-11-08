@@ -8,15 +8,12 @@ namespace Kairos.Infra.Read.TimeEntry
         public DateTimeOffset When { get; }
         public int Type { get; }
         public Guid Job { get; }
-        public Guid Project { get; }
-
-        public TimeEntryReadDto(Guid id, DateTimeOffset when, int type, Guid job, Guid project)
+        public TimeEntryReadDto(Guid id, DateTimeOffset when, int type, Guid job)
         {
             Id = id;
             When = when;
             Type = type;
             Job = job;
-            Project = project;
         }
     }
 }

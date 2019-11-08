@@ -1,6 +1,4 @@
 using System;
-using System.Collections.Generic;
-using System.Collections.Immutable;
 using Kairos.Common;
 
 namespace Kairos.Domain
@@ -8,8 +6,7 @@ namespace Kairos.Domain
     public class UserJob : Entity
     {
         public UserJob(string? name, DateTimeOffset start, DateTimeOffset? end, decimal holidaysPerYear, decimal monday,
-            decimal tuesday, decimal wednesday, decimal thursday, decimal friday, decimal saturday, decimal sunday,
-            IEnumerable<UserProject> projects)
+            decimal tuesday, decimal wednesday, decimal thursday, decimal friday, decimal saturday, decimal sunday)
         {
             Name = name;
             Start = start;
@@ -22,7 +19,6 @@ namespace Kairos.Domain
             Friday = friday;
             Saturday = saturday;
             Sunday = sunday;
-            Projects = projects.ToImmutableList();
         }
 
         public string? Name { get; }
@@ -36,6 +32,5 @@ namespace Kairos.Domain
         public decimal Friday { get; }
         public decimal Saturday { get; }
         public decimal Sunday { get; }
-        public ImmutableList<UserProject> Projects { get; }
     }
 }

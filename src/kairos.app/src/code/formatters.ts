@@ -1,10 +1,12 @@
-import { format, Locale } from 'date-fns';
+import { format, Locale, isValid } from 'date-fns';
 import { enGB, it } from 'date-fns/locale';
 import { Language } from '../models/language-model';
 import { getTextFromAbsenceType, TimeAbsenceEntryTypes } from '../models/time-absence-entry.model';
 import { getTextFromEntryType, TimeEntryTypes } from '../models/time-entry.model';
 import { formatAsDate, formatAsDateTime } from './constants';
 import { isString } from './is';
+import { i18n } from '../i18nLoader';
+import { t } from '@lingui/macro';
 
 const locales: { [key: string]: Locale } = { ['en']: enGB, ['it']: it };
 
@@ -23,7 +25,11 @@ export const formatDate = (
   dateFormat: string = formatAsDateTime,
 ) => {
   if (!isString(date)) {
-    return format(date, dateFormat, { locale: locales[language] });
+    if (isValid(date)) {
+      return format(date, dateFormat, { locale: locales[language] });
+    } else {
+      return i18n._(t`Validation.InvalidDate`);
+    }
   }
 
   return date;

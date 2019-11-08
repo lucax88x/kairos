@@ -66,11 +66,6 @@ msgstr "Invalid Entries"
 msgid "BulkTimeEntryInsert.JobTableHeader"
 msgstr "Job"
 
-#: src/bulk-insert/BulkTimeEntryInsert.tsx:129
-#: src/bulk-insert/BulkTimeEntryInsert.tsx:160
-msgid "BulkTimeEntryInsert.ProjectTableHeader"
-msgstr "Project"
-
 #: src/bulk-insert/BulkTimeEntryInsert.tsx:94
 msgid "BulkTimeEntryInsert.Title"
 msgstr "Entries"
@@ -234,10 +229,6 @@ msgstr "Export entries"
 msgid "Label.Type"
 msgstr "Type"
 
-#: src/profile/ProfileJobProjectForm.tsx:112
-msgid "Labels.Allocation"
-msgstr "Allocation"
-
 #: src/shared/TimeAbsenceEntryForm.tsx:73
 #: src/shared/TimeHolidayEntryForm.tsx:44
 msgid "Labels.Description"
@@ -246,7 +237,6 @@ msgstr "Description"
 #: src/export/ExportTimeAbsenceEntries.tsx:46
 #: src/export/ExportTimeEntries.tsx:46
 #: src/profile/ProfileJobForm.tsx:115
-#: src/profile/ProfileJobProjectForm.tsx:124
 #: src/shared/TimeAbsenceEntryForm.tsx:76
 msgid "Labels.End"
 msgstr "End"
@@ -268,13 +258,8 @@ msgid "Labels.Monday"
 msgstr "Monday"
 
 #: src/profile/ProfileJobForm.tsx:108
-#: src/profile/ProfileJobProjectForm.tsx:109
 msgid "Labels.Name"
 msgstr "Name"
-
-#: src/shared/TimeEntryForm.tsx:96
-msgid "Labels.Project"
-msgstr "Project"
 
 #: src/profile/ProfileJobForm.tsx:125
 msgid "Labels.Saturday"
@@ -283,7 +268,6 @@ msgstr "Saturday"
 #: src/export/ExportTimeAbsenceEntries.tsx:45
 #: src/export/ExportTimeEntries.tsx:45
 #: src/profile/ProfileJobForm.tsx:112
-#: src/profile/ProfileJobProjectForm.tsx:121
 #: src/shared/TimeAbsenceEntryForm.tsx:75
 msgid "Labels.Start"
 msgstr "Start"
@@ -406,7 +390,6 @@ msgid "Messages.ProfileSaved"
 msgstr "Profile Saved"
 
 #: src/profile/ProfileJobForm.tsx:98
-#: src/profile/ProfileJobProjectForm.tsx:97
 msgid "Profile.CurrentDateLabel"
 msgstr "Current Date"
 
@@ -418,16 +401,8 @@ msgstr "Jobs"
 msgid "Profile.NoJobsDefined"
 msgstr "No defined jobs"
 
-#: src/profile/ProfileJobForm.tsx:134
-msgid "Profile.Projects"
-msgstr "Projects"
-
 #: src/profile/ProfileJobForm.tsx:95
 msgid "Profile.UnknownJob"
-msgstr "Unknown"
-
-#: src/profile/ProfileJobProjectForm.tsx:92
-msgid "Profile.UnknownProject"
 msgstr "Unknown"
 
 #: src/services/api.service.ts:37
@@ -492,10 +467,6 @@ msgstr "Job"
 msgid "TimeEntries.NoItems"
 msgstr "No items"
 
-#: src/time-entries/TimeEntries.tsx:57
-msgid "TimeEntries.ProjectTableHeader"
-msgstr "Project"
-
 #: src/time-entries/TimeEntries.tsx:35
 msgid "TimeEntries.Title"
 msgstr "Entries"
@@ -557,10 +528,6 @@ msgstr "When you are sick"
 msgid "TimeStatistics.Illness.Title"
 msgstr "Illness"
 
-#: src/code/calculator.ts:337
-msgid "TimeStatistics.RemainingToday"
-msgstr "Remaining Today: {project}"
-
 #: src/dashboard/TimeStatistics.tsx:72
 msgid "TimeStatistics.Vacations.SubTitle"
 msgstr "Vacations"
@@ -609,10 +576,6 @@ msgstr "Invalid Date"
 #: src/bulk-insert/BulkTimeEntryInsert.tsx:64
 msgid "Validation.InvalidJob"
 msgstr "Invalid Job"
-
-#: src/bulk-insert/BulkTimeEntryInsert.tsx:65
-msgid "Validation.InvalidProject"
-msgstr "Invalid Project"
 
 #: src/bulk-insert/BulkTimeAbsenceEntryInsert.tsx:59
 #: src/bulk-insert/BulkTimeEntryInsert.tsx:63

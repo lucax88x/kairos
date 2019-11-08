@@ -1,10 +1,9 @@
-import React from 'react';
 import { t, Trans } from '@lingui/macro';
 import { parseISO } from 'date-fns';
 import { immerable } from 'immer';
+import React from 'react';
 import { i18n } from '../i18nLoader';
 import { JobOutModel } from './job.model';
-import { ProjectOutModel } from './project.model';
 import { UUID } from './uuid.model';
 
 export enum TimeEntryTypes {
@@ -20,7 +19,6 @@ export class TimeEntryModel {
     public when = new Date(),
     public type = TimeEntryTypes.IN,
     public job = new UUID(UUID.Empty),
-    public project = new UUID(UUID.Empty),
   ) {}
 
   static fromOutModel(outModel: TimeEntryOutModel) {
@@ -29,7 +27,6 @@ export class TimeEntryModel {
       parseISO(outModel.when),
       TimeEntryTypes[outModel.type],
       new UUID(outModel.job.id),
-      new UUID(outModel.project.id),
     );
   }
 
@@ -39,8 +36,7 @@ export class TimeEntryModel {
     return (
       this.id.equals(TimeEntryModel.empty.id) &&
       this.when === TimeEntryModel.empty.when &&
-      this.job.isEmpty &&
-      this.project.isEmpty
+      this.job.isEmpty
     );
   }
 }
@@ -50,7 +46,6 @@ export interface TimeEntryOutModel {
   when: string;
   type: TimeEntryTypes;
   job: Partial<JobOutModel>;
-  project: Partial<ProjectOutModel>;
 }
 
 export function getTextFromEntryType(type: TimeEntryTypes) {

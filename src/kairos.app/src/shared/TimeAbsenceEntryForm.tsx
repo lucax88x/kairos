@@ -1,7 +1,6 @@
 import DateFnsUtils from '@date-io/date-fns';
 import { Trans } from '@lingui/macro';
 import {
-  Divider,
   FormControl,
   InputLabel,
   makeStyles,
@@ -16,6 +15,7 @@ import {
   MuiPickersUtilsProvider,
 } from '@material-ui/pickers';
 import React, { ChangeEvent, useCallback, useEffect } from 'react';
+import { formatAsDateTime } from '../code/constants';
 import { getDatepickerLocale } from '../code/get-datepicker-locale';
 import { isString } from '../code/is';
 import ButtonSpinner from '../components/ButtonSpinner';
@@ -26,6 +26,7 @@ import {
   TimeAbsenceEntryTypes,
 } from '../models/time-absence-entry.model';
 import {
+  ResetModel,
   SetModel,
   SetTimeAbsenceEntryDescriptionAction,
   SetTimeAbsenceEntryEndAction,
@@ -33,7 +34,6 @@ import {
   SetTimeAbsenceEntryTypeAction,
   useTimeAbsenceEntryFormReducer,
 } from './TimeAbsenceEntryForm.store';
-import { formatAsDateTime } from '../code/constants';
 
 const useStyles = makeStyles(theme => ({
   container: {
@@ -103,6 +103,8 @@ export const TimeAbsenceEntryForm: React.FC<TimeAbsenceEntryFormProps> = props =
   useEffect(() => {
     if (!model.isEmpty()) {
       dispatch(SetModel(model));
+    } else {
+      dispatch(ResetModel());
     }
   }, [dispatch, model]);
 
@@ -151,6 +153,7 @@ export const TimeAbsenceEntryForm: React.FC<TimeAbsenceEntryFormProps> = props =
           maxDate={end}
           onChange={handleStartChange}
           label={<Trans>Labels.Start</Trans>}
+          invalidDateMessage={<Trans>Validation.InvalidDate</Trans>}
           format={formatAsDateTime}
           fullWidth
         />
@@ -161,11 +164,11 @@ export const TimeAbsenceEntryForm: React.FC<TimeAbsenceEntryFormProps> = props =
           minDate={start}
           onChange={handleEndChange}
           label={<Trans>Labels.End</Trans>}
+          invalidDateMessage={<Trans>Validation.InvalidDate</Trans>}
           format={formatAsDateTime}
           fullWidth
         />
       </MuiPickersUtilsProvider>
-      <Divider />
       <ButtonSpinner
         onClick={handleSave}
         isBusy={isBusy}

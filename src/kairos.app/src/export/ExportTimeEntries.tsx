@@ -74,6 +74,7 @@ export const ExportTimeEntriesComponent: React.FC<ExportTimeEntriesProps> = prop
             maxDate={end}
             onChange={handleStartChange}
             label={<Trans>Labels.Start</Trans>}
+            invalidDateMessage={<Trans>Validation.InvalidDate</Trans>}
             format={formatAsDateTime}
             fullWidth
           />
@@ -84,6 +85,7 @@ export const ExportTimeEntriesComponent: React.FC<ExportTimeEntriesProps> = prop
             minDate={start}
             onChange={handleEndChange}
             label={<Trans>Labels.End</Trans>}
+            invalidDateMessage={<Trans>Validation.InvalidDate</Trans>}
             format={formatAsDateTime}
             fullWidth
           />

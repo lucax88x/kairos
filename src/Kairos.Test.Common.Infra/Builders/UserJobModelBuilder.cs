@@ -1,5 +1,4 @@
 using System;
-using System.Collections.Generic;
 using Kairos.Application.UserProfile.Dtos;
 
 namespace Kairos.Test.Common.Infra.Builders
@@ -9,8 +8,8 @@ namespace Kairos.Test.Common.Infra.Builders
         public UserJobModel Build()
         {
             return new UserJobModel(Guid.NewGuid(), "job", DateTimeOffset.MinValue, DateTimeOffset.MaxValue,
-                20, 8, 8, 8, 8, 8, 8, 8,
-                new List<UserProjectModel>());
+                20, 8, 8, 8, 8, 8, 8, 8
+            );
         }
     }
 }

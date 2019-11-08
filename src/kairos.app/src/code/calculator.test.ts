@@ -1,13 +1,8 @@
 import { TimeEntryModel, TimeEntryTypes } from '../models/time-entry.model';
 import { UUID } from '../models/uuid.model';
 import { getDifferencesByRangeByIdAndDate, getWorkingHoursStatistics } from './calculator';
-import {
-  TimeEntryListModel,
-  TimeEntryListJobModel,
-  TimeEntryListProjectModel,
-} from '../models/time-entry-list.model';
+import { TimeEntryListModel, TimeEntryListJobModel } from '../models/time-entry-list.model';
 import { JobModel } from '../models/job.model';
-import { ProjectModel } from '../models/project.model';
 import { ProfileModel } from '../models/profile.model';
 
 it('should get differences with only 2 entries', () => {
@@ -170,7 +165,11 @@ it.only('build working hour statistics', () => {
   console.log(result);
 
   // then
-  expect(result[0]).toBe({ title: 'TimeStatistics.RemainingToday', subtitle: 'January 01', text: '7h' });
+  expect(result[0]).toBe({
+    title: 'TimeStatistics.RemainingToday',
+    subtitle: 'January 01',
+    text: '7h',
+  });
 });
 
 const buildTimeEntry = function(type: TimeEntryTypes, date: string) {
@@ -179,7 +178,6 @@ const buildTimeEntry = function(type: TimeEntryTypes, date: string) {
     new Date(date),
     type,
     new TimeEntryListJobModel(''),
-    new TimeEntryListProjectModel(''),
   );
 };
 
@@ -197,14 +195,5 @@ const profile = new ProfileModel(UUID.Generate(), [
     8,
     8,
     8,
-    [
-      new ProjectModel(
-        UUID.Generate(),
-        'test-project',
-        new Date('January 1 2019 00:00'),
-        new Date('March 31 2019 23:59'),
-        100,
-      ),
-    ],
   ),
 ]);

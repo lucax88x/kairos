@@ -1,16 +1,13 @@
 using System;
-using System.Collections.Generic;
-using System.Collections.Immutable;
-using System.Linq;
 
 namespace Kairos.Domain.Events.UserProfile.EventDtos
 {
     public class UserJobEventDto
     {
-        public UserJobEventDto(Guid id, string? name, DateTimeOffset start, DateTimeOffset? end, decimal holidaysPerYear,
+        public UserJobEventDto(Guid id, string? name, DateTimeOffset start, DateTimeOffset? end,
+            decimal holidaysPerYear,
             decimal monday, decimal tuesday, decimal wednesday, decimal thursday, decimal friday, decimal saturday,
-            decimal sunday,
-            IEnumerable<UserProjectEventDto> projects)
+            decimal sunday)
         {
             Id = id;
             Name = name;
@@ -24,7 +21,6 @@ namespace Kairos.Domain.Events.UserProfile.EventDtos
             Friday = friday;
             Saturday = saturday;
             Sunday = sunday;
-            Projects = projects.ToImmutableList();
         }
 
         public Guid Id { get; }
@@ -39,13 +35,11 @@ namespace Kairos.Domain.Events.UserProfile.EventDtos
         public decimal Friday { get; }
         public decimal Saturday { get; }
         public decimal Sunday { get; }
-        public ImmutableList<UserProjectEventDto> Projects { get; }
 
         public static UserJob To(UserJobEventDto dto)
         {
             return new UserJob(dto.Name, dto.Start, dto.End, dto.HolidaysPerYear, dto.Monday, dto.Tuesday,
-                dto.Wednesday, dto.Thursday, dto.Friday, dto.Saturday, dto.Sunday,
-                dto.Projects.Select(UserProjectEventDto.To));
+                dto.Wednesday, dto.Thursday, dto.Friday, dto.Saturday, dto.Sunday);
         }
     }
 }

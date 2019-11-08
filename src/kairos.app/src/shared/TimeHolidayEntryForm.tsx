@@ -83,6 +83,7 @@ export const TimeHolidayEntryForm: React.FC<TimeHolidayEntryFormProps> = props =
           value={when}
           onChange={handleWhenChange}
           label={<Trans>Labels.When</Trans>}
+          invalidDateMessage={<Trans>Validation.InvalidDate</Trans>}
           format={formatAsDate}
           fullWidth
         />

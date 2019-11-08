@@ -1,10 +1,11 @@
 import DateFnsUtils from '@date-io/date-fns';
 import { Trans } from '@lingui/macro';
-import { Divider, FormControl, FormControlLabel, InputLabel, makeStyles, MenuItem, Radio, RadioGroup, Select } from '@material-ui/core';
+import { FormControl, FormControlLabel, InputLabel, makeStyles, MenuItem, Radio, RadioGroup, Select } from '@material-ui/core';
 import SaveIcon from '@material-ui/icons/Save';
 import { KeyboardDateTimePicker, MaterialUiPickersDate, MuiPickersUtilsProvider } from '@material-ui/pickers';
 import { map } from 'ramda';
 import React, { ChangeEvent, useCallback, useEffect } from 'react';
+import { formatAsDateTime } from '../code/constants';
 import { getDatepickerLocale } from '../code/get-datepicker-locale';
 import { isString } from '../code/is';
 import ButtonSpinner from '../components/ButtonSpinner';
@@ -13,8 +14,7 @@ import { Language } from '../models/language-model';
 import { ProfileModel } from '../models/profile.model';
 import { getTransFromEntryType, TimeEntryModel, TimeEntryTypes } from '../models/time-entry.model';
 import { UUID } from '../models/uuid.model';
-import { RefreshSelectsTimeEntryAction, SetModel, SetTimeEntrySelectedJobAction, SetTimeEntrySelectedProjectAction, SetTimeEntryTypeAction, SetTimeEntryWhenAction, useTimeEntryFormReducer } from './TimeEntryForm.store';
-import { formatAsDateTime } from '../code/constants';
+import { RefreshSelectsTimeEntryAction, ResetModel, SetModel, SetTimeEntrySelectedJobAction, SetTimeEntryTypeAction, SetTimeEntryWhenAction, useTimeEntryFormReducer } from './TimeEntryForm.store';
 
 const useStyles = makeStyles(theme => ({
   container: {
@@ -47,7 +47,7 @@ export const TimeEntryForm: React.FC<TimeEntryFormProps> = props => {
   const { selectedLanguage, isBusy, profile, model, onSave } = props;
 
   const [state, dispatch] = useTimeEntryFormReducer();
-  const { id, when, type, jobs, selectedJobId, projects, selectedProjectId } = state;
+  const { id, when, type, jobs, selectedJobId } = state;
 
   useEffect(() => {
     dispatch(RefreshSelectsTimeEntryAction(profile));
@@ -55,11 +55,9 @@ export const TimeEntryForm: React.FC<TimeEntryFormProps> = props => {
 
   const handleSave = useCallback(() => {
     if (!!when) {
-      onSave(
-        new TimeEntryModel(id, when, type, new UUID(selectedJobId), new UUID(selectedProjectId)),
-      );
+      onSave(new TimeEntryModel(id, when, type, new UUID(selectedJobId)));
     }
-  }, [onSave, id, type, when, selectedJobId, selectedProjectId]);
+  }, [onSave, id, type, when, selectedJobId]);
 
   const handleTypeChange = useCallback(
     (_, value: string) => dispatch(SetTimeEntryTypeAction(value as TimeEntryTypes)),
@@ -84,18 +82,11 @@ export const TimeEntryForm: React.FC<TimeEntryFormProps> = props => {
     [dispatch, profile],
   );
 
-  const handleProjectChange = useCallback(
-    (event: ChangeEvent<{ value: unknown }>) => {
-      if (isString(event.target.value)) {
-        dispatch(SetTimeEntrySelectedProjectAction(event.target.value));
-      }
-    },
-    [dispatch],
-  );
-
   useEffect(() => {
     if (!model.isEmpty()) {
       dispatch(SetModel(model));
+    } else {
+      dispatch(ResetModel());
     }
   }, [dispatch, model]);
 
@@ -138,6 +129,8 @@ export const TimeEntryForm: React.FC<TimeEntryFormProps> = props => {
           value={when}
           onChange={handleWhenChange}
           format={formatAsDateTime}
+          label={<Trans>Labels.When</Trans>}
+          invalidDateMessage={<Trans>Validation.InvalidDate</Trans>}
         />
       </MuiPickersUtilsProvider>
       <div>
@@ -165,35 +158,10 @@ export const TimeEntryForm: React.FC<TimeEntryFormProps> = props => {
           </FormControl>
         )}
       </div>
-      <FormControl fullWidth>
-        <InputLabel htmlFor="project">
-          <Trans>Labels.Project</Trans>
-        </InputLabel>
-        <Select
-          value={selectedProjectId}
-          onChange={handleProjectChange}
-          disabled={projects.length === 1}
-          inputProps={{
-            id: 'project',
-          }}
-        >
-          {map(
-            project => (
-              <MenuItem key={project.id.toString()} value={project.id.toString()}>
-                {project.name}
-              </MenuItem>
-            ),
-            projects,
-          )}
-        </Select>
-      </FormControl>
-      <Divider />
       <ButtonSpinner
         onClick={handleSave}
         isBusy={isBusy}
-        disabled={
-          !when || selectedJobId === UUID.Empty || selectedProjectId === UUID.Empty || isBusy
-        }
+        disabled={!when || selectedJobId === UUID.Empty || isBusy}
         className={classes.selfCenter}
       >
         {model.isEmpty() ? (
