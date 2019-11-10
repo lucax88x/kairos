@@ -26,6 +26,9 @@ const useStyles = makeStyles(theme => ({
   hasPadding: {
     padding: theme.spacing(3),
   },
+  marginLeft: {
+    marginLeft: theme.spacing(1),
+  },
 }));
 
 export interface TimeHolidayEntryFormProps {
@@ -95,7 +98,10 @@ export const TimeHolidayEntryForm: React.FC<TimeHolidayEntryFormProps> = props =
         disabled={!when || isBusy}
         className={classes.selfCenter}
       >
-        <SaveIcon />
+        <>
+          <Trans>Buttons.Update</Trans>
+          <SaveIcon className={classes.marginLeft} />
+        </>
       </ButtonSpinner>
     </div>
   );

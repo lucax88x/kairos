@@ -78,7 +78,7 @@ export const ProfileComponent: React.FC<ProfileProps> = props => {
     [dispatch],
   );
   const handleJobEndDateChange = useCallback(
-    (jobId: UUID, end: Date) => dispatch(UpdateJobEndDateAction(jobId, end)),
+    (jobId: UUID, end: Date | null) => dispatch(UpdateJobEndDateAction(jobId, end)),
     [dispatch],
   );
   const handleJobHolidaysPerYearChange = useCallback(

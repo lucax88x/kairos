@@ -394,7 +394,7 @@ export const AppComponent: React.FC<AppProps> = props => {
                 </Box>
               </div>
               <div className={classes.toolbarContentRight}>
-                {!isRightDrawerOpen && (
+                {!isRightDrawerOpen && !isLeftDrawerOpen && (
                   <IconButton
                     color="inherit"
                     aria-label={i18n._(t`TopBar.OpenTimeEntry`)}
@@ -403,7 +403,7 @@ export const AppComponent: React.FC<AppProps> = props => {
                     <TimerIcon />
                   </IconButton>
                 )}
-                {!isRightDrawerOpen && (
+                {!isRightDrawerOpen && !isLeftDrawerOpen && (
                   <IconButton
                     color="inherit"
                     aria-label={i18n._(t`TopBar.OpenTimeAbsenceEntry`)}

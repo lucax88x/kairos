@@ -1,17 +1,16 @@
 import { t } from '@lingui/macro';
 import {
+  Avatar,
+  Box,
   Button,
+  Container,
   createMuiTheme,
   CssBaseline,
-  Container,
-  Grid,
-  Box,
-  Typography,
   IconButton,
-  Avatar,
+  Typography,
 } from '@material-ui/core';
 import CloseIcon from '@material-ui/icons/Close';
-import { ThemeProvider, makeStyles } from '@material-ui/styles';
+import { makeStyles, ThemeProvider } from '@material-ui/styles';
 import { ConnectedRouter } from 'connected-react-router';
 import { SnackbarProvider } from 'notistack';
 import React, { useCallback } from 'react';
@@ -23,6 +22,7 @@ import { App } from './App.container';
 import { LoginForm } from './auth/LoginForm.container';
 import { Themes } from './code/variables';
 import { ErrorBoundary } from './components/ErrorBoundary';
+import { SimpleIcon } from './components/SimpleIcon';
 import { SpinnerIcon } from './components/SpinnerIcon';
 import { history, persistor, store } from './createStore';
 import { i18n } from './i18nLoader';
@@ -33,7 +33,6 @@ import { enqueueSnackbarAction } from './notification-manager/enqueue-snackbar';
 import { NotificationManager } from './notification-manager/NotificationManager.container';
 import { Routes } from './routes';
 import * as serviceWorker from './serviceWorker';
-import { SimpleIcon } from './components/SimpleIcon';
 
 const theme = createMuiTheme({
   palette: {
@@ -48,6 +47,20 @@ const theme = createMuiTheme({
     MuiButton: {
       textPrimary: {
         color: Themes.First.color,
+      },
+    },
+    MuiFormLabel: {
+      root: {
+        '&$focused': {
+          color: Themes.Second.backgroundColor,
+        },
+      },
+    },
+    MuiInput: {
+      underline: {
+        '&:after': {
+          borderBottom: `2px solid ${Themes.Second.backgroundColor}`,
+        },
       },
     },
   },

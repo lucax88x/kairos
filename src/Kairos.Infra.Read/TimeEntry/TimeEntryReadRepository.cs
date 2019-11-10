@@ -48,13 +48,18 @@ namespace Kairos.Infra.Read.TimeEntry
 
             var dtos = await _repository.GetMultiple<TimeEntryReadDto>(ids);
             
-            dtos = dtos.Where(d => d.When.Year == year).ToImmutableArray();
+            dtos = dtos
+                .Where(d => d.When.Year == year)
+                .ToImmutableArray();
 
             var jobs = await _userProfileReadRepository.GetMultipleJobs(dtos.Select(d => d.Job).Distinct());
 
             var indexedJobs = jobs.ToDictionary(job => job.Id, job => job);
 
-            return dtos.Select(dto => new TimeEntryAggregationReadDto(dto.Id, dto.When, dto.Type, indexedJobs[dto.Job])).ToImmutableList();
+            return dtos
+                .Select(dto => new TimeEntryAggregationReadDto(dto.Id, dto.When, dto.Type, indexedJobs[dto.Job]))
+                .OrderByDescending(d => d.When)
+                .ToImmutableList();
         }
 
         public async Task<TimeEntryAggregationReadDto> GetById(Guid id)

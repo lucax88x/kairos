@@ -91,7 +91,7 @@ msgstr "Descrizione"
 
 #: src/bulk-insert/BulkTimeHolidayEntryInsert.tsx:103
 msgid "BulkTimeHolidayEntryInsert.InvalidEntries"
-msgstr "Vacanze invalidi"
+msgstr "Vacanze invalide"
 
 #: src/bulk-insert/BulkTimeHolidayEntryInsert.tsx:67
 msgid "BulkTimeHolidayEntryInsert.Title"
@@ -247,7 +247,7 @@ msgstr "Venerdì"
 
 #: src/profile/ProfileJobForm.tsx:117
 msgid "Labels.Holidays"
-msgstr "Vacanze"
+msgstr "Vacanze (giorni all'anno)"
 
 #: src/shared/TimeEntryForm.tsx:83
 msgid "Labels.Job"

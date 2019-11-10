@@ -1,9 +1,21 @@
 import DateFnsUtils from '@date-io/date-fns';
 import { t, Trans } from '@lingui/macro';
-import { ExpansionPanel, ExpansionPanelDetails, ExpansionPanelSummary, IconButton, makeStyles, TextField, Typography } from '@material-ui/core';
+import {
+  ExpansionPanel,
+  ExpansionPanelDetails,
+  ExpansionPanelSummary,
+  IconButton,
+  makeStyles,
+  TextField,
+  Typography,
+} from '@material-ui/core';
 import DeleteIcon from '@material-ui/icons/Delete';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
-import { KeyboardDatePicker, MaterialUiPickersDate, MuiPickersUtilsProvider } from '@material-ui/pickers';
+import {
+  KeyboardDatePicker,
+  MaterialUiPickersDate,
+  MuiPickersUtilsProvider,
+} from '@material-ui/pickers';
 import clsx from 'clsx';
 import { endOfDay } from 'date-fns';
 import React, { ChangeEvent, useCallback } from 'react';
@@ -75,7 +87,7 @@ export interface ProfileJobFormDispatches {
   onJobDelete: (jobId: UUID) => void;
   onJobNameChange: (jobId: UUID, name: string) => void;
   onJobStartDateChange: (jobId: UUID, date: Date) => void;
-  onJobEndDateChange: (jobId: UUID, date: Date) => void;
+  onJobEndDateChange: (jobId: UUID, date: Date | null) => void;
   onJobHolidaysPerYearChange: (jobId: UUID, days: number) => void;
   onJobDayChange: (jobId: UUID, day: string, hours: number) => void;
 }
@@ -116,6 +128,8 @@ export const ProfileJobForm: React.FC<ProfileJobFormProps> = props => {
     (date: MaterialUiPickersDate) => {
       if (!!date) {
         onJobEndDateChange(job.id, endOfDay(date));
+      } else {
+        onJobEndDateChange(job.id, null);
       }
     },
     [onJobEndDateChange, job],
@@ -140,6 +154,9 @@ export const ProfileJobForm: React.FC<ProfileJobFormProps> = props => {
   const handleFridayChange = useCallback(handleJobDayChange('friday'), [handleJobDayChange]);
   const handleSaturdayChange = useCallback(handleJobDayChange('saturday'), [handleJobDayChange]);
   const handleSundayChange = useCallback(handleJobDayChange('sunday'), [handleJobDayChange]);
+
+  const maxDate = new Date(8640000000000000);
+  const minDate = new Date(0);
 
   return (
     <ExpansionPanel>
@@ -179,19 +196,21 @@ export const ProfileJobForm: React.FC<ProfileJobFormProps> = props => {
                 autoOk
                 fullWidth
                 value={job.start}
-                // maxDate={end}
+                maxDate={!!job.end ? job.end : maxDate}
                 onChange={handleJobStartDateChange}
                 label={<Trans>Labels.Start</Trans>}
                 invalidDateMessage={<Trans>Validation.InvalidDate</Trans>}
+                format={formatAsDate}
               />
               <KeyboardDatePicker
                 autoOk
                 fullWidth
                 value={job.end}
-                // minDate={start}
+                minDate={!!job.start ? job.start : minDate}
                 invalidDateMessage={<Trans>Validation.InvalidDate</Trans>}
                 onChange={handleJobEndDateChange}
                 label={<Trans>Labels.End</Trans>}
+                format={formatAsDate}
               />
             </MuiPickersUtilsProvider>
             <TextField

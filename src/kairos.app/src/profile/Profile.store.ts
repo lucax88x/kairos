@@ -17,7 +17,7 @@ export const UpdateJobNameAction = (jobId: UUID, name: string) =>
   action('UPDATE_JOB_NAME', { jobId, name });
 export const UpdateJobStartDateAction = (jobId: UUID, start: Date) =>
   action('UPDATE_JOB_START_DATE', { jobId, start });
-export const UpdateJobEndDateAction = (jobId: UUID, end: Date) =>
+export const UpdateJobEndDateAction = (jobId: UUID, end: Date | null) =>
   action('UPDATE_JOB_END_DATE', { jobId, end });
 export const UpdateJobHolidaysPerYearAction = (jobId: UUID, days: number) =>
   action('UPDATE_JOB_HOLIDAYS_PER_YEAR', { jobId, days });
