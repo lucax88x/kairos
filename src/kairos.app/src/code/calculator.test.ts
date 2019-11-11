@@ -1,3 +1,4 @@
+import { ProfileBuilder } from './../tests/profile.builder';
 import { TimeEntryModel, TimeEntryTypes } from '../models/time-entry.model';
 import { UUID } from '../models/uuid.model';
 import { getDifferencesByRangeByIdAndDate, getWorkingHoursStatistics } from './calculator';
@@ -151,8 +152,10 @@ it('should get min difference when there is no in', () => {
   expect(result[1]).toBe('00:00:00');
 });
 
-it.only('build working hour statistics', () => {
+it('build working hour statistics', () => {
   // given
+const profile = new ProfileBuilder().build()
+
   const timeEntries: TimeEntryListModel[] = [
     buildTimeEntry(TimeEntryTypes.IN, 'January 1 2019 08:30'),
     buildTimeEntry(TimeEntryTypes.OUT, 'January 1 2019 09:30'),
@@ -182,29 +185,3 @@ const buildTimeEntry = function(type: TimeEntryTypes, date: string) {
     new TimeEntryListProjectModel(''),
   );
 };
-
-const profile = new ProfileModel(UUID.Generate(), [
-  new JobModel(
-    UUID.Generate(),
-    'test-job',
-    new Date('January 1 2019 00:00'),
-    new Date('March 31 2019 23:59'),
-    20,
-    8,
-    8,
-    8,
-    8,
-    8,
-    8,
-    8,
-    [
-      new ProjectModel(
-        UUID.Generate(),
-        'test-project',
-        new Date('January 1 2019 00:00'),
-        new Date('March 31 2019 23:59'),
-        100,
-      ),
-    ],
-  ),
-]);
