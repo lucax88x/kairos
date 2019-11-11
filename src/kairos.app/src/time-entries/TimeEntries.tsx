@@ -12,7 +12,6 @@ import { i18n } from '../i18nLoader';
 import {
   TimeEntryListJobModel,
   TimeEntryListModel,
-  TimeEntryListProjectModel,
 } from '../models/time-entry-list.model';
 import { UUID } from '../models/uuid.model';
 
@@ -58,7 +57,6 @@ export const TimeEntriesComponent: React.FC<TimeEntriesProps> = props => {
   );
   const rowGetter = useCallback(({ index }: Index) => timeEntries[index], [timeEntries]);
   const jobFormatter = useCallback((job: TimeEntryListJobModel) => job.name, []);
-  const projectFormatter = useCallback((project: TimeEntryListProjectModel) => project.name, []);
   const updateCellRenderer = useCallback(
     model => (
       <IconButton color="inherit" aria-label="Update entry" onClick={() => handleUpdate(model)}>
@@ -106,12 +104,6 @@ export const TimeEntriesComponent: React.FC<TimeEntriesProps> = props => {
               label: i18n._(t`TimeEntries.JobTableHeader`),
               dataKey: 'job',
               formatter: jobFormatter,
-            },
-            {
-              width: 200,
-              label: i18n._(t`TimeEntries.ProjectTableHeader`),
-              dataKey: 'project',
-              formatter: projectFormatter,
             },
             {
               width: 100,

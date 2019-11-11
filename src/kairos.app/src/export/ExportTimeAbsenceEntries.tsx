@@ -12,6 +12,7 @@ import React, { useCallback, useState } from 'react';
 import { getDatepickerLocale } from '../code/get-datepicker-locale';
 import ButtonSpinner from '../components/ButtonSpinner';
 import { Language } from '../models/language-model';
+import { formatAsDateTime } from '../code/constants';
 
 const useStyles = makeStyles(theme => ({
   rows: {
@@ -73,6 +74,8 @@ export const ExportTimeAbsenceEntriesComponent: React.FC<ExportTimeAbsenceEntrie
             maxDate={end}
             onChange={handleStartChange}
             label={<Trans>Labels.Start</Trans>}
+            invalidDateMessage={<Trans>Validation.InvalidDate</Trans>}
+            format={formatAsDateTime}
             fullWidth
           />
           <KeyboardDateTimePicker
@@ -82,6 +85,8 @@ export const ExportTimeAbsenceEntriesComponent: React.FC<ExportTimeAbsenceEntrie
             minDate={start}
             onChange={handleEndChange}
             label={<Trans>Labels.End</Trans>}
+            invalidDateMessage={<Trans>Validation.InvalidDate</Trans>}
+            format={formatAsDateTime}
             fullWidth
           />
         </div>

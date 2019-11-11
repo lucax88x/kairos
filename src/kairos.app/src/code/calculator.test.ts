@@ -2,13 +2,8 @@ import { ProfileBuilder } from './../tests/profile.builder';
 import { TimeEntryModel, TimeEntryTypes } from '../models/time-entry.model';
 import { UUID } from '../models/uuid.model';
 import { getDifferencesByRangeByIdAndDate, getWorkingHoursStatistics } from './calculator';
-import {
-  TimeEntryListModel,
-  TimeEntryListJobModel,
-  TimeEntryListProjectModel,
-} from '../models/time-entry-list.model';
+import { TimeEntryListModel, TimeEntryListJobModel } from '../models/time-entry-list.model';
 import { JobModel } from '../models/job.model';
-import { ProjectModel } from '../models/project.model';
 import { ProfileModel } from '../models/profile.model';
 
 it('should get differences with only 2 entries', () => {
@@ -173,7 +168,11 @@ const profile = new ProfileBuilder().build()
   console.log(result);
 
   // then
-  expect(result[0]).toBe({ title: 'TimeStatistics.RemainingToday', subtitle: 'January 01', text: '7h' });
+  expect(result[0]).toBe({
+    title: 'TimeStatistics.RemainingToday',
+    subtitle: 'January 01',
+    text: '7h',
+  });
 });
 
 const buildTimeEntry = function(type: TimeEntryTypes, date: string) {
@@ -182,6 +181,5 @@ const buildTimeEntry = function(type: TimeEntryTypes, date: string) {
     new Date(date),
     type,
     new TimeEntryListJobModel(''),
-    new TimeEntryListProjectModel(''),
   );
 };

@@ -30,8 +30,7 @@ namespace Kairos.Infra.Read.TimeEntry
 
         public async Task AddOrUpdate(TimeEntryEventDto timeEntry)
         {
-            var dto = new TimeEntryReadDto(timeEntry.Id, timeEntry.When, (int) timeEntry.Type, timeEntry.Job,
-                timeEntry.Project);
+            var dto = new TimeEntryReadDto(timeEntry.Id, timeEntry.When, (int) timeEntry.Type, timeEntry.Job);
 
             await _repository.Set(timeEntry.Id, dto);
             await _repository.SortedSetAdd($"by-when|by-user|{timeEntry.User}", dto.When.UtcTicks, timeEntry.Id);
@@ -49,25 +48,26 @@ namespace Kairos.Infra.Read.TimeEntry
 
             var dtos = await _repository.GetMultiple<TimeEntryReadDto>(ids);
             
-            dtos = dtos.Where(d => d.When.Year == year).ToImmutableArray();
+            dtos = dtos
+                .Where(d => d.When.Year == year)
+                .ToImmutableArray();
 
             var jobs = await _userProfileReadRepository.GetMultipleJobs(dtos.Select(d => d.Job).Distinct());
-            var projects = await _userProfileReadRepository.GetMultipleProjects(dtos.Select(d => d.Project).Distinct());
 
             var indexedJobs = jobs.ToDictionary(job => job.Id, job => job);
-            var indexedProjects = projects.ToDictionary(project => project.Id, project => project);
 
-            return dtos.Select(dto => new TimeEntryAggregationReadDto(dto.Id, dto.When, dto.Type, indexedJobs[dto.Job],
-                indexedProjects[dto.Project])).ToImmutableList();
+            return dtos
+                .Select(dto => new TimeEntryAggregationReadDto(dto.Id, dto.When, dto.Type, indexedJobs[dto.Job]))
+                .OrderByDescending(d => d.When)
+                .ToImmutableList();
         }
 
         public async Task<TimeEntryAggregationReadDto> GetById(Guid id)
         {
             var dto = await _repository.Get<TimeEntryReadDto>(id);
             var job = await _userProfileReadRepository.GetJobById(dto.Job);
-            var project = await _userProfileReadRepository.GetProjectById(dto.Project);
 
-            return new TimeEntryAggregationReadDto(dto.Id, dto.When, dto.Type, job, project);
+            return new TimeEntryAggregationReadDto(dto.Id, dto.When, dto.Type, job);
         }
     }
 }

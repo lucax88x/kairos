@@ -1,20 +1,7 @@
 import { parseISO } from 'date-fns';
+import { immerable } from 'immer';
 import { TimeEntryTypes } from './time-entry.model';
 import { UUID } from './uuid.model';
-import { immerable } from 'immer';
-
-export class TimeEntryListProjectModel {
-  constructor(public name: string) {}
-  static fromOutModel(outModel: TimeEntryListProjectOutModel) {
-    return new TimeEntryListProjectModel(outModel.name);
-  }
-
-  static empty = new TimeEntryListProjectModel('');
-
-  isEmpty() {
-    return !!this.name;
-  }
-}
 
 export class TimeEntryListJobModel {
   constructor(public name: string) {}
@@ -31,13 +18,12 @@ export class TimeEntryListJobModel {
 
 export class TimeEntryListModel {
   [immerable] = true;
-  
+
   constructor(
     public id: UUID,
     public when: Date,
     public type: TimeEntryTypes,
     public job: TimeEntryListJobModel,
-    public project: TimeEntryListProjectModel,
   ) {}
 
   static fromOutModel(outModel: TimeEntryListOutModel) {
@@ -46,7 +32,6 @@ export class TimeEntryListModel {
       parseISO(outModel.when),
       TimeEntryTypes[outModel.type],
       TimeEntryListJobModel.fromOutModel(outModel.job),
-      TimeEntryListProjectModel.fromOutModel(outModel.project),
     );
   }
 
@@ -55,15 +40,13 @@ export class TimeEntryListModel {
     new Date(0),
     TimeEntryTypes.IN,
     TimeEntryListJobModel.empty,
-    TimeEntryListProjectModel.empty,
   );
 
   isEmpty() {
     return (
       this.id.equals(TimeEntryListModel.empty.id) &&
       this.when === TimeEntryListModel.empty.when &&
-      this.job.isEmpty() &&
-      this.project.isEmpty()
+      this.job.isEmpty()
     );
   }
 }
@@ -73,13 +56,8 @@ export interface TimeEntryListOutModel {
   when: string;
   type: TimeEntryTypes;
   job: TimeEntryListJobOutModel;
-  project: TimeEntryListProjectOutModel;
 }
 
 export interface TimeEntryListJobOutModel {
-  name: string;
-}
-
-export interface TimeEntryListProjectOutModel {
   name: string;
 }

@@ -7,9 +7,5 @@ export const getTimeEntryQuery = `query ($id: ID!) {
       id
       name
     }
-    project {
-      id
-      name
-    }
   }
 }`;

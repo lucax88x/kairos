@@ -3,8 +3,11 @@ import React from 'react';
 import { TimeEntriesByRange } from './TimeEntriesByRange.container';
 import { TimeEntriesCalendar } from './TimeEntriesCalendar.container';
 
-
 const useStyles = makeStyles(theme => ({
+  root: {
+    display: 'grid',
+    gridGap: theme.spacing(1),
+  },
   paper: {
     padding: theme.spacing(2),
     display: 'grid',
@@ -17,22 +20,17 @@ export const Dashboard: React.FC = props => {
   const classes = useStyles(props);
 
   return (
-    <Grid container spacing={3}>
-      {/* <Grid item xs>
+    <div className={classes.root}>
+      {/* 
         <Paper className={classes.paper}>
           <TimeStatistics />
-        </Paper>
-      </Grid> */}
-      <Grid item xs>
-        <Paper className={classes.paper}>
-          <TimeEntriesByRange />
-        </Paper>
-      </Grid>
-      <Grid item xs>
-        <Paper className={classes.paper}>
-          <TimeEntriesCalendar />
-        </Paper>
-      </Grid>
-    </Grid>
+        </Paper> */}
+      <Paper className={classes.paper}>
+        <TimeEntriesByRange />
+      </Paper>
+      <Paper className={classes.paper}>
+        <TimeEntriesCalendar />
+      </Paper>
+    </div>
   );
 };

@@ -14,13 +14,6 @@ export const getProfileQuery = `query {
       friday
       saturday
       sunday
-      projects {
-        id
-        name
-        start
-        end
-        allocation
-      }
     }
   }
 }`;

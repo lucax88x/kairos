@@ -67,7 +67,7 @@ namespace Kairos.Application.TimeEntry
                 var entries = await _timeEntryReadRepository.Get(_authProvider.GetUser(), year);
 
                 foreach (var entry in entries.Where(e => e.When >= request.From && e.When <= request.To))
-                    sb.AppendLine($"{entry.When},{entry.Type},{entry.Job.Name},{entry.Project.Name}");
+                    sb.AppendLine($"{entry.When},{entry.Type},{entry.Job.Name}");
             }
 
             var stream = new MemoryStream(Encoding.UTF8.GetBytes(sb.ToString()));

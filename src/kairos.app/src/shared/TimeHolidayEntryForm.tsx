@@ -3,11 +3,12 @@ import { Trans } from '@lingui/react';
 import { Divider, makeStyles, TextField } from '@material-ui/core';
 import SaveIcon from '@material-ui/icons/Save';
 import {
-  KeyboardDateTimePicker,
+  KeyboardDatePicker,
   MaterialUiPickersDate,
   MuiPickersUtilsProvider,
 } from '@material-ui/pickers';
 import React, { ChangeEvent, useCallback, useEffect, useState } from 'react';
+import { formatAsDate } from '../code/constants';
 import { getDatepickerLocale } from '../code/get-datepicker-locale';
 import ButtonSpinner from '../components/ButtonSpinner';
 import { Language } from '../models/language-model';
@@ -24,6 +25,9 @@ const useStyles = makeStyles(theme => ({
   },
   hasPadding: {
     padding: theme.spacing(3),
+  },
+  marginLeft: {
+    marginLeft: theme.spacing(1),
   },
 }));
 
@@ -77,12 +81,13 @@ export const TimeHolidayEntryForm: React.FC<TimeHolidayEntryFormProps> = props =
         fullWidth
       />
       <MuiPickersUtilsProvider utils={DateFnsUtils} locale={getDatepickerLocale(selectedLanguage)}>
-        <KeyboardDateTimePicker
+        <KeyboardDatePicker
           autoOk
-          ampm={false}
           value={when}
           onChange={handleWhenChange}
           label={<Trans>Labels.When</Trans>}
+          invalidDateMessage={<Trans>Validation.InvalidDate</Trans>}
+          format={formatAsDate}
           fullWidth
         />
       </MuiPickersUtilsProvider>
@@ -93,7 +98,10 @@ export const TimeHolidayEntryForm: React.FC<TimeHolidayEntryFormProps> = props =
         disabled={!when || isBusy}
         className={classes.selfCenter}
       >
-        <SaveIcon />
+        <>
+          <Trans>Buttons.Update</Trans>
+          <SaveIcon className={classes.marginLeft} />
+        </>
       </ButtonSpinner>
     </div>
   );

@@ -18,8 +18,19 @@ export class ErrorBoundary extends React.Component<ErrorBoundaryProps, ErrorBoun
 
   render() {
     if (this.state.hasError) {
-      // You can render any custom fallback UI
-      return <h1>Something went wrong.</h1>;
+      return (
+        <div
+          style={{
+            display: 'grid',
+            width: '100vw',
+            fontSize: '35px',
+            height: '100vh',
+            justifyContent: 'center',
+          }}
+        >
+          <h1 style={{ color: 'white' }}>Something went wrong. Please refresh the page.</h1>
+        </div>
+      );
     }
     return this.props.children;
   }

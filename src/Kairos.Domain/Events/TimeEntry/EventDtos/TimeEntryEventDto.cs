@@ -4,14 +4,13 @@ namespace Kairos.Domain.Events.TimeEntry.EventDtos
 {
     public class TimeEntryEventDto
     {
-        public TimeEntryEventDto(Guid id, string? user, DateTimeOffset when, TimeEntryType type, Guid job, Guid project)
+        public TimeEntryEventDto(Guid id, string? user, DateTimeOffset when, TimeEntryType type, Guid job)
         {
             Id = id;
             User = user;
             When = when;
             Type = type;
             Job = job;
-            Project = project;
         }
 
         public Guid Id { get; }
@@ -19,6 +18,5 @@ namespace Kairos.Domain.Events.TimeEntry.EventDtos
         public DateTimeOffset When { get; }
         public TimeEntryType Type { get; }
         public Guid Job { get; }
-        public Guid Project { get; }
     }
 }

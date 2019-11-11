@@ -48,8 +48,7 @@ namespace Kairos.Application.Tests.TimeEntry
             // GIVEN
             var command = new CreateTimeEntries(new TimeEntryModel(DateTimeOffset.UtcNow,
                 (int) TimeEntryType.In,
-                UserProfileScenarioBuilder.Job1,
-                UserProfileScenarioBuilder.Project1));
+                UserProfileScenarioBuilder.Job1));
 
             // WHEN           
             var ids = await _sandbox.Mediator!.Send(command);
@@ -84,13 +83,13 @@ namespace Kairos.Application.Tests.TimeEntry
         }
 
         [Fact(Skip = "TODO")]
-        public async Task should_not_allow_to_create_time_entry_on_inexistent_job_or_project()
+        public async Task should_not_allow_to_create_time_entry_on_inexistent_job()
         {
             await Task.CompletedTask;
         }
 
         [Fact(Skip = "TODO")]
-        public async Task should_not_allow_to_create_time_entry_on_a_job_or_project_which_are_outside_the_date()
+        public async Task should_not_allow_to_create_time_entry_on_a_job_which_are_outside_the_date()
         {
             await Task.CompletedTask;
         }

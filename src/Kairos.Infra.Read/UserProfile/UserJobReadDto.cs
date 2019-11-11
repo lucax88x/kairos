@@ -1,7 +1,4 @@
 using System;
-using System.Collections.Generic;
-using System.Collections.Immutable;
-using System.Linq;
 using Kairos.Domain.Events.UserProfile.EventDtos;
 
 namespace Kairos.Infra.Read.UserProfile
@@ -9,8 +6,8 @@ namespace Kairos.Infra.Read.UserProfile
     public class UserJobReadDto
     {
         public UserJobReadDto(Guid id, string? name, DateTimeOffset start, DateTimeOffset? end, decimal holidaysPerYear,
-            decimal monday, decimal tuesday, decimal wednesday, decimal thursday, decimal friday, decimal saturday, decimal sunday, 
-            IEnumerable<UserProjectReadDto> projects)
+            decimal monday, decimal tuesday, decimal wednesday, decimal thursday, decimal friday, decimal saturday,
+            decimal sunday)
         {
             Id = id;
             Name = name;
@@ -24,7 +21,6 @@ namespace Kairos.Infra.Read.UserProfile
             Friday = friday;
             Saturday = saturday;
             Sunday = sunday;
-            Projects = projects.ToImmutableList();
         }
 
         public Guid Id { get; }
@@ -39,14 +35,12 @@ namespace Kairos.Infra.Read.UserProfile
         public decimal Friday { get; }
         public decimal Saturday { get; }
         public decimal Sunday { get; }
-        public ImmutableList<UserProjectReadDto> Projects { get; }
 
         public static UserJobReadDto From(UserJobEventDto dto)
         {
             return new UserJobReadDto(dto.Id, dto.Name, dto.Start, dto.End, dto.HolidaysPerYear, dto.Monday,
                 dto.Tuesday,
-                dto.Wednesday, dto.Thursday, dto.Friday, dto.Saturday, dto.Sunday, 
-                dto.Projects.Select(UserProjectReadDto.From));
+                dto.Wednesday, dto.Thursday, dto.Friday, dto.Saturday, dto.Sunday);
         }
     }
 }

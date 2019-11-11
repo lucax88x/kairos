@@ -15,7 +15,6 @@ namespace Kairos.Web.Api.GraphQL.TimeEntry.Types
             Field(d => d.When).Description("When it happened");
             Field(d => d.Type, type: typeof(TimeEntryTypeEnum)).Description("The type of the time entry.");
             Field(d => d.Job, type: typeof(UserJobType)).Description("The job connected to");
-            Field(d => d.Project, type: typeof(UserProjectType)).Description("The project connected to");
         }
     }
 }

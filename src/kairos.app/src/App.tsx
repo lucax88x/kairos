@@ -70,7 +70,9 @@ for (let i = -10; i < 3; i++) {
 
 const useStyles = makeStyles(theme => ({
   root: {
-    display: 'flex',
+    width: '100%',
+    overflowY: 'auto',
+    overflowX: 'hidden',
   },
   logo: {
     width: 40,
@@ -85,14 +87,6 @@ const useStyles = makeStyles(theme => ({
   languageFlag: {
     width: 20,
   },
-  footerAvatar: {
-    width: 24,
-    height: 24,
-  },
-  footerIcon: {
-    width: 24,
-    height: 24,
-  },
   toolbar: {
     paddingRight: 16,
     paddingLeft: 16,
@@ -103,32 +97,32 @@ const useStyles = makeStyles(theme => ({
   },
   toolbarContent: {
     width: '100%',
-    display: 'grid',
+    display: 'flex',
     alignItems: 'center',
     justifyContent: 'space-between',
     gridAutoFlow: 'column',
   },
   toolbarContentLeft: {
-    display: 'grid',
+    display: 'flex',
     alignItems: 'center',
     justifyContent: 'center',
     gridAutoFlow: 'column',
   },
   toolbarContentRight: {
-    display: 'grid',
+    display: 'flex',
     alignItems: 'center',
     justifyContent: 'center',
     gridAutoFlow: 'column',
   },
   toolbarLeftIcon: {
-    display: 'grid',
+    display: 'flex',
     alignItems: 'center',
     justifyContent: 'flex-end',
     padding: '0 8px',
     ...theme.mixins.toolbar,
   },
   toolbarRightIcon: {
-    display: 'grid',
+    display: 'flex',
     alignItems: 'center',
     justifyContent: 'flex-start',
     padding: '0 8px',
@@ -188,9 +182,9 @@ const useStyles = makeStyles(theme => ({
   },
   appBarSpacer: theme.mixins.toolbar,
   content: {
-    display: 'flex',
+    display: 'grid',
+    width: '100%',
     flexDirection: 'column',
-    height: '100vh',
     flexGrow: 1,
     overflow: 'auto',
     marginRight: -drawerWidth,
@@ -213,24 +207,6 @@ const useStyles = makeStyles(theme => ({
   avatar: {
     margin: 10,
     cursor: 'pointer',
-  },
-  footer: {
-    backgroundColor: theme.palette.background.paper,
-    marginTop: 'auto',
-  },
-  footerRoot: {
-    padding: 2,
-  },
-  footerLinks: {
-    display: 'grid',
-    gridAutoFlow: 'column',
-    justifyContent: 'center',
-    alignItems: 'center',
-    gridGap: 0,
-
-    [theme.breakpoints.up('md')]: {
-      gridGap: theme.spacing(2),
-    },
   },
 }));
 
@@ -418,7 +394,7 @@ export const AppComponent: React.FC<AppProps> = props => {
                 </Box>
               </div>
               <div className={classes.toolbarContentRight}>
-                {!isRightDrawerOpen && (
+                {!isRightDrawerOpen && !isLeftDrawerOpen && (
                   <IconButton
                     color="inherit"
                     aria-label={i18n._(t`TopBar.OpenTimeEntry`)}
@@ -427,7 +403,7 @@ export const AppComponent: React.FC<AppProps> = props => {
                     <TimerIcon />
                   </IconButton>
                 )}
-                {!isRightDrawerOpen && (
+                {!isRightDrawerOpen && !isLeftDrawerOpen && (
                   <IconButton
                     color="inherit"
                     aria-label={i18n._(t`TopBar.OpenTimeAbsenceEntry`)}
@@ -503,103 +479,21 @@ export const AppComponent: React.FC<AppProps> = props => {
           </List>
         </Drawer>
 
-        <div className={classes.content}>
-          <main>
-            <div className={classes.appBarSpacer} />
-            <Container maxWidth="lg" className={classes.container}>
-              <Route path={Routes.Dashboard} component={Dashboard} />
-              <Route path={Routes.Profile} component={Profile} />
-              <Route path={Routes.TimeEntries} component={TimeEntries} />
-              <Route path={Routes.TimeAbsenceEntries} component={TimeAbsenceEntries} />
-              <Route path={Routes.TimeHolidayEntries} component={TimeHolidayEntries} />
-              <Route path={Routes.EditTimeEntry} component={EditTimeEntry} />
-              <Route path={Routes.EditTimeAbsenceEntry} component={EditTimeAbsenceEntry} />
-              <Route path={Routes.EditTimeHolidayEntry} component={EditTimeHolidayEntry} />
-              <Route path={Routes.BulkInsert} component={BulkInsert} />
-              <Route path={Routes.Export} component={Export} />
-            </Container>
-          </main>
-
-          <footer className={classes.footer}>
-            <Container maxWidth="lg" className={classes.footerRoot}>
-              <Grid container direction="row" justify="space-between" alignItems="center">
-                <Grid item>
-                  <div className={classes.footerLinks}>
-                    <Box component="div" display={{ xs: 'none', md: 'block' }}>
-                      <Typography
-                        variant="subtitle1"
-                        align="center"
-                        color="textSecondary"
-                        component="p"
-                      >
-                        From developer for developers with love!
-                      </Typography>
-                    </Box>
-                    <a
-                      href="https://github.com/lucax88x/kairos"
-                      target="_blank"
-                      rel="noopener noreferrer"
-                    >
-                      <IconButton color="inherit" aria-label="Github">
-                        <SimpleIcon type="github" className={classes.footerIcon}></SimpleIcon>
-                      </IconButton>
-                    </a>
-                    <a
-                      href="https://github.com/lucax88x/kairos/stargazers"
-                      target="_blank"
-                      rel="noopener noreferrer"
-                    >
-                      <img
-                        alt="preview badge"
-                        src="https://img.shields.io/github/stars/lucax88x/kairos?style=for-the-badge"
-                      ></img>
-                    </a>
-                    <Box component="div" display={{ xs: 'none', sm: 'block' }}>
-                      <a
-                        href="https://github.com/lucax88x/kairos/issues"
-                        target="_blank"
-                        rel="noopener noreferrer"
-                      >
-                        <img
-                          alt="preview badge"
-                          src="https://img.shields.io/github/issues/lucax88x/kairos?style=for-the-badge"
-                        ></img>
-                      </a>
-                    </Box>
-                  </div>
-                </Grid>
-                <Grid item>
-                  <div className={classes.footerLinks}>
-                    <a href="https://lucax88x.github.io" target="_blank" rel="noopener noreferrer">
-                      <IconButton color="inherit" aria-label="Github.io">
-                        <Avatar
-                          className={classes.footerAvatar}
-                          alt={'lucatrazzi'}
-                          src={'https://lucax88x.github.io/img/author.jpg'}
-                        />
-                      </IconButton>
-                    </a>
-
-                    <a href="https://github.com/lucax88x" target="_blank" rel="noopener noreferrer">
-                      <IconButton color="inherit" aria-label="Github">
-                        <SimpleIcon type="github" className={classes.footerIcon}></SimpleIcon>
-                      </IconButton>
-                    </a>
-                    <a
-                      href="https://www.linkedin.com/in/luca-trazzi-93217931/"
-                      target="_blank"
-                      rel="noopener noreferrer"
-                    >
-                      <IconButton color="inherit" aria-label="Linkedin">
-                        <SimpleIcon type="linkedin" className={classes.footerIcon}></SimpleIcon>
-                      </IconButton>
-                    </a>
-                  </div>
-                </Grid>
-              </Grid>
-            </Container>
-          </footer>
-        </div>
+        <main className={classes.content}>
+          <div className={classes.appBarSpacer} />
+          <Container component="main" maxWidth="lg" className={classes.container}>
+            <Route path={Routes.Dashboard} component={Dashboard} />
+            <Route path={Routes.Profile} component={Profile} />
+            <Route path={Routes.TimeEntries} component={TimeEntries} />
+            <Route path={Routes.TimeAbsenceEntries} component={TimeAbsenceEntries} />
+            <Route path={Routes.TimeHolidayEntries} component={TimeHolidayEntries} />
+            <Route path={Routes.EditTimeEntry} component={EditTimeEntry} />
+            <Route path={Routes.EditTimeAbsenceEntry} component={EditTimeAbsenceEntry} />
+            <Route path={Routes.EditTimeHolidayEntry} component={EditTimeHolidayEntry} />
+            <Route path={Routes.BulkInsert} component={BulkInsert} />
+            <Route path={Routes.Export} component={Export} />
+          </Container>
+        </main>
 
         <Drawer
           variant="persistent"
@@ -642,6 +536,24 @@ export const AppComponent: React.FC<AppProps> = props => {
             <ListItem>
               <Select
                 fullWidth
+                value={year}
+                onChange={handleYearChange}
+                className={classes.topbarSelect}
+              >
+                {map(
+                  year => (
+                    <MenuItem key={year} value={year} className={classes.topbarSelectOption}>
+                      {year}
+                    </MenuItem>
+                  ),
+                  years,
+                )}
+              </Select>
+            </ListItem>
+            <Divider />
+            <ListItem>
+              <Select
+                fullWidth
                 value={language}
                 onChange={handleLanguageChange}
                 className={classes.topbarSelect}
@@ -657,24 +569,6 @@ export const AppComponent: React.FC<AppProps> = props => {
                     </MenuItem>
                   ),
                   Languages,
-                )}
-              </Select>
-            </ListItem>
-            <Divider />
-            <ListItem>
-              <Select
-                fullWidth
-                value={year}
-                onChange={handleYearChange}
-                className={classes.topbarSelect}
-              >
-                {map(
-                  year => (
-                    <MenuItem key={year} value={year} className={classes.topbarSelectOption}>
-                      {year}
-                    </MenuItem>
-                  ),
-                  years,
                 )}
               </Select>
             </ListItem>

@@ -1,6 +1,8 @@
 import { Trans } from '@lingui/macro';
 import { Avatar, Divider, IconButton, makeStyles, Paper, Typography } from '@material-ui/core';
 import AddIcon from '@material-ui/icons/Add';
+import SaveIcon from '@material-ui/icons/Save';
+import clsx from 'clsx';
 import { map } from 'ramda';
 import React, { Fragment, useCallback, useEffect } from 'react';
 import ButtonSpinner from '../components/ButtonSpinner';
@@ -9,26 +11,8 @@ import { Language } from '../models/language-model';
 import { ProfileModel } from '../models/profile.model';
 import { UserModel } from '../models/user.model';
 import { UUID } from '../models/uuid.model';
-import SaveIcon from '@material-ui/icons/Save';
-import {
-  AddJobAction,
-  AddProjectAction,
-  DeleteJobAction,
-  DeleteProjectAction,
-  InitializeJobsAction,
-  UpdateJobDayAction,
-  UpdateJobEndDateAction,
-  UpdateJobHolidaysPerYearAction,
-  UpdateJobNameAction,
-  UpdateJobStartDateAction,
-  UpdateProjectAllocationAction,
-  UpdateProjectEndDateAction,
-  UpdateProjectNameAction,
-  UpdateProjectStartDateAction,
-  useProfileReducer,
-} from './Profile.store';
+import { AddJobAction, DeleteJobAction, InitializeJobsAction, UpdateJobDayAction, UpdateJobEndDateAction, UpdateJobHolidaysPerYearAction, UpdateJobNameAction, UpdateJobStartDateAction, useProfileReducer } from './Profile.store';
 import { ProfileJobForm } from './ProfileJobForm';
-import clsx from 'clsx';
 
 const useStyles = makeStyles(theme => ({
   rows: {
@@ -94,7 +78,7 @@ export const ProfileComponent: React.FC<ProfileProps> = props => {
     [dispatch],
   );
   const handleJobEndDateChange = useCallback(
-    (jobId: UUID, end: Date) => dispatch(UpdateJobEndDateAction(jobId, end)),
+    (jobId: UUID, end: Date | null) => dispatch(UpdateJobEndDateAction(jobId, end)),
     [dispatch],
   );
   const handleJobHolidaysPerYearChange = useCallback(
@@ -103,34 +87,6 @@ export const ProfileComponent: React.FC<ProfileProps> = props => {
   );
   const handleJobDayChange = useCallback(
     (jobId: UUID, day: string, hours: number) => dispatch(UpdateJobDayAction(jobId, day, hours)),
-    [dispatch],
-  );
-
-  const handleAddProject = useCallback((jobId: UUID) => dispatch(AddProjectAction(jobId)), [
-    dispatch,
-  ]);
-  const handleProjectDelete = useCallback(
-    (jobId: UUID, projectId: UUID) => dispatch(DeleteProjectAction(jobId, projectId)),
-    [dispatch],
-  );
-  const handleProjectNameChange = useCallback(
-    (jobId: UUID, projectId: UUID, name: string) =>
-      dispatch(UpdateProjectNameAction(jobId, projectId, name)),
-    [dispatch],
-  );
-  const handleProjectAllocationChange = useCallback(
-    (jobId: UUID, projectId: UUID, allocation: number) =>
-      dispatch(UpdateProjectAllocationAction(jobId, projectId, allocation)),
-    [dispatch],
-  );
-  const handleProjectStartDateChange = useCallback(
-    (jobId: UUID, projectId: UUID, start: Date) =>
-      dispatch(UpdateProjectStartDateAction(jobId, projectId, start)),
-    [dispatch],
-  );
-  const handleProjectEndDateChange = useCallback(
-    (jobId: UUID, projectId: UUID, end: Date) =>
-      dispatch(UpdateProjectEndDateAction(jobId, projectId, end)),
     [dispatch],
   );
 
@@ -179,12 +135,6 @@ export const ProfileComponent: React.FC<ProfileProps> = props => {
                     onJobEndDateChange={handleJobEndDateChange}
                     onJobHolidaysPerYearChange={handleJobHolidaysPerYearChange}
                     onJobDayChange={handleJobDayChange}
-                    onProjectAdd={handleAddProject}
-                    onProjectDelete={handleProjectDelete}
-                    onProjectAllocationChange={handleProjectAllocationChange}
-                    onProjectNameChange={handleProjectNameChange}
-                    onProjectStartDateChange={handleProjectStartDateChange}
-                    onProjectEndDateChange={handleProjectEndDateChange}
                   />
                   <Divider />
                 </Fragment>

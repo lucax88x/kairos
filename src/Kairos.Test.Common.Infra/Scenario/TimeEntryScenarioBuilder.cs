@@ -28,7 +28,7 @@ namespace Kairos.Test.Common.Infra.Scenario
                 new CreateTimeEntries(new TimeEntryModel(
                     DateTimeOffset.Parse(when),
                     (int) type,
-                    UserProfileScenarioBuilder.Job1, UserProfileScenarioBuilder.Project1,
+                    UserProfileScenarioBuilder.Job1,
                     id)));
 
             return ids.First();

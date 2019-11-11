@@ -44,17 +44,6 @@ namespace Kairos.Console.ScenarioBuilder
                         Friday = 8.24m,
                         Saturday = 0,
                         Sunday = 0,
-                        Projects = new List<UserProjectModel>
-                        {
-                            new UserProjectModel
-                            {
-                                Id = Guid.NewGuid(),
-                                Name = "VisecaOne",
-                                Allocation = 100,
-                                Start = new DateTimeOffset(new DateTime(2017, 8, 1)),
-                                End = new DateTimeOffset(new DateTime(2017, 12, 31)),
-                            }
-                        }
                     },
                     new UserJobModel
                     {
@@ -69,31 +58,6 @@ namespace Kairos.Console.ScenarioBuilder
                         Friday = 8.30m,
                         Saturday = 0,
                         Sunday = 0,
-                        Projects = new List<UserProjectModel>
-                        {
-                            new UserProjectModel
-                            {
-                                Id = Guid.NewGuid(),
-                                Name = "DAP",
-                                Allocation = 100,
-                                Start = new DateTimeOffset(new DateTime(2018, 1, 1)),
-                                End = new DateTimeOffset(new DateTime(2019, 4, 30)),
-                            },
-                            new UserProjectModel
-                            {
-                                Id = Guid.NewGuid(),
-                                Name = "DAP - Coach",
-                                Allocation = 50,
-                                Start = new DateTimeOffset(new DateTime(2019, 5, 1)),
-                            },
-                            new UserProjectModel
-                            {
-                                Id = Guid.NewGuid(),
-                                Name = "BASF - Solunaut",
-                                Allocation = 50,
-                                Start = new DateTimeOffset(new DateTime(2019, 5, 1)),
-                            },
-                        }
                     },
                     new UserJobModel
                     {
@@ -108,16 +72,6 @@ namespace Kairos.Console.ScenarioBuilder
                         Friday = 3m,
                         Saturday = 0,
                         Sunday = 0,
-                        Projects = new List<UserProjectModel>
-                        {
-                            new UserProjectModel
-                            {
-                                Id = Guid.NewGuid(),
-                                Name = "kairos",
-                                Allocation = 100,
-                                Start = new DateTimeOffset(new DateTime(2019, 2, 15)),
-                            }
-                        }
                     }
                 }
             };

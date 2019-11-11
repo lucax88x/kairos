@@ -96,10 +96,6 @@ namespace Kairos.Web.Api.Ioc
             builder.RegisterType<UserJobType>()
                 .AsSelf();
             builder.RegisterType<UserJobInputType>();
-            builder.RegisterType<UserProjectType>()
-                .AsSelf();
-            builder.RegisterType<UserProjectInputType>()
-                .AsSelf();
 
             builder.RegisterType<KairosQuery>()
                 .AsSelf();

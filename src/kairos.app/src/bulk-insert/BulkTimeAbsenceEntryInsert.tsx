@@ -24,7 +24,7 @@ interface TimeAbsenceEntryInvalidModel {
 
 const useStyles = makeStyles(theme => ({
   center: {
-    display: 'flex',
+    display: 'grid',
     justifyContent: 'center',
   },
 }));
@@ -78,7 +78,12 @@ export const BulkTimeAbsenceEntryInsertComponent: React.FC<
           const isStartValid = isValid(start);
           const isEndValid = isValid(end);
           const isTypeValid =
-            indexOf(type, [TimeAbsenceEntryTypes.VACATION, TimeAbsenceEntryTypes.ILLNESS, TimeAbsenceEntryTypes.COMPENSATION, TimeAbsenceEntryTypes.PERMIT]) !== -1;
+            indexOf(type, [
+              TimeAbsenceEntryTypes.VACATION,
+              TimeAbsenceEntryTypes.ILLNESS,
+              TimeAbsenceEntryTypes.COMPENSATION,
+              TimeAbsenceEntryTypes.PERMIT,
+            ]) !== -1;
           if (isStartValid && isEndValid && isTypeValid) {
             validModels.push(
               new TimeAbsenceEntryModel(
@@ -100,6 +105,14 @@ export const BulkTimeAbsenceEntryInsertComponent: React.FC<
                 : i18n._(t`Validation.InvalidType`),
             });
           }
+        } else {
+          invalidModels.push({
+            id: UUID.Generate(),
+            description: '',
+            start: i18n._(t`Validation.InvalidDate`),
+            end: i18n._(t`Validation.InvalidDate`),
+            type: i18n._(t`Validation.InvalidType`),
+          });
         }
       }
     }

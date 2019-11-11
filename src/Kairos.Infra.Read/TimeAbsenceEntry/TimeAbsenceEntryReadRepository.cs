@@ -45,7 +45,10 @@ namespace Kairos.Infra.Read.TimeAbsenceEntry
 
             var dtos = await _repository.GetMultiple<TimeAbsenceEntryReadDto>(ids);
 
-            return dtos.Where(d => d.Start.Year == year || d.End.Year == year).ToImmutableArray();
+            return dtos
+                .Where(d => d.Start.Year == year || d.End.Year == year)
+                .OrderByDescending(d => d.Start)
+                .ToImmutableArray();
         }
 
         public async Task<TimeAbsenceEntryReadDto> GetById(Guid id)

@@ -1,7 +1,5 @@
 import { parseISO, startOfDay } from 'date-fns';
 import { immerable } from 'immer';
-import { map } from 'ramda';
-import { ProjectModel, ProjectOutModel } from './project.model';
 import { UUID } from './uuid.model';
 
 export class JobModel {
@@ -18,11 +16,8 @@ export class JobModel {
     public wednesday: number = 8.5,
     public thursday: number = 8.5,
     public friday: number = 8.5,
-    public saturday: number = 8.5,
-    public sunday: number = 8.5,
-    public projects: ProjectModel[] = [
-      new ProjectModel(UUID.Generate(), 'default', startOfDay(new Date()), null, 100),
-    ],
+    public saturday: number = 0,
+    public sunday: number = 0,
   ) {}
 
   static fromOutModel(outModel: JobOutModel) {
@@ -39,7 +34,6 @@ export class JobModel {
       outModel.friday,
       outModel.saturday,
       outModel.sunday,
-      map(ProjectModel.fromOutModel, outModel.projects),
     );
   }
 
@@ -63,5 +57,4 @@ export interface JobOutModel {
   friday: number;
   saturday: number;
   sunday: number;
-  projects: ProjectOutModel[];
 }

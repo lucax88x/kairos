@@ -20,7 +20,6 @@ namespace Kairos.Web.Api.GraphQL.UserProfile.Types
             Field(x => x.Friday);
             Field(x => x.Saturday);
             Field(x => x.Sunday);
-            Field(x => x.Projects, type: typeof(ListGraphType<UserProjectInputType>));
         }
     }
 }

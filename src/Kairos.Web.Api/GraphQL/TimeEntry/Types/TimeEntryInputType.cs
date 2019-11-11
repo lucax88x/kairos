@@ -12,7 +12,6 @@ namespace Kairos.Web.Api.GraphQL.TimeEntry.Types
             Field(x => x.When);
             Field(x => x.Type, type: typeof(TimeEntryTypeEnum));
             Field(x => x.Job, type: typeof(IdGraphType));
-            Field(x => x.Project, type: typeof(IdGraphType));
         }
     }
 }

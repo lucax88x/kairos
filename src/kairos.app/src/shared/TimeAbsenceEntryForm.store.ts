@@ -22,6 +22,7 @@ const initialState: State = {
 };
 
 export const SetModel = (model: TimeAbsenceEntryModel) => action('SET_MODEL', { model });
+export const ResetModel = () => action('RESET_MODEL');
 export const SetTimeAbsenceEntryTypeAction = (type: TimeAbsenceEntryTypes) =>
   action('SET_TYPE', { type });
 export const SetTimeAbsenceEntryDescriptionAction = (description: string) =>
@@ -33,6 +34,7 @@ function reducer(
   state: State,
   action: ActionType<
     | typeof SetModel
+    | typeof ResetModel
     | typeof SetTimeAbsenceEntryTypeAction
     | typeof SetTimeAbsenceEntryDescriptionAction
     | typeof SetTimeAbsenceEntryStartAction
@@ -47,6 +49,14 @@ function reducer(
         draft.start = action.payload.model.start;
         draft.end = action.payload.model.end;
         draft.type = action.payload.model.type;
+        break;
+      }
+      case 'RESET_MODEL': {
+        draft.id = UUID.Generate();
+        draft.description = '';
+        draft.type = TimeAbsenceEntryTypes.VACATION;
+        draft.start = startOfDay(new Date());
+        draft.end = endOfDay(new Date());
         break;
       }
       case 'SET_TYPE': {

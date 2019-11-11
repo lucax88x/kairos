@@ -17,7 +17,6 @@ namespace Kairos.Domain
         public DateTimeOffset When { get; private set; }
         public TimeEntryType Type { get; private set; }
         public Guid Job { get; private set; }
-        public Guid Project { get; private set; }
 
         protected override void Apply(Event @event)
         {
@@ -29,7 +28,6 @@ namespace Kairos.Domain
                     User = added.TimeEntry.User;
                     When = added.TimeEntry.When;
                     Job = added.TimeEntry.Job;
-                    Project = added.TimeEntry.Project;
                     return;
                 }
 
@@ -38,7 +36,6 @@ namespace Kairos.Domain
                     When = updated.TimeEntry.When;
                     Type = updated.TimeEntry.Type;
                     Job = updated.TimeEntry.Job;
-                    Project = updated.TimeEntry.Project;
                     return;
                 }
 
