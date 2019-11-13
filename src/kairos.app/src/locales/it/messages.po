@@ -528,6 +528,10 @@ msgstr "Malattia"
 msgid "TimeStatistics.Illness.Title"
 msgstr "Malattia"
 
+#: src/code/calculator.ts:337
+msgid "TimeStatistics.RemainingToday"
+msgstr "Rimanenti oggi: {job}"
+
 #: src/dashboard/TimeStatistics.tsx:72
 msgid "TimeStatistics.Vacations.SubTitle"
 msgstr "Ferie"
