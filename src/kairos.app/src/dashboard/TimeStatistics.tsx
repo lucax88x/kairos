@@ -72,96 +72,112 @@ export interface TimeStatisticsDispatches {
 
 type TimeStatisticsProps = TimeStatisticsInputs & TimeStatisticsDispatches;
 
-export const TimeStatisticsComponent: React.FC<TimeStatisticsProps> = memo(props => {
-  const classes = useStyles(props);
+export const TimeStatisticsComponent: React.FC<TimeStatisticsProps> = memo(
+  props => {
+    const classes = useStyles(props);
 
-  const {
-    isGetTimeEntriesBusy,
-    selectedLanguage,
-    profile,
-    timeEntries,
-    absences,
-    holidays,
-  } = props;
+    const {
+      isGetTimeEntriesBusy,
+      selectedLanguage,
+      profile,
+      timeEntries,
+      absences,
+      holidays,
+    } = props;
 
-  const workingHourTiles: TimeStatisticTile[] = useMemo(
-    () => getWorkingHoursStatistics(new Date(), selectedLanguage, profile, timeEntries, absences, holidays),
-    [selectedLanguage, profile, timeEntries, absences, holidays],
-  );
+    const workingHourTiles: TimeStatisticTile[] = useMemo(
+      () =>
+        getWorkingHoursStatistics(
+          new Date(),
+          selectedLanguage,
+          profile,
+          timeEntries,
+          absences,
+          holidays,
+        ),
+      [selectedLanguage, profile, timeEntries, absences, holidays],
+    );
 
-  const vacationTiles: TimeStatisticTile[] = useMemo(
-    () => getVacationStatistics(selectedLanguage, absences),
-    [selectedLanguage, absences],
-  );
+    const vacationTiles: TimeStatisticTile[] = useMemo(
+      () => getVacationStatistics(selectedLanguage, absences),
+      [selectedLanguage, absences],
+    );
 
-  const illnessTiles: TimeStatisticTile[] = useMemo(
-    () => getIllnessStatistics(selectedLanguage, absences),
-    [selectedLanguage, absences],
-  );
+    const illnessTiles: TimeStatisticTile[] = useMemo(
+      () => getIllnessStatistics(selectedLanguage, absences),
+      [selectedLanguage, absences],
+    );
 
-  const generateTiles = useCallback(
-    mapIndexed<TimeStatisticTile, JSX.Element>()((tile, index) => (
-      <GridListTile
-        key={tile.title}
-        className={classes.gridTile}
-        style={{ ...Themes.getRelativeToIndex(index) }}
-      >
-        <div className={classes.gridTileContent}>{tile.text}</div>
-        <GridListTileBar title={tile.title} subtitle={tile.subtitle} />
-      </GridListTile>
-    )),
-    [],
-  );
+    const generateTiles = useCallback(
+      mapIndexed<TimeStatisticTile, JSX.Element>()((tile, index) => (
+        <GridListTile
+          key={tile.title}
+          className={classes.gridTile}
+          style={{ ...Themes.getRelativeToIndex(index) }}
+        >
+          <div className={classes.gridTileContent}>{tile.text}</div>
+          <GridListTileBar title={tile.title} subtitle={tile.subtitle} />
+        </GridListTile>
+      )),
+      [],
+    );
 
-  return (
-    <Spinner show={isGetTimeEntriesBusy}>
-      <div className={classes.root}>
-        <ExpansionPanel>
-          <ExpansionPanelSummary expandIcon={<ExpandMoreIcon />}>
-            <Typography className={classes.heading}>
-              <Trans>TimeStatistics.WorkingHours.Title</Trans>
-            </Typography>
-            <Typography className={classes.secondaryHeading}>
-              <Trans>TimeStatistics.WorkingHours.SecondaryTitle</Trans>
-            </Typography>
-          </ExpansionPanelSummary>
-          <ExpansionPanelDetails>
-            <GridList cellHeight={180} className={classes.gridList}>
-              {generateTiles(workingHourTiles)}
-            </GridList>
-          </ExpansionPanelDetails>
-        </ExpansionPanel>
-        <ExpansionPanel>
-          <ExpansionPanelSummary expandIcon={<ExpandMoreIcon />}>
-            <Typography className={classes.heading}>
-              <Trans>TimeStatistics.Vacations.Title</Trans>
-            </Typography>
-            <Typography className={classes.secondaryHeading}>
-              <Trans>TimeStatistics.Vacations.SubTitle</Trans>
-            </Typography>
-          </ExpansionPanelSummary>
-          <ExpansionPanelDetails>
-            <GridList cellHeight={180} className={classes.gridList}>
-              {generateTiles(vacationTiles)}
-            </GridList>
-          </ExpansionPanelDetails>
-        </ExpansionPanel>
-        <ExpansionPanel>
-          <ExpansionPanelSummary expandIcon={<ExpandMoreIcon />}>
-            <Typography className={classes.heading}>
-              <Trans>TimeStatistics.Illness.Title</Trans>
-            </Typography>
-            <Typography className={classes.secondaryHeading}>
-              <Trans>TimeStatistics.Illness.SubTitle</Trans>
-            </Typography>
-          </ExpansionPanelSummary>
-          <ExpansionPanelDetails>
-            <GridList cellHeight={180} className={classes.gridList}>
-              {generateTiles(illnessTiles)}
-            </GridList>
-          </ExpansionPanelDetails>
-        </ExpansionPanel>
-      </div>
-    </Spinner>
-  );
-});
+    return (
+      <Spinner show={isGetTimeEntriesBusy}>
+        <div className={classes.root}>
+          {!!workingHourTiles.length && (
+            <ExpansionPanel>
+              <ExpansionPanelSummary expandIcon={<ExpandMoreIcon />}>
+                <Typography className={classes.heading}>
+                  <Trans>TimeStatistics.WorkingHours.Title</Trans>
+                </Typography>
+                <Typography className={classes.secondaryHeading}>
+                  <Trans>TimeStatistics.WorkingHours.SecondaryTitle</Trans>
+                </Typography>
+              </ExpansionPanelSummary>
+              <ExpansionPanelDetails>
+                <GridList cellHeight={180} className={classes.gridList}>
+                  {generateTiles(workingHourTiles)}
+                </GridList>
+              </ExpansionPanelDetails>
+            </ExpansionPanel>
+          )}
+          {!!vacationTiles.length && (
+            <ExpansionPanel>
+              <ExpansionPanelSummary expandIcon={<ExpandMoreIcon />}>
+                <Typography className={classes.heading}>
+                  <Trans>TimeStatistics.Vacations.Title</Trans>
+                </Typography>
+                <Typography className={classes.secondaryHeading}>
+                  <Trans>TimeStatistics.Vacations.SubTitle</Trans>
+                </Typography>
+              </ExpansionPanelSummary>
+              <ExpansionPanelDetails>
+                <GridList cellHeight={180} className={classes.gridList}>
+                  {generateTiles(vacationTiles)}
+                </GridList>
+              </ExpansionPanelDetails>
+            </ExpansionPanel>
+          )}
+          {!!illnessTiles.length && (
+            <ExpansionPanel>
+              <ExpansionPanelSummary expandIcon={<ExpandMoreIcon />}>
+                <Typography className={classes.heading}>
+                  <Trans>TimeStatistics.Illness.Title</Trans>
+                </Typography>
+                <Typography className={classes.secondaryHeading}>
+                  <Trans>TimeStatistics.Illness.SubTitle</Trans>
+                </Typography>
+              </ExpansionPanelSummary>
+              <ExpansionPanelDetails>
+                <GridList cellHeight={180} className={classes.gridList}>
+                  {generateTiles(illnessTiles)}
+                </GridList>
+              </ExpansionPanelDetails>
+            </ExpansionPanel>
+          )}
+        </div>
+      </Spinner>
+    );
+  },
+);

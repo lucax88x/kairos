@@ -1,5 +1,6 @@
 import {
   endOfDay,
+  format,
   getUnixTime,
   isFriday,
   isMonday,
@@ -10,8 +11,9 @@ import {
   isWednesday,
   isWithinInterval,
   startOfDay,
+  setHours,
 } from 'date-fns';
-import { ascend, filter, sortWith } from 'ramda';
+import { ascend, filter, groupBy, sortWith } from 'ramda';
 import { JobModel } from '../models/job.model';
 import { Language } from '../models/language-model';
 import { ProfileModel } from '../models/profile.model';
@@ -20,7 +22,10 @@ import { TimeEntryListModel } from '../models/time-entry-list.model';
 import { TimeEntryTypes } from '../models/time-entry.model';
 import { TimeHolidayEntryModel } from '../models/time-holiday-entry.model';
 import { UUID } from '../models/uuid.model';
+import { formatAsDate } from './constants';
 import { filterByInterval, humanDifference } from './functions';
+import { i18n } from '@lingui/core';
+import { formatDate } from './formatters';
 
 export interface TimeEntryPair {
   enterId: UUID;
@@ -35,41 +40,60 @@ export function getTimeEntryPairsByJob(
 ): { [id: string]: TimeEntryPair[] } {
   const filteredByInterval = filterByInterval(interval)(timeEntries);
   const orderedByDate = sortWith([ascend(te => te.when)], filteredByInterval);
+  const groupByDay = groupBy(
+    te => format(startOfDay(te.when), formatAsDate),
+    orderedByDate,
+  );
   const pairsByJob: { [id: string]: TimeEntryPair[] } = {};
 
-  for (let i = 0; i < orderedByDate.length; i++) {
-    const enter = orderedByDate[i];
+  for (const day in groupByDay) {
+    const entriesByDay = groupByDay[day];
 
-    if (enter.type === TimeEntryTypes.IN) {
-      const [exit, toSkip] = getNearestExit(i, orderedByDate);
-      i += toSkip;
+    for (let i = 0; i < entriesByDay.length; i++) {
+      const entry = entriesByDay[i];
 
-      const job = enter.job.id.toString();
-
-      const pair: TimeEntryPair = {
-        enterId: enter.id,
-        enter: enter.when,
-        job: enter.job.name,
-        exit: new Date(0),
-      };
+      const job = entry.job.id.toString();
 
       if (!pairsByJob[job]) {
         pairsByJob[job] = [];
       }
 
-      if (!exit.isEmpty()) {
-        pairsByJob[job].push({
-          ...pair,
-          exit: exit.when,
-        });
-      } else {
-        pairsByJob[job].push({
-          ...pair,
-          exit: endOfDay(enter.when),
-        });
+      if (entry.type === TimeEntryTypes.IN) {
+        const [exit, toSkip] = getNearestExit(i, entriesByDay);
+        i += toSkip;
+
+        const pair: TimeEntryPair = {
+          enterId: entry.id,
+          enter: entry.when,
+          job: entry.job.name,
+          exit: new Date(0),
+        };
+
+        if (!exit.isEmpty()) {
+          pairsByJob[job].push({
+            ...pair,
+            exit: exit.when,
+          });
+        } else {
+          pairsByJob[job].push({
+            ...pair,
+            exit: endOfDay(entry.when),
+          });
+        }
+      } else if (i === 0) {
+        // the first entry is an OUT, so we have no IN before
+        const pair: TimeEntryPair = {
+          enterId: entry.id,
+          enter: startOfDay(entry.when),
+          job: entry.job.name,
+          exit: entry.when,
+        };
+
+        pairsByJob[job].push(pair);
       }
     }
   }
+
   return pairsByJob;
 }
 
@@ -123,17 +147,10 @@ export function getHumanDifferencesByRange(
         humanDifferencesByJobAndDate[job] = {};
       }
 
-      if (!!difference) {
-        humanDifferencesByJobAndDate[job][date] = humanDifference(
-          new Date(0),
-          new Date(difference),
-        );
-      } else {
-        humanDifferencesByJobAndDate[job][date] = humanDifference(
-          new Date(0),
-          new Date(0),
-        );
-      }
+      humanDifferencesByJobAndDate[job][date] = humanDifference(
+        new Date(0),
+        new Date(!!difference ? difference : 0),
+      );
     }
   }
 
@@ -146,12 +163,13 @@ function getNearestExit(
 ): [TimeEntryListModel, number] {
   let toSkip = 0;
   for (let i = startingIndex + 1; i < timeEntries.length; i++) {
+    toSkip++;
+
     const nextTimeEntry = timeEntries[i];
 
     if (nextTimeEntry.type === TimeEntryTypes.OUT) {
       return [nextTimeEntry, toSkip];
     }
-    toSkip++;
   }
   return [TimeEntryListModel.empty, toSkip];
 }
@@ -181,12 +199,20 @@ export function getWorkingHoursStatistics(
   // { title: 'done this year', subtitle: '2019', text: '250' },
   // { title: 'done previous year', subtitle: '2018', text: '30' },
   // { title: 'done all previous years', text: '30' },
+  // { title: 'overtime today', subtitle: 'July', text: '8h' },
+  // { title: 'overtime this week', subtitle: 'July', text: '30' },
+  // { title: 'overtime this month', subtitle: 'August', text: '50' },
+  // { title: 'overtime previous month', subtitle: 'July', text: '30' },
+  // { title: 'overtime all previous months', text: '30' },
+  // { title: 'overtime this year', subtitle: '2019', text: '250' },
+  // { title: 'overtime previous year', subtitle: '2018', text: '30' },
+  // { title: 'overtime all previous years', text: '30' },
 
   const statistics: TimeStatisticTile[] = [];
 
   const maxDate = new Date(8640000000000000);
 
-  const dateJobs = filter(
+  const jobsInDate = filter(
     job =>
       isWithinInterval(date, {
         start: job.start,
@@ -195,12 +221,12 @@ export function getWorkingHoursStatistics(
     profile.jobs,
   );
 
-  const differencesByDate = getHumanDifferencesByRange(entries, {
+  const differencesByDateByJob = getDifferencesByRangeByJobAndDate(entries, {
     start: startOfDay(date),
     end: endOfDay(date),
   });
 
-  console.log(differencesByDate);
+  console.log(differencesByDateByJob);
 
   // const todayHoliday = filter(
   //   holiday =>
@@ -220,21 +246,26 @@ export function getWorkingHoursStatistics(
   //   absences,
   // );
 
-  for (const job of dateJobs) {
-    // for (const project of dateProjects) {
-    //   const workingHours = getDayWorkingHours(date, job);
-    //   const projectWorkingHours = (workingHours * project.allocation) / 100;
-    //   statistics.push({
-    //     title: i18n._(
-    //       /*i18n*/ {
-    //         id: 'TimeStatistics.RemainingToday',
-    //         values: { project: project.name },
-    //       },
-    //     ),
-    //     subtitle: formatDate(date, language, 'MMMM dd'),
-    //     text: `${projectWorkingHours}h`,
-    //   });
-    // }
+  for (const job of jobsInDate) {
+    const differencesByDate = differencesByDateByJob[job.id.toString()];
+    const difference = !!differencesByDate
+      ? differencesByDate[getUnixTime(date)]
+      : 0;
+    const workingHours = getDayWorkingHours(date, job);
+
+    const remainingHours =
+      workingHours - (!!difference ? difference / 3600000 : 0);
+
+    statistics.push({
+      title: i18n._(
+        /*i18n*/ {
+          id: 'TimeStatistics.RemainingToday',
+          values: { job: job.name },
+        },
+      ),
+      subtitle: formatDate(date, language, 'MMMM dd'),
+      text: `${remainingHours}h`,
+    });
   }
 
   return statistics;

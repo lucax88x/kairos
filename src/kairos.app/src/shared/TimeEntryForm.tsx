@@ -1,8 +1,21 @@
 import DateFnsUtils from '@date-io/date-fns';
 import { Trans } from '@lingui/macro';
-import { FormControl, FormControlLabel, InputLabel, makeStyles, MenuItem, Radio, RadioGroup, Select } from '@material-ui/core';
+import {
+  FormControl,
+  FormControlLabel,
+  InputLabel,
+  makeStyles,
+  MenuItem,
+  Radio,
+  RadioGroup,
+  Select,
+} from '@material-ui/core';
 import SaveIcon from '@material-ui/icons/Save';
-import { KeyboardDateTimePicker, MaterialUiPickersDate, MuiPickersUtilsProvider } from '@material-ui/pickers';
+import {
+  KeyboardDateTimePicker,
+  MaterialUiPickersDate,
+  MuiPickersUtilsProvider,
+} from '@material-ui/pickers';
 import { map } from 'ramda';
 import React, { ChangeEvent, useCallback, useEffect } from 'react';
 import { formatAsDateTime } from '../code/constants';
@@ -12,9 +25,21 @@ import ButtonSpinner from '../components/ButtonSpinner';
 import { YouNeedAtLeastOneJob } from '../components/YouNeedAtLeastOneJob';
 import { Language } from '../models/language-model';
 import { ProfileModel } from '../models/profile.model';
-import { getTransFromEntryType, TimeEntryModel, TimeEntryTypes } from '../models/time-entry.model';
+import {
+  getTransFromEntryType,
+  TimeEntryModel,
+  TimeEntryTypes,
+} from '../models/time-entry.model';
 import { UUID } from '../models/uuid.model';
-import { RefreshSelectsTimeEntryAction, ResetModel, SetModel, SetTimeEntrySelectedJobAction, SetTimeEntryTypeAction, SetTimeEntryWhenAction, useTimeEntryFormReducer } from './TimeEntryForm.store';
+import {
+  RefreshSelectsTimeEntryAction,
+  ResetModel,
+  SetModel,
+  SetTimeEntrySelectedJobAction,
+  SetTimeEntryTypeAction,
+  SetTimeEntryWhenAction,
+  useTimeEntryFormReducer,
+} from './TimeEntryForm.store';
 
 const useStyles = makeStyles(theme => ({
   container: {
@@ -60,7 +85,8 @@ export const TimeEntryForm: React.FC<TimeEntryFormProps> = props => {
   }, [onSave, id, type, when, selectedJobId]);
 
   const handleTypeChange = useCallback(
-    (_, value: string) => dispatch(SetTimeEntryTypeAction(value as TimeEntryTypes)),
+    (_, value: string) =>
+      dispatch(SetTimeEntryTypeAction(value as TimeEntryTypes)),
     [dispatch],
   );
 
@@ -120,7 +146,10 @@ export const TimeEntryForm: React.FC<TimeEntryFormProps> = props => {
           />
         </RadioGroup>
       </FormControl>
-      <MuiPickersUtilsProvider utils={DateFnsUtils} locale={getDatepickerLocale(selectedLanguage)}>
+      <MuiPickersUtilsProvider
+        utils={DateFnsUtils}
+        locale={getDatepickerLocale(selectedLanguage)}
+      >
         <KeyboardDateTimePicker
           fullWidth
           margin="normal"
@@ -134,29 +163,28 @@ export const TimeEntryForm: React.FC<TimeEntryFormProps> = props => {
         />
       </MuiPickersUtilsProvider>
       <div>
-        {jobs.length > 1 && (
-          <FormControl fullWidth>
-            <InputLabel htmlFor="job">
-              <Trans>Labels.Job</Trans>
-            </InputLabel>
-            <Select
-              value={selectedJobId}
-              onChange={handleJobChange}
-              inputProps={{
-                id: 'job',
-              }}
-            >
-              {map(
-                job => (
-                  <MenuItem key={job.id.toString()} value={job.id.toString()}>
-                    {job.name}
-                  </MenuItem>
-                ),
-                jobs,
-              )}
-            </Select>
-          </FormControl>
-        )}
+        <FormControl fullWidth>
+          <InputLabel htmlFor="job">
+            <Trans>Labels.Job</Trans>
+          </InputLabel>
+          <Select
+            value={selectedJobId}
+            onChange={handleJobChange}
+            disabled={jobs.length === 1}
+            inputProps={{
+              id: 'job',
+            }}
+          >
+            {map(
+              job => (
+                <MenuItem key={job.id.toString()} value={job.id.toString()}>
+                  {job.name}
+                </MenuItem>
+              ),
+              jobs,
+            )}
+          </Select>
+        </FormControl>
       </div>
       <ButtonSpinner
         onClick={handleSave}
