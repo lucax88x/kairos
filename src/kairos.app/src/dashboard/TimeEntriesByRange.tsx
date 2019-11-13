@@ -1,15 +1,46 @@
 import { Trans } from '@lingui/macro';
-import { makeStyles, Typography } from '@material-ui/core';
-import { eachDayOfInterval, endOfMonth, getDate, startOfMonth } from 'date-fns';
+import { Button, makeStyles, Typography } from '@material-ui/core';
+import KeyboardArrowLeftIcon from '@material-ui/icons/KeyboardArrowLeft';
+import KeyboardArrowRightIcon from '@material-ui/icons/KeyboardArrowRight';
+import clsx from 'clsx';
+import {
+  eachDayOfInterval,
+  endOfMonth,
+  format,
+  getDate,
+  getMonth,
+  getUnixTime,
+  isEqual,
+  setMonth,
+  startOfDay,
+  startOfMonth,
+} from 'date-fns';
 import { map } from 'ramda';
-import React, { memo, useCallback, useMemo } from 'react';
-
-import { getDifferencesByRange } from '../code/calculator';
+import React, { memo, useCallback, useMemo, useState } from 'react';
+import { getHumanDifferencesByRange } from '../code/calculator';
+import { dateFormatterLocales } from '../code/formatters';
 import Spinner from '../components/Spinner';
+import { JobModel } from '../models/job.model';
+import { Language } from '../models/language-model';
+import { ProfileModel } from '../models/profile.model';
 import { TimeEntryListModel } from '../models/time-entry-list.model';
 
-
 const useStyles = makeStyles(theme => ({
+  container: {
+    display: 'grid',
+  },
+  header: {
+    display: 'grid',
+    gridAutoFlow: 'column',
+  },
+  actionButtons: {
+    display: 'grid',
+    justifySelf: 'right',
+    justifyItems: 'center',
+    alignItems: 'center',
+    gridAutoFlow: 'column',
+    gridGap: theme.spacing(1),
+  },
   grid: {
     display: 'grid',
     justifyItems: 'center',
@@ -21,6 +52,9 @@ const useStyles = makeStyles(theme => ({
     width: '100%',
     padding: theme.spacing(1),
   },
+  isCurrentDay: {
+    textDecoration: 'underline',
+  },
   line: {
     gridColumn: '1 / -1',
     height: 1,
@@ -30,6 +64,8 @@ const useStyles = makeStyles(theme => ({
 }));
 
 export interface TimeEntriesByRangeInputs {
+  profile: ProfileModel;
+  selectedLanguage: Language;
   timeEntries: TimeEntryListModel[];
   isGetTimeEntriesBusy: boolean;
 }
@@ -38,64 +74,144 @@ export interface TimeEntriesByRangeDispatches {
   onUpdate: (item: TimeEntryListModel) => void;
 }
 
-type TimeEntriesByRangeProps = TimeEntriesByRangeInputs & TimeEntriesByRangeDispatches;
+type TimeEntriesByRangeProps = TimeEntriesByRangeInputs &
+  TimeEntriesByRangeDispatches;
 
-export const TimeEntriesByRangeComponent: React.FC<TimeEntriesByRangeProps> = memo(props => {
-  const classes = useStyles(props);
+export const TimeEntriesByRangeComponent: React.FC<TimeEntriesByRangeProps> = memo(
+  props => {
+    const classes = useStyles(props);
 
-  const { timeEntries, isGetTimeEntriesBusy } = props;
+    const {
+      selectedLanguage,
+      timeEntries,
+      profile,
+      isGetTimeEntriesBusy,
+    } = props;
 
-  const monthDaysToHeaderCells = useCallback(
-    (date: Date) => {
-      const start = startOfMonth(date);
-      const end = endOfMonth(date);
+    const [currentMonth, setCurrentMonth] = useState(getMonth(new Date()));
 
-      const days = eachDayOfInterval({ start, end });
+    const handlePreviousMonth = useCallback(
+      () => setCurrentMonth(currentMonth - 1),
+      [currentMonth, setCurrentMonth],
+    );
+    const handleNextMonth = useCallback(
+      () => setCurrentMonth(currentMonth + 1),
+      [currentMonth, setCurrentMonth],
+    );
 
-      return map<Date, JSX.Element>(day => (
-        <div key={day.getDate()} className={classes.headerCell}>
-          {getDate(day)}
+    const currentMonthDaysToHeaderCells = useCallback(
+      (date: Date) => {
+        const today = startOfDay(new Date());
+        const start = startOfMonth(date);
+        const end = endOfMonth(date);
+
+        const days = eachDayOfInterval({ start, end });
+
+        const dateCells = map<Date, JSX.Element>(day => (
+          <div
+            key={day.getDate()}
+            className={clsx(
+              classes.headerCell,
+              isEqual(day, today) && classes.isCurrentDay,
+            )}
+          >
+            {getDate(day)}
+          </div>
+        ))(days);
+
+        return [
+          <div key={'job'} className={classes.headerCell}></div>,
+          ...dateCells,
+        ];
+      },
+      [classes],
+    );
+
+    const currentMonthDaysToBodyCells = useCallback(
+      (date: Date) => {
+        const start = startOfMonth(date);
+        const end = endOfMonth(date);
+
+        const humanDifferencesByRangeByJob = getHumanDifferencesByRange(
+          timeEntries,
+          { start, end },
+        );
+        const days = eachDayOfInterval({ start, end });
+
+        return map<JobModel, JSX.Element | null>(job => {
+          const humanDifferencesByRange =
+            humanDifferencesByRangeByJob[job.id.toString()];
+
+          if (!humanDifferencesByRange) {
+            return null;
+          }
+
+          const dayCells = map<Date, JSX.Element>(day => {
+            const unixTime = getUnixTime(day);
+            return (
+              <div key={unixTime} className={classes.headerCell}>
+                {!!humanDifferencesByRange[unixTime] &&
+                  humanDifferencesByRange[unixTime]}
+              </div>
+            );
+          })(days);
+
+          return (
+            <React.Fragment key={job.id.toString()}>
+              <div className={classes.headerCell}>{job.name}</div>
+              {dayCells}
+              <div className={classes.line} />
+            </React.Fragment>
+          );
+        }, profile.jobs);
+      },
+      [timeEntries, profile, classes],
+    );
+
+    const headerCells = useMemo(
+      () => currentMonthDaysToHeaderCells(setMonth(new Date(), currentMonth)),
+      [currentMonthDaysToHeaderCells, currentMonth],
+    );
+    const bodyCells = useMemo(
+      () => currentMonthDaysToBodyCells(setMonth(new Date(), currentMonth)),
+      [currentMonthDaysToBodyCells, currentMonth],
+    );
+
+    return (
+      <Spinner show={isGetTimeEntriesBusy}>
+        <div className={classes.container}>
+          <div className={classes.header}>
+            <Typography component="h2" variant="h6" gutterBottom>
+              <Trans>TimeEntriesByRange.Title</Trans>
+            </Typography>
+            <div className={classes.actionButtons}>
+              <span>
+                {format(setMonth(new Date(), currentMonth), 'MMMM', {
+                  locale: dateFormatterLocales[selectedLanguage],
+                })}
+              </span>
+              <Button
+                onClick={handlePreviousMonth}
+                disabled={currentMonth <= 0}
+              >
+                <KeyboardArrowLeftIcon></KeyboardArrowLeftIcon>
+              </Button>
+              <Button onClick={handleNextMonth} disabled={currentMonth >= 11}>
+                <KeyboardArrowRightIcon></KeyboardArrowRightIcon>
+              </Button>
+            </div>
+          </div>
+          <div
+            className={classes.grid}
+            style={{
+              gridTemplateColumns: `repeat(${headerCells.length}, 1fr)`,
+            }}
+          >
+            {headerCells}
+            {bodyCells}
+          </div>
         </div>
-      ))(days);
-    },
-    [classes],
-  );
-
-  const monthDaysToBodyCells = useCallback(
-    (date: Date) => {
-      const start = startOfMonth(date);
-      const end = endOfMonth(date);
-
-      const differencesByRange = getDifferencesByRange(timeEntries, { start, end });
-      // const differencesByRange = getDifferencesByRangeByIdAndDate(timeEntries, { start, end });
-
-      const days = eachDayOfInterval({ start, end });
-
-      return map<Date, JSX.Element>(day => (
-        <div key={day.getDate()} className={classes.headerCell}>
-          {!!differencesByRange[day.getDate()] && differencesByRange[day.getDate()]}
-        </div>
-      ))(days);
-    },
-    [timeEntries, classes],
-  );
-
-  const headerCells = useMemo(() => monthDaysToHeaderCells(new Date()), [monthDaysToHeaderCells]);
-  const bodyCells = useMemo(() => monthDaysToBodyCells(new Date()), [monthDaysToBodyCells]);
-
-  return (
-    <Spinner show={isGetTimeEntriesBusy}>
-      <Typography component="h2" variant="h6" gutterBottom>
-        <Trans>TimeEntriesByRange.Title</Trans>
-      </Typography>
-      <div
-        className={classes.grid}
-        style={{ gridTemplateColumns: `repeat(${headerCells.length}, 1fr)` }}
-      >
-        {headerCells}
-        <div className={classes.line} />
-        {bodyCells}
-      </div>
-    </Spinner>
-  );
-});
+      </Spinner>
+    );
+  },
+);

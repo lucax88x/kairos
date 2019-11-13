@@ -4,6 +4,7 @@ export const getTimeEntriesQuery = `query ($year: Int!) {
     when
     type
     job {
+      id
       name
     }
   }

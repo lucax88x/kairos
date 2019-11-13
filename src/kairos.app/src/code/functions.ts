@@ -61,19 +61,19 @@ export const humanDifference = (left: Date, right: Date) => {
     time.push('00');
   }
 
-  const seconds = differenceInSeconds(right, left);
-  if (seconds > 0) {
-    time.push(`${padNumber(seconds)}`);
-    right = subSeconds(right, seconds);
-  } else {
-    time.push('00');
-  }
+  // const seconds = differenceInSeconds(right, left);
+  // if (seconds > 0) {
+  //   time.push(`${padNumber(seconds)}`);
+  //   right = subSeconds(right, seconds);
+  // } else {
+  //   time.push('00');
+  // }
 
   result.push(join(':', time));
 
   const str = join(' ', result);
 
-  if (str === '00:00:00') {
+  if (str === '00:00') {
     return '-';
   }
 

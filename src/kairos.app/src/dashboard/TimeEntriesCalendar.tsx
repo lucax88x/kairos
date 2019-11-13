@@ -4,13 +4,16 @@ import moment from 'moment';
 import { join, map } from 'ramda';
 import React, { useCallback, useEffect, useState } from 'react';
 import { Calendar, Event, Messages, momentLocalizer } from 'react-big-calendar';
-
-import { getEnterExitEvents } from '../code/calculator';
+import { getTimeEntryPairsByJob } from '../code/calculator';
 import { Themes } from '../code/variables';
 import Spinner from '../components/Spinner';
 import { i18n } from '../i18nLoader';
 import { Language } from '../models/language-model';
-import { getTextFromAbsenceType, TimeAbsenceEntryModel } from '../models/time-absence-entry.model';
+import { ProfileModel } from '../models/profile.model';
+import {
+  getTextFromAbsenceType,
+  TimeAbsenceEntryModel,
+} from '../models/time-absence-entry.model';
 import { TimeEntryListModel } from '../models/time-entry-list.model';
 import { TimeHolidayEntryModel } from '../models/time-holiday-entry.model';
 import { Routes } from '../routes';
@@ -46,6 +49,7 @@ const useStyles = makeStyles({
 });
 
 export interface TimeEntriesCalendarInputs {
+  profile: ProfileModel;
   selectedLanguage: Language;
 
   isGetTimeEntriesBusy: boolean;
@@ -62,12 +66,14 @@ export interface TimeEntriesCalendarDispatches {
   onNavigate: (url: string) => void;
 }
 
-type TimeEntriesCalendarEntryProps = TimeEntriesCalendarInputs & TimeEntriesCalendarDispatches;
+type TimeEntriesCalendarEntryProps = TimeEntriesCalendarInputs &
+  TimeEntriesCalendarDispatches;
 
 export const TimeEntriesCalendarComponent: React.FC<TimeEntriesCalendarEntryProps> = props => {
   const classes = useStyles(props);
 
   const {
+    profile,
     selectedLanguage,
     isGetTimeEntriesBusy,
     timeEntries,
@@ -81,47 +87,59 @@ export const TimeEntriesCalendarComponent: React.FC<TimeEntriesCalendarEntryProp
   const [events, setEvents] = useState<Event[]>([]);
 
   useEffect(() => {
-    // const pairs = getTimeEntryPairsById(timeEntries, {
-    const pairs = getEnterExitEvents(timeEntries, {
+    const pairsByJob = getTimeEntryPairsByJob(timeEntries, {
       start: startOfYear(new Date()),
       end: endOfYear(new Date()),
     });
 
-    const entries = map(
-      ({ enter, exit, title, id }) => ({
-        start: enter,
-        end: exit,
-        title,
-        resource: { type: EventType.Work, id },
-      }),
-      pairs,
-    );
+    let toSetEvents: Event[] = [];
 
-    const absences = map(
-      ab => ({
-        start: ab.start,
-        end: ab.end,
-        title: join(' ', [getTextFromAbsenceType(ab.type), ab.description]),
-        resource: { type: EventType.Absence, id: ab.id },
-      }),
-      timeAbsenceEntries,
-    );
+    for (const job of profile.jobs) {
+      const entries = !!pairsByJob[job.id.toString()]
+        ? map(
+            ({ enter, exit, job, enterId }) => ({
+              start: enter,
+              end: exit,
+              title: job,
+              resource: { type: EventType.Work, id: enterId },
+            }),
+            pairsByJob[job.id.toString()],
+          )
+        : [];
 
-    const holidays = map(
-      hol => ({
-        start: startOfDay(hol.when),
-        end: endOfDay(hol.when),
-        title: hol.description,
-        resource: { type: EventType.Holiday, id: hol.id },
-      }),
-      timeHolidayEntries,
-    );
+      const absences = map(
+        ab => ({
+          start: ab.start,
+          end: ab.end,
+          title: join(' ', [getTextFromAbsenceType(ab.type), ab.description]),
+          resource: { type: EventType.Absence, id: ab.id },
+        }),
+        timeAbsenceEntries,
+      );
 
-    setEvents([...entries, ...absences, ...holidays]);
-  }, [timeEntries, timeAbsenceEntries, timeHolidayEntries]);
+      const holidays = map(
+        hol => ({
+          start: startOfDay(hol.when),
+          end: endOfDay(hol.when),
+          title: hol.description,
+          resource: { type: EventType.Holiday, id: hol.id },
+        }),
+        timeHolidayEntries,
+      );
+
+      toSetEvents = [...toSetEvents, ...entries, ...absences, ...holidays];
+    }
+
+    setEvents(toSetEvents);
+  }, [profile, timeEntries, timeAbsenceEntries, timeHolidayEntries]);
 
   const eventPropGetter = useCallback(
-    (event: Event, start: string | Date, end: string | Date, isSelected: boolean) => {
+    (
+      event: Event,
+      start: string | Date,
+      end: string | Date,
+      isSelected: boolean,
+    ) => {
       const { type } = event.resource;
       if (type === EventType.Work) {
         return { className: classes.work };
@@ -175,7 +193,11 @@ export const TimeEntriesCalendarComponent: React.FC<TimeEntriesCalendarEntryProp
 
   return (
     <Spinner
-      show={isGetTimeEntriesBusy || isGetTimeAbsenceEntriesBusy || isGetTimeHolidayEntriesBusy}
+      show={
+        isGetTimeEntriesBusy ||
+        isGetTimeAbsenceEntriesBusy ||
+        isGetTimeHolidayEntriesBusy
+      }
     >
       <Calendar
         className={classes.calendar}

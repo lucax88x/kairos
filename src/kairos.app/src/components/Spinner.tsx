@@ -1,10 +1,8 @@
-import './Spinner.scss';
-
+import { makeStyles } from '@material-ui/styles';
 import clsx from 'clsx';
 import React from 'react';
-
+import './Spinner.scss';
 import { SpinnerIcon } from './SpinnerIcon';
-import { makeStyles } from '@material-ui/styles';
 
 export interface SpinnerProps {
   show: boolean;
@@ -42,7 +40,9 @@ const Spinner: React.FC<SpinnerProps> = props => {
 
   return (
     <div className={classes.container}>
-      <div className={clsx(classes.blocker, show && classes.hasSpinner)}>{children}</div>
+      <div className={clsx(classes.blocker, show && classes.hasSpinner)}>
+        {children}
+      </div>
       {show && (
         <div className={classes.spinner}>
           <SpinnerIcon />

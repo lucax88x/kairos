@@ -8,7 +8,7 @@ import { isString } from './is';
 import { i18n } from '../i18nLoader';
 import { t } from '@lingui/macro';
 
-const locales: { [key: string]: Locale } = { ['en']: enGB, ['it']: it };
+export const dateFormatterLocales: { [key: string]: Locale } = { ['en']: enGB, ['it']: it };
 
 export const dateTimeFormatter = (date: Date | string) => {
   return formatDate(date, 'en', formatAsDateTime);
@@ -26,7 +26,7 @@ export const formatDate = (
 ) => {
   if (!isString(date)) {
     if (isValid(date)) {
-      return format(date, dateFormat, { locale: locales[language] });
+      return format(date, dateFormat, { locale: dateFormatterLocales[language] });
     } else {
       return i18n._(t`Validation.InvalidDate`);
     }

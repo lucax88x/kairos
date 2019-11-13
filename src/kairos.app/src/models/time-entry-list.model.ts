@@ -4,15 +4,15 @@ import { TimeEntryTypes } from './time-entry.model';
 import { UUID } from './uuid.model';
 
 export class TimeEntryListJobModel {
-  constructor(public name: string) {}
+  constructor(public id: UUID, public name: string) {}
   static fromOutModel(outModel: TimeEntryListJobOutModel) {
-    return new TimeEntryListJobModel(outModel.name);
+    return new TimeEntryListJobModel(new UUID(outModel.id), outModel.name);
   }
 
-  static empty = new TimeEntryListJobModel('');
+  static empty = new TimeEntryListJobModel(new UUID(), '');
 
   isEmpty() {
-    return !!this.name;
+    return this.id.equals(TimeEntryListJobModel.empty.id) && !this.name;
   }
 }
 
@@ -59,5 +59,6 @@ export interface TimeEntryListOutModel {
 }
 
 export interface TimeEntryListJobOutModel {
+  id: string;
   name: string;
 }

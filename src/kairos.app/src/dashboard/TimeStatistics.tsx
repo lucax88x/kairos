@@ -85,7 +85,7 @@ export const TimeStatisticsComponent: React.FC<TimeStatisticsProps> = memo(props
   } = props;
 
   const workingHourTiles: TimeStatisticTile[] = useMemo(
-    () => getWorkingHoursStatistics(selectedLanguage, profile, timeEntries, absences, holidays),
+    () => getWorkingHoursStatistics(new Date(), selectedLanguage, profile, timeEntries, absences, holidays),
     [selectedLanguage, profile, timeEntries, absences, holidays],
   );
 
