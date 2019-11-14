@@ -12,13 +12,16 @@ import {
   SELECT_YEAR,
   UPDATE_TIME_HOLIDAY_ENTRIES_BY_COUNTRY_SUCCESS,
 } from '../shared/constants';
-import { selectDashboardRoute, selectTimeHolidayEntriesRoute } from '../shared/router.selectors';
+import {
+  selectDashboardRoute,
+  selectTimeHolidayEntriesRoute,
+} from '../shared/router.selectors';
 import {
   GET_TIME_HOLIDAY_ENTRIES,
   GET_TIME_HOLIDAY_ENTRIES_FAILURE,
   GET_TIME_HOLIDAY_ENTRIES_SUCCESS,
 } from './constants';
-import { selectSelectedYear } from './selectors';
+import { selectSelectedYear, selectIsOnline } from './selectors';
 import { SharedState } from './state';
 
 export const getTimeHolidayEntriesAsync = createAsyncAction(
@@ -29,7 +32,9 @@ export const getTimeHolidayEntriesAsync = createAsyncAction(
 
 function* doGetTimeHolidayEntriesOnOtherActions() {
   const dashboardRoute: Route = yield select(selectDashboardRoute);
-  const timeHolidayEntriesRoute: Route = yield select(selectTimeHolidayEntriesRoute);
+  const timeHolidayEntriesRoute: Route = yield select(
+    selectTimeHolidayEntriesRoute,
+  );
 
   if (!!dashboardRoute || !!timeHolidayEntriesRoute) {
     yield put(getTimeHolidayEntriesAsync.request());
@@ -37,6 +42,12 @@ function* doGetTimeHolidayEntriesOnOtherActions() {
 }
 
 function* doGetTimeHolidayEntries() {
+  const isOnline = yield select(selectIsOnline);
+  if (!isOnline) {
+    yield put(getTimeHolidayEntriesAsync.failure(''));
+    return;
+  }
+
   try {
     const year = yield select(selectSelectedYear);
     const timeHolidayEntries = yield call(getTimeHolidayEntries, year);

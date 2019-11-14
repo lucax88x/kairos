@@ -6,6 +6,8 @@ import { TimeEntryListModel } from '../models/time-entry-list.model';
 import { TimeHolidayEntryModel } from '../models/time-holiday-entry.model';
 
 export interface SharedState {
+  isOnline: boolean;
+  refreshDate: Date;
   selectedLanguage: Language;
   selectedYear: number;
   countries: CountryModel[];
@@ -40,6 +42,8 @@ export interface SharedState {
 }
 
 export const sharedInitialState: SharedState = {
+  isOnline: false,
+  refreshDate: new Date(0),
   selectedLanguage: getBrowserLanguage(),
   selectedYear: getYear(new Date()),
   countries: [],

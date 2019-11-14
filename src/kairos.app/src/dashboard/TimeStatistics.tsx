@@ -125,23 +125,21 @@ export const TimeStatisticsComponent: React.FC<TimeStatisticsProps> = memo(
     return (
       <Spinner show={isGetTimeEntriesBusy}>
         <div className={classes.root}>
-          {!!workingHourTiles.length && (
-            <ExpansionPanel>
-              <ExpansionPanelSummary expandIcon={<ExpandMoreIcon />}>
-                <Typography className={classes.heading}>
-                  <Trans>TimeStatistics.WorkingHours.Title</Trans>
-                </Typography>
-                <Typography className={classes.secondaryHeading}>
-                  <Trans>TimeStatistics.WorkingHours.SecondaryTitle</Trans>
-                </Typography>
-              </ExpansionPanelSummary>
-              <ExpansionPanelDetails>
-                <GridList cellHeight={180} className={classes.gridList}>
-                  {generateTiles(workingHourTiles)}
-                </GridList>
-              </ExpansionPanelDetails>
-            </ExpansionPanel>
-          )}
+          <ExpansionPanel>
+            <ExpansionPanelSummary expandIcon={<ExpandMoreIcon />}>
+              <Typography className={classes.heading}>
+                <Trans>TimeStatistics.WorkingHours.Title</Trans>
+              </Typography>
+              <Typography className={classes.secondaryHeading}>
+                <Trans>TimeStatistics.WorkingHours.SecondaryTitle</Trans>
+              </Typography>
+            </ExpansionPanelSummary>
+            <ExpansionPanelDetails>
+              <GridList cellHeight={180} className={classes.gridList}>
+                {generateTiles(workingHourTiles)}
+              </GridList>
+            </ExpansionPanelDetails>
+          </ExpansionPanel>
           {!!vacationTiles.length && (
             <ExpansionPanel>
               <ExpansionPanelSummary expandIcon={<ExpandMoreIcon />}>

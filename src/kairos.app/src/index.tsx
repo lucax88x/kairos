@@ -41,7 +41,10 @@ const theme = createMuiTheme({
       main: Themes.First.backgroundColor,
       contrastText: Themes.First.color,
     },
-    secondary: { main: Themes.Second.backgroundColor, contrastText: Themes.Second.color },
+    secondary: {
+      main: Themes.Second.backgroundColor,
+      contrastText: Themes.Second.color,
+    },
   },
   overrides: {
     MuiButton: {
@@ -112,10 +115,13 @@ const useStyles = makeStyles(() => ({
 }));
 
 const Index: React.FC = () => {
-  const notistackRef = React.createRef<{ handleDismissSnack: (key: string) => void }>();
+  const notistackRef = React.createRef<{
+    handleDismissSnack: (key: string) => void;
+  }>();
 
   const onClickDismiss = useCallback(
-    (key: string) => !!notistackRef.current && notistackRef.current.handleDismissSnack(key),
+    (key: string) =>
+      !!notistackRef.current && notistackRef.current.handleDismissSnack(key),
     [notistackRef],
   );
 
@@ -170,7 +176,10 @@ const Index: React.FC = () => {
                   <Container maxWidth="lg" className={classes.footerContainer}>
                     <div className={classes.footer}>
                       <div className={classes.footerLinks}>
-                        <Box component="div" display={{ xs: 'none', md: 'block' }}>
+                        <Box
+                          component="div"
+                          display={{ xs: 'none', md: 'block' }}
+                        >
                           <Typography
                             variant="subtitle1"
                             align="center"
@@ -187,7 +196,10 @@ const Index: React.FC = () => {
                           className={classes.footerLink}
                         >
                           <IconButton color="inherit" aria-label="Github">
-                            <SimpleIcon type="github" className={classes.footerIcon}></SimpleIcon>
+                            <SimpleIcon
+                              type="github"
+                              className={classes.footerIcon}
+                            ></SimpleIcon>
                           </IconButton>
                         </a>
                         <a
@@ -201,7 +213,10 @@ const Index: React.FC = () => {
                             src="https://img.shields.io/github/stars/lucax88x/kairos?style=for-the-badge"
                           ></img>
                         </a>
-                        <Box component="div" display={{ xs: 'none', sm: 'block' }}>
+                        <Box
+                          component="div"
+                          display={{ xs: 'none', sm: 'block' }}
+                        >
                           <a
                             href="https://github.com/lucax88x/kairos/issues"
                             target="_blank"
@@ -238,7 +253,10 @@ const Index: React.FC = () => {
                           className={classes.footerLink}
                         >
                           <IconButton color="inherit" aria-label="Github">
-                            <SimpleIcon type="github" className={classes.footerIcon}></SimpleIcon>
+                            <SimpleIcon
+                              type="github"
+                              className={classes.footerIcon}
+                            ></SimpleIcon>
                           </IconButton>
                         </a>
                         <a
@@ -248,7 +266,10 @@ const Index: React.FC = () => {
                           className={classes.footerLink}
                         >
                           <IconButton color="inherit" aria-label="Linkedin">
-                            <SimpleIcon type="linkedin" className={classes.footerIcon}></SimpleIcon>
+                            <SimpleIcon
+                              type="linkedin"
+                              className={classes.footerIcon}
+                            ></SimpleIcon>
                           </IconButton>
                         </a>
                       </div>
@@ -272,9 +293,12 @@ serviceWorker.register({
   },
   onUpdate: () => {
     store.dispatch(
-      enqueueSnackbarAction(i18n._(t`Messages.NewContentAvailablePleaseRefresh`), {
-        variant: 'warning',
-      }),
+      enqueueSnackbarAction(
+        i18n._(t`Messages.NewContentAvailablePleaseRefresh`),
+        {
+          variant: 'warning',
+        },
+      ),
     );
   },
 });

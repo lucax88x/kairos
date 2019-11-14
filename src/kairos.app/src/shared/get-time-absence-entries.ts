@@ -6,12 +6,22 @@ import { SharedActions } from '../actions';
 import { Route } from '../models/route.model';
 import { TimeAbsenceEntryModel } from '../models/time-absence-entry.model';
 import { getTimeAbsenceEntries } from '../services/time-absence-entry/time-absence-entry.service';
-import { CREATE_TIME_ABSENCE_ENTRY_SUCCESS, DELETE_TIME_ABSENCE_ENTRIES_SUCCESS, SELECT_YEAR } from '../shared/constants';
-import { selectDashboardRoute, selectTimeAbsenceEntriesRoute } from '../shared/router.selectors';
-import { GET_TIME_ABSENCE_ENTRIES, GET_TIME_ABSENCE_ENTRIES_FAILURE, GET_TIME_ABSENCE_ENTRIES_SUCCESS } from './constants';
-import { selectSelectedYear } from './selectors';
+import {
+  CREATE_TIME_ABSENCE_ENTRY_SUCCESS,
+  DELETE_TIME_ABSENCE_ENTRIES_SUCCESS,
+  SELECT_YEAR,
+} from '../shared/constants';
+import {
+  selectDashboardRoute,
+  selectTimeAbsenceEntriesRoute,
+} from '../shared/router.selectors';
+import {
+  GET_TIME_ABSENCE_ENTRIES,
+  GET_TIME_ABSENCE_ENTRIES_FAILURE,
+  GET_TIME_ABSENCE_ENTRIES_SUCCESS,
+} from './constants';
+import { selectSelectedYear, selectIsOnline } from './selectors';
 import { SharedState } from './state';
-
 
 export const getTimeAbsenceEntriesAsync = createAsyncAction(
   GET_TIME_ABSENCE_ENTRIES,
@@ -21,7 +31,9 @@ export const getTimeAbsenceEntriesAsync = createAsyncAction(
 
 function* doGetTimeAbsenceEntriesOnOtherActions() {
   const dashboardRoute: Route = yield select(selectDashboardRoute);
-  const timeAbsenceEntriesRoute: Route = yield select(selectTimeAbsenceEntriesRoute);
+  const timeAbsenceEntriesRoute: Route = yield select(
+    selectTimeAbsenceEntriesRoute,
+  );
 
   if (!!dashboardRoute || !!timeAbsenceEntriesRoute) {
     yield put(getTimeAbsenceEntriesAsync.request());
@@ -29,6 +41,12 @@ function* doGetTimeAbsenceEntriesOnOtherActions() {
 }
 
 function* doGetTimeAbsenceEntries() {
+  const isOnline = yield select(selectIsOnline);
+  if (!isOnline) {
+    yield put(getTimeAbsenceEntriesAsync.failure(''));
+    return;
+  }
+
   try {
     const year = yield select(selectSelectedYear);
 

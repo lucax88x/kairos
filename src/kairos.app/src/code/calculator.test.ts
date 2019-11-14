@@ -8,6 +8,7 @@ import {
   getHumanDifferencesByRange,
   getWorkingHoursStatistics,
 } from './calculator';
+import { advanceBy, advanceTo, clear } from 'jest-date-mock';
 
 describe('calculations', () => {
   it('should get differences with only 2 entries', () => {
@@ -179,6 +180,25 @@ describe('calculations', () => {
     expect(result[jobId][getUnixTime(new Date('January 1 2019'))]).toBe(
       '15:59',
     );
+  });
+
+  it('should get correct max difference to now when date is today', () => {
+    advanceTo(new Date('January 3 2019 15:00'))
+    // given
+    const jobId = UUID.Generate().toString();
+    const start = new Date('January 1 2019 00:00');
+    const end = new Date('January 31 2019 23:59');
+
+    const timeEntries: TimeEntryListModel[] = [
+      buildTimeEntry(jobId, TimeEntryTypes.IN, 'January 3 2019 08:00'),
+    ];
+
+    // when
+    const result = getHumanDifferencesByRange(timeEntries, { start, end });
+
+    // then
+    expect(result[jobId][getUnixTime(new Date('January 3 2019'))]).toBe('07:00');
+    clear();
   });
 
   it('should get max difference when there is no out even with next days', () => {

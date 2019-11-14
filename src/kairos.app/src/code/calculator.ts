@@ -12,6 +12,7 @@ import {
   isWithinInterval,
   startOfDay,
   setHours,
+  isSameDay,
 } from 'date-fns';
 import { ascend, filter, groupBy, sortWith } from 'ramda';
 import { JobModel } from '../models/job.model';
@@ -77,7 +78,7 @@ export function getTimeEntryPairsByJob(
         } else {
           pairsByJob[job].push({
             ...pair,
-            exit: endOfDay(entry.when),
+            exit: isSameDay(new Date(), entry.when) ? new Date(): endOfDay(entry.when),
           });
         }
       } else if (i === 0) {
@@ -114,12 +115,12 @@ export function getDifferencesByRangeByJobAndDate(
     }
 
     for (const { enter, exit } of pairs) {
-      const date = getUnixTime(startOfDay(enter));
+      const unixDate = getUnixTime(startOfDay(enter));
 
       const diff = Math.abs(enter.getTime() - exit.getTime());
 
-      differencesByJobAndDate[job][date] = !!differencesByJobAndDate[job][date]
-        ? differencesByJobAndDate[job][date] + diff
+      differencesByJobAndDate[job][unixDate] = !!differencesByJobAndDate[job][unixDate]
+        ? differencesByJobAndDate[job][unixDate] + diff
         : diff;
     }
   }

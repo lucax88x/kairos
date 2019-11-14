@@ -6,10 +6,21 @@ import { SharedActions } from '../actions';
 import { Route } from '../models/route.model';
 import { TimeEntryListModel } from '../models/time-entry-list.model';
 import { getTimeEntries } from '../services/time-entry/time-entry.service';
-import { CREATE_TIME_ENTRY_SUCCESS, DELETE_TIME_ENTRIES_SUCCESS, SELECT_YEAR } from '../shared/constants';
-import { selectDashboardRoute, selectTimeEntriesRoute } from '../shared/router.selectors';
-import { GET_TIME_ENTRIES, GET_TIME_ENTRIES_FAILURE, GET_TIME_ENTRIES_SUCCESS } from './constants';
-import { selectSelectedYear } from './selectors';
+import {
+  CREATE_TIME_ENTRY_SUCCESS,
+  DELETE_TIME_ENTRIES_SUCCESS,
+  SELECT_YEAR,
+} from '../shared/constants';
+import {
+  selectDashboardRoute,
+  selectTimeEntriesRoute,
+} from '../shared/router.selectors';
+import {
+  GET_TIME_ENTRIES,
+  GET_TIME_ENTRIES_FAILURE,
+  GET_TIME_ENTRIES_SUCCESS,
+} from './constants';
+import { selectSelectedYear, selectIsOnline } from './selectors';
 import { SharedState } from './state';
 
 export const getTimeEntriesAsync = createAsyncAction(
@@ -28,6 +39,12 @@ function* doGetTimeEntriesOnOtherActions() {
 }
 
 function* doGetTimeEntries() {
+  const isOnline = yield select(selectIsOnline);
+  if (!isOnline) {
+    yield put(getTimeEntriesAsync.failure(''));
+    return;
+  }
+
   try {
     const year = yield select(selectSelectedYear);
 
@@ -41,13 +58,21 @@ function* doGetTimeEntries() {
 
 export function* getTimeEntriesSaga() {
   yield takeLatest(
-    [LOCATION_CHANGE, CREATE_TIME_ENTRY_SUCCESS, DELETE_TIME_ENTRIES_SUCCESS, SELECT_YEAR],
+    [
+      LOCATION_CHANGE,
+      CREATE_TIME_ENTRY_SUCCESS,
+      DELETE_TIME_ENTRIES_SUCCESS,
+      SELECT_YEAR,
+    ],
     doGetTimeEntriesOnOtherActions,
   );
   yield takeLatest(GET_TIME_ENTRIES, doGetTimeEntries);
 }
 
-export const getTimeEntriesReducer = (state: SharedState, action: SharedActions): SharedState =>
+export const getTimeEntriesReducer = (
+  state: SharedState,
+  action: SharedActions,
+): SharedState =>
   produce(state, draft => {
     switch (action.type) {
       case GET_TIME_ENTRIES:

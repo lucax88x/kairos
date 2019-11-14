@@ -3,6 +3,16 @@ import { State } from '../state';
 
 const selectState = (state: State) => state.shared;
 
+export const selectIsOnline = createSelector(
+  selectState,
+  state => state.isOnline,
+);
+
+export const selectRefreshDate = createSelector(
+  selectState,
+  state => state.refreshDate,
+);
+
 export const selectSelectedYear = createSelector(
   selectState,
   state => state.selectedYear,

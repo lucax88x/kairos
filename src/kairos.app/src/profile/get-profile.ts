@@ -12,6 +12,7 @@ import {
 } from './constants';
 import { ProfileState } from './state';
 import { selectIsAuthenticated } from '../auth/selectors';
+import { selectIsOnline } from '../shared/selectors';
 
 export const getProfileAsync = createAsyncAction(
   GET_PROFILE,
@@ -25,8 +26,15 @@ function* doGetProfileOnOtherActions() {
 
 function* doGetProfile() {
   const isAuthenticated = yield select(selectIsAuthenticated);
-
+  
   if (isAuthenticated) {
+
+    const isOnline = yield select(selectIsOnline);
+    if (!isOnline) {
+      yield put(getProfileAsync.failure(''));
+      return;
+    }
+
     try {
       const profile = yield call(getProfile);
 

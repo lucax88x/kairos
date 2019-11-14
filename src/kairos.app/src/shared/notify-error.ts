@@ -10,7 +10,10 @@ import {
   GET_TIME_ABSENCE_ENTRY_FAILURE,
   UPDATE_TIME_ABSENCE_ENTRY_FAILURE,
 } from '../edit-time-absence-entry/constants';
-import { GET_TIME_ENTRY_FAILURE, UPDATE_TIME_ENTRY_FAILURE } from '../edit-time-entry/constants';
+import {
+  GET_TIME_ENTRY_FAILURE,
+  UPDATE_TIME_ENTRY_FAILURE,
+} from '../edit-time-entry/constants';
 import {
   EXPORT_TIME_ABSENCE_ENTRIES_FAILURE,
   EXPORT_TIME_ENTRIES_FAILURE,
@@ -32,7 +35,11 @@ import {
 } from './constants';
 
 function* doNotifyError(action: PayloadAction<string, string>) {
-  yield put(enqueueSnackbarAction(action.payload.toString(), { variant: 'error' }));
+  if (!!action.payload) {
+    yield put(
+      enqueueSnackbarAction(action.payload.toString(), { variant: 'error' }),
+    );
+  }
 }
 
 export function* notifyError() {

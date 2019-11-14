@@ -181,9 +181,6 @@ export const TimeEntriesByRangeComponent: React.FC<TimeEntriesByRangeProps> = me
       <Spinner show={isGetTimeEntriesBusy}>
         <div className={classes.container}>
           <div className={classes.header}>
-            <Typography component="h2" variant="h6" gutterBottom>
-              <Trans>TimeEntriesByRange.Title</Trans>
-            </Typography>
             <div className={classes.actionButtons}>
               <span>
                 {format(setMonth(new Date(), currentMonth), 'MMMM', {

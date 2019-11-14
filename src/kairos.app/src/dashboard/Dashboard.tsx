@@ -1,8 +1,10 @@
-import { Grid, makeStyles, Paper } from '@material-ui/core';
+import { Grid, makeStyles, Paper, Typography } from '@material-ui/core';
+import RefreshIcon from '@material-ui/icons/Refresh';
 import React from 'react';
 import { TimeEntriesByRange } from './TimeEntriesByRange.container';
 import { TimeEntriesCalendar } from './TimeEntriesCalendar.container';
 import { TimeStatistics } from './TimeStatistics.container';
+import { DashboardHeader } from './DashboardHeader.container';
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -22,6 +24,9 @@ export const Dashboard: React.FC = props => {
 
   return (
     <div className={classes.root}>
+      <Paper className={classes.paper}>
+        <DashboardHeader></DashboardHeader>
+      </Paper>
       <Paper className={classes.paper}>
         <TimeStatistics />
       </Paper>
