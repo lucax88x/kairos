@@ -10,7 +10,6 @@ import { updateTimeEntry } from '../services/time-entry/time-entry.service';
 import { UPDATE_TIME_ENTRY, UPDATE_TIME_ENTRY_FAILURE, UPDATE_TIME_ENTRY_SUCCESS } from './constants';
 import { EditTimeEntryState } from './state';
 
-
 export const updateTimeEntryAsync = createAsyncAction(
   UPDATE_TIME_ENTRY,
   UPDATE_TIME_ENTRY_SUCCESS,

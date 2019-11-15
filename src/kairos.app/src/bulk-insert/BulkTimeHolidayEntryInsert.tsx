@@ -1,9 +1,15 @@
 import { t, Trans } from '@lingui/macro';
-import { Fab, Grid, makeStyles, TextField, Typography } from '@material-ui/core';
+import {
+  Fab,
+  Grid,
+  makeStyles,
+  TextField,
+  Typography,
+} from '@material-ui/core';
 import CheckIcon from '@material-ui/icons/Check';
 import SaveIcon from '@material-ui/icons/Save';
 import { isValid, parseISO } from 'date-fns';
-import { split, map } from 'ramda';
+import { map, split } from 'ramda';
 import React, { ChangeEvent, useCallback, useState } from 'react';
 import { Index } from 'react-virtualized';
 import { dateTimeFormatter } from '../code/formatters';
@@ -27,6 +33,7 @@ const useStyles = makeStyles(theme => ({
 }));
 
 export interface BulkTimeHolidayEntryInsertInputs {
+  isOnline: boolean;
   isBusy: boolean;
 }
 
@@ -37,16 +44,16 @@ export interface BulkTimeHolidayEntryInsertDispatches {
 type BulkTimeHolidayEntryInsertProps = BulkTimeHolidayEntryInsertInputs &
   BulkTimeHolidayEntryInsertDispatches;
 
-export const BulkTimeHolidayEntryInsertComponent: React.FC<
-  BulkTimeHolidayEntryInsertProps
-> = props => {
+export const BulkTimeHolidayEntryInsertComponent: React.FC<BulkTimeHolidayEntryInsertProps> = props => {
   const classes = useStyles(props);
 
-  const { isBusy, onBulkInsert } = props;
+  const { isOnline, isBusy, onBulkInsert } = props;
 
   const [csv, setCsv] = useState('');
   const [validModels, setValidModels] = useState<TimeHolidayEntryModel[]>([]);
-  const [invalidModels, setInvalidModels] = useState<TimeHolidayEntryInvalidModel[]>([]);
+  const [invalidModels, setInvalidModels] = useState<
+    TimeHolidayEntryInvalidModel[]
+  >([]);
 
   const handleBulkInsert = useCallback(() => onBulkInsert(validModels), [
     onBulkInsert,
@@ -72,7 +79,9 @@ export const BulkTimeHolidayEntryInsertComponent: React.FC<
 
           const isWhenValid = isValid(when);
           if (isWhenValid) {
-            validModels.push(new TimeHolidayEntryModel(UUID.Generate(), description, when));
+            validModels.push(
+              new TimeHolidayEntryModel(UUID.Generate(), description, when),
+            );
           } else {
             invalidModels.push({
               id: UUID.Generate(),
@@ -80,8 +89,7 @@ export const BulkTimeHolidayEntryInsertComponent: React.FC<
               when: isWhenValid ? when : i18n._(t`Validation.InvalidDate`),
             });
           }
-        }
-        else{
+        } else {
           invalidModels.push({
             id: UUID.Generate(),
             description: '',
@@ -95,10 +103,14 @@ export const BulkTimeHolidayEntryInsertComponent: React.FC<
   }, [setValidModels, setInvalidModels, csv]);
 
   const noRowsRenderer = useCallback(() => <p>Empty or Invalid CSV</p>, []);
-  const validModelsRowGetter = useCallback(({ index }: Index) => validModels[index], [validModels]);
-  const invalidModelsRowGetter = useCallback(({ index }: Index) => invalidModels[index], [
-    invalidModels,
-  ]);
+  const validModelsRowGetter = useCallback(
+    ({ index }: Index) => validModels[index],
+    [validModels],
+  );
+  const invalidModelsRowGetter = useCallback(
+    ({ index }: Index) => invalidModels[index],
+    [invalidModels],
+  );
 
   return (
     <Grid container spacing={2} direction="column" justify="center">
@@ -137,7 +149,9 @@ export const BulkTimeHolidayEntryInsertComponent: React.FC<
               columns={[
                 {
                   width: 200,
-                  label: i18n._(t`BulkTimeHolidayEntryInsert.DescriptionTableHeader`),
+                  label: i18n._(
+                    t`BulkTimeHolidayEntryInsert.DescriptionTableHeader`,
+                  ),
                   dataKey: 'description',
                 },
                 {
@@ -165,7 +179,9 @@ export const BulkTimeHolidayEntryInsertComponent: React.FC<
               columns={[
                 {
                   width: 200,
-                  label: i18n._(t`BulkTimeHolidayEntryInsert.DescriptionTableHeader`),
+                  label: i18n._(
+                    t`BulkTimeHolidayEntryInsert.DescriptionTableHeader`,
+                  ),
                   dataKey: 'description',
                 },
                 {
@@ -182,7 +198,11 @@ export const BulkTimeHolidayEntryInsertComponent: React.FC<
       )}
       {!!validModels.length && (
         <Grid item className={classes.center}>
-          <FabButtonSpinner onClick={handleBulkInsert} isBusy={isBusy} disabled={isBusy}>
+          <FabButtonSpinner
+            onClick={handleBulkInsert}
+            isBusy={isBusy}
+            disabled={!isOnline || isBusy}
+          >
             <SaveIcon />
           </FabButtonSpinner>
         </Grid>

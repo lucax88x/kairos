@@ -16,6 +16,7 @@ const useStyles = makeStyles(theme => ({
 }));
 
 export interface EditTimeEntryInputs {
+  isOnline: boolean;
   selectedLanguage: Language;
   profile: ProfileModel;
   timeEntry: TimeEntryModel;
@@ -32,7 +33,15 @@ type EditTimeEntryProps = EditTimeEntryInputs & EditTimeEntryDispatches;
 export const EditTimeEntryComponent: React.FC<EditTimeEntryProps> = props => {
   const classes = useStyles(props);
 
-  const { selectedLanguage, profile, timeEntry, isGetBusy, isUpdateBusy, onUpdate } = props;
+  const {
+    isOnline,
+    selectedLanguage,
+    profile,
+    timeEntry,
+    isGetBusy,
+    isUpdateBusy,
+    onUpdate,
+  } = props;
 
   return (
     <Grid container spacing={3}>
@@ -40,6 +49,7 @@ export const EditTimeEntryComponent: React.FC<EditTimeEntryProps> = props => {
         <Paper className={classes.paper}>
           <Spinner show={isGetBusy}>
             <TimeEntryForm
+              isOnline={isOnline}
               selectedLanguage={selectedLanguage}
               profile={profile}
               isBusy={isUpdateBusy}

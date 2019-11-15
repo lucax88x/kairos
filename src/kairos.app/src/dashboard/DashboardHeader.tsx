@@ -1,12 +1,20 @@
-import { Button, makeStyles, Typography } from '@material-ui/core';
+import { makeStyles, Typography } from '@material-ui/core';
 import RefreshIcon from '@material-ui/icons/Refresh';
 import React, { memo } from 'react';
 import { ReactComponent as LogoIcon } from '../assets/images/logo.svg';
 import { formatDate } from '../code/formatters';
+import ButtonSpinner from '../components/ButtonSpinner';
 import { Language } from '../models/language-model';
+import { isEqual } from 'date-fns';
 
 const useStyles = makeStyles(theme => ({
   container: {
+    display: 'grid',
+    gridAutoFlow: 'column',
+    alignItems: 'center',
+    justifyContent: 'end',
+  },
+  logoContainer: {
     display: 'grid',
     gridAutoFlow: 'column',
     alignItems: 'center',
@@ -18,6 +26,7 @@ const useStyles = makeStyles(theme => ({
 }));
 
 export interface DashboardHeaderInputs {
+  isBusy: boolean;
   isOnline: boolean;
   refreshDate: Date;
   selectedLanguage: Language;
@@ -33,24 +42,23 @@ export const DashboardHeaderComponent: React.FC<DashboardHeaderProps> = memo(
   props => {
     const classes = useStyles(props);
 
-    const { isOnline, refreshDate, selectedLanguage, refresh } = props;
+    const { isBusy, isOnline, refreshDate, selectedLanguage, refresh } = props;
 
     return (
       <div className={classes.container}>
-        <div>
+        {/* <div className={classes.logoContainer}>
           <LogoIcon className={classes.logo} />
           <Typography component="h1" variant="h6" color="inherit">
             kairos
           </Typography>
         </div>
-        <div>
-          <Button disabled={!isOnline} onClick={refresh}>
+        <div> */}
+          <ButtonSpinner disabled={!isOnline} onClick={refresh} isBusy={isBusy}>
+            {!isEqual(new Date(0), refreshDate) &&
+              formatDate(refreshDate, selectedLanguage)}
             <RefreshIcon></RefreshIcon>
-          </Button>
-          <span>
-            Last refreshed: {formatDate(refreshDate, selectedLanguage)}
-          </span>
-        </div>
+          </ButtonSpinner>
+        {/* </div> */}
       </div>
     );
   },

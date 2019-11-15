@@ -6,6 +6,7 @@ import { TimeHolidayEntryModel } from './models/time-holiday-entry.model';
 import { TimeHolidayEntryForm } from './shared/TimeHolidayEntryForm';
 
 export interface CreateTimeHolidayEntryModalInputs {
+  isOnline: boolean;
   selectedLanguage: Language;
   isBusy: boolean;
   isOpen: boolean;
@@ -19,10 +20,8 @@ export interface CreateTimeHolidayEntryModalDispatches {
 type CreateTimeHolidayEntryModalProps = CreateTimeHolidayEntryModalInputs &
   CreateTimeHolidayEntryModalDispatches;
 
-export const CreateTimeHolidayEntryModalComponent: React.FC<
-  CreateTimeHolidayEntryModalProps
-> = props => {
-  const { selectedLanguage, isBusy, isOpen, onCreate, onClose } = props;
+export const CreateTimeHolidayEntryModalComponent: React.FC<CreateTimeHolidayEntryModalProps> = props => {
+  const { isOnline, selectedLanguage, isBusy, isOpen, onCreate, onClose } = props;
   return (
     <Dialog open={isOpen} onClose={onClose} aria-labelledby="form-dialog-title">
       <DialogTitle id="form-dialog-title">
@@ -30,6 +29,7 @@ export const CreateTimeHolidayEntryModalComponent: React.FC<
       </DialogTitle>
       <DialogContent>
         <TimeHolidayEntryForm
+          isOnline={isOnline}
           selectedLanguage={selectedLanguage}
           isBusy={isBusy}
           model={new TimeHolidayEntryModel()}

@@ -53,6 +53,7 @@ const useStyles = makeStyles(theme => ({
 }));
 
 export interface TimeAbsenceEntryFormProps {
+  isOnline: boolean;
   selectedLanguage: Language;
   model: TimeAbsenceEntryModel;
   isBusy: boolean;
@@ -62,7 +63,7 @@ export interface TimeAbsenceEntryFormProps {
 export const TimeAbsenceEntryForm: React.FC<TimeAbsenceEntryFormProps> = props => {
   const classes = useStyles(props);
 
-  const { selectedLanguage, isBusy, model, onSave } = props;
+  const { isOnline, selectedLanguage, isBusy, model, onSave } = props;
 
   const [state, dispatch] = useTimeAbsenceEntryFormReducer();
   const { id, type, description, start, end } = state;
@@ -76,7 +77,11 @@ export const TimeAbsenceEntryForm: React.FC<TimeAbsenceEntryFormProps> = props =
   const handleTypeChange = useCallback(
     (event: ChangeEvent<{ value: unknown }>) => {
       if (isString(event.target.value)) {
-        dispatch(SetTimeAbsenceEntryTypeAction(event.target.value as TimeAbsenceEntryTypes));
+        dispatch(
+          SetTimeAbsenceEntryTypeAction(
+            event.target.value as TimeAbsenceEntryTypes,
+          ),
+        );
       }
     },
     [dispatch],
@@ -145,7 +150,10 @@ export const TimeAbsenceEntryForm: React.FC<TimeAbsenceEntryFormProps> = props =
         onChange={handleDescriptionChange}
         fullWidth
       />
-      <MuiPickersUtilsProvider utils={DateFnsUtils} locale={getDatepickerLocale(selectedLanguage)}>
+      <MuiPickersUtilsProvider
+        utils={DateFnsUtils}
+        locale={getDatepickerLocale(selectedLanguage)}
+      >
         <KeyboardDateTimePicker
           autoOk
           ampm={false}
@@ -172,7 +180,7 @@ export const TimeAbsenceEntryForm: React.FC<TimeAbsenceEntryFormProps> = props =
       <ButtonSpinner
         onClick={handleSave}
         isBusy={isBusy}
-        disabled={!start || !end || start > end || isBusy}
+        disabled={!isOnline || !start || !end || start > end || isBusy}
         className={classes.selfCenter}
       >
         {model.isEmpty() ? (

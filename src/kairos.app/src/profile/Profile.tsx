@@ -45,6 +45,7 @@ const useStyles = makeStyles(theme => ({
 }));
 
 export interface ProfileInputs {
+  isOnline: boolean;
   selectedLanguage: Language;
   user: UserModel;
   profile: ProfileModel;
@@ -61,7 +62,7 @@ type ProfileProps = ProfileInputs & ProfileDispatches;
 export const ProfileComponent: React.FC<ProfileProps> = props => {
   const classes = useStyles(props);
 
-  const { selectedLanguage, user, profile, isGetBusy, isUpdateBusy, onUpdate } = props;
+  const { isOnline, selectedLanguage, user, profile, isGetBusy, isUpdateBusy, onUpdate } = props;
 
   const [state, dispatch] = useProfileReducer();
 
@@ -150,7 +151,7 @@ export const ProfileComponent: React.FC<ProfileProps> = props => {
           )}
         </div>
 
-        <ButtonSpinner onClick={handleUpdate} isBusy={isUpdateBusy} disabled={isUpdateBusy}>
+        <ButtonSpinner onClick={handleUpdate} isBusy={isUpdateBusy} disabled={!isOnline || isUpdateBusy}>
           <Trans>Buttons.Update</Trans>
           <SaveIcon className={classes.marginLeft} />
         </ButtonSpinner>

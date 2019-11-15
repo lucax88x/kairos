@@ -1,9 +1,9 @@
 import { connect } from 'react-redux';
 import { Dispatch } from 'redux';
-
 import { Actions } from '../actions';
 import { TimeEntryModel } from '../models/time-entry.model';
 import { selectProfile } from '../profile/selectors';
+import { selectIsOnline, selectSelectedLanguage } from '../shared/selectors';
 import { State } from '../state';
 import {
   EditTimeEntryComponent,
@@ -16,9 +16,9 @@ import {
   selectTimeEntry,
 } from './selectors';
 import { updateTimeEntryAsync } from './update-time-entry';
-import { selectSelectedLanguage } from '../shared/selectors';
 
 const mapStateToProps = (state: State): EditTimeEntryInputs => ({
+  isOnline: selectIsOnline(state),
   selectedLanguage: selectSelectedLanguage(state),
   profile: selectProfile(state),
   timeEntry: selectTimeEntry(state),
@@ -26,8 +26,11 @@ const mapStateToProps = (state: State): EditTimeEntryInputs => ({
   isUpdateBusy: selectIsUpdateTimeEntryBusy(state),
 });
 
-const mapDispatchToProps = (dispatch: Dispatch<Actions>): EditTimeEntryDispatches => ({
-  onUpdate: (model: TimeEntryModel) => dispatch(updateTimeEntryAsync.request({ model })),
+const mapDispatchToProps = (
+  dispatch: Dispatch<Actions>,
+): EditTimeEntryDispatches => ({
+  onUpdate: (model: TimeEntryModel) =>
+    dispatch(updateTimeEntryAsync.request({ model })),
 });
 
 export const EditTimeEntry = connect(

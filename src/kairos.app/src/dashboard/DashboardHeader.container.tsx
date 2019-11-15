@@ -4,8 +4,9 @@ import { Actions } from '../actions';
 import { refreshAction } from '../shared/refresh';
 import {
   selectIsOnline,
-  selectSelectedLanguage,
+  selectIsRefreshBusy,
   selectRefreshDate,
+  selectSelectedLanguage,
 } from '../shared/selectors';
 import { State } from '../state';
 import {
@@ -15,6 +16,7 @@ import {
 } from './DashboardHeader';
 
 const mapStateToProps = (state: State): DashboardHeaderInputs => ({
+  isBusy: selectIsRefreshBusy(state),
   isOnline: selectIsOnline(state),
   refreshDate: selectRefreshDate(state),
   selectedLanguage: selectSelectedLanguage(state),

@@ -24,9 +24,9 @@ export const Dashboard: React.FC = props => {
 
   return (
     <div className={classes.root}>
-      <Paper className={classes.paper}>
+      {/* <Paper className={classes.paper}> */}
         <DashboardHeader></DashboardHeader>
-      </Paper>
+      {/* </Paper> */}
       <Paper className={classes.paper}>
         <TimeStatistics />
       </Paper>

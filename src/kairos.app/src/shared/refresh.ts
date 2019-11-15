@@ -1,26 +1,48 @@
+import { LOCATION_CHANGE } from 'connected-react-router';
 import produce from 'immer';
-import { put, takeLatest } from 'redux-saga/effects';
+import { Route } from 'react-router';
+import { put, select, takeLatest } from 'redux-saga/effects';
 import { action } from 'typesafe-actions';
 import { SharedActions } from '../actions';
 import { IS_ONLINE } from '../shared/constants';
-import { getTimeAbsenceEntriesAsync, getTimeEntriesAsync, getTimeHolidayEntriesAsync } from './actions';
+import {
+  getTimeAbsenceEntriesAsync,
+  getTimeEntriesAsync,
+  getTimeHolidayEntriesAsync,
+} from './actions';
 import { REFRESH } from './constants';
+import { selectDashboardRoute } from './router.selectors';
 import { SharedState } from './state';
+import { selectIsOnline } from './selectors';
 
 export const refreshAction = () => action(REFRESH);
 
 function* doRefreshOnOtherActions() {
-  yield put(refreshAction());
+  const isOnline = yield select(selectIsOnline);
+  if (!isOnline) {
+    return;
+  }
+
+  const dashboardRoute: Route = yield select(selectDashboardRoute);
+
+  if (!!dashboardRoute) {
+    yield put(refreshAction());
+  }
 }
 
 function* doRefresh() {
+  const isOnline = yield select(selectIsOnline);
+  if (!isOnline) {
+    return;
+  }
+
   yield put(getTimeEntriesAsync.request());
   yield put(getTimeAbsenceEntriesAsync.request());
   yield put(getTimeHolidayEntriesAsync.request());
 }
 
 export function* refreshSaga() {
-  yield takeLatest([IS_ONLINE], doRefreshOnOtherActions);
+  yield takeLatest([LOCATION_CHANGE, IS_ONLINE], doRefreshOnOtherActions);
   yield takeLatest(REFRESH, doRefresh);
 }
 
@@ -31,7 +53,7 @@ export const refreshReducer = (
   produce(state, draft => {
     switch (action.type) {
       case REFRESH:
-        // draft.ui.busy.refresh = true;
+        draft.refreshDate = new Date();
         break;
     }
   });

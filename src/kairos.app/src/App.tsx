@@ -6,7 +6,6 @@ import {
   Container,
   Divider,
   Drawer,
-  Grid,
   IconButton,
   List,
   ListItem,
@@ -40,7 +39,6 @@ import { ReactComponent as LogoIcon } from './assets/images/logo.svg';
 import { BulkInsert } from './bulk-insert/BulkInsert';
 import { isLanguage, isNumber } from './code/is';
 import { isIOS } from './code/is-ios';
-import { SimpleIcon } from './components/SimpleIcon';
 import { CreateTimeAbsenceEntry } from './CreateTimeAbsenceEntry.container';
 import { CreateTimeEntry } from './CreateTimeEntry.container';
 import { CreateTimeHolidayEntryModal } from './CreateTimeHolidayEntryModal.container';
@@ -50,6 +48,7 @@ import { EditTimeEntry } from './edit-time-entry/EditTimeEntry.container';
 import { EditTimeHolidayEntry } from './edit-time-holiday-entry/EditTimeHolidayEntry.container';
 import { Export } from './export/Export';
 import { i18n } from './i18nLoader';
+import { IsOnline } from './IsOnline.container';
 import { Language, Languages } from './models/language-model';
 import { UserModel } from './models/user.model';
 import { Profile } from './profile/Profile.container';
@@ -261,11 +260,19 @@ export const AppComponent: React.FC<AppProps> = props => {
 
   const classes = useStyles(props);
 
-  const handleLeftDrawerOpen = useCallback(() => openLeftDrawer(), [openLeftDrawer]);
-  const handleLeftDrawerClose = useCallback(() => closeLeftDrawer(), [closeLeftDrawer]);
+  const handleLeftDrawerOpen = useCallback(() => openLeftDrawer(), [
+    openLeftDrawer,
+  ]);
+  const handleLeftDrawerClose = useCallback(() => closeLeftDrawer(), [
+    closeLeftDrawer,
+  ]);
 
-  const handleRightDrawerOpen = useCallback(() => openRightDrawer(), [openRightDrawer]);
-  const handleRightDrawerClose = useCallback(() => closeRightDrawer(), [closeRightDrawer]);
+  const handleRightDrawerOpen = useCallback(() => openRightDrawer(), [
+    openRightDrawer,
+  ]);
+  const handleRightDrawerClose = useCallback(() => closeRightDrawer(), [
+    closeRightDrawer,
+  ]);
 
   const [language, setLanguage] = useState<Language>(selectedLanguage);
   const [year, setYear] = useState<number>(selectedYear);
@@ -395,6 +402,9 @@ export const AppComponent: React.FC<AppProps> = props => {
               </div>
               <div className={classes.toolbarContentRight}>
                 {!isRightDrawerOpen && !isLeftDrawerOpen && (
+                  <IsOnline></IsOnline>
+                )}
+                {!isRightDrawerOpen && !isLeftDrawerOpen && (
                   <IconButton
                     color="inherit"
                     aria-label={i18n._(t`TopBar.OpenTimeEntry`)}
@@ -427,7 +437,10 @@ export const AppComponent: React.FC<AppProps> = props => {
         <Drawer
           variant="persistent"
           classes={{
-            paper: clsx(classes.leftDrawerPaper, !isLeftDrawerOpen && classes.drawerPaperClose),
+            paper: clsx(
+              classes.leftDrawerPaper,
+              !isLeftDrawerOpen && classes.drawerPaperClose,
+            ),
           }}
           open={isLeftDrawerOpen}
         >
@@ -455,13 +468,17 @@ export const AppComponent: React.FC<AppProps> = props => {
               <ListItemIcon>
                 <WeekendIcon />
               </ListItemIcon>
-              <ListItemText primary={<Trans>LeftMenu.TimeAbsenceEntries</Trans>} />
+              <ListItemText
+                primary={<Trans>LeftMenu.TimeAbsenceEntries</Trans>}
+              />
             </ListItem>
             <ListItem button to={Routes.TimeHolidayEntries} component={Link}>
               <ListItemIcon>
                 <BeachAccessIcon />
               </ListItemIcon>
-              <ListItemText primary={<Trans>LeftMenu.TimeHolidayEntries</Trans>} />
+              <ListItemText
+                primary={<Trans>LeftMenu.TimeHolidayEntries</Trans>}
+              />
             </ListItem>
             <Divider />
             <ListItem button to={Routes.BulkInsert} component={Link}>
@@ -481,15 +498,31 @@ export const AppComponent: React.FC<AppProps> = props => {
 
         <main className={classes.content}>
           <div className={classes.appBarSpacer} />
-          <Container component="main" maxWidth="lg" className={classes.container}>
+          <Container
+            component="main"
+            maxWidth="lg"
+            className={classes.container}
+          >
             <Route path={Routes.Dashboard} component={Dashboard} />
             <Route path={Routes.Profile} component={Profile} />
             <Route path={Routes.TimeEntries} component={TimeEntries} />
-            <Route path={Routes.TimeAbsenceEntries} component={TimeAbsenceEntries} />
-            <Route path={Routes.TimeHolidayEntries} component={TimeHolidayEntries} />
+            <Route
+              path={Routes.TimeAbsenceEntries}
+              component={TimeAbsenceEntries}
+            />
+            <Route
+              path={Routes.TimeHolidayEntries}
+              component={TimeHolidayEntries}
+            />
             <Route path={Routes.EditTimeEntry} component={EditTimeEntry} />
-            <Route path={Routes.EditTimeAbsenceEntry} component={EditTimeAbsenceEntry} />
-            <Route path={Routes.EditTimeHolidayEntry} component={EditTimeHolidayEntry} />
+            <Route
+              path={Routes.EditTimeAbsenceEntry}
+              component={EditTimeAbsenceEntry}
+            />
+            <Route
+              path={Routes.EditTimeHolidayEntry}
+              component={EditTimeHolidayEntry}
+            />
             <Route path={Routes.BulkInsert} component={BulkInsert} />
             <Route path={Routes.Export} component={Export} />
           </Container>
@@ -530,7 +563,9 @@ export const AppComponent: React.FC<AppProps> = props => {
               <ListItemIcon>
                 <WeekendIcon />
               </ListItemIcon>
-              <ListItemText primary={<Trans>TopBar.OpenTimeAbsenceEntry</Trans>} />
+              <ListItemText
+                primary={<Trans>TopBar.OpenTimeAbsenceEntry</Trans>}
+              />
             </ListItem>
             <Divider />
             <ListItem>
@@ -542,7 +577,11 @@ export const AppComponent: React.FC<AppProps> = props => {
               >
                 {map(
                   year => (
-                    <MenuItem key={year} value={year} className={classes.topbarSelectOption}>
+                    <MenuItem
+                      key={year}
+                      value={year}
+                      className={classes.topbarSelectOption}
+                    >
                       {year}
                     </MenuItem>
                   ),

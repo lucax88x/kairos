@@ -1,6 +1,5 @@
 import { connect } from 'react-redux';
 import { Dispatch } from 'redux';
-
 import { Actions } from './actions';
 import {
   CreateTimeEntryComponent,
@@ -10,17 +9,25 @@ import {
 import { TimeEntryModel } from './models/time-entry.model';
 import { selectProfile } from './profile/selectors';
 import { createTimeEntryAsync } from './shared/create-time-entry';
-import { selectIsCreateTimeEntryBusy, selectSelectedLanguage } from './shared/selectors';
+import {
+  selectIsCreateTimeEntryBusy,
+  selectIsOnline,
+  selectSelectedLanguage,
+} from './shared/selectors';
 import { State } from './state';
 
 const mapStateToProps = (state: State): CreateTimeEntryInputs => ({
+  isOnline: selectIsOnline(state),
   selectedLanguage: selectSelectedLanguage(state),
   profile: selectProfile(state),
   isBusy: selectIsCreateTimeEntryBusy(state),
 });
 
-const mapDispatchToProps = (dispatch: Dispatch<Actions>): CreateTimeEntryDispatches => ({
-  onCreate: (model: TimeEntryModel) => dispatch(createTimeEntryAsync.request(model)),
+const mapDispatchToProps = (
+  dispatch: Dispatch<Actions>,
+): CreateTimeEntryDispatches => ({
+  onCreate: (model: TimeEntryModel) =>
+    dispatch(createTimeEntryAsync.request(model)),
 });
 
 export const CreateTimeEntry = connect(

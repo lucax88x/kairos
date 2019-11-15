@@ -32,6 +32,7 @@ const useStyles = makeStyles(theme => ({
 }));
 
 export interface TimeHolidayEntryFormProps {
+  isOnline: boolean;
   selectedLanguage: Language;
   model: TimeHolidayEntryModel;
   isBusy: boolean;
@@ -41,7 +42,7 @@ export interface TimeHolidayEntryFormProps {
 export const TimeHolidayEntryForm: React.FC<TimeHolidayEntryFormProps> = props => {
   const classes = useStyles(props);
 
-  const { selectedLanguage, model, isBusy, onSave } = props;
+  const { isOnline, selectedLanguage, model, isBusy, onSave } = props;
 
   const [id, setId] = useState(model.id);
   const [description, setDescription] = useState<string>(model.description);
@@ -95,7 +96,7 @@ export const TimeHolidayEntryForm: React.FC<TimeHolidayEntryFormProps> = props =
       <ButtonSpinner
         onClick={handleSave}
         isBusy={isBusy}
-        disabled={!when || isBusy}
+        disabled={!isOnline || !when || isBusy}
         className={classes.selfCenter}
       >
         <>

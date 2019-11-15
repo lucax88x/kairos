@@ -30,6 +30,7 @@ const useStyles = makeStyles(theme => ({
 }));
 
 export interface BulkTimeAbsenceEntryInsertInputs {
+  isOnline: boolean;
   isBusy: boolean;
 }
 
@@ -45,7 +46,7 @@ export const BulkTimeAbsenceEntryInsertComponent: React.FC<
 > = props => {
   const classes = useStyles(props);
 
-  const { isBusy, onBulkInsert } = props;
+  const { isOnline, isBusy, onBulkInsert } = props;
 
   const [csv, setCsv] = useState('');
   const [validModels, setValidModels] = useState<TimeAbsenceEntryModel[]>([]);
@@ -234,7 +235,7 @@ export const BulkTimeAbsenceEntryInsertComponent: React.FC<
       )}
       {!!validModels.length && (
         <Grid item className={classes.center}>
-          <FabButtonSpinner onClick={handleBulkInsert} isBusy={isBusy} disabled={isBusy}>
+          <FabButtonSpinner onClick={handleBulkInsert} isBusy={isBusy} disabled={!isOnline || isBusy}>
             <SaveIcon />
           </FabButtonSpinner>
         </Grid>

@@ -31,6 +31,7 @@ const useStyles = makeStyles(theme => ({
 }));
 
 export interface ExportTimeAbsenceEntriesInputs {
+  isOnline: boolean;
   selectedLanguage: Language;
   isBusy: boolean;
 }
@@ -44,7 +45,7 @@ type ExportTimeAbsenceEntriesProps = ExportTimeAbsenceEntriesInputs & ExportTime
 export const ExportTimeAbsenceEntriesComponent: React.FC<ExportTimeAbsenceEntriesProps> = props => {
   const classes = useStyles(props);
 
-  const { selectedLanguage, isBusy, onExport } = props;
+  const { isOnline, selectedLanguage, isBusy, onExport } = props;
 
   const [start, setStart] = useState<Date | null>(startOfMonth(new Date()));
   const [end, setEnd] = useState<Date | null>(endOfMonth(new Date()));
@@ -91,7 +92,7 @@ export const ExportTimeAbsenceEntriesComponent: React.FC<ExportTimeAbsenceEntrie
           />
         </div>
       </MuiPickersUtilsProvider>
-      <ButtonSpinner onClick={handleExport} isBusy={isBusy} disabled={isBusy || !start || !end}>
+      <ButtonSpinner onClick={handleExport} isBusy={isBusy} disabled={!isOnline || isBusy || !start || !end}>
         <InsertDriveFileIcon />
         <Trans>ExportTimeAbsenceEntries.Export</Trans>
       </ButtonSpinner>

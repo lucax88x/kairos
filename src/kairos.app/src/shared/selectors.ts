@@ -43,20 +43,11 @@ export const selectTimeHolidayEntries = createSelector(
   state => state.timeHolidayEntries,
 );
 
-export const selectUi = createSelector(
-  selectState,
-  state => state.ui,
-);
+export const selectUi = createSelector(selectState, state => state.ui);
 
-export const selectBusy = createSelector(
-  selectUi,
-  ui => ui.busy,
-);
+export const selectBusy = createSelector(selectUi, ui => ui.busy);
 
-export const selectModal = createSelector(
-  selectUi,
-  ui => ui.modal,
-);
+export const selectModal = createSelector(selectUi, ui => ui.modal);
 
 export const selectConfirmation = createSelector(
   selectUi,
@@ -116,6 +107,20 @@ export const selectIsDeleteTimeHolidayEntriesBusy = createSelector(
 export const selectIsUpdateTimeHolidayEntriesByCountry = createSelector(
   selectBusy,
   busy => busy.updateTimeHolidayEntriesByCountry,
+);
+
+export const selectIsRefreshBusy = createSelector(
+  selectIsGetTimeEntriesBusy,
+  selectIsGetTimeAbsenceEntriesBusy,
+  selectIsGetTimeHolidayEntriesBusy,
+  (
+    isGetTimeEntriesBusy,
+    isGetTimeAbsenceEntriesBusy,
+    isGetTimeHolidayEntriesBusy,
+  ) =>
+    isGetTimeEntriesBusy ||
+    isGetTimeAbsenceEntriesBusy ||
+    isGetTimeHolidayEntriesBusy,
 );
 
 export const selectIsConfirmationModalOpen = createSelector(

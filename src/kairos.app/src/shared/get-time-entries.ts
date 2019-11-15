@@ -31,9 +31,8 @@ export const getTimeEntriesAsync = createAsyncAction(
 
 function* doGetTimeEntriesOnOtherActions() {
   const timeEntriesRoute: Route = yield select(selectTimeEntriesRoute);
-  const dashboardRoute: Route = yield select(selectDashboardRoute);
 
-  if (!!dashboardRoute || !!timeEntriesRoute) {
+  if (!!timeEntriesRoute) {
     yield put(getTimeEntriesAsync.request());
   }
 }

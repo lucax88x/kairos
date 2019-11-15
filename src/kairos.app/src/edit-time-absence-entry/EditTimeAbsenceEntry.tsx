@@ -15,6 +15,7 @@ const useStyles = makeStyles(theme => ({
 }));
 
 export interface EditTimeAbsenceEntryInputs {
+  isOnline: boolean;
   selectedLanguage: Language;
   timeAbsenceEntry: TimeAbsenceEntryModel;
   isGetBusy: boolean;
@@ -25,12 +26,20 @@ export interface EditTimeAbsenceEntryDispatches {
   onUpdate: (model: TimeAbsenceEntryModel) => void;
 }
 
-type EditTimeAbsenceEntryProps = EditTimeAbsenceEntryInputs & EditTimeAbsenceEntryDispatches;
+type EditTimeAbsenceEntryProps = EditTimeAbsenceEntryInputs &
+  EditTimeAbsenceEntryDispatches;
 
 export const EditTimeAbsenceEntryComponent: React.FC<EditTimeAbsenceEntryProps> = props => {
   const classes = useStyles(props);
 
-  const { selectedLanguage, timeAbsenceEntry, isGetBusy, isUpdateBusy, onUpdate } = props;
+  const {
+    isOnline,
+    selectedLanguage,
+    timeAbsenceEntry,
+    isGetBusy,
+    isUpdateBusy,
+    onUpdate,
+  } = props;
 
   return (
     <Grid container spacing={3}>
@@ -38,6 +47,7 @@ export const EditTimeAbsenceEntryComponent: React.FC<EditTimeAbsenceEntryProps> 
         <Paper className={classes.paper}>
           <Spinner show={isGetBusy}>
             <TimeAbsenceEntryForm
+              isOnline={isOnline}
               selectedLanguage={selectedLanguage}
               isBusy={isUpdateBusy}
               model={timeAbsenceEntry}

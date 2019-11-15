@@ -59,6 +59,7 @@ const useStyles = makeStyles(theme => ({
 }));
 
 export interface TimeEntryFormProps {
+  isOnline: boolean;
   selectedLanguage: Language;
   profile: ProfileModel;
   model: TimeEntryModel;
@@ -69,7 +70,7 @@ export interface TimeEntryFormProps {
 export const TimeEntryForm: React.FC<TimeEntryFormProps> = props => {
   const classes = useStyles(props);
 
-  const { selectedLanguage, isBusy, profile, model, onSave } = props;
+  const { isOnline, selectedLanguage, isBusy, profile, model, onSave } = props;
 
   const [state, dispatch] = useTimeEntryFormReducer();
   const { id, when, type, jobs, selectedJobId } = state;
@@ -189,7 +190,7 @@ export const TimeEntryForm: React.FC<TimeEntryFormProps> = props => {
       <ButtonSpinner
         onClick={handleSave}
         isBusy={isBusy}
-        disabled={!when || selectedJobId === UUID.Empty || isBusy}
+        disabled={!isOnline || !when || selectedJobId === UUID.Empty || isBusy}
         className={classes.selfCenter}
       >
         {model.isEmpty() ? (

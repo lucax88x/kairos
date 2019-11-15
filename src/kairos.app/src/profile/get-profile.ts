@@ -1,9 +1,12 @@
 import produce from 'immer';
-import { call, put, takeLatest, select } from 'redux-saga/effects';
+import { call, put, select, takeLatest } from 'redux-saga/effects';
 import { createAsyncAction } from 'typesafe-actions';
 import { ProfileActions } from '../actions';
+import { selectIsAuthenticated } from '../auth/selectors';
 import { ProfileModel } from '../models/profile.model';
 import { getProfile } from '../services/profile/profile.service';
+import { IS_ONLINE } from '../shared/constants';
+import { selectIsOnline } from '../shared/selectors';
 import {
   GET_PROFILE,
   GET_PROFILE_FAILURE,
@@ -11,8 +14,6 @@ import {
   UPDATE_PROFILE_SUCCESS,
 } from './constants';
 import { ProfileState } from './state';
-import { selectIsAuthenticated } from '../auth/selectors';
-import { selectIsOnline } from '../shared/selectors';
 
 export const getProfileAsync = createAsyncAction(
   GET_PROFILE,
@@ -26,9 +27,8 @@ function* doGetProfileOnOtherActions() {
 
 function* doGetProfile() {
   const isAuthenticated = yield select(selectIsAuthenticated);
-  
-  if (isAuthenticated) {
 
+  if (isAuthenticated) {
     const isOnline = yield select(selectIsOnline);
     if (!isOnline) {
       yield put(getProfileAsync.failure(''));
@@ -46,13 +46,19 @@ function* doGetProfile() {
 }
 
 export function* getProfileSaga() {
-  yield takeLatest(UPDATE_PROFILE_SUCCESS, doGetProfileOnOtherActions);
+  yield takeLatest(
+    [UPDATE_PROFILE_SUCCESS, IS_ONLINE],
+    doGetProfileOnOtherActions,
+  );
   yield takeLatest(GET_PROFILE, doGetProfile);
 
   yield put(getProfileAsync.request());
 }
 
-export const getProfileReducer = (state: ProfileState, action: ProfileActions): ProfileState =>
+export const getProfileReducer = (
+  state: ProfileState,
+  action: ProfileActions,
+): ProfileState =>
   produce(state, draft => {
     switch (action.type) {
       case GET_PROFILE:
