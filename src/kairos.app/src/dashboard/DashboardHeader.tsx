@@ -1,27 +1,17 @@
-import { makeStyles, Typography } from '@material-ui/core';
+import { makeStyles } from '@material-ui/core';
 import RefreshIcon from '@material-ui/icons/Refresh';
+import { isEqual } from 'date-fns';
 import React, { memo } from 'react';
-import { ReactComponent as LogoIcon } from '../assets/images/logo.svg';
 import { formatDate } from '../code/formatters';
 import ButtonSpinner from '../components/ButtonSpinner';
 import { Language } from '../models/language-model';
-import { isEqual } from 'date-fns';
 
-const useStyles = makeStyles(theme => ({
+const useStyles = makeStyles(() => ({
   container: {
     display: 'grid',
     gridAutoFlow: 'column',
     alignItems: 'center',
     justifyContent: 'end',
-  },
-  logoContainer: {
-    display: 'grid',
-    gridAutoFlow: 'column',
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-  logo: {
-    width: 100,
   },
 }));
 
@@ -46,19 +36,11 @@ export const DashboardHeaderComponent: React.FC<DashboardHeaderProps> = memo(
 
     return (
       <div className={classes.container}>
-        {/* <div className={classes.logoContainer}>
-          <LogoIcon className={classes.logo} />
-          <Typography component="h1" variant="h6" color="inherit">
-            kairos
-          </Typography>
-        </div>
-        <div> */}
-          <ButtonSpinner disabled={!isOnline} onClick={refresh} isBusy={isBusy}>
-            {!isEqual(new Date(0), refreshDate) &&
-              formatDate(refreshDate, selectedLanguage)}
-            <RefreshIcon></RefreshIcon>
-          </ButtonSpinner>
-        {/* </div> */}
+        <ButtonSpinner disabled={!isOnline} onClick={refresh} isBusy={isBusy}>
+          {!isEqual(new Date(0), refreshDate) &&
+            formatDate(refreshDate, selectedLanguage)}
+          <RefreshIcon></RefreshIcon>
+        </ButtonSpinner>
       </div>
     );
   },

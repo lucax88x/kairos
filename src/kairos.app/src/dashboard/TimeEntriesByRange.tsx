@@ -1,5 +1,4 @@
-import { Trans } from '@lingui/macro';
-import { Button, makeStyles, Typography } from '@material-ui/core';
+import { Button, makeStyles } from '@material-ui/core';
 import KeyboardArrowLeftIcon from '@material-ui/icons/KeyboardArrowLeft';
 import KeyboardArrowRightIcon from '@material-ui/icons/KeyboardArrowRight';
 import clsx from 'clsx';
@@ -26,9 +25,7 @@ import { ProfileModel } from '../models/profile.model';
 import { TimeEntryListModel } from '../models/time-entry-list.model';
 
 const useStyles = makeStyles(theme => ({
-  container: {
-    display: 'grid',
-  },
+  container: {},
   header: {
     display: 'grid',
     gridAutoFlow: 'column',
@@ -158,9 +155,9 @@ export const TimeEntriesByRangeComponent: React.FC<TimeEntriesByRangeProps> = me
 
           return (
             <React.Fragment key={job.id.toString()}>
+              <div className={classes.line} />
               <div className={classes.headerCell}>{job.name}</div>
               {dayCells}
-              <div className={classes.line} />
             </React.Fragment>
           );
         }, profile.jobs);

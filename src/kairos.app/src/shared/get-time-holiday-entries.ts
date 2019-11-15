@@ -6,9 +6,21 @@ import { SharedActions } from '../actions';
 import { Route } from '../models/route.model';
 import { TimeHolidayEntryModel } from '../models/time-holiday-entry.model';
 import { getTimeHolidayEntries } from '../services/time-holiday-entry/time-holiday-entry.service';
-import { CREATE_TIME_HOLIDAY_ENTRY_SUCCESS, DELETE_TIME_HOLIDAY_ENTRIES_SUCCESS, SELECT_YEAR, UPDATE_TIME_HOLIDAY_ENTRIES_BY_COUNTRY_SUCCESS } from '../shared/constants';
-import { selectTimeHolidayEntriesRoute } from '../shared/router.selectors';
-import { GET_TIME_HOLIDAY_ENTRIES, GET_TIME_HOLIDAY_ENTRIES_FAILURE, GET_TIME_HOLIDAY_ENTRIES_SUCCESS } from './constants';
+import {
+  CREATE_TIME_HOLIDAY_ENTRY_SUCCESS,
+  DELETE_TIME_HOLIDAY_ENTRIES_SUCCESS,
+  SELECT_YEAR,
+  UPDATE_TIME_HOLIDAY_ENTRIES_BY_COUNTRY_SUCCESS,
+} from '../shared/constants';
+import {
+  selectDashboardRoute,
+  selectTimeHolidayEntriesRoute,
+} from '../shared/router.selectors';
+import {
+  GET_TIME_HOLIDAY_ENTRIES,
+  GET_TIME_HOLIDAY_ENTRIES_FAILURE,
+  GET_TIME_HOLIDAY_ENTRIES_SUCCESS,
+} from './constants';
 import { selectIsOnline, selectSelectedYear } from './selectors';
 import { SharedState } from './state';
 
@@ -22,8 +34,9 @@ function* doGetTimeHolidayEntriesOnOtherActions() {
   const timeHolidayEntriesRoute: Route = yield select(
     selectTimeHolidayEntriesRoute,
   );
+  const dashboardRoute: Route = yield select(selectDashboardRoute);
 
-  if (!!timeHolidayEntriesRoute) {
+  if (!!dashboardRoute || !!timeHolidayEntriesRoute) {
     yield put(getTimeHolidayEntriesAsync.request());
   }
 }
@@ -52,7 +65,6 @@ export function* getTimeHolidayEntriesSaga() {
       CREATE_TIME_HOLIDAY_ENTRY_SUCCESS,
       DELETE_TIME_HOLIDAY_ENTRIES_SUCCESS,
       UPDATE_TIME_HOLIDAY_ENTRIES_BY_COUNTRY_SUCCESS,
-      SELECT_YEAR,
     ],
     doGetTimeHolidayEntriesOnOtherActions,
   );

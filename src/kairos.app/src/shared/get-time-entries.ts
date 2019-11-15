@@ -31,8 +31,9 @@ export const getTimeEntriesAsync = createAsyncAction(
 
 function* doGetTimeEntriesOnOtherActions() {
   const timeEntriesRoute: Route = yield select(selectTimeEntriesRoute);
+  const dashboardRoute: Route = yield select(selectDashboardRoute);
 
-  if (!!timeEntriesRoute) {
+  if (!!dashboardRoute || !!timeEntriesRoute) {
     yield put(getTimeEntriesAsync.request());
   }
 }
@@ -61,7 +62,6 @@ export function* getTimeEntriesSaga() {
       LOCATION_CHANGE,
       CREATE_TIME_ENTRY_SUCCESS,
       DELETE_TIME_ENTRIES_SUCCESS,
-      SELECT_YEAR,
     ],
     doGetTimeEntriesOnOtherActions,
   );

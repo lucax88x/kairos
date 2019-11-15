@@ -66,6 +66,13 @@ const theme = createMuiTheme({
         },
       },
     },
+    MuiExpansionPanelSummary: {
+      root: {
+        '&$focused': {
+          backgroundColor: Themes.Second.backgroundColor,
+        },
+      },
+    },
   },
 });
 
@@ -297,6 +304,11 @@ serviceWorker.register({
         i18n._(t`Messages.NewContentAvailablePleaseRefresh`),
         {
           variant: 'warning',
+          action: (
+            <Button onClick={() => window.location.reload(true)}>
+              <CloseIcon />
+            </Button>
+          ),
         },
       ),
     );

@@ -11,7 +11,7 @@ import {
   DELETE_TIME_ABSENCE_ENTRIES_SUCCESS,
   SELECT_YEAR,
 } from '../shared/constants';
-import { selectTimeAbsenceEntriesRoute } from '../shared/router.selectors';
+import { selectTimeAbsenceEntriesRoute, selectDashboardRoute } from '../shared/router.selectors';
 import {
   GET_TIME_ABSENCE_ENTRIES,
   GET_TIME_ABSENCE_ENTRIES_FAILURE,
@@ -30,8 +30,9 @@ function* doGetTimeAbsenceEntriesOnOtherActions() {
   const timeAbsenceEntriesRoute: Route = yield select(
     selectTimeAbsenceEntriesRoute,
   );
+  const dashboardRoute: Route = yield select(selectDashboardRoute);
 
-  if (!!timeAbsenceEntriesRoute) {
+  if (!!dashboardRoute || !!timeAbsenceEntriesRoute) {
     yield put(getTimeAbsenceEntriesAsync.request());
   }
 }
@@ -60,7 +61,6 @@ export function* getTimeAbsenceEntriesSaga() {
       LOCATION_CHANGE,
       CREATE_TIME_ABSENCE_ENTRY_SUCCESS,
       DELETE_TIME_ABSENCE_ENTRIES_SUCCESS,
-      SELECT_YEAR,
     ],
     doGetTimeAbsenceEntriesOnOtherActions,
   );

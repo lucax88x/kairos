@@ -227,8 +227,6 @@ export function getWorkingHoursStatistics(
     end: endOfDay(date),
   });
 
-  console.log(differencesByDateByJob);
-
   // const todayHoliday = filter(
   //   holiday =>
   //     isWithinInterval(date, {
