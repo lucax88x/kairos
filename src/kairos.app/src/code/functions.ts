@@ -3,7 +3,6 @@ import {
   differenceInHours,
   differenceInMinutes,
   differenceInMonths,
-  differenceInSeconds,
   differenceInYears,
   getDate,
   isWithinInterval,
@@ -11,7 +10,6 @@ import {
   subHours,
   subMinutes,
   subMonths,
-  subSeconds,
   subYears,
 } from 'date-fns';
 import { filter, groupBy, join } from 'ramda';
@@ -21,7 +19,9 @@ import { TimeEntryListModel } from '../models/time-entry-list.model';
 export const filterByInterval = (interval: Interval) =>
   filter((te: TimeEntryListModel) => isWithinInterval(te.when, interval));
 
-export const groupByDate = groupBy((te: TimeEntryListModel) => getDate(te.when).toString());
+export const groupByDate = groupBy((te: TimeEntryListModel) =>
+  getDate(te.when).toString(),
+);
 
 export const humanDifference = (left: Date, right: Date) => {
   const result = [];

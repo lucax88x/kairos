@@ -1,9 +1,11 @@
+import { i18n } from '@lingui/core';
 import {
   endOfDay,
   format,
   getUnixTime,
   isFriday,
   isMonday,
+  isSameDay,
   isSaturday,
   isSunday,
   isThursday,
@@ -11,8 +13,6 @@ import {
   isWednesday,
   isWithinInterval,
   startOfDay,
-  setHours,
-  isSameDay,
 } from 'date-fns';
 import { ascend, filter, groupBy, sortWith } from 'ramda';
 import { JobModel } from '../models/job.model';
@@ -24,9 +24,8 @@ import { TimeEntryTypes } from '../models/time-entry.model';
 import { TimeHolidayEntryModel } from '../models/time-holiday-entry.model';
 import { UUID } from '../models/uuid.model';
 import { formatAsDate } from './constants';
-import { filterByInterval, humanDifference } from './functions';
-import { i18n } from '@lingui/core';
 import { formatDate } from './formatters';
+import { filterByInterval, humanDifference } from './functions';
 
 export interface TimeEntryPair {
   enterId: UUID;
@@ -78,7 +77,9 @@ export function getTimeEntryPairsByJob(
         } else {
           pairsByJob[job].push({
             ...pair,
-            exit: isSameDay(new Date(), entry.when) ? new Date(): endOfDay(entry.when),
+            exit: isSameDay(new Date(), entry.when)
+              ? new Date()
+              : endOfDay(entry.when),
           });
         }
       } else if (i === 0) {
@@ -119,7 +120,9 @@ export function getDifferencesByRangeByJobAndDate(
 
       const diff = Math.abs(enter.getTime() - exit.getTime());
 
-      differencesByJobAndDate[job][unixDate] = !!differencesByJobAndDate[job][unixDate]
+      differencesByJobAndDate[job][unixDate] = !!differencesByJobAndDate[job][
+        unixDate
+      ]
         ? differencesByJobAndDate[job][unixDate] + diff
         : diff;
     }

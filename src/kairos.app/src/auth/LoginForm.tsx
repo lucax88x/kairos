@@ -1,5 +1,11 @@
 import { Trans } from '@lingui/macro';
-import { Button, Container, Divider, makeStyles, Typography } from '@material-ui/core';
+import {
+  Button,
+  Container,
+  Divider,
+  makeStyles,
+  Typography,
+} from '@material-ui/core';
 import React from 'react';
 import { ReactComponent as LogoIcon } from '../assets/images/logo.svg';
 
@@ -30,16 +36,20 @@ const useStyles = makeStyles(theme => ({
   },
 }));
 
-export interface LoginDispatches {
-  login: () => void;
+export interface LoginInputs {
+  isOnline: boolean;
 }
 
-type LoginProps = LoginDispatches;
+export interface LoginDispatches {
+  onLogin: () => void;
+}
+
+type LoginProps = LoginInputs & LoginDispatches;
 
 export const LoginFormComponent: React.FC<LoginProps> = props => {
   const classes = useStyles(props);
 
-  const { login } = props;
+  const { isOnline, onLogin } = props;
 
   return (
     <Container component="main" maxWidth="lg">
@@ -58,9 +68,13 @@ export const LoginFormComponent: React.FC<LoginProps> = props => {
         </div>
         <Divider></Divider>
         <div className={classes.button}>
-          <Button variant="contained" color="primary" onClick={login}>
-            <Trans>Login.SignIn</Trans>
-          </Button>
+          {isOnline ? (
+            <Button variant="contained" color="primary" onClick={onLogin}>
+              <Trans>Login.SignIn</Trans>
+            </Button>
+          ) : (
+            <Trans>Login.YouNeedToBeOnlineToSignIn</Trans>
+          )}
         </div>
       </div>
     </Container>

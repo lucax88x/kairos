@@ -1,24 +1,23 @@
+import { t } from '@lingui/macro';
 import produce from 'immer';
 import { call, put, takeLatest } from 'redux-saga/effects';
-import { createAsyncAction, action } from 'typesafe-actions';
-
+import { action, createAsyncAction } from 'typesafe-actions';
 import { SharedActions } from '../actions';
-import { TimeAbsenceEntryModel } from '../models/time-absence-entry.model';
+import { i18n } from '../i18nLoader';
+import { UUID } from '../models/uuid.model';
+import { enqueueSnackbarAction } from '../notification-manager/actions';
 import { deleteTimeAbsenceEntries } from '../services/time-absence-entry/time-absence-entry.service';
+import { askForConfirmation } from './ask-for-confirmation';
 import {
-  TRY_DELETE_TIME_ABSENCE_ENTRIES,
   DELETE_TIME_ABSENCE_ENTRIES,
   DELETE_TIME_ABSENCE_ENTRIES_FAILURE,
   DELETE_TIME_ABSENCE_ENTRIES_SUCCESS,
+  TRY_DELETE_TIME_ABSENCE_ENTRIES,
 } from './constants';
 import { SharedState } from './state';
-import { enqueueSnackbarAction } from '../notification-manager/actions';
-import { i18n } from '../i18nLoader';
-import { t } from '@lingui/macro';
-import { UUID } from '../models/uuid.model';
-import { askForConfirmation } from './ask-for-confirmation';
 
-export const tryDeleteTimeAbsenceEntriesAction = (ids: UUID[]) => action(TRY_DELETE_TIME_ABSENCE_ENTRIES, ids);
+export const tryDeleteTimeAbsenceEntriesAction = (ids: UUID[]) =>
+  action(TRY_DELETE_TIME_ABSENCE_ENTRIES, ids);
 
 export const deleteTimeAbsenceEntriesAsync = createAsyncAction(
   DELETE_TIME_ABSENCE_ENTRIES,
@@ -42,7 +41,7 @@ function* doDeleteTimeAbsenceEntries({
 
   try {
     yield put(deleteTimeAbsenceEntriesAsync.request());
-    
+
     yield call(deleteTimeAbsenceEntries, payload);
 
     yield put(deleteTimeAbsenceEntriesAsync.success());
@@ -52,7 +51,11 @@ function* doDeleteTimeAbsenceEntries({
 }
 
 function* doNotifySuccess() {
-  yield put(enqueueSnackbarAction(i18n._(t`Messages.AbsenceDeleted`), { variant: 'success' }));
+  yield put(
+    enqueueSnackbarAction(i18n._(t`Messages.AbsenceDeleted`), {
+      variant: 'success',
+    }),
+  );
 }
 
 export function* deleteTimeAbsenceEntriesSaga() {
@@ -60,7 +63,10 @@ export function* deleteTimeAbsenceEntriesSaga() {
   yield takeLatest(DELETE_TIME_ABSENCE_ENTRIES_SUCCESS, doNotifySuccess);
 }
 
-export const deleteTimeAbsenceEntriesReducer = (state: SharedState, action: SharedActions): SharedState =>
+export const deleteTimeAbsenceEntriesReducer = (
+  state: SharedState,
+  action: SharedActions,
+): SharedState =>
   produce(state, draft => {
     switch (action.type) {
       case DELETE_TIME_ABSENCE_ENTRIES:

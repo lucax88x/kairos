@@ -1,4 +1,3 @@
-import { LOCATION_CHANGE } from 'connected-react-router';
 import produce from 'immer';
 import { call, put, select, takeLatest } from 'redux-saga/effects';
 import { createAsyncAction } from 'typesafe-actions';
@@ -9,7 +8,6 @@ import { getTimeHolidayEntries } from '../services/time-holiday-entry/time-holid
 import {
   CREATE_TIME_HOLIDAY_ENTRY_SUCCESS,
   DELETE_TIME_HOLIDAY_ENTRIES_SUCCESS,
-  SELECT_YEAR,
   UPDATE_TIME_HOLIDAY_ENTRIES_BY_COUNTRY_SUCCESS,
 } from '../shared/constants';
 import {
@@ -61,7 +59,6 @@ function* doGetTimeHolidayEntries() {
 export function* getTimeHolidayEntriesSaga() {
   yield takeLatest(
     [
-      LOCATION_CHANGE,
       CREATE_TIME_HOLIDAY_ENTRY_SUCCESS,
       DELETE_TIME_HOLIDAY_ENTRIES_SUCCESS,
       UPDATE_TIME_HOLIDAY_ENTRIES_BY_COUNTRY_SUCCESS,

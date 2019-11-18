@@ -4,7 +4,6 @@ import { call, put, takeLatest } from 'redux-saga/effects';
 import { createAsyncAction } from 'typesafe-actions';
 import { ExportActions } from '../actions';
 import { i18n } from '../i18nLoader';
-import { TimeEntryModel } from '../models/time-entry.model';
 import { enqueueSnackbarAction } from '../notification-manager/actions';
 import { exportTimeEntries } from '../services/time-entry/time-entry.service';
 import {
@@ -18,7 +17,7 @@ export const exportTimeEntriesAsync = createAsyncAction(
   EXPORT_TIME_ENTRIES,
   EXPORT_TIME_ENTRIES_SUCCESS,
   EXPORT_TIME_ENTRIES_FAILURE,
-)<{ start: Date, end: Date }, void, string>();
+)<{ start: Date; end: Date }, void, string>();
 
 function* doExportTimeEntries({
   payload: { start, end },
@@ -33,7 +32,11 @@ function* doExportTimeEntries({
 }
 
 function* doNotifySuccess() {
-  yield put(enqueueSnackbarAction(i18n._(t`Messages.ExportEntriesSaved`), { variant: 'success' }));
+  yield put(
+    enqueueSnackbarAction(i18n._(t`Messages.ExportEntriesSaved`), {
+      variant: 'success',
+    }),
+  );
 }
 
 export function* exportTimeEntriesSaga() {

@@ -12,9 +12,9 @@ namespace Kairos.Domain.Events.TimeEntry.EventDtos
             Type = type;
             Job = job;
         }
-
+    
         public Guid Id { get; }
-        public string? User { get; }
+        public string? User { get; }    
         public DateTimeOffset When { get; }
         public TimeEntryType Type { get; }
         public Guid Job { get; }

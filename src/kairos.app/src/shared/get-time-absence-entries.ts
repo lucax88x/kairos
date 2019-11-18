@@ -1,4 +1,3 @@
-import { LOCATION_CHANGE } from 'connected-react-router';
 import produce from 'immer';
 import { call, put, select, takeLatest } from 'redux-saga/effects';
 import { createAsyncAction } from 'typesafe-actions';
@@ -9,9 +8,11 @@ import { getTimeAbsenceEntries } from '../services/time-absence-entry/time-absen
 import {
   CREATE_TIME_ABSENCE_ENTRY_SUCCESS,
   DELETE_TIME_ABSENCE_ENTRIES_SUCCESS,
-  SELECT_YEAR,
 } from '../shared/constants';
-import { selectTimeAbsenceEntriesRoute, selectDashboardRoute } from '../shared/router.selectors';
+import {
+  selectDashboardRoute,
+  selectTimeAbsenceEntriesRoute,
+} from '../shared/router.selectors';
 import {
   GET_TIME_ABSENCE_ENTRIES,
   GET_TIME_ABSENCE_ENTRIES_FAILURE,
@@ -57,11 +58,7 @@ function* doGetTimeAbsenceEntries() {
 
 export function* getTimeAbsenceEntriesSaga() {
   yield takeLatest(
-    [
-      LOCATION_CHANGE,
-      CREATE_TIME_ABSENCE_ENTRY_SUCCESS,
-      DELETE_TIME_ABSENCE_ENTRIES_SUCCESS,
-    ],
+    [CREATE_TIME_ABSENCE_ENTRY_SUCCESS, DELETE_TIME_ABSENCE_ENTRIES_SUCCESS],
     doGetTimeAbsenceEntriesOnOtherActions,
   );
   yield takeLatest(GET_TIME_ABSENCE_ENTRIES, doGetTimeAbsenceEntries);

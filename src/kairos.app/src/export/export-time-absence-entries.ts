@@ -4,7 +4,6 @@ import { call, put, takeLatest } from 'redux-saga/effects';
 import { createAsyncAction } from 'typesafe-actions';
 import { ExportActions } from '../actions';
 import { i18n } from '../i18nLoader';
-import { TimeAbsenceEntryModel } from '../models/time-absence-entry.model';
 import { enqueueSnackbarAction } from '../notification-manager/actions';
 import { exportTimeAbsenceEntries } from '../services/time-absence-entry/time-absence-entry.service';
 import {
@@ -33,7 +32,11 @@ function* doExportTimeAbsenceEntries({
 }
 
 function* doNotifySuccess() {
-  yield put(enqueueSnackbarAction(i18n._(t`Messages.ExportAbsencesSaved`), { variant: 'success' }));
+  yield put(
+    enqueueSnackbarAction(i18n._(t`Messages.ExportAbsencesSaved`), {
+      variant: 'success',
+    }),
+  );
 }
 
 export function* exportTimeAbsenceEntriesSaga() {

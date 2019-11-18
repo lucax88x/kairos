@@ -1,4 +1,7 @@
 export const CHECK_IS_ONLINE = '[SHARED] Check Is Online';
+
+export const STARTS_AS_ONLINE = '[SHARED] Starts as Online';
+export const STARTS_AS_OFFLINE = '[SHARED] Starts as Offline';
 export const IS_ONLINE = '[SHARED] Is Online';
 export const IS_OFFLINE = '[SHARED] Is Offline';
 

@@ -1,4 +1,3 @@
-import { LOCATION_CHANGE } from 'connected-react-router';
 import produce from 'immer';
 import { call, put, select, takeLatest } from 'redux-saga/effects';
 import { createAsyncAction } from 'typesafe-actions';
@@ -9,7 +8,6 @@ import { getTimeEntries } from '../services/time-entry/time-entry.service';
 import {
   CREATE_TIME_ENTRY_SUCCESS,
   DELETE_TIME_ENTRIES_SUCCESS,
-  SELECT_YEAR,
 } from '../shared/constants';
 import {
   selectDashboardRoute,
@@ -20,7 +18,7 @@ import {
   GET_TIME_ENTRIES_FAILURE,
   GET_TIME_ENTRIES_SUCCESS,
 } from './constants';
-import { selectSelectedYear, selectIsOnline } from './selectors';
+import { selectIsOnline, selectSelectedYear } from './selectors';
 import { SharedState } from './state';
 
 export const getTimeEntriesAsync = createAsyncAction(
@@ -58,11 +56,7 @@ function* doGetTimeEntries() {
 
 export function* getTimeEntriesSaga() {
   yield takeLatest(
-    [
-      LOCATION_CHANGE,
-      CREATE_TIME_ENTRY_SUCCESS,
-      DELETE_TIME_ENTRIES_SUCCESS,
-    ],
+    [CREATE_TIME_ENTRY_SUCCESS, DELETE_TIME_ENTRIES_SUCCESS],
     doGetTimeEntriesOnOtherActions,
   );
   yield takeLatest(GET_TIME_ENTRIES, doGetTimeEntries);

@@ -1,23 +1,23 @@
 import { t } from '@lingui/macro';
 import produce from 'immer';
 import { call, put, takeLatest } from 'redux-saga/effects';
-import { createAsyncAction, action } from 'typesafe-actions';
+import { action, createAsyncAction } from 'typesafe-actions';
 import { SharedActions } from '../actions';
 import { i18n } from '../i18nLoader';
-import { TimeHolidayEntryModel } from '../models/time-holiday-entry.model';
+import { UUID } from '../models/uuid.model';
 import { enqueueSnackbarAction } from '../notification-manager/actions';
 import { deleteTimeHolidayEntries } from '../services/time-holiday-entry/time-holiday-entry.service';
+import { askForConfirmation } from './ask-for-confirmation';
 import {
-  TRY_DELETE_TIME_HOLIDAY_ENTRIES,
   DELETE_TIME_HOLIDAY_ENTRIES,
   DELETE_TIME_HOLIDAY_ENTRIES_FAILURE,
   DELETE_TIME_HOLIDAY_ENTRIES_SUCCESS,
+  TRY_DELETE_TIME_HOLIDAY_ENTRIES,
 } from './constants';
 import { SharedState } from './state';
-import { UUID } from '../models/uuid.model';
-import { askForConfirmation } from './ask-for-confirmation';
 
-export const tryDeleteTimeHolidayEntriesAction = (ids: UUID[]) => action(TRY_DELETE_TIME_HOLIDAY_ENTRIES, ids);
+export const tryDeleteTimeHolidayEntriesAction = (ids: UUID[]) =>
+  action(TRY_DELETE_TIME_HOLIDAY_ENTRIES, ids);
 
 export const deleteTimeHolidayEntriesAsync = createAsyncAction(
   DELETE_TIME_HOLIDAY_ENTRIES,
@@ -38,7 +38,7 @@ function* doDeleteTimeHolidayEntries({
   if (!confirmed) {
     return;
   }
-  
+
   try {
     yield put(deleteTimeHolidayEntriesAsync.request());
 
@@ -51,7 +51,11 @@ function* doDeleteTimeHolidayEntries({
 }
 
 function* doNotifySuccess() {
-  yield put(enqueueSnackbarAction(i18n._(t`Messages.HolidayDeleted`), { variant: 'success' }));
+  yield put(
+    enqueueSnackbarAction(i18n._(t`Messages.HolidayDeleted`), {
+      variant: 'success',
+    }),
+  );
 }
 
 export function* deleteTimeHolidayEntriesSaga() {

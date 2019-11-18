@@ -16,7 +16,8 @@ import {
 } from './constants';
 import { SharedState } from './state';
 
-export const tryDeleteTimeEntriesAction = (ids: UUID[]) => action(TRY_DELETE_TIME_ENTRIES, ids);
+export const tryDeleteTimeEntriesAction = (ids: UUID[]) =>
+  action(TRY_DELETE_TIME_ENTRIES, ids);
 
 export const deleteTimeEntriesAsync = createAsyncAction(
   DELETE_TIME_ENTRIES,
@@ -24,7 +25,9 @@ export const deleteTimeEntriesAsync = createAsyncAction(
   DELETE_TIME_ENTRIES_FAILURE,
 )<void, void, string>();
 
-function* doTryDeleteTimeEntries({ payload }: ReturnType<typeof tryDeleteTimeEntriesAction>) {
+function* doTryDeleteTimeEntries({
+  payload,
+}: ReturnType<typeof tryDeleteTimeEntriesAction>) {
   const confirmed = yield call(askForConfirmation, {
     title: null,
     message: i18n._(t`ConfirmationModal.DeleteEntries`),
@@ -35,10 +38,10 @@ function* doTryDeleteTimeEntries({ payload }: ReturnType<typeof tryDeleteTimeEnt
   if (!confirmed) {
     return;
   }
-  
+
   try {
     yield put(deleteTimeEntriesAsync.request());
-  
+
     yield call(deleteTimeEntries, payload);
 
     yield put(deleteTimeEntriesAsync.success());
@@ -48,7 +51,11 @@ function* doTryDeleteTimeEntries({ payload }: ReturnType<typeof tryDeleteTimeEnt
 }
 
 function* doNotifySuccess() {
-  yield put(enqueueSnackbarAction(i18n._(t`Messages.EntryDeleted`), { variant: 'success' }));
+  yield put(
+    enqueueSnackbarAction(i18n._(t`Messages.EntryDeleted`), {
+      variant: 'success',
+    }),
+  );
 }
 
 export function* deleteTimeEntriesSaga() {
@@ -56,7 +63,10 @@ export function* deleteTimeEntriesSaga() {
   yield takeLatest(DELETE_TIME_ENTRIES_SUCCESS, doNotifySuccess);
 }
 
-export const deleteTimeEntriesReducer = (state: SharedState, action: SharedActions): SharedState =>
+export const deleteTimeEntriesReducer = (
+  state: SharedState,
+  action: SharedActions,
+): SharedState =>
   produce(state, draft => {
     switch (action.type) {
       case DELETE_TIME_ENTRIES:
