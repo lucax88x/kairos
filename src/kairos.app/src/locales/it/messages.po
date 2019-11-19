@@ -291,33 +291,35 @@ msgstr "Mercoledì"
 msgid "Labels.When"
 msgstr "Quando"
 
-#: src/App.tsx:316
+#: src/App.tsx:317
 msgid "LeftMenu.BulkInsert"
 msgstr "Inserimento multiplo"
 
-#: src/App.tsx:290
+#: src/App.tsx:291
 msgid "LeftMenu.Dashboard"
 msgstr "Dashboard"
 
-#: src/App.tsx:322
+#: src/App.tsx:323
 msgid "LeftMenu.Export"
 msgstr "Esporta"
 
-#: src/App.tsx:303
+#: src/App.tsx:304
 msgid "LeftMenu.TimeAbsenceEntries"
 msgstr "Assenze"
 
-#: src/App.tsx:297
+#: src/App.tsx:298
 msgid "LeftMenu.TimeEntries"
 msgstr "Ingressi"
 
-#: src/App.tsx:309
+#: src/App.tsx:310
 msgid "LeftMenu.TimeHolidayEntries"
 msgstr "Vacanze"
 
 #: src/auth/LoginForm.tsx:45
 msgid "Login.Message"
-msgstr "Kairos è un sistema di tracciamento del tempo gratuito.\n 2 È stato costruito da me come strumento per essere utilizzato ogni giorno in modo rapido per tenere traccia di tempo, assenze e vacanze. L'obiettivo è avere una chiara visualizzazione di quante ore abbiamo lavorato, quante vacanze ci mancano e quante ore extra dobbiamo compensare."
+msgstr ""
+"Kairos è un sistema di tracciamento del tempo gratuito.\n"
+" 2 È stato costruito da me come strumento per essere utilizzato ogni giorno in modo rapido per tenere traccia di tempo, assenze e vacanze. L'obiettivo è avere una chiara visualizzazione di quante ore abbiamo lavorato, quante vacanze ci mancano e quante ore extra dobbiamo compensare."
 
 #: src/auth/LoginForm.tsx:51
 msgid "Login.SignIn"
@@ -534,7 +536,7 @@ msgstr "Malattia"
 msgid "TimeStatistics.Illness.Title"
 msgstr "Malattia"
 
-#: src/code/calculator.ts:150
+#: src/code/calculator.ts:152
 msgid "TimeStatistics.RemainingToday"
 msgstr "Rimanenti oggi: {job}"
 
@@ -554,27 +556,31 @@ msgstr "Ore lavorative"
 msgid "TimeStatistics.WorkingHours.Title"
 msgstr "Ore lavorative"
 
-#: src/App.tsx:391
+#: src/App.tsx:395
 msgid "TopBar.Logout"
 msgstr "Esci"
 
-#: src/App.tsx:249
+#: src/App.tsx:250
 msgid "TopBar.OpenMenu"
 msgstr "Apri menu"
 
-#: src/App.tsx:268
-#: src/App.tsx:368
+#: src/App.tsx:269
+#: src/App.tsx:369
 msgid "TopBar.OpenTimeAbsenceEntry"
 msgstr "Inserisci assenza"
 
-#: src/App.tsx:265
-#: src/App.tsx:362
+#: src/App.tsx:266
+#: src/App.tsx:363
 msgid "TopBar.OpenTimeEntry"
 msgstr "Inserisci ingresso"
 
-#: src/App.tsx:355
+#: src/App.tsx:356
 msgid "TopBar.Profile"
 msgstr "Profilo"
+
+#: src/App.tsx:389
+msgid "TopBar.Version"
+msgstr "Version {version}"
 
 #: src/bulk-insert/BulkTimeAbsenceEntryInsert.tsx:60
 #: src/bulk-insert/BulkTimeAbsenceEntryInsert.tsx:61
@@ -584,7 +590,7 @@ msgstr "Profilo"
 #: src/bulk-insert/BulkTimeEntryInsert.tsx:66
 #: src/bulk-insert/BulkTimeHolidayEntryInsert.tsx:50
 #: src/bulk-insert/BulkTimeHolidayEntryInsert.tsx:58
-#: src/code/formatters.ts:24
+#: src/code/formatters.ts:29
 #: src/export/ExportTimeAbsenceEntries.tsx:46
 #: src/export/ExportTimeAbsenceEntries.tsx:47
 #: src/export/ExportTimeEntries.tsx:46
