@@ -5,6 +5,9 @@ BUILD_ID=$1
 LAST_TAG=`git describe --abbrev=0`
 CURRENT_TAG=`git describe`
 
+LAST_TAG="${LAST_TAG:-0.0.1}"
+CURRENT_TAG="${CURRENT_TAG:-0.0.0}"
+
 echo last tag is ${LAST_TAG} 
 echo current tag is ${CURRENT_TAG}
 
