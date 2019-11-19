@@ -60,11 +60,8 @@ jobs:
 workflows:
   build-and-deploy:
     jobs:
-      # - build
-      - deploy
-      # - deploy:
-      # requires:
-      #   - build
-        filters:
-          branches:
-            only: master
+      - deploy:
+          filters: 
+            branches:
+              only:  # only branches matching the below regex filters will run
+                - master
