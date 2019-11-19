@@ -6,6 +6,7 @@
   "license": "MIT",
   "scripts": {
     "build": "yarn frontend:build && yarn backend:build",
+    "version:write": "sh ./scripts/version.write.sh",
     "frontend:prettier": "cd src/kairos.app && yarn prettier",
     "frontend:lint": "cd src/kairos.app && yarn lint",
     "frontend:test": "cd src/kairos.app && yarn test --no-watch",
