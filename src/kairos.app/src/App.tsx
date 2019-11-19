@@ -57,6 +57,7 @@ import { ConfirmationModal } from './shared/ConfirmationModal.container';
 import { TimeAbsenceEntries } from './time-absence-entries/TimeAbsenceEntries.container';
 import { TimeEntries } from './time-entries/TimeEntries.container';
 import { TimeHolidayEntries } from './time-holiday-entries/TimeHolidayEntries.container';
+import version from './version.json';
 
 const drawerWidth = 240;
 
@@ -82,6 +83,9 @@ const useStyles = makeStyles(theme => ({
   topbarSelectOption: {
     justifyContent: 'center',
     padding: theme.spacing(1),
+  },
+  topbarText: {
+    textAlign: 'center',
   },
   languageFlag: {
     width: 20,
@@ -612,6 +616,12 @@ export const AppComponent: React.FC<AppProps> = props => {
               </Select>
             </ListItem>
             <Divider />
+            <ListItem>
+              <ListItemText
+                className={classes.topbarText}
+                primary={i18n._('TopBar.Version', { version: version.version })}
+              />
+            </ListItem>
             <ListItem button onClick={onLogout}>
               <ListItemIcon>
                 <LogoutIcon />

@@ -291,27 +291,27 @@ msgstr "Wednesday"
 msgid "Labels.When"
 msgstr "When"
 
-#: src/App.tsx:316
+#: src/App.tsx:317
 msgid "LeftMenu.BulkInsert"
 msgstr "Bulk Insert"
 
-#: src/App.tsx:290
+#: src/App.tsx:291
 msgid "LeftMenu.Dashboard"
 msgstr "Dashboard"
 
-#: src/App.tsx:322
+#: src/App.tsx:323
 msgid "LeftMenu.Export"
 msgstr "Export"
 
-#: src/App.tsx:303
+#: src/App.tsx:304
 msgid "LeftMenu.TimeAbsenceEntries"
 msgstr "Absences"
 
-#: src/App.tsx:297
+#: src/App.tsx:298
 msgid "LeftMenu.TimeEntries"
 msgstr "Time Entries"
 
-#: src/App.tsx:309
+#: src/App.tsx:310
 msgid "LeftMenu.TimeHolidayEntries"
 msgstr "Holidays"
 
@@ -534,7 +534,7 @@ msgstr "When you are sick"
 msgid "TimeStatistics.Illness.Title"
 msgstr "Illness"
 
-#: src/code/calculator.ts:150
+#: src/code/calculator.ts:152
 msgid "TimeStatistics.RemainingToday"
 msgstr "Remaining Today: {job}"
 
@@ -554,27 +554,31 @@ msgstr "Working Hours"
 msgid "TimeStatistics.WorkingHours.Title"
 msgstr "Working Hours"
 
-#: src/App.tsx:391
+#: src/App.tsx:395
 msgid "TopBar.Logout"
 msgstr "Logout"
 
-#: src/App.tsx:249
+#: src/App.tsx:250
 msgid "TopBar.OpenMenu"
 msgstr "Open Menu"
 
-#: src/App.tsx:268
-#: src/App.tsx:368
+#: src/App.tsx:269
+#: src/App.tsx:369
 msgid "TopBar.OpenTimeAbsenceEntry"
 msgstr "Open absence"
 
-#: src/App.tsx:265
-#: src/App.tsx:362
+#: src/App.tsx:266
+#: src/App.tsx:363
 msgid "TopBar.OpenTimeEntry"
 msgstr "Open time entry"
 
-#: src/App.tsx:355
+#: src/App.tsx:356
 msgid "TopBar.Profile"
 msgstr "Profile"
+
+#: src/App.tsx:389
+msgid "TopBar.Version"
+msgstr "Version {version}"
 
 #: src/bulk-insert/BulkTimeAbsenceEntryInsert.tsx:60
 #: src/bulk-insert/BulkTimeAbsenceEntryInsert.tsx:61
@@ -584,7 +588,7 @@ msgstr "Profile"
 #: src/bulk-insert/BulkTimeEntryInsert.tsx:66
 #: src/bulk-insert/BulkTimeHolidayEntryInsert.tsx:50
 #: src/bulk-insert/BulkTimeHolidayEntryInsert.tsx:58
-#: src/code/formatters.ts:24
+#: src/code/formatters.ts:29
 #: src/export/ExportTimeAbsenceEntries.tsx:46
 #: src/export/ExportTimeAbsenceEntries.tsx:47
 #: src/export/ExportTimeEntries.tsx:46
