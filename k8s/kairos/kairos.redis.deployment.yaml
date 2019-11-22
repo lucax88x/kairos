@@ -22,7 +22,7 @@ spec:
             
       containers:
         - name: redis
-          image: redislabs/rejson:latest
+          image: eqalpha/keydb:latest
           imagePullPolicy: IfNotPresent
           ports:
             - containerPort: 6379

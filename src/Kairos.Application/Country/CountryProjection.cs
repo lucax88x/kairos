@@ -8,7 +8,7 @@ using MediatR;
 namespace Kairos.Application.Country
 {
     public class CountryProjection :
-        IRequestHandler<GetCountries, ImmutableArray<CountryModel>>
+        IRequestHandler<GetCountries, ImmutableList<CountryModel>>
     {
         private readonly ICountryProvider _countryProvider;
 
@@ -17,12 +17,12 @@ namespace Kairos.Application.Country
             _countryProvider = countryProvider;
         }
 
-        public async Task<ImmutableArray<CountryModel>> Handle(GetCountries request,
+        public async Task<ImmutableList<CountryModel>> Handle(GetCountries request,
             CancellationToken cancellationToken)
         {
             var countries = await _countryProvider.GetCountries();
 
-            return countries.ToImmutableArray();
+            return countries.ToImmutableList();
         }
     }
 }

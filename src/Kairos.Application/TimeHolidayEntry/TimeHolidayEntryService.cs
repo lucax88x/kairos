@@ -13,10 +13,10 @@ using Nager.Date;
 namespace Kairos.Application.TimeHolidayEntry
 {
     public class TimeHolidayEntryService :
-        IRequestHandler<CreateTimeHolidayEntries, ImmutableArray<Guid>>,
+        IRequestHandler<CreateTimeHolidayEntries, ImmutableList<Guid>>,
         IRequestHandler<DeleteTimeHolidayEntries, ImmutableList<Guid>>,
         IRequestHandler<UpdateTimeHolidayEntry, Guid>,
-        IRequestHandler<UpdateTimeHolidayEntriesByCountry, ImmutableArray<Guid>>
+        IRequestHandler<UpdateTimeHolidayEntriesByCountry, ImmutableList<Guid>>
     {
         private readonly IWriteRepository _writeRepository;
         private readonly IAuthProvider _authProvider;
@@ -29,7 +29,7 @@ namespace Kairos.Application.TimeHolidayEntry
             _authProvider = authProvider;
         }
 
-        public async Task<ImmutableArray<Guid>> Handle(CreateTimeHolidayEntries request,
+        public async Task<ImmutableList<Guid>> Handle(CreateTimeHolidayEntries request,
             CancellationToken cancellationToken)
         {
             var user = _authProvider.GetUser();
@@ -41,7 +41,7 @@ namespace Kairos.Application.TimeHolidayEntry
 
             foreach (var evt in events) await _mediator.Publish(evt, cancellationToken);
 
-            return timeHolidayEntries.Select(te => te.Id).ToImmutableArray();
+            return timeHolidayEntries.Select(te => te.Id).ToImmutableList();
         }
 
         public async Task<ImmutableList<Guid>> Handle(DeleteTimeHolidayEntries request, CancellationToken cancellationToken)
@@ -85,7 +85,7 @@ namespace Kairos.Application.TimeHolidayEntry
             return toUpdateEntry.Id;
         }
 
-        public async Task<ImmutableArray<Guid>> Handle(UpdateTimeHolidayEntriesByCountry request,
+        public async Task<ImmutableList<Guid>> Handle(UpdateTimeHolidayEntriesByCountry request,
             CancellationToken cancellationToken)
         {
             var user = _authProvider.GetUser();
@@ -108,7 +108,7 @@ namespace Kairos.Application.TimeHolidayEntry
 
             foreach (var evt in events) await _mediator.Publish(evt, cancellationToken);
 
-            return timeHolidayEntries.Select(te => te.Id).ToImmutableArray();
+            return timeHolidayEntries.Select(te => te.Id).ToImmutableList();
         }
     }
 }

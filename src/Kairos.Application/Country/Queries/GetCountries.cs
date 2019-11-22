@@ -4,7 +4,7 @@ using Kairos.Common;
 
 namespace Kairos.Application.Country.Queries
 {
-    public class GetCountries : Query<ImmutableArray<CountryModel>>
+    public class GetCountries : Query<ImmutableList<CountryModel>>
     {
     }
 }

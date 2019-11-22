@@ -1,15 +1,13 @@
 version: '3'
-# https://medium.com/@harsh.manvar111/redis-rejson-on-kubernetes-d29a0d4ee653
 services:
   redis:
-    image: redislabs/rejson:latest
+    image: eqalpha/keydb:latest
     restart: always
     container_name: kairos-redis
     ports:
       - '6379:6379'
     volumes:
        - redis-data:/data
-    command: redis-server --appendonly yes --save 900 1 --save 30 2 --loadmodule /usr/lib/redis/modules/rejson.so
     
   eventstore:
     image: 'eventstore/eventstore'
