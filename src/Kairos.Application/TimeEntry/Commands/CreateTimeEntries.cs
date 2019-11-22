@@ -6,7 +6,7 @@ using Kairos.Common;
 
 namespace Kairos.Application.TimeEntry.Commands
 {
-    public class CreateTimeEntries : Command<ImmutableArray<Guid>>
+    public class CreateTimeEntries : Command<ImmutableList<Guid>>
     {
         public CreateTimeEntries(params TimeEntryModel[] entries)
         {

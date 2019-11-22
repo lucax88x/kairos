@@ -5,7 +5,7 @@ using Nager.Date;
 
 namespace Kairos.Application.TimeHolidayEntry.Commands
 {
-    public class UpdateTimeHolidayEntriesByCountry : Command<ImmutableArray<Guid>>
+    public class UpdateTimeHolidayEntriesByCountry : Command<ImmutableList<Guid>>
     {
         public UpdateTimeHolidayEntriesByCountry(int year, CountryCode countryCode)
         {

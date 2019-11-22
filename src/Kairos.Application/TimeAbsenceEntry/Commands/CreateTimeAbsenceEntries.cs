@@ -6,7 +6,7 @@ using Kairos.Common;
 
 namespace Kairos.Application.TimeAbsenceEntry.Commands
 {
-    public class CreateTimeAbsenceEntries : Command<ImmutableArray<Guid>>
+    public class CreateTimeAbsenceEntries : Command<ImmutableList<Guid>>
     {
         public CreateTimeAbsenceEntries(params TimeAbsenceEntryModel[] timeAbsenceEntries)
         {
