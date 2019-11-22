@@ -10,7 +10,7 @@ namespace Kairos.Infra.Read.TimeAbsenceEntry
     {
         Task AddOrUpdate(TimeAbsenceEntryEventDto timeAbsenceEntry);
         Task Delete(Guid id, string? user);
-        Task<ImmutableArray<TimeAbsenceEntryReadDto>> Get(string user, int year);
+        Task<ImmutableList<TimeAbsenceEntryReadDto>> Get(string user, int year);
         Task<TimeAbsenceEntryReadDto> GetById(Guid id);
     }
 
@@ -39,7 +39,7 @@ namespace Kairos.Infra.Read.TimeAbsenceEntry
             await _repository.SortedSetRemove($"by-when|by-user|{user}", id);
         }
 
-        public async Task<ImmutableArray<TimeAbsenceEntryReadDto>> Get(string user, int year)
+        public async Task<ImmutableList<TimeAbsenceEntryReadDto>> Get(string user, int year)
         {
             var ids = await _repository.SortedSetRangeByScore($"by-when|by-user|{user}");
 
@@ -48,7 +48,7 @@ namespace Kairos.Infra.Read.TimeAbsenceEntry
             return dtos
                 .Where(d => d.Start.Year == year || d.End.Year == year)
                 .OrderByDescending(d => d.Start)
-                .ToImmutableArray();
+                .ToImmutableList();
         }
 
         public async Task<TimeAbsenceEntryReadDto> GetById(Guid id)

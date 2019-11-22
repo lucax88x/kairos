@@ -4,7 +4,7 @@ using Kairos.Infra.Read.TimeAbsenceEntry;
 
 namespace Kairos.Application.TimeAbsenceEntry.Queries
 {
-    public class GetTimeAbsenceEntries : Query<ImmutableArray<TimeAbsenceEntryReadDto>>
+    public class GetTimeAbsenceEntries : Query<ImmutableList<TimeAbsenceEntryReadDto>>
     {
         public GetTimeAbsenceEntries(int year)
         {

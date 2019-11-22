@@ -4,7 +4,7 @@ using Kairos.Infra.Read.TimeHolidayEntry;
 
 namespace Kairos.Application.TimeHolidayEntry.Queries
 {
-    public class GetTimeHolidayEntries : Query<ImmutableArray<TimeHolidayEntryReadDto>>
+    public class GetTimeHolidayEntries : Query<ImmutableList<TimeHolidayEntryReadDto>>
     {
         public GetTimeHolidayEntries(int year)
         {

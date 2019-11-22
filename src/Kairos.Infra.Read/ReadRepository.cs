@@ -16,29 +16,27 @@ namespace Kairos.Infra.Read
 {
     public interface IReadRepository
     {
-        Task Set<T>(Guid id, T obj, string path = ".", CommandFlags flags = CommandFlags.None);
-        Task Set<T>(string key, T obj, string path = ".", CommandFlags flags = CommandFlags.None);
+        Task Set<T>(Guid id, T obj);
+        Task Set<T>(string key, T obj);
 
-        Task SetRemove(Guid id, string path = ".", CommandFlags flags = CommandFlags.None);
-        Task SetRemove(string key, string path = ".", CommandFlags flags = CommandFlags.None);
+        Task SetRemove(Guid id);
+        Task SetRemove(string key);
 
-        Task<bool> Exists(Guid id, string path = ".", CommandFlags flags = CommandFlags.None);
-        Task<bool> Exists(string key, string path = ".", CommandFlags flags = CommandFlags.None);
+        Task<bool> Exists(Guid id);
+        Task<bool> Exists(string key);
 
-        Task<T> Get<T>(Guid id, string path = ".", CommandFlags flags = CommandFlags.None);
-        Task<T> Get<T>(string key, string path = ".", CommandFlags flags = CommandFlags.None);
+        Task<T> Get<T>(Guid id);
+        Task<T> Get<T>(string key);
 
-        Task<ImmutableArray<T>> GetMultiple<T>(IEnumerable<Guid> ids, string path = ".",
-            CommandFlags flags = CommandFlags.None);
+        Task<ImmutableArray<T>> GetMultiple<T>(IEnumerable<Guid> ids);
 
-        Task<ImmutableArray<T>> GetMultiple<T>(IEnumerable<string> ids, string path = ".",
-            CommandFlags flags = CommandFlags.None);
+        Task<ImmutableArray<T>> GetMultiple<T>(IEnumerable<string> ids);
 
-        Task SortedSetAdd(string key, double score, Guid id, CommandFlags flags = CommandFlags.None);
-        Task SortedSetAdd(string key, double score, string id, CommandFlags flags = CommandFlags.None);
+        Task SortedSetAdd(string key, double score, Guid id);
+        Task SortedSetAdd(string key, double score, string id);
 
-        Task SortedSetRemove(string key, Guid id, CommandFlags flags = CommandFlags.None);
-        Task SortedSetRemove(string key, string id, CommandFlags flags = CommandFlags.None);
+        Task SortedSetRemove(string key, Guid id);
+        Task SortedSetRemove(string key, string id);
 
         Task<ImmutableArray<string?>> SortedSetRangeByScore(string key,
             double start = double.NegativeInfinity,
@@ -46,131 +44,113 @@ namespace Kairos.Infra.Read
             Exclude exclude = Exclude.None,
             Order order = Order.Ascending,
             long skip = 0,
-            long take = -1,
-            CommandFlags flags = CommandFlags.None);
+            long take = -1);
     }
 
     public class ReadRepository : IReadRepository
     {
         private readonly ISerializer _serializer;
-        private readonly string _prefix;
         private readonly IDatabase _database;
 
         public ReadRepository(IConnectionMultiplexer connection, ISerializer serializer, int database, string prefix)
         {
             _serializer = serializer;
-            _prefix = prefix;
 
             _database = connection.GetDatabase(database).WithKeyPrefix(prefix);
         }
 
-        public async Task Set<T>(Guid id, T obj, string path = ".", CommandFlags flags = CommandFlags.None)
+        public async Task Set<T>(Guid id, T obj)
         {
-            await Set(id.ToString(), obj, path, flags);
+            await Set(id.ToString(), obj);
         }
 
-        public async Task Set<T>(string key, T obj, string path = ".", CommandFlags flags = CommandFlags.None)
+        public async Task Set<T>(string key, T obj)
         {
             var json = _serializer.Serialize(obj);
 
-            var value = await _database.ExecuteAsync("JSON.SET", new object[] {WithPrefix(key), path, json}, flags);
+            var done = await _database.StringSetAsync(key, json);
 
-            if (value == null || value.IsNull) throw new NotFoundItemException();
+            if (!done) throw new NotFoundItemException();
         }
 
-        public async Task SetRemove(Guid id, string path = ".", CommandFlags flags = CommandFlags.None)
+        public async Task SetRemove(Guid id)
         {
-            await SetRemove(id.ToString(), path, flags);
+            await SetRemove(id.ToString());
         }
 
-        public async Task SetRemove(string key, string path = ".", CommandFlags flags = CommandFlags.None)
+        public async Task SetRemove(string key)
         {
-            var value = await _database.ExecuteAsync("JSON.DEL", new object[] {WithPrefix(key), path}, flags);
+            var done = await _database.KeyDeleteAsync(key);
 
-            if (value == null || value.IsNull) throw new NotFoundItemException();
+            if (!done) throw new NotFoundItemException();
         }
 
-        public async Task<bool> Exists(Guid id, string path = ".", CommandFlags flags = CommandFlags.None)
+        public async Task<bool> Exists(Guid id)
         {
-            return await Exists(id.ToString(), path, flags);
+            return await Exists(id.ToString());
         }
 
-        public async Task<bool> Exists(string key, string path = ".", CommandFlags flags = CommandFlags.None)
+        public async Task<bool> Exists(string key)
         {
-            var value = await _database.ExecuteAsync("JSON.GET", new object[] {WithPrefix(key), "noescape", path}, flags);
-
-            return value != null && !value.IsNull;
+            var value = await _database.StringGetAsync(key);
+            return value.HasValue;
         }
 
-        public async Task<T> Get<T>(Guid id, string path = ".", CommandFlags flags = CommandFlags.None)
+        public async Task<T> Get<T>(Guid id)
         {
-            return await Get<T>(id.ToString(), path, flags);
+            return await Get<T>(id.ToString());
         }
 
-        public async Task<T> Get<T>(string key, string path = ".", CommandFlags flags = CommandFlags.None)
+        public async Task<T> Get<T>(string key)
         {
-            var value = await _database.ExecuteAsync("JSON.GET", new object[] {WithPrefix(key), "noescape", path},
-                flags);
+            var value = await _database.StringGetAsync(key);
 
-            if (value == null || value.IsNull) throw new NotFoundItemException();
+            if (!value.HasValue) throw new NotFoundItemException();
 
             return _serializer.Deserialize<T>(Encoding.UTF8.GetString((byte[]) value));
         }
 
-        public async Task<ImmutableArray<T>> GetMultiple<T>(IEnumerable<Guid> ids, string path = ".",
-            CommandFlags flags = CommandFlags.None)
+        public async Task<ImmutableArray<T>> GetMultiple<T>(IEnumerable<Guid> ids
+        )
         {
-            return await GetMultiple<T>(ids.Select(id => id.ToString()), path, flags);
+            return await GetMultiple<T>(ids.Select(id => id.ToString()));
         }
 
-        public async Task<ImmutableArray<T>> GetMultiple<T>(IEnumerable<string> ids, string path = ".",
-            CommandFlags flags = CommandFlags.None)
+        public async Task<ImmutableArray<T>> GetMultiple<T>(IEnumerable<string> ids
+        )
         {
-            var keys = ids.ToList();
+            var keys = ids.Select(i => (RedisKey) i).ToArray();
 
-            var parameters = new object[keys.Count + 1];
+            var values = await _database.StringGetAsync(keys);
 
-            for (var i = 0; i < keys.Count; i++)
-            {
-                parameters[i] = WithPrefix(keys[i]);
-            }    
-
-            parameters[keys.Count] = path;
-
-            // NOESCAPE STILL NOT SUPPORTED 
-            // https://github.com/RedisJSON/RedisJSON/issues/120
-            var values = await _database.ExecuteAsync("JSON.MGET", parameters, flags);
-
-            var array = (byte[][]) values;
-
-            var result = array
-                .Select(value => _serializer.Deserialize<T>(Encoding.UTF8.GetString(value))).ToList();
+            var result = values
+                .Select(value => _serializer.Deserialize<T>(Encoding.UTF8.GetString((byte[]) value))).ToList();
 
             return result.ToImmutableArray();
         }
 
-        public async Task SortedSetAdd(string key, double score, Guid id,
-            CommandFlags flags = CommandFlags.None)
+        public async Task SortedSetAdd(string key, double score, Guid id
+        )
         {
-            await SortedSetAdd(key, score, id.ToString(), flags);
+            await SortedSetAdd(key, score, id.ToString());
         }
 
-        public async Task SortedSetAdd(string key, double score, string id,
-            CommandFlags flags = CommandFlags.None)
+        public async Task SortedSetAdd(string key, double score, string id
+        )
         {
-            await _database.SortedSetAddAsync(key, id, score, flags);
+            await _database.SortedSetAddAsync(key, id, score);
         }
 
-        public async Task SortedSetRemove(string key, Guid id,
-            CommandFlags flags = CommandFlags.None)
+        public async Task SortedSetRemove(string key, Guid id
+        )
         {
-            await SortedSetRemove(key, id.ToString(), flags);
+            await SortedSetRemove(key, id.ToString());
         }
 
-        public async Task SortedSetRemove(string key, string id,
-            CommandFlags flags = CommandFlags.None)
+        public async Task SortedSetRemove(string key, string id
+        )
         {
-            await _database.SortedSetRemoveAsync(key, id, flags);
+            await _database.SortedSetRemoveAsync(key, id);
         }
 
         public async Task<ImmutableArray<string?>> SortedSetRangeByScore(string key,
@@ -179,19 +159,14 @@ namespace Kairos.Infra.Read
             Exclude exclude = Exclude.None,
             Order order = Order.Ascending,
             long skip = 0,
-            long take = -1,
-            CommandFlags flags = CommandFlags.None)
+            long take = -1
+        )
         {
             var result =
-                await _database.SortedSetRangeByScoreAsync(key, start, stop, exclude, order, skip, take, flags);
+                await _database.SortedSetRangeByScoreAsync(key, start, stop, exclude, order, skip, take);
 
             return result.Select(m => m == RedisValue.Null ? default : m.ToString())
                 .ToImmutableArray();
-        }
-
-        private string WithPrefix(string key)
-        {
-            return $"{_prefix}{key}";
         }
     }
 }

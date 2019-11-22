@@ -11,7 +11,7 @@ using MediatR;
 namespace Kairos.Application.TimeEntry
 {
     public class TimeEntryService :
-        IRequestHandler<CreateTimeEntries, ImmutableArray<Guid>>,
+        IRequestHandler<CreateTimeEntries, ImmutableList<Guid>>,
         IRequestHandler<UpdateTimeEntry, Guid>,
         IRequestHandler<DeleteTimeEntries, ImmutableList<Guid>>
     {
@@ -26,7 +26,7 @@ namespace Kairos.Application.TimeEntry
             _authProvider = authProvider;
         }
 
-        public async Task<ImmutableArray<Guid>> Handle(CreateTimeEntries request, CancellationToken cancellationToken)
+        public async Task<ImmutableList<Guid>> Handle(CreateTimeEntries request, CancellationToken cancellationToken)
         {
             var user = _authProvider.GetUser();
 
@@ -37,7 +37,7 @@ namespace Kairos.Application.TimeEntry
 
             foreach (var evt in events) await _mediator.Publish(evt, cancellationToken);
 
-            return timeEntries.Select(te => te.Id).ToImmutableArray();
+            return timeEntries.Select(te => te.Id).ToImmutableList();
         }
 
         public async Task<ImmutableList<Guid>> Handle(DeleteTimeEntries request, CancellationToken cancellationToken)

@@ -18,7 +18,7 @@ namespace Kairos.Application.TimeAbsenceEntry
         INotificationHandler<TimeAbsenceEntryUpdated>,
         INotificationHandler<TimeAbsenceEntryDeleted>,
         IRequestHandler<GetTimeAbsenceEntryById, TimeAbsenceEntryReadDto>,
-        IRequestHandler<GetTimeAbsenceEntries, ImmutableArray<TimeAbsenceEntryReadDto>>,
+        IRequestHandler<GetTimeAbsenceEntries, ImmutableList<TimeAbsenceEntryReadDto>>,
         IRequestHandler<GetTimeAbsenceEntriesReport, ReportModel>
     {
         private readonly ITimeAbsenceEntryReadRepository _timeAbsenceEntryReadRepository;
@@ -52,7 +52,7 @@ namespace Kairos.Application.TimeAbsenceEntry
             return await _timeAbsenceEntryReadRepository.GetById(request.Id);
         }
 
-        public async Task<ImmutableArray<TimeAbsenceEntryReadDto>> Handle(GetTimeAbsenceEntries request,
+        public async Task<ImmutableList<TimeAbsenceEntryReadDto>> Handle(GetTimeAbsenceEntries request,
             CancellationToken cancellationToken)
         {
             return await _timeAbsenceEntryReadRepository.Get(_authProvider.GetUser(), request.Year);
