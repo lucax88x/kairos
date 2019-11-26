@@ -1,5 +1,4 @@
 import { Button, CircularProgress, makeStyles } from '@material-ui/core';
-import { green } from '@material-ui/core/colors';
 import clsx from 'clsx';
 import React from 'react';
 import './Spinner.scss';
@@ -21,15 +20,13 @@ const useStyles = makeStyles(theme => ({
     justifyItems: 'center',
   },
   wrapper: {
+    display: 'grid',
     position: 'relative',
   },
   buttonProgress: {
-    color: green[500],
     position: 'absolute',
-    top: '50%',
-    left: '50%',
-    marginTop: -12,
-    marginLeft: -12,
+    justifySelf: 'center',
+    alignSelf: 'center',
   },
 }));
 
@@ -41,10 +38,21 @@ const ButtonSpinner: React.FC<ButtonSpinnerProps> = props => {
   return (
     <div className={clsx(classes.root, props.className)}>
       <div className={classes.wrapper}>
-        <Button variant="contained" color="primary" disabled={isBusy || disabled} onClick={onClick}>
+        <Button
+          variant="contained"
+          color="primary"
+          disabled={isBusy || disabled}
+          onClick={onClick}
+        >
           {children}
         </Button>
-        {isBusy && <CircularProgress size={24} className={classes.buttonProgress} />}
+        {isBusy && (
+          <CircularProgress
+            size={24}
+            className={classes.buttonProgress}
+            color="secondary"
+          />
+        )}
       </div>
     </div>
   );

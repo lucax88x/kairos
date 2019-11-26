@@ -1,11 +1,4 @@
 @import '../styles/variables.scss';
-@import 'spinkit/scss/spinners/11-folding-cube.scss';
-
-.sk-folding-cube {
-  .sk-cube::before {
-    background-color: $third-color;
-  }
-}
 
 @keyframes blurry {
   0% {
