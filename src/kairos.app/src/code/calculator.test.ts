@@ -326,8 +326,13 @@ describe('statistics', () => {
     const jobId = UUID.Generate().toString();
     const profile = new ProfileBuilder().withJob(new UUID(jobId)).build();
 
+    const timeEntries = [
+      buildTimeEntry(jobId, TimeEntryTypes.IN, 'January 1 2019 08:30'),
+      buildTimeEntry(jobId, TimeEntryTypes.OUT, 'January 1 2019 12:30'),
+    ];
+    
     const timeAbsenceEntries = [
-      buildTimeAbsenceEntry('January 1 2019 08:30', 'January 1 2019 10:30'),
+      buildTimeAbsenceEntry('January 1 2019 13:00', 'January 1 2019 17:30'),
     ];
 
     // when
@@ -335,7 +340,7 @@ describe('statistics', () => {
       new Date('January 1 2019 00:00'),
       'en',
       profile,
-      [],
+      timeEntries,
       timeAbsenceEntries,
       [],
     );
@@ -344,7 +349,7 @@ describe('statistics', () => {
     expect(result[0]).toEqual({
       title: 'TimeStatistics.RemainingToday',
       subtitle: 'January 01',
-      text: '6h 30m',
+      text: '0',
     });
   });
 
@@ -353,9 +358,7 @@ describe('statistics', () => {
     const jobId = UUID.Generate().toString();
     const profile = new ProfileBuilder().withJob(new UUID(jobId)).build();
 
-    const timeHolidayEntries = [
-      buildTimeHolidayEntry('January 1 2019'),
-    ];
+    const timeHolidayEntries = [buildTimeHolidayEntry('January 1 2019')];
 
     // when
     const result = getWorkingHoursStatistics(
@@ -392,7 +395,7 @@ function buildTimeAbsenceEntry(
   return new TimeAbsenceEntryBuilder()
     .withType(type)
     .withStart(start)
-    .withEnd(start)
+    .withEnd(end)
     .build();
 }
 

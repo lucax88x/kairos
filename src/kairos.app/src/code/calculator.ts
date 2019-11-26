@@ -1,5 +1,6 @@
 import { i18n } from '@lingui/core';
 import {
+  differenceInHours,
   endOfDay,
   format,
   getUnixTime,
@@ -14,7 +15,7 @@ import {
   isWithinInterval,
   startOfDay,
 } from 'date-fns';
-import { ascend, filter, groupBy, sortWith, find } from 'ramda';
+import { ascend, filter, find, groupBy, map, sortWith, sum } from 'ramda';
 import { JobModel } from '../models/job.model';
 import { Language } from '../models/language-model';
 import { ProfileModel } from '../models/profile.model';
@@ -33,6 +34,16 @@ export interface TimeEntryPair {
   enter: Date;
   exit: Date;
 }
+
+const getHoursFromAbsences = map<TimeAbsenceEntryModel, number>(t =>
+  differenceInHours(t.end, t.start),
+);
+
+const r = differenceInHours(
+  new Date('January 1 2019 09:30'),
+  new Date('January 1 2019 10:00'),
+);
+console.log(r);
 
 export function getTimeEntryPairsByJob(
   timeEntries: TimeEntryListModel[],
@@ -230,14 +241,14 @@ export function getWorkingHoursStatistics(
     end: endOfDay(date),
   });
 
-  // const absenceInDate = filter(
-  //   absence =>
-  //     isWithinInterval(date, {
-  //       start: absence.start,
-  //       end: !!absence.end ? absence.end : maxDate,
-  //     }),
-  //   absences,
-  // );
+  const absencesInDate = filter(
+    absence =>
+      isWithinInterval(date, {
+        start: startOfDay(absence.start),
+        end: endOfDay(absence.end),
+      }),
+    absences,
+  );
 
   const holidayInDate = find(
     holiday =>
@@ -253,13 +264,19 @@ export function getWorkingHoursStatistics(
     if (!!holidayInDate) {
       remainingHours = 0;
     } else {
+      const absenceHours = sum(getHoursFromAbsences(absencesInDate));
       const differencesByDate = differencesByDateByJob[job.id.toString()];
       const difference = !!differencesByDate
         ? differencesByDate[getUnixTime(date)]
         : 0;
       const workingHours = getDayWorkingHours(date, job);
+      const workedHours = !!difference ? difference / 3600000 : 0;
 
-      remainingHours = workingHours - (!!difference ? difference / 3600000 : 0);
+      remainingHours = workingHours - (workedHours + absenceHours);
+      console.log(workingHours);
+      console.log(absenceHours);
+      console.log(workedHours);
+      console.log(remainingHours);
     }
 
     statistics.push({
