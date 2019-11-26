@@ -28,21 +28,11 @@ namespace Kairos.Application.Ioc
         {
             builder.RegisterAssemblyTypes(typeof(IMediator).GetTypeInfo().Assembly).AsImplementedInterfaces();
 
-            var mediatrOpenTypes = new[]
-            {
-                typeof(IRequestHandler<,>),
-                typeof(INotificationHandler<>)
-            };
-
             var assembly = typeof(Module).GetTypeInfo().Assembly;
 
-            foreach (var mediatrOpenType in mediatrOpenTypes)
-            {
-                builder
-                    .RegisterAssemblyTypes(assembly)
-                    .AsClosedTypesOf(mediatrOpenType)
-                    .AsImplementedInterfaces();
-            }
+            builder.RegisterAssemblyTypes(assembly)
+                .Where(t => t.Name.EndsWith("Service") || t.Name.EndsWith("Projection"))
+                .AsImplementedInterfaces();
 
             builder.RegisterGeneric(typeof(RequestPostProcessorBehavior<,>)).As(typeof(IPipelineBehavior<,>));
             builder.RegisterGeneric(typeof(RequestPreProcessorBehavior<,>)).As(typeof(IPipelineBehavior<,>));

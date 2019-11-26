@@ -1,6 +1,5 @@
 using System;
 using System.Threading.Tasks;
-using FluentAssertions;
 using Kairos.Application.Ioc;
 using Kairos.Application.UserProfile.Commands;
 using Kairos.Application.UserProfile.Dtos;
@@ -14,6 +13,7 @@ namespace Kairos.Application.Tests.UserProfile
     public class UserProfileTest : IDisposable
     {
         private readonly Sandbox _sandbox;
+
 
         public UserProfileTest()
         {
