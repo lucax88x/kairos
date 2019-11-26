@@ -1,8 +1,8 @@
+import { CircularProgress } from '@material-ui/core';
 import { makeStyles } from '@material-ui/styles';
 import clsx from 'clsx';
 import React from 'react';
 import './Spinner.scss';
-import { SpinnerIcon } from './SpinnerIcon';
 
 export interface SpinnerProps {
   show: boolean;
@@ -12,6 +12,7 @@ const useStyles = makeStyles(theme => ({
   container: {
     width: '100%',
     height: '100%',
+    display: 'grid',
     position: 'relative',
   },
   blocker: {
@@ -28,8 +29,8 @@ const useStyles = makeStyles(theme => ({
   spinner: {
     cursor: 'wait',
     position: 'absolute',
-    left: 'calc(50% - 60px)',
-    top: 'calc(50% - 60px)',
+    justifySelf: 'center',
+    alignSelf: 'center',
   },
 }));
 
@@ -45,7 +46,7 @@ const Spinner: React.FC<SpinnerProps> = props => {
       </div>
       {show && (
         <div className={classes.spinner}>
-          <SpinnerIcon />
+          <CircularProgress color="secondary" />
         </div>
       )}
     </div>

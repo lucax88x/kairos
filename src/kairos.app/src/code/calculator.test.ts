@@ -1,14 +1,18 @@
 import { getUnixTime } from 'date-fns';
+import { advanceTo, clear } from 'jest-date-mock';
+import { TimeAbsenceEntryTypes } from '../models/time-absence-entry.model';
 import { TimeEntryListModel } from '../models/time-entry-list.model';
 import { TimeEntryTypes } from '../models/time-entry.model';
+import { TimeHolidayEntryModel } from '../models/time-holiday-entry.model';
 import { UUID } from '../models/uuid.model';
+import { TimeAbsenceEntryBuilder } from '../tests/time-absence-entry.builder';
 import { TimeEntryBuilder } from '../tests/time-entry.builder';
+import { TimeHolidayEntryBuilder } from '../tests/time-holiday-entry.builder';
 import { ProfileBuilder } from './../tests/profile.builder';
 import {
   getHumanDifferencesByRange,
   getWorkingHoursStatistics,
 } from './calculator';
-import { advanceBy, advanceTo, clear } from 'jest-date-mock';
 
 describe('calculations', () => {
   it('should get differences with only 2 entries', () => {
@@ -17,7 +21,7 @@ describe('calculations', () => {
     const start = new Date('January 1 2019 00:00');
     const end = new Date('January 31 2019 23:59');
 
-    const timeEntries: TimeEntryListModel[] = [
+    const timeEntries = [
       buildTimeEntry(jobId, TimeEntryTypes.IN, 'January 1 2019 08:30'),
       buildTimeEntry(jobId, TimeEntryTypes.OUT, 'January 1 2019 09:30'),
     ];
@@ -37,7 +41,7 @@ describe('calculations', () => {
     const start = new Date('January 1 2019 00:00');
     const end = new Date('January 31 2019 23:59');
 
-    const timeEntries: TimeEntryListModel[] = [
+    const timeEntries = [
       buildTimeEntry(jobId, TimeEntryTypes.OUT, 'January 1 2019 09:30'),
       buildTimeEntry(jobId, TimeEntryTypes.IN, 'January 1 2019 08:30'),
     ];
@@ -57,7 +61,7 @@ describe('calculations', () => {
     const start = new Date('January 1 2019 00:00');
     const end = new Date('January 31 2019 23:59');
 
-    const timeEntries: TimeEntryListModel[] = [
+    const timeEntries = [
       buildTimeEntry(jobId, TimeEntryTypes.IN, 'January 1 2019 08:00'),
       buildTimeEntry(jobId, TimeEntryTypes.OUT, 'January 1 2019 12:00'),
       buildTimeEntry(jobId, TimeEntryTypes.IN, 'January 1 2019 14:00'),
@@ -79,7 +83,7 @@ describe('calculations', () => {
     const start = new Date('January 1 2019 00:00');
     const end = new Date('January 31 2019 23:59');
 
-    const timeEntries: TimeEntryListModel[] = [
+    const timeEntries = [
       buildTimeEntry(jobId, TimeEntryTypes.IN, 'January 1 2019 08:00'),
       buildTimeEntry(jobId, TimeEntryTypes.OUT, 'January 1 2019 12:00'),
       buildTimeEntry(jobId, TimeEntryTypes.IN, 'January 4 2019 09:00'),
@@ -104,7 +108,7 @@ describe('calculations', () => {
     const start = new Date('January 1 2019 00:00');
     const end = new Date('January 31 2019 23:59');
 
-    const timeEntries: TimeEntryListModel[] = [
+    const timeEntries = [
       buildTimeEntry(jobId, TimeEntryTypes.IN, 'January 1 2019 22:00'),
       buildTimeEntry(jobId, TimeEntryTypes.OUT, 'January 2 2019 02:00'),
     ];
@@ -127,7 +131,7 @@ describe('calculations', () => {
     const start = new Date('January 1 2019 00:00');
     const end = new Date('January 31 2019 23:59');
 
-    const timeEntries: TimeEntryListModel[] = [
+    const timeEntries = [
       buildTimeEntry(jobId, TimeEntryTypes.IN, 'January 1 2019 08:00'),
       buildTimeEntry(jobId, TimeEntryTypes.IN, 'January 1 2019 14:00'),
       buildTimeEntry(jobId, TimeEntryTypes.OUT, 'January 1 2019 18:00'),
@@ -148,7 +152,7 @@ describe('calculations', () => {
     const start = new Date('January 1 2019 00:00');
     const end = new Date('January 31 2019 23:59');
 
-    const timeEntries: TimeEntryListModel[] = [
+    const timeEntries = [
       buildTimeEntry(jobId, TimeEntryTypes.IN, 'January 1 2019 08:00'),
       buildTimeEntry(jobId, TimeEntryTypes.OUT, 'January 1 2019 14:00'),
       buildTimeEntry(jobId, TimeEntryTypes.OUT, 'January 1 2019 18:00'),
@@ -169,7 +173,7 @@ describe('calculations', () => {
     const start = new Date('January 1 2019 00:00');
     const end = new Date('January 31 2019 23:59');
 
-    const timeEntries: TimeEntryListModel[] = [
+    const timeEntries = [
       buildTimeEntry(jobId, TimeEntryTypes.IN, 'January 1 2019 08:00'),
     ];
 
@@ -183,13 +187,13 @@ describe('calculations', () => {
   });
 
   it('should get correct max difference to now when date is today', () => {
-    advanceTo(new Date('January 3 2019 15:00'))
+    advanceTo(new Date('January 3 2019 15:00'));
     // given
     const jobId = UUID.Generate().toString();
     const start = new Date('January 1 2019 00:00');
     const end = new Date('January 31 2019 23:59');
 
-    const timeEntries: TimeEntryListModel[] = [
+    const timeEntries = [
       buildTimeEntry(jobId, TimeEntryTypes.IN, 'January 3 2019 08:00'),
     ];
 
@@ -197,7 +201,9 @@ describe('calculations', () => {
     const result = getHumanDifferencesByRange(timeEntries, { start, end });
 
     // then
-    expect(result[jobId][getUnixTime(new Date('January 3 2019'))]).toBe('07:00');
+    expect(result[jobId][getUnixTime(new Date('January 3 2019'))]).toBe(
+      '07:00',
+    );
     clear();
   });
 
@@ -207,7 +213,7 @@ describe('calculations', () => {
     const start = new Date('January 1 2019 00:00');
     const end = new Date('January 31 2019 23:59');
 
-    const timeEntries: TimeEntryListModel[] = [
+    const timeEntries = [
       buildTimeEntry(jobId, TimeEntryTypes.IN, 'January 1 2019 08:00'),
       buildTimeEntry(jobId, TimeEntryTypes.IN, 'January 2 2019 08:00'),
       buildTimeEntry(jobId, TimeEntryTypes.OUT, 'January 2 2019 17:00'),
@@ -232,7 +238,7 @@ describe('statistics', () => {
     const jobId = UUID.Generate().toString();
     const profile = new ProfileBuilder().withJob(new UUID(jobId)).build();
 
-    const timeEntries: TimeEntryListModel[] = [
+    const timeEntries = [
       buildTimeEntry(jobId, TimeEntryTypes.IN, 'January 1 2019 08:30'),
       buildTimeEntry(jobId, TimeEntryTypes.OUT, 'January 1 2019 09:30'),
     ];
@@ -260,7 +266,7 @@ describe('statistics', () => {
     const jobId = UUID.Generate().toString();
     const profile = new ProfileBuilder().withJob(new UUID(jobId)).build();
 
-    const timeEntries: TimeEntryListModel[] = [
+    const timeEntries = [
       buildTimeEntry(jobId, TimeEntryTypes.IN, 'January 1 2019 08:30'),
       buildTimeEntry(jobId, TimeEntryTypes.OUT, 'January 1 2019 12:30'),
       buildTimeEntry(jobId, TimeEntryTypes.IN, 'January 1 2019 13:30'),
@@ -290,7 +296,7 @@ describe('statistics', () => {
     const jobId = UUID.Generate().toString();
     const profile = new ProfileBuilder().withJob(new UUID(jobId)).build();
 
-    const timeEntries: TimeEntryListModel[] = [
+    const timeEntries = [
       buildTimeEntry(jobId, TimeEntryTypes.IN, 'January 1 2019 08:30'),
       buildTimeEntry(jobId, TimeEntryTypes.OUT, 'January 1 2019 12:30'),
       buildTimeEntry(jobId, TimeEntryTypes.IN, 'January 1 2019 13:30'),
@@ -314,6 +320,60 @@ describe('statistics', () => {
       text: '-2h',
     });
   });
+
+  it.only('build working hour statistics with multiple absences', () => {
+    // given
+    const jobId = UUID.Generate().toString();
+    const profile = new ProfileBuilder().withJob(new UUID(jobId)).build();
+
+    const timeAbsenceEntries = [
+      buildTimeAbsenceEntry('January 1 2019 08:30', 'January 1 2019 10:30'),
+    ];
+
+    // when
+    const result = getWorkingHoursStatistics(
+      new Date('January 1 2019 00:00'),
+      'en',
+      profile,
+      [],
+      timeAbsenceEntries,
+      [],
+    );
+
+    // then
+    expect(result[0]).toEqual({
+      title: 'TimeStatistics.RemainingToday',
+      subtitle: 'January 01',
+      text: '6h 30m',
+    });
+  });
+
+  it('build working hour statistics with a holiday', () => {
+    // given
+    const jobId = UUID.Generate().toString();
+    const profile = new ProfileBuilder().withJob(new UUID(jobId)).build();
+
+    const timeHolidayEntries = [
+      buildTimeHolidayEntry('January 1 2019'),
+    ];
+
+    // when
+    const result = getWorkingHoursStatistics(
+      new Date('January 1 2019 00:00'),
+      'en',
+      profile,
+      [],
+      [],
+      timeHolidayEntries,
+    );
+
+    // then
+    expect(result[0]).toEqual({
+      title: 'TimeStatistics.RemainingToday',
+      subtitle: 'January 01',
+      text: '0h',
+    });
+  });
 });
 
 function buildTimeEntry(jobId: string, type: TimeEntryTypes, date: string) {
@@ -322,4 +382,20 @@ function buildTimeEntry(jobId: string, type: TimeEntryTypes, date: string) {
     .withType(type)
     .withDate(date)
     .build();
+}
+
+function buildTimeAbsenceEntry(
+  start: string,
+  end: string,
+  type = TimeAbsenceEntryTypes.COMPENSATION,
+) {
+  return new TimeAbsenceEntryBuilder()
+    .withType(type)
+    .withStart(start)
+    .withEnd(start)
+    .build();
+}
+
+function buildTimeHolidayEntry(when: string) {
+  return new TimeHolidayEntryBuilder().withWhen(when).build();
 }

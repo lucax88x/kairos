@@ -40,7 +40,6 @@
     "redux-saga": "^1.0.5",
     "reselect": "^4.0.0",
     "simple-icons": "^1.15.0",
-    "spinkit": "^1.2.5",
     "typesafe-actions": "^4.4.2",
     "typescript": "3.5.2",
     "use-immer": "^0.3.3",
@@ -72,9 +71,6 @@
       "last 1 firefox version",
       "last 1 safari version"
     ]
-  },
-  "jest": {
-    "setupFiles": ["jest-date-mock"]
   },
   "devDependencies": {
     "@babel/core": "^7.6.0",
