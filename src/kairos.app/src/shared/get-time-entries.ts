@@ -20,6 +20,7 @@ import {
 } from './constants';
 import { selectIsOnline, selectSelectedYear } from './selectors';
 import { SharedState } from './state';
+import { LOCATION_CHANGE } from 'connected-react-router';
 
 export const getTimeEntriesAsync = createAsyncAction(
   GET_TIME_ENTRIES,
@@ -32,6 +33,15 @@ function* doGetTimeEntriesOnOtherActions() {
   const dashboardRoute: Route = yield select(selectDashboardRoute);
 
   if (!!dashboardRoute || !!timeEntriesRoute) {
+    yield put(getTimeEntriesAsync.request());
+  }
+}
+
+function* doGetTimeEntriesOnLocationChange() {
+  const timeEntriesRoute: Route = yield select(selectTimeEntriesRoute);
+
+  // don't put dashboard, it already has REFRESH
+  if (!!timeEntriesRoute) {
     yield put(getTimeEntriesAsync.request());
   }
 }
@@ -59,6 +69,8 @@ export function* getTimeEntriesSaga() {
     [CREATE_TIME_ENTRY_SUCCESS, DELETE_TIME_ENTRIES_SUCCESS],
     doGetTimeEntriesOnOtherActions,
   );
+
+  yield takeLatest([LOCATION_CHANGE], doGetTimeEntriesOnLocationChange);
   yield takeLatest(GET_TIME_ENTRIES, doGetTimeEntries);
 }
 

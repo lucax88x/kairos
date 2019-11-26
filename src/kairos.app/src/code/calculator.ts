@@ -14,7 +14,7 @@ import {
   isWithinInterval,
   startOfDay,
 } from 'date-fns';
-import { ascend, filter, groupBy, sortWith } from 'ramda';
+import { ascend, filter, groupBy, sortWith, find } from 'ramda';
 import { JobModel } from '../models/job.model';
 import { Language } from '../models/language-model';
 import { ProfileModel } from '../models/profile.model';
@@ -230,16 +230,7 @@ export function getWorkingHoursStatistics(
     end: endOfDay(date),
   });
 
-  // const todayHoliday = filter(
-  //   holiday =>
-  //     isWithinInterval(date, {
-  //       start: startOfDay(holiday.when),
-  //       end: endOfDay(holiday.when),
-  //     }),
-  //   holidays,
-  // );
-
-  // const todayAbsences = filter(
+  // const absenceInDate = filter(
   //   absence =>
   //     isWithinInterval(date, {
   //       start: absence.start,
@@ -248,15 +239,28 @@ export function getWorkingHoursStatistics(
   //   absences,
   // );
 
-  for (const job of jobsInDate) {
-    const differencesByDate = differencesByDateByJob[job.id.toString()];
-    const difference = !!differencesByDate
-      ? differencesByDate[getUnixTime(date)]
-      : 0;
-    const workingHours = getDayWorkingHours(date, job);
+  const holidayInDate = find(
+    holiday =>
+      isWithinInterval(date, {
+        start: startOfDay(holiday.when),
+        end: endOfDay(holiday.when),
+      }),
+    holidays,
+  );
 
-    const remainingHours =
-      workingHours - (!!difference ? difference / 3600000 : 0);
+  for (const job of jobsInDate) {
+    let remainingHours = 0;
+    if (!!holidayInDate) {
+      remainingHours = 0;
+    } else {
+      const differencesByDate = differencesByDateByJob[job.id.toString()];
+      const difference = !!differencesByDate
+        ? differencesByDate[getUnixTime(date)]
+        : 0;
+      const workingHours = getDayWorkingHours(date, job);
+
+      remainingHours = workingHours - (!!difference ? difference / 3600000 : 0);
+    }
 
     statistics.push({
       title: i18n._(

@@ -16,7 +16,7 @@
     "jsx": "preserve",
     "noImplicitReturns": true,
     "noImplicitThis": true,
-    "noImplicitAny": true
+    "noImplicitAny": true,
   },
   "include": ["src"]
 }
