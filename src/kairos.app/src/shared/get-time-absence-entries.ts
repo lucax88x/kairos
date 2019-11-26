@@ -1,3 +1,4 @@
+import { LOCATION_CHANGE } from 'connected-react-router';
 import produce from 'immer';
 import { call, put, select, takeLatest } from 'redux-saga/effects';
 import { createAsyncAction } from 'typesafe-actions';
@@ -38,6 +39,17 @@ function* doGetTimeAbsenceEntriesOnOtherActions() {
   }
 }
 
+function* doGetTimeAbsenceEntriesOnLocationChange() {
+  const timeAbsenceEntriesRoute: Route = yield select(
+    selectTimeAbsenceEntriesRoute,
+  );
+
+  // don't put dashboard, it already has REFRESH
+  if (!!timeAbsenceEntriesRoute) {
+    yield put(getTimeAbsenceEntriesAsync.request());
+  }
+}
+
 function* doGetTimeAbsenceEntries() {
   const isOnline = yield select(selectIsOnline);
   if (!isOnline) {
@@ -61,6 +73,7 @@ export function* getTimeAbsenceEntriesSaga() {
     [CREATE_TIME_ABSENCE_ENTRY_SUCCESS, DELETE_TIME_ABSENCE_ENTRIES_SUCCESS],
     doGetTimeAbsenceEntriesOnOtherActions,
   );
+  yield takeLatest([LOCATION_CHANGE], doGetTimeAbsenceEntriesOnLocationChange);
   yield takeLatest(GET_TIME_ABSENCE_ENTRIES, doGetTimeAbsenceEntries);
 }
 

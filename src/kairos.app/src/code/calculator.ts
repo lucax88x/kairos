@@ -230,14 +230,14 @@ export function getWorkingHoursStatistics(
     end: endOfDay(date),
   });
 
-  const absenceInDate = filter(
-    absence =>
-      isWithinInterval(date, {
-        start: absence.start,
-        end: !!absence.end ? absence.end : maxDate,
-      }),
-    absences,
-  );
+  // const absenceInDate = filter(
+  //   absence =>
+  //     isWithinInterval(date, {
+  //       start: absence.start,
+  //       end: !!absence.end ? absence.end : maxDate,
+  //     }),
+  //   absences,
+  // );
 
   const holidayInDate = find(
     holiday =>
