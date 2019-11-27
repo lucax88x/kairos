@@ -246,6 +246,7 @@ describe('statistics', () => {
     // when
     const result = getWorkingHoursStatistics(
       new Date('January 1 2019 00:00'),
+      new Date('January 1 2019 23:59'),
       'en',
       profile,
       timeEntries,
@@ -256,8 +257,16 @@ describe('statistics', () => {
     // then
     expect(result[0]).toEqual({
       title: 'TimeStatistics.RemainingToday',
+      titleValues: { job: 'test-job' },
       subtitle: 'January 01',
       text: '7.5h',
+    });
+
+    expect(result[2]).toEqual({
+      title: 'TimeStatistics.OvertimeToday',
+      titleValues: { job: 'test-job' },
+      subtitle: 'January 01',
+      text: '0h',
     });
   });
 
@@ -276,6 +285,7 @@ describe('statistics', () => {
     // when
     const result = getWorkingHoursStatistics(
       new Date('January 1 2019 00:00'),
+      new Date('January 1 2019 23:59'),
       'en',
       profile,
       timeEntries,
@@ -286,6 +296,14 @@ describe('statistics', () => {
     // then
     expect(result[0]).toEqual({
       title: 'TimeStatistics.RemainingToday',
+      titleValues: { job: 'test-job' },
+      subtitle: 'January 01',
+      text: '0h',
+    });
+
+    expect(result[2]).toEqual({
+      title: 'TimeStatistics.OvertimeToday',
+      titleValues: { job: 'test-job' },
       subtitle: 'January 01',
       text: '0h',
     });
@@ -306,6 +324,7 @@ describe('statistics', () => {
     // when
     const result = getWorkingHoursStatistics(
       new Date('January 1 2019 00:00'),
+      new Date('January 1 2019 23:59'),
       'en',
       profile,
       timeEntries,
@@ -316,12 +335,20 @@ describe('statistics', () => {
     // then
     expect(result[0]).toEqual({
       title: 'TimeStatistics.RemainingToday',
+      titleValues: { job: 'test-job' },
       subtitle: 'January 01',
       text: '-2h',
     });
+
+    expect(result[2]).toEqual({
+      title: 'TimeStatistics.OvertimeToday',
+      titleValues: { job: 'test-job' },
+      subtitle: 'January 01',
+      text: '2h',
+    });
   });
 
-  it.only('build working hour statistics with multiple absences', () => {
+  it('build working hour statistics with multiple absences', () => {
     // given
     const jobId = UUID.Generate().toString();
     const profile = new ProfileBuilder().withJob(new UUID(jobId)).build();
@@ -330,7 +357,7 @@ describe('statistics', () => {
       buildTimeEntry(jobId, TimeEntryTypes.IN, 'January 1 2019 08:30'),
       buildTimeEntry(jobId, TimeEntryTypes.OUT, 'January 1 2019 12:30'),
     ];
-    
+
     const timeAbsenceEntries = [
       buildTimeAbsenceEntry('January 1 2019 13:00', 'January 1 2019 17:30'),
     ];
@@ -338,6 +365,7 @@ describe('statistics', () => {
     // when
     const result = getWorkingHoursStatistics(
       new Date('January 1 2019 00:00'),
+      new Date('January 1 2019 23:59'),
       'en',
       profile,
       timeEntries,
@@ -348,8 +376,16 @@ describe('statistics', () => {
     // then
     expect(result[0]).toEqual({
       title: 'TimeStatistics.RemainingToday',
+      titleValues: { job: 'test-job' },
       subtitle: 'January 01',
-      text: '0',
+      text: '0h',
+    });
+
+    expect(result[2]).toEqual({
+      title: 'TimeStatistics.OvertimeToday',
+      titleValues: { job: 'test-job' },
+      subtitle: 'January 01',
+      text: '0h',
     });
   });
 
@@ -363,6 +399,7 @@ describe('statistics', () => {
     // when
     const result = getWorkingHoursStatistics(
       new Date('January 1 2019 00:00'),
+      new Date('January 1 2019 23:59'),
       'en',
       profile,
       [],
@@ -373,6 +410,14 @@ describe('statistics', () => {
     // then
     expect(result[0]).toEqual({
       title: 'TimeStatistics.RemainingToday',
+      titleValues: { job: 'test-job' },
+      subtitle: 'January 01',
+      text: '0h',
+    });
+
+    expect(result[2]).toEqual({
+      title: 'TimeStatistics.OvertimeToday',
+      titleValues: { job: 'test-job' },
       subtitle: 'January 01',
       text: '0h',
     });

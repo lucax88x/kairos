@@ -25,6 +25,8 @@ import { TimeEntryListModel } from '../models/time-entry-list.model';
 import { TimeHolidayEntryModel } from '../models/time-holiday-entry.model';
 import { ProfileModel } from '../models/profile.model';
 import { Language } from '../models/language-model';
+import { i18n } from '../i18nLoader';
+import { startOfDay, endOfDay } from 'date-fns';
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -88,7 +90,8 @@ export const TimeStatisticsComponent: React.FC<TimeStatisticsProps> = memo(
     const workingHourTiles: TimeStatisticTile[] = useMemo(
       () =>
         getWorkingHoursStatistics(
-          new Date(),
+          startOfDay(new Date()),
+          endOfDay(new Date()),
           selectedLanguage,
           profile,
           timeEntries,
@@ -116,7 +119,10 @@ export const TimeStatisticsComponent: React.FC<TimeStatisticsProps> = memo(
           style={{ ...Themes.getRelativeToIndex(index) }}
         >
           <div className={classes.gridTileContent}>{tile.text}</div>
-          <GridListTileBar title={tile.title} subtitle={tile.subtitle} />
+          <GridListTileBar
+            title={i18n._(tile.title, tile.titleValues)}
+            subtitle={tile.subtitle}
+          />
         </GridListTile>
       )),
       [],
