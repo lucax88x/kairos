@@ -51,7 +51,7 @@ export const TimeAbsenceEntriesComponent: React.FC<TimeAbsenceEntriesProps> = pr
   ]);
 
   const noRowsRenderer = useCallback(
-    () => <p>{isGetTimeAbsenceEntriesBusy ? '' : <Trans>TimeAbsenceEntries.NoItems</Trans>}</p>,
+    () => <p>{isGetTimeAbsenceEntriesBusy ? '' : <Trans>No items</Trans>}</p>,
     [isGetTimeAbsenceEntriesBusy],
   );
   const rowGetter = useCallback(({ index }: Index) => timeAbsenceEntries[index], [
@@ -61,7 +61,7 @@ export const TimeAbsenceEntriesComponent: React.FC<TimeAbsenceEntriesProps> = pr
     model => (
       <IconButton
         color="inherit"
-        aria-label={i18n._(t`TimeAbsenceEntries.UpdateTimeAbsenceEntryButton`)}
+        aria-label={i18n._(t`Update Absence`)}
         onClick={() => handleUpdate(model)}
       >
         <CreateIcon />
@@ -73,7 +73,7 @@ export const TimeAbsenceEntriesComponent: React.FC<TimeAbsenceEntriesProps> = pr
     model => (
       <IconButton
         color="inherit"
-        aria-label={i18n._(t`TimeAbsenceEntries.DeleteTimeAbsenceEntryButton`)}
+        aria-label={i18n._(t`Delete Absence`)}
         onClick={() => handleDelete(model)}
       >
         <DeleteIcon />
@@ -88,7 +88,7 @@ export const TimeAbsenceEntriesComponent: React.FC<TimeAbsenceEntriesProps> = pr
     <Spinner show={isGetTimeAbsenceEntriesBusy || isDeleteTimeAbsenceEntriesBusy}>
       <div className={classes.container}>
         <VirtualizedTable
-          title={i18n._(t`TimeAbsenceEntries.Title`)}
+          title={i18n._(t`Absences`)}
           rowCount={timeAbsenceEntries.length}
           rowIds={map(m => m.id.toString(), timeAbsenceEntries)}
           noRowsRenderer={noRowsRenderer}
@@ -96,27 +96,27 @@ export const TimeAbsenceEntriesComponent: React.FC<TimeAbsenceEntriesProps> = pr
           columns={[
             {
               width: 100,
-              label: i18n._(t`TimeAbsenceEntries.TypeTableHeader`),
+              label: i18n._(t`Type`),
               dataKey: 'type',
               formatter: absenceTypeFormatter,
             },
             {
               width: 200,
-              label: i18n._(t`TimeAbsenceEntries.StartTableHeader`),
+              label: i18n._(t`Start`),
               dataKey: 'start',
               flexGrow: 1,
               formatter: dateTimeFormatter,
             },
             {
               width: 200,
-              label: i18n._(t`TimeAbsenceEntries.EndTableHeader`),
+              label: i18n._(t`End`),
               dataKey: 'end',
               flexGrow: 1,
               formatter: dateTimeFormatter,
             },
             {
               width: 200,
-              label: i18n._(t`TimeAbsenceEntries.DescriptionTableHeader`),
+              label: i18n._(t`Description`),
               dataKey: 'description',
             },
             {
@@ -136,7 +136,7 @@ export const TimeAbsenceEntriesComponent: React.FC<TimeAbsenceEntriesProps> = pr
         />
       </div>
       <Button variant="contained" color="primary" onClick={onCreate}>
-        <Trans>Buttons.Create</Trans>
+        <Trans>Create</Trans>
       </Button>
     </Spinner>
   );

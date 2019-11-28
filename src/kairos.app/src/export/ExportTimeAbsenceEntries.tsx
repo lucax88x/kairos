@@ -64,7 +64,7 @@ export const ExportTimeAbsenceEntriesComponent: React.FC<ExportTimeAbsenceEntrie
   return (
     <div className={classes.rows}>
       <Typography component="h1" variant="h6" noWrap>
-        <Trans>ExportTimeAbsenceEntries.Title</Trans>
+        <Trans>Export absences</Trans>
       </Typography>
       <MuiPickersUtilsProvider utils={DateFnsUtils} locale={getDatepickerLocale(selectedLanguage)}>
         <div className={classes.columns}>
@@ -74,8 +74,8 @@ export const ExportTimeAbsenceEntriesComponent: React.FC<ExportTimeAbsenceEntrie
             value={start}
             maxDate={end}
             onChange={handleStartChange}
-            label={<Trans>Labels.Start</Trans>}
-            invalidDateMessage={<Trans>Validation.InvalidDate</Trans>}
+            label={<Trans>Start</Trans>}
+            invalidDateMessage={<Trans>Invalid Date</Trans>}
             format={formatAsDateTime}
             fullWidth
           />
@@ -85,8 +85,8 @@ export const ExportTimeAbsenceEntriesComponent: React.FC<ExportTimeAbsenceEntrie
             value={end}
             minDate={start}
             onChange={handleEndChange}
-            label={<Trans>Labels.End</Trans>}
-            invalidDateMessage={<Trans>Validation.InvalidDate</Trans>}
+            label={<Trans>End</Trans>}
+            invalidDateMessage={<Trans>Invalid Date</Trans>}
             format={formatAsDateTime}
             fullWidth
           />
@@ -94,7 +94,7 @@ export const ExportTimeAbsenceEntriesComponent: React.FC<ExportTimeAbsenceEntrie
       </MuiPickersUtilsProvider>
       <ButtonSpinner onClick={handleExport} isBusy={isBusy} disabled={!isOnline || isBusy || !start || !end}>
         <InsertDriveFileIcon />
-        <Trans>ExportTimeAbsenceEntries.Export</Trans>
+        <Trans>Export</Trans>
       </ButtonSpinner>
     </div>
   );

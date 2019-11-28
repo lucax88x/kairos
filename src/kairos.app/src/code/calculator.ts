@@ -1,27 +1,6 @@
 import { i18n } from '@lingui/core';
 import { t } from '@lingui/macro';
-import {
-  differenceInMinutes,
-  endOfDay,
-  format,
-  getUnixTime,
-  isFriday,
-  isMonday,
-  isSameDay,
-  isSaturday,
-  isSunday,
-  isThursday,
-  isTuesday,
-  isWednesday,
-  isWithinInterval,
-  startOfDay,
-  eachDayOfInterval,
-  startOfYear,
-  endOfYear,
-  startOfWeek,
-  endOfWeek,
-  fromUnixTime,
-} from 'date-fns';
+import { differenceInMinutes, eachDayOfInterval, endOfDay, endOfWeek, endOfYear, format, getUnixTime, isFriday, isMonday, isSameDay, isSaturday, isSunday, isThursday, isTuesday, isWednesday, isWithinInterval, startOfDay, startOfWeek, startOfYear } from 'date-fns';
 import { Decimal } from 'decimal.js';
 import { ascend, filter, find, groupBy, map, sortWith, sum } from 'ramda';
 import { JobModel } from '../models/job.model';
@@ -261,19 +240,18 @@ export function getWorkingHoursStatistics(
     );
 
     statistics['RemainingToday'] = {
-      title: i18n._(t`TimeStatistics.RemainingToday`),
+      title: i18n._(t`Remaining Today: {job}`),
       titleValues: { job: job.name },
       subtitle: formatDate(now, language, 'MMMM dd'),
       text: `${todayJobHours.remainingHours}h`,
     };
 
     statistics['OvertimeToday'] = {
-      title: i18n._(t`TimeStatistics.OvertimeToday`),
+      title: i18n._(t`Overtime Today: {job}`),
       titleValues: { job: job.name },
       subtitle: formatDate(start, language, 'MMMM dd'),
       text: `${todayJobHours.overtimeHours}h`,
     };
-
 
     // week
     const weekJobHours = buildJobHoursForRange(
@@ -286,7 +264,7 @@ export function getWorkingHoursStatistics(
     );
 
     statistics['RemainingWeek'] = {
-      title: i18n._(t`TimeStatistics.RemainingWeek`),
+      title: i18n._(t`Remaining Week: {job}`),
       titleValues: { job: job.name },
       subtitle: `${formatDate(
         startOfWeek(now),
@@ -294,10 +272,10 @@ export function getWorkingHoursStatistics(
         'MMMM dd',
       )} - ${formatDate(endOfWeek(now), language, 'MMMM dd')}`,
       text: `${weekJobHours.remainingHours}h`,
-    };    
-    
+    };
+
     statistics['OvertimeWeek'] = {
-      title: i18n._(t`TimeStatistics.OvertimeWeek`),
+      title: i18n._(t`Overtime Week: {job}`),
       titleValues: { job: job.name },
       subtitle: `${formatDate(
         startOfWeek(now),

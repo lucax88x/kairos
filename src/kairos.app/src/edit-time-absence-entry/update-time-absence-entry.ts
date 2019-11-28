@@ -30,7 +30,7 @@ function* doUpdateTimeAbsenceEntry({
 }
 
 function* doNotifySuccess() {
-  yield put(enqueueSnackbarAction(i18n._(t`Messages.AbsenceUpdated`), { variant: 'success' }));
+  yield put(enqueueSnackbarAction(i18n._(t`Absence Updated`), { variant: 'success' }));
 }
 
 export function* updateTimeAbsenceEntrySaga() {

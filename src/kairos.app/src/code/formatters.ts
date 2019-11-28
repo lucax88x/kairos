@@ -41,7 +41,7 @@ export const formatDate = (
         locale: dateFormatterLocales[language],
       });
     } else {
-      return i18n._(t`Validation.InvalidDate`);
+      return i18n._(t`Invalid Date`);
     }
   }
 

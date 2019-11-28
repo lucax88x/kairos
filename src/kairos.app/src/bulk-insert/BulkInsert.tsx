@@ -51,9 +51,9 @@ const BulkInsertComponent: React.FC<BulkInsertInputs> = props => {
   return (
     <div className={classes.root}>
       <Tabs value={tab} onChange={handleChangeTab} centered>
-        <Tab label={i18n._(t`BulkInsert.TimeEntryTabHeader`)} icon={<TimerIcon />} />
-        <Tab label={i18n._(t`BulkInsert.TimeAbsenceEntryTabHeader`)} icon={<WeekendIcon />} />
-        <Tab label={i18n._(t`BulkInsert.TimeHolidayEntryTabHeader`)} icon={<BeachAccessIcon />} />
+        <Tab label={i18n._(t`Time Entries`)} icon={<TimerIcon />} />
+        <Tab label={i18n._(t`Absences`)} icon={<WeekendIcon />} />
+        <Tab label={i18n._(t`Holidays`)} icon={<BeachAccessIcon />} />
       </Tabs>
       <div className={classes.tabContent}>
         {tab === 0 && <BulkTimeEntryInsert />}

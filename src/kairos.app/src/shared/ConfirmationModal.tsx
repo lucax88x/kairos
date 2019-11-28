@@ -21,14 +21,14 @@ export const ConfirmationModalComponent: React.FC<ConfirmationModalProps> = prop
   const { isOpen, title, message, approveButton, rejectButton, onReject, onApprove } = props;
   return (
     <Dialog open={isOpen} onClose={onReject} aria-labelledby="form-dialog-title">
-      <DialogTitle>{!!title ? title : <Trans>ConfirmationModal.Title</Trans>}</DialogTitle>
-      <DialogContent>{!!message ? message : <Trans>ConfirmationModal.Message</Trans>}</DialogContent>
+      <DialogTitle>{!!title ? title : <Trans>Confirm</Trans>}</DialogTitle>
+      <DialogContent>{!!message ? message : <Trans>Are you sure?</Trans>}</DialogContent>
       <DialogActions>
         <Button onClick={onReject}>
-          {!!rejectButton ? rejectButton : <Trans>ConfirmationModal.Reject</Trans>}
+          {!!rejectButton ? rejectButton : <Trans>Abort</Trans>}
         </Button>
         <Button onClick={onApprove} autoFocus>
-          {!!approveButton ? approveButton : <Trans>ConfirmationModal.Approve</Trans>}
+          {!!approveButton ? approveButton : <Trans>Confirm</Trans>}
         </Button>
       </DialogActions>
     </Dialog>

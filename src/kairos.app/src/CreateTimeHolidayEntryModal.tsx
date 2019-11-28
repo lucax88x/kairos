@@ -25,7 +25,7 @@ export const CreateTimeHolidayEntryModalComponent: React.FC<CreateTimeHolidayEnt
   return (
     <Dialog open={isOpen} onClose={onClose} aria-labelledby="form-dialog-title">
       <DialogTitle id="form-dialog-title">
-        <Trans>CreateTimeHolidayEntry.ModalTitle</Trans>
+        <Trans>Create Holiday</Trans>
       </DialogTitle>
       <DialogContent>
         <TimeHolidayEntryForm

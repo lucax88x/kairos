@@ -52,7 +52,7 @@ export const TableToolbar: React.FC<TableToolbarProps> = props => {
       <div className={classes.title}>
         {numSelected > 0 ? (
           <Typography color="inherit" variant="subtitle1">
-            {i18n._('TableToolbar.Selected', { selected: numSelected })}
+            {i18n._('{selected} selected', { selected: numSelected })}
           </Typography>
         ) : (
           <Typography variant="h6" id="tableTitle">

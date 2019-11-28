@@ -369,7 +369,7 @@ export const AppComponent: React.FC<AppProps> = props => {
     intro.setOptions({
       steps: [
         {
-          intro: i18n._(t`TopBar.OpenMenu`),
+          intro: i18n._(t`Welcome`),
         },
         {
           element: document.querySelector('#step1') as Element,
@@ -404,7 +404,7 @@ export const AppComponent: React.FC<AppProps> = props => {
                   <IconButton
                     edge="start"
                     color="inherit"
-                    aria-label={i18n._(t`TopBar.OpenMenu`)}
+                    aria-label={i18n._(t`Open Menu`)}
                     onClick={handleLeftDrawerOpen}
                   >
                     <MenuIcon />
@@ -434,7 +434,7 @@ export const AppComponent: React.FC<AppProps> = props => {
                 {!isRightDrawerOpen && !isLeftDrawerOpen && (
                   <IconButton
                     color="inherit"
-                    aria-label={i18n._(t`TopBar.OpenTimeEntry`)}
+                    aria-label={i18n._(t`Open time entry`)}
                     onClick={handleTimeEntryDrawerOpen}
                   >
                     <TimerIcon />
@@ -443,7 +443,7 @@ export const AppComponent: React.FC<AppProps> = props => {
                 {!isRightDrawerOpen && !isLeftDrawerOpen && (
                   <IconButton
                     color="inherit"
-                    aria-label={i18n._(t`TopBar.OpenTimeAbsenceEntry`)}
+                    aria-label={i18n._(t`Open absence`)}
                     onClick={handleTimeAbsenceEntryDrawerOpen}
                   >
                     <WeekendIcon />
@@ -482,21 +482,21 @@ export const AppComponent: React.FC<AppProps> = props => {
               <ListItemIcon>
                 <DashboardIcon />
               </ListItemIcon>
-              <ListItemText primary={<Trans>LeftMenu.Dashboard</Trans>} />
+              <ListItemText primary={<Trans>Dashboard</Trans>} />
             </ListItem>
             <Divider />
             <ListItem button to={Routes.TimeEntries} component={Link}>
               <ListItemIcon>
                 <TimerIcon />
               </ListItemIcon>
-              <ListItemText primary={<Trans>LeftMenu.TimeEntries</Trans>} />
+              <ListItemText primary={<Trans>Time Entries</Trans>} />
             </ListItem>
             <ListItem button to={Routes.TimeAbsenceEntries} component={Link}>
               <ListItemIcon>
                 <WeekendIcon />
               </ListItemIcon>
               <ListItemText
-                primary={<Trans>LeftMenu.TimeAbsenceEntries</Trans>}
+                primary={<Trans>Absences</Trans>}
               />
             </ListItem>
             <ListItem button to={Routes.TimeHolidayEntries} component={Link}>
@@ -504,7 +504,7 @@ export const AppComponent: React.FC<AppProps> = props => {
                 <BeachAccessIcon />
               </ListItemIcon>
               <ListItemText
-                primary={<Trans>LeftMenu.TimeHolidayEntries</Trans>}
+                primary={<Trans>Holidays</Trans>}
               />
             </ListItem>
             <Divider />
@@ -512,13 +512,13 @@ export const AppComponent: React.FC<AppProps> = props => {
               <ListItemIcon>
                 <FastForwardIcon />
               </ListItemIcon>
-              <ListItemText primary={<Trans>LeftMenu.BulkInsert</Trans>} />
+              <ListItemText primary={<Trans>Bulk Insert</Trans>} />
             </ListItem>
             <ListItem button to={Routes.Export} component={Link}>
               <ListItemIcon>
                 <InsertDriveFileIcon />
               </ListItemIcon>
-              <ListItemText primary={<Trans>LeftMenu.Export</Trans>} />
+              <ListItemText primary={<Trans>Export</Trans>} />
             </ListItem>
           </List>
         </Drawer>
@@ -577,21 +577,21 @@ export const AppComponent: React.FC<AppProps> = props => {
                   // className={classes.avatar}
                 />
               </ListItemIcon>
-              <ListItemText primary={<Trans>TopBar.Profile</Trans>} />
+              <ListItemText primary={<Trans>Profile</Trans>} />
             </ListItem>
             <Divider />
             <ListItem button onClick={handleTimeEntryDrawerOpen}>
               <ListItemIcon>
                 <TimerIcon />
               </ListItemIcon>
-              <ListItemText primary={<Trans>TopBar.OpenTimeEntry</Trans>} />
+              <ListItemText primary={<Trans>Open time entry</Trans>} />
             </ListItem>
             <ListItem button onClick={handleTimeAbsenceEntryDrawerOpen}>
               <ListItemIcon>
                 <WeekendIcon />
               </ListItemIcon>
               <ListItemText
-                primary={<Trans>TopBar.OpenTimeAbsenceEntry</Trans>}
+                primary={<Trans>Open absence</Trans>}
               />
             </ListItem>
             <Divider />
@@ -642,14 +642,14 @@ export const AppComponent: React.FC<AppProps> = props => {
             <ListItem>
               <ListItemText
                 className={classes.topbarText}
-                primary={i18n._('TopBar.Version', { version: version.version })}
+                primary={i18n._('Version {version}', { version: version.version })}
               />
             </ListItem>
             <ListItem button onClick={onLogout}>
               <ListItemIcon>
                 <LogoutIcon />
               </ListItemIcon>
-              <ListItemText primary={<Trans>TopBar.Logout</Trans>} />
+              <ListItemText primary={<Trans>Logout</Trans>} />
             </ListItem>
           </List>
         </Drawer>

@@ -157,18 +157,18 @@ export const TimeEntriesCalendarComponent: React.FC<TimeEntriesCalendarEntryProp
   );
 
   const messages: Messages = {
-    month: i18n._('Calendar.Month'),
-    yesterday: i18n._('Calendar.Yesterday'),
-    day: i18n._('Calendar.Day'),
-    today: i18n._('Calendar.Today'),
-    previous: i18n._('Calendar.Back'),
-    next: i18n._('Calendar.Next'),
-    week: i18n._('Calendar.Week'),
-    work_week: i18n._('Calendar.WorkWeek'),
-    agenda: i18n._('Calendar.Agenda'),
-    noEventsInRange: i18n._('Calendar.NoEventsInRange'),
-    allDay: i18n._('Calendar.AllDay'),
-    showMore: more => i18n._('Calendar.ShowMore', { more }),
+    month: i18n._('Month'),
+    yesterday: i18n._('Yesterday'),
+    day: i18n._('Day'),
+    today: i18n._('Today'),
+    previous: i18n._('Back'),
+    next: i18n._('Next'),
+    week: i18n._('Week'),
+    work_week: i18n._('Work Week'),
+    agenda: i18n._('Agenda'),
+    noEventsInRange: i18n._('No Events In Range'),
+    allDay: i18n._('All day'),
+    showMore: more => i18n._('More {more}', { more }),
   };
 
   const handleOnDoubleClick = useCallback(

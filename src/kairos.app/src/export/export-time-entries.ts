@@ -33,7 +33,7 @@ function* doExportTimeEntries({
 
 function* doNotifySuccess() {
   yield put(
-    enqueueSnackbarAction(i18n._(t`Messages.ExportEntriesSaved`), {
+    enqueueSnackbarAction(i18n._(t`Entries exported`), {
       variant: 'success',
     }),
   );

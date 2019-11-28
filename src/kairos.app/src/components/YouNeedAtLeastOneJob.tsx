@@ -7,7 +7,7 @@ import { Routes } from '../routes';
 export const YouNeedAtLeastOneJob: React.FC = () => {
   return (
     <Typography color="inherit">
-      <Trans id="YouNeedAtLeastOneJob.Message" components={[<Link to={Routes.Profile}></Link>]} />
+      <Trans id="You need at least one job, connect to <0>Profile</0>" components={[<Link to={Routes.Profile}></Link>]} />
     </Typography>
   );
 };

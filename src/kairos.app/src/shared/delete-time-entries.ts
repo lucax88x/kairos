@@ -30,7 +30,7 @@ function* doTryDeleteTimeEntries({
 }: ReturnType<typeof tryDeleteTimeEntriesAction>) {
   const confirmed = yield call(askForConfirmation, {
     title: null,
-    message: i18n._(t`ConfirmationModal.DeleteEntries`),
+    message: i18n._(t`Are you sure you want to delete the selected entries?`),
     rejectButton: null,
     approveButton: null,
   });
@@ -52,7 +52,7 @@ function* doTryDeleteTimeEntries({
 
 function* doNotifySuccess() {
   yield put(
-    enqueueSnackbarAction(i18n._(t`Messages.EntryDeleted`), {
+    enqueueSnackbarAction(i18n._(t`Entry Deleted`), {
       variant: 'success',
     }),
   );

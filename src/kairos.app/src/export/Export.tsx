@@ -49,8 +49,8 @@ export const ExportComponent: React.FC<ExportInputs> = props => {
   return (
     <div className={classes.root}>
       <Tabs value={tab} onChange={handleChangeTab} centered>
-        <Tab label={i18n._(t`Export.TimeEntryTabHeader`)} icon={<TimerIcon />} />
-        <Tab label={i18n._(t`Export.TimeAbsenceEntryTabHeader`)} icon={<WeekendIcon />} />
+        <Tab label={i18n._(t`Entries`)} icon={<TimerIcon />} />
+        <Tab label={i18n._(t`Absences`)} icon={<WeekendIcon />} />
       </Tabs>
       <div className={classes.tabContent}>
         {tab === 0 && <ExportTimeEntries />}

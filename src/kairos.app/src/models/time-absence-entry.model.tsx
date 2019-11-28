@@ -59,29 +59,29 @@ export interface TimeAbsenceEntryOutModel {
 export function getTextFromAbsenceType(type: TimeAbsenceEntryTypes) {
   switch (type) {
     case TimeAbsenceEntryTypes.COMPENSATION:
-      return i18n._(t`Values.TimeAbsenceEntryTypes.Compensation`);
+      return i18n._(t`Compensation`);
     case TimeAbsenceEntryTypes.PERMIT:
-      return i18n._(t`Values.TimeAbsenceEntryTypes.Permit`);
+      return i18n._(t`Permit`);
     case TimeAbsenceEntryTypes.VACATION:
-      return i18n._(t`Values.TimeAbsenceEntryTypes.Vacation`);
+      return i18n._(t`Vacation`);
     case TimeAbsenceEntryTypes.ILLNESS:
-      return i18n._(t`Values.TimeAbsenceEntryTypes.Illness`);
+      return i18n._(t`Illness`);
     default:
-      return i18n._(t`Validation.InvalidType`);
+      return i18n._(t`Invalid Type`);
   }
 }
 
 export function getTransFromAbsenceType(type: TimeAbsenceEntryTypes) {
   switch (type) {
     case TimeAbsenceEntryTypes.COMPENSATION:
-      return <Trans>Values.TimeAbsenceEntryTypes.Compensation</Trans>;
+      return <Trans>Compensation</Trans>;
     case TimeAbsenceEntryTypes.PERMIT:
-      return <Trans>Values.TimeAbsenceEntryTypes.Permit</Trans>;
+      return <Trans>Permit</Trans>;
     case TimeAbsenceEntryTypes.VACATION:
-      return <Trans>Values.TimeAbsenceEntryTypes.Vacation</Trans>;
+      return <Trans>Vacation</Trans>;
     case TimeAbsenceEntryTypes.ILLNESS:
-      return <Trans>Values.TimeAbsenceEntryTypes.Illness</Trans>;
+      return <Trans>Illness</Trans>;
     default:
-      return <Trans>Validation.InvalidType</Trans>;
+      return <Trans>Invalid Type</Trans>;
   }
 }

@@ -296,12 +296,12 @@ ReactDOM.render(<Index />, document.getElementById('root'));
 
 serviceWorker.register({
   onSuccess: () => {
-    store.dispatch(enqueueSnackbarAction(i18n._(t`Messages.ContentIsCached`)));
+    store.dispatch(enqueueSnackbarAction(i18n._(t`Content is cached for offline use.`)));
   },
   onUpdate: () => {
     store.dispatch(
       enqueueSnackbarAction(
-        i18n._(t`Messages.NewContentAvailablePleaseRefresh`),
+        i18n._(t`New content is available and will be used when all tabs for this page are closed.`),
         {
           variant: 'warning',
           action: (
