@@ -10,23 +10,23 @@ import {
   Typography,
 } from '@material-ui/core';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
+import { values } from 'ramda';
 import React, { memo, useCallback, useMemo } from 'react';
 import {
+  getIllnessStatistics,
+  getVacationStatistics,
   getWorkingHoursStatistics,
   TimeStatisticTile,
-  getVacationStatistics,
-  getIllnessStatistics,
 } from '../code/calculator';
 import { mapIndexed } from '../code/ramda.curried';
 import { Themes } from '../code/variables';
 import Spinner from '../components/Spinner';
+import { i18n } from '../i18nLoader';
+import { Language } from '../models/language-model';
+import { ProfileModel } from '../models/profile.model';
 import { TimeAbsenceEntryModel } from '../models/time-absence-entry.model';
 import { TimeEntryListModel } from '../models/time-entry-list.model';
 import { TimeHolidayEntryModel } from '../models/time-holiday-entry.model';
-import { ProfileModel } from '../models/profile.model';
-import { Language } from '../models/language-model';
-import { i18n } from '../i18nLoader';
-import { startOfDay, endOfDay } from 'date-fns';
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -89,25 +89,25 @@ export const TimeStatisticsComponent: React.FC<TimeStatisticsProps> = memo(
 
     const workingHourTiles: TimeStatisticTile[] = useMemo(
       () =>
-        getWorkingHoursStatistics(
-          startOfDay(new Date()),
-          endOfDay(new Date()),
-          selectedLanguage,
-          profile,
-          timeEntries,
-          absences,
-          holidays,
+        values(
+          getWorkingHoursStatistics(
+            selectedLanguage,
+            profile,
+            timeEntries,
+            absences,
+            holidays,
+          ),
         ),
       [selectedLanguage, profile, timeEntries, absences, holidays],
     );
 
     const vacationTiles: TimeStatisticTile[] = useMemo(
-      () => getVacationStatistics(selectedLanguage, absences),
+      () => values(getVacationStatistics(selectedLanguage, absences)),
       [selectedLanguage, absences],
     );
 
     const illnessTiles: TimeStatisticTile[] = useMemo(
-      () => getIllnessStatistics(selectedLanguage, absences),
+      () => values(getIllnessStatistics(selectedLanguage, absences)),
       [selectedLanguage, absences],
     );
 
