@@ -240,14 +240,14 @@ export function getWorkingHoursStatistics(
     );
 
     statistics['RemainingToday'] = {
-      title: i18n._(t`Remaining Today: {job}`),
+      title: i18n._(t`Remaining Today: ${job.name}`),
       titleValues: { job: job.name },
       subtitle: formatDate(now, language, 'MMMM dd'),
       text: `${todayJobHours.remainingHours}h`,
     };
 
     statistics['OvertimeToday'] = {
-      title: i18n._(t`Overtime Today: {job}`),
+      title: i18n._(t`Overtime Today: ${job.name}`),
       titleValues: { job: job.name },
       subtitle: formatDate(start, language, 'MMMM dd'),
       text: `${todayJobHours.overtimeHours}h`,
@@ -264,7 +264,7 @@ export function getWorkingHoursStatistics(
     );
 
     statistics['RemainingWeek'] = {
-      title: i18n._(t`Remaining Week: {job}`),
+      title: i18n._(t`Remaining Week: ${job.name}`),
       titleValues: { job: job.name },
       subtitle: `${formatDate(
         startOfWeek(now),
@@ -275,7 +275,7 @@ export function getWorkingHoursStatistics(
     };
 
     statistics['OvertimeWeek'] = {
-      title: i18n._(t`Overtime Week: {job}`),
+      title: i18n._(t`Overtime Week: ${job.name}`),
       titleValues: { job: job.name },
       subtitle: `${formatDate(
         startOfWeek(now),

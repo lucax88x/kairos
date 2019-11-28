@@ -17,6 +17,7 @@ import {
 import { TimeEntryListModel } from '../models/time-entry-list.model';
 import { TimeHolidayEntryModel } from '../models/time-holiday-entry.model';
 import { Routes } from '../routes';
+import { t } from '@lingui/macro';
 
 const localizer = momentLocalizer(moment);
 
@@ -157,18 +158,18 @@ export const TimeEntriesCalendarComponent: React.FC<TimeEntriesCalendarEntryProp
   );
 
   const messages: Messages = {
-    month: i18n._('Month'),
-    yesterday: i18n._('Yesterday'),
-    day: i18n._('Day'),
-    today: i18n._('Today'),
-    previous: i18n._('Back'),
-    next: i18n._('Next'),
-    week: i18n._('Week'),
-    work_week: i18n._('Work Week'),
-    agenda: i18n._('Agenda'),
-    noEventsInRange: i18n._('No Events In Range'),
-    allDay: i18n._('All day'),
-    showMore: more => i18n._('More {more}', { more }),
+    month: i18n._(t`Month`),
+    yesterday: i18n._(t`Yesterday`),
+    day: i18n._(t`Day`),
+    today: i18n._(t`Today`),
+    previous: i18n._(t`Back`),
+    next: i18n._(t`Next`),
+    week: i18n._(t`Week`),
+    work_week: i18n._(t`Work Week`),
+    agenda: i18n._(t`Agenda`),
+    noEventsInRange: i18n._(t`No Events In Range`),
+    allDay: i18n._(t`All day`),
+    showMore: more => i18n._(t`More ${more}`),
   };
 
   const handleOnDoubleClick = useCallback(

@@ -174,8 +174,8 @@ const Index: React.FC = () => {
                   <Switch>
                     <Redirect exact={true} from="/" to={Routes.Dashboard} />
                     <Route path={Routes.Login} component={LoginForm} />
-                    <Route path="" component={App} />
-                    <Route component={NotFound} />
+                    <Route path={Routes.Private} component={App} />
+                    <Route path="*" component={NotFound} />
                   </Switch>
                 </ConnectedRouter>
 

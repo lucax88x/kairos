@@ -1448,11 +1448,6 @@
     "@types/react" "*"
     hoist-non-react-statics "^3.3.0"
 
-"@types/intro.js@^2.4.5":
-  version "2.4.5"
-  resolved "https://registry.yarnpkg.com/@types/intro.js/-/intro.js-2.4.5.tgz#9c96c0953a98d9fb2e0322809ffdd41e66c2865b"
-  integrity sha512-iBKhOzf6tgTzYsjkrkghGQJFA/pYB7WelXhg8SCbsgMHg6xeIqVzsEFpKlcBMS93WDuNfgwT0kfgyjXgCIIB5g==
-
 "@types/istanbul-lib-coverage@*", "@types/istanbul-lib-coverage@^2.0.0":
   version "2.0.1"
   resolved "https://registry.yarnpkg.com/@types/istanbul-lib-coverage/-/istanbul-lib-coverage-2.0.1.tgz#42995b446db9a48a11a07ec083499a860e9138ff"
@@ -5715,11 +5710,6 @@ internal-ip@^4.2.0:
   dependencies:
     default-gateway "^4.2.0"
     ipaddr.js "^1.9.0"
-
-intro.js@^2.9.3:
-  version "2.9.3"
-  resolved "https://registry.yarnpkg.com/intro.js/-/intro.js-2.9.3.tgz#001d9a7bca66d8f4d2d0253c9b3345e9ae4320c3"
-  integrity sha512-hC+EXWnEuJeA3CveGMat3XHePd2iaXNFJIVfvJh2E9IzBMGLTlhWvPIVHAgKlOpO4lNayCxEqzr4N02VmHFr9Q==
 
 invariant@^2.2.2, invariant@^2.2.4:
   version "2.2.4"

@@ -1,13 +1,15 @@
 export class Routes {
   static Login = '/login';
-  static Profile = '/profile';
-  static Dashboard = '/dashboard';
-  static TimeEntries = '/time-entries';
-  static TimeAbsenceEntries = '/time-absence-entries';
-  static TimeHolidayEntries = '/time-holiday-entries';
-  static EditTimeEntry = '/entry/:id';
-  static EditTimeAbsenceEntry = '/absence/:id';
-  static EditTimeHolidayEntry = '/holiday/:id';
-  static BulkInsert = '/bulk-insert';
-  static Export = '/export';
+  static Private = '/private';
+  static Profile = '/private/profile';
+  static Dashboard = '/private/dashboard';
+  static Navigator = '/private/navigator/:date';
+  static TimeEntries = '/private/time-entries';
+  static TimeAbsenceEntries = '/private/time-absence-entries';
+  static TimeHolidayEntries = '/private/time-holiday-entries';
+  static EditTimeEntry = '/private/entry/:id';
+  static EditTimeAbsenceEntry = '/private/absence/:id';
+  static EditTimeHolidayEntry = '/private/holiday/:id';
+  static BulkInsert = '/private/bulk-insert';
+  static Export = '/private/export';
 }

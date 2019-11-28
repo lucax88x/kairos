@@ -28,6 +28,7 @@ export const selectLanguageReducer = (state: SharedState, action: SharedActions)
   produce(state, draft => {
     switch (action.type) {
       case SELECTED_LANGUAGE:
+        console.log('selected');
         draft.selectedLanguage = action.payload;
         break;
     }

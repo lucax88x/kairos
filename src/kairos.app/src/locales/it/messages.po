@@ -40,11 +40,11 @@ msgstr "Assenze"
 msgid "Absences exported"
 msgstr "Assenze esportate"
 
-#: src/dashboard/TimeEntriesCalendar.tsx:98
+#: src/dashboard/TimeEntriesCalendar.tsx:99
 msgid "Agenda"
 msgstr "Agenda"
 
-#: src/dashboard/TimeEntriesCalendar.tsx:100
+#: src/dashboard/TimeEntriesCalendar.tsx:101
 msgid "All day"
 msgstr "Tutto il giorno"
 
@@ -67,7 +67,7 @@ msgstr "Sei sicuro di voler cancellare le vacanze selezionate?"
 msgid "Are you sure?"
 msgstr "Sei sicuro?"
 
-#: src/dashboard/TimeEntriesCalendar.tsx:94
+#: src/dashboard/TimeEntriesCalendar.tsx:95
 msgid "Back"
 msgstr "Indietro"
 
@@ -112,7 +112,7 @@ msgstr "Data attuale"
 msgid "Dashboard"
 msgstr "Dashboard"
 
-#: src/dashboard/TimeEntriesCalendar.tsx:92
+#: src/dashboard/TimeEntriesCalendar.tsx:93
 msgid "Day"
 msgstr "Giorno"
 
@@ -303,11 +303,11 @@ msgstr "Esci"
 msgid "Monday"
 msgstr "Lunedì"
 
-#: src/dashboard/TimeEntriesCalendar.tsx:90
+#: src/dashboard/TimeEntriesCalendar.tsx:91
 msgid "Month"
 msgstr "Mese"
 
-#: src/dashboard/TimeEntriesCalendar.tsx:101
+#: src/dashboard/TimeEntriesCalendar.tsx:102
 msgid "More {more}"
 msgstr "Mostra {more}"
 
@@ -319,11 +319,11 @@ msgstr "Nome"
 msgid "New content is available and will be used when all tabs for this page are closed."
 msgstr "Il nuovo contenuto è disponibile e verrà utilizzato quando tutte le schede di questa pagina sono chiuse."
 
-#: src/dashboard/TimeEntriesCalendar.tsx:95
+#: src/dashboard/TimeEntriesCalendar.tsx:96
 msgid "Next"
 msgstr "Prossimo"
 
-#: src/dashboard/TimeEntriesCalendar.tsx:99
+#: src/dashboard/TimeEntriesCalendar.tsx:100
 msgid "No Events In Range"
 msgstr "Nessun evento"
 
@@ -358,12 +358,12 @@ msgid "Out"
 msgstr "Uscita"
 
 #: src/code/calculator.ts:144
-msgid "Overtime Today: {job}"
-msgstr "Straordinari oggi: {job}"
+msgid "Overtime Today: {0}"
+msgstr "Straordinari oggi: {0}"
 
 #: src/code/calculator.ts:158
-msgid "Overtime Week: {job}"
-msgstr "Straordinari settimane: {job}"
+msgid "Overtime Week: {0}"
+msgstr "Straordinari settimana: {0}"
 
 #: src/models/time-absence-entry.model.tsx:39
 #: src/models/time-absence-entry.model.tsx:53
@@ -381,12 +381,12 @@ msgid "Profile Saved"
 msgstr "Profilo salvato"
 
 #: src/code/calculator.ts:138
-msgid "Remaining Today: {job}"
-msgstr "Rimanenti oggi: {job}"
+msgid "Remaining Today: {0}"
+msgstr "Rimanenti oggi: {0}"
 
 #: src/code/calculator.ts:152
-msgid "Remaining Week: {job}"
-msgstr "Rimanenti settimana: {job}"
+msgid "Remaining Week: {0}"
+msgstr "Rimanenti settimana: {0}"
 
 #: src/profile/ProfileJobForm.tsx:125
 msgid "Saturday"
@@ -439,7 +439,7 @@ msgstr "Giovedì"
 msgid "Time Entries"
 msgstr "Ingressi"
 
-#: src/dashboard/TimeEntriesCalendar.tsx:93
+#: src/dashboard/TimeEntriesCalendar.tsx:94
 msgid "Today"
 msgstr "Oggi"
 
@@ -498,14 +498,14 @@ msgid "Valid Entries"
 msgstr "Vacanze valide"
 
 #: src/App.tsx:413
-msgid "Version {version}"
-msgstr "Version {version}"
+msgid "Version {0}"
+msgstr "Versione {0}"
 
 #: src/profile/ProfileJobForm.tsx:122
 msgid "Wednesday"
 msgstr "Mercoledì"
 
-#: src/dashboard/TimeEntriesCalendar.tsx:96
+#: src/dashboard/TimeEntriesCalendar.tsx:97
 msgid "Week"
 msgstr "Settimana"
 
@@ -526,7 +526,7 @@ msgstr "Quando"
 msgid "When you are sick"
 msgstr "Malattia"
 
-#: src/dashboard/TimeEntriesCalendar.tsx:97
+#: src/dashboard/TimeEntriesCalendar.tsx:98
 msgid "Work Week"
 msgstr "Settimana lavorativa"
 
@@ -535,7 +535,7 @@ msgstr "Settimana lavorativa"
 msgid "Working Hours"
 msgstr "Ore lavorative"
 
-#: src/dashboard/TimeEntriesCalendar.tsx:91
+#: src/dashboard/TimeEntriesCalendar.tsx:92
 msgid "Yesterday"
 msgstr "Ieri"
 
@@ -547,6 +547,6 @@ msgstr "Ti serve almeno un impiego, collegati al <0>Profilo</0>"
 msgid "You need to be online in order to sign in."
 msgstr "Devi essere online per entrare."
 
-#: src/components/TableToolbar.tsx:41
-msgid "{selected} selected"
-msgstr "{selected} selezionati"
+#: src/components/TableToolbar.tsx:42
+msgid "{numSelected} selected"
+msgstr "{numSelected} selezionati"
