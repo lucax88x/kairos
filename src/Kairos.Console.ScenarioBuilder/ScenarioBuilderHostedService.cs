@@ -1,9 +1,14 @@
 using System;
 using System.Collections.Generic;
+using System.IO;
+using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
+using Kairos.Application.TimeEntry.Commands;
+using Kairos.Application.TimeEntry.Dtos;
 using Kairos.Application.UserProfile.Commands;
 using Kairos.Application.UserProfile.Dtos;
+using Kairos.Domain;
 using MediatR;
 using Microsoft.Extensions.Hosting;
 using Serilog;
@@ -14,6 +19,7 @@ namespace Kairos.Console.ScenarioBuilder
     {
         private readonly ILogger _logger;
         private readonly IMediator _mediator;
+        private readonly Guid _trimanJobId = Guid.NewGuid();
 
         public ScenarioBuilderHostedService(ILogger logger, IMediator mediator)
         {
@@ -25,6 +31,18 @@ namespace Kairos.Console.ScenarioBuilder
         {
             _logger.Information($"Starting Scenario Builder Service.");
 
+            var profile = BuildProfile();
+            var timeEntries = BuildTimeEntries();
+
+            await _mediator.Send(new CreateOrUpdateUserProfile(profile), cancellationToken);
+
+            await _mediator.Send(new CreateTimeEntries(timeEntries.ToArray()), cancellationToken);
+
+            await Task.CompletedTask;
+        }
+
+        private UserProfileModel BuildProfile()
+        {
             var profile = new UserProfileModel
             {
                 Id = Guid.NewGuid(),
@@ -32,53 +50,35 @@ namespace Kairos.Console.ScenarioBuilder
                 {
                     new UserJobModel
                     {
-                        Id = Guid.NewGuid(),
-                        Name = "Aduno",
-                        Start = new DateTimeOffset(new DateTime(2017, 8, 1)),
-                        End = new DateTimeOffset(new DateTime(2017, 12, 31)),
-                        HolidaysPerYear = 20,
-                        Monday = 8.24m,
-                        Tuesday = 8.24m,
-                        Wednesday = 8.24m,
-                        Thursday = 8.24m,
-                        Friday = 8.24m,
-                        Saturday = 0,
-                        Sunday = 0,
-                    },
-                    new UserJobModel
-                    {
-                        Id = Guid.NewGuid(),
+                        Id = _trimanJobId,
                         Name = "Triman",
                         Start = new DateTimeOffset(new DateTime(2018, 1, 1)),
                         HolidaysPerYear = 20,
-                        Monday = 8.30m,
-                        Tuesday = 8.30m,
-                        Wednesday = 8.30m,
-                        Thursday = 8.30m,
-                        Friday = 8.30m,
-                        Saturday = 0,
-                        Sunday = 0,
-                    },
-                    new UserJobModel
-                    {
-                        Id = Guid.NewGuid(),
-                        Name = "Personal",
-                        Start = new DateTimeOffset(new DateTime(2019, 2, 15)),
-                        HolidaysPerYear = 20,
-                        Monday = 3m,
-                        Tuesday = 3m,
-                        Wednesday = 3m,
-                        Thursday = 3m,
-                        Friday = 3m,
+                        Monday = 8.50m,
+                        Tuesday = 8.50m,
+                        Wednesday = 8.50m,
+                        Thursday = 8.50m,
+                        Friday = 8.50m,
                         Saturday = 0,
                         Sunday = 0,
                     }
                 }
             };
+            return profile;
+        }
 
-            await _mediator.Send(new CreateOrUpdateUserProfile(profile), cancellationToken);
+        private IEnumerable<TimeEntryModel> BuildTimeEntries()
+        {
+            var csv = File.ReadAllLines("Data/time-entries.csv");
 
-            await Task.CompletedTask;
+            foreach (var row in csv)
+            {
+                var cells = row.Split(",");
+                yield return new TimeEntryModel(
+                    DateTimeOffset.Parse(cells[0]),
+                    cells[1] == "IN" ? (int) TimeEntryType.In : (int) TimeEntryType.Out,
+                    _trimanJobId);
+            }
         }
 
         public async Task StopAsync(CancellationToken cancellationToken)

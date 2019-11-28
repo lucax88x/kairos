@@ -1,5 +1,3 @@
-# KAIROS
-
 # Environment variables
 
 In order to fully run the backend locally, you need to set environment variables (you may need to login again / reboot)

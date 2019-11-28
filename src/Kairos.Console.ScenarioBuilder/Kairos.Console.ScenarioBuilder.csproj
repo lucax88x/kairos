@@ -24,4 +24,10 @@
     <ProjectReference Include="..\Kairos.Application\Kairos.Application.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <None Update="Data\time-entries.csv">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+
 </Project>
