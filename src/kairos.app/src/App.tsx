@@ -1,4 +1,5 @@
 import { t, Trans } from '@lingui/macro';
+import introJs from 'intro.js';
 import {
   AppBar,
   Avatar,
@@ -31,7 +32,7 @@ import WeekendIcon from '@material-ui/icons/Weekend';
 import clsx from 'clsx';
 import { getYear } from 'date-fns';
 import { map } from 'ramda';
-import React, { ChangeEvent, useCallback, useState } from 'react';
+import React, { ChangeEvent, useCallback, useState, useEffect } from 'react';
 import { Link, Route } from 'react-router-dom';
 import { ReactComponent as EnglishFlag } from './assets/images/en.svg';
 import { ReactComponent as ItalianFlag } from './assets/images/it.svg';
@@ -362,6 +363,28 @@ export const AppComponent: React.FC<AppProps> = props => {
     },
     [classes],
   );
+
+  useEffect(() => {
+    var intro = introJs();
+    intro.setOptions({
+      steps: [
+        {
+          intro: i18n._(t`TopBar.OpenMenu`),
+        },
+        {
+          element: document.querySelector('#step1') as Element,
+          intro: 'To begin, let',
+        },
+        {
+          element: document.querySelector('#step1') as Element,
+          intro: "Ok, wasn't that fun?",
+          position: 'right',
+        },
+      ],
+    });
+
+    intro.start();
+  }, []);
 
   return (
     <>

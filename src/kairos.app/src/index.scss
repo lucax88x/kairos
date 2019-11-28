@@ -3,7 +3,9 @@
 @import './assets/fonts/montserrat/index.scss';
 
 @import './styles/react-big-calendar-variables.scss';
-@import 'react-big-calendar/lib/sass/styles.scss';
+@import '~react-big-calendar/lib/sass/styles.scss';
+@import '~intro.js/introjs.css';
+@import '~intro.js/themes/introjs-modern.css';
 
 body {
   background-color: #303030;
