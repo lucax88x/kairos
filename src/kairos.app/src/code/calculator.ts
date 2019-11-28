@@ -1,5 +1,7 @@
 import { i18n } from '@lingui/core';
+import { t } from '@lingui/macro';
 import {
+  differenceInMinutes,
   endOfDay,
   format,
   getUnixTime,
@@ -13,8 +15,15 @@ import {
   isWednesday,
   isWithinInterval,
   startOfDay,
+  eachDayOfInterval,
+  startOfYear,
+  endOfYear,
+  startOfWeek,
+  endOfWeek,
+  fromUnixTime,
 } from 'date-fns';
-import { ascend, filter, groupBy, sortWith, find } from 'ramda';
+import { Decimal } from 'decimal.js';
+import { ascend, filter, find, groupBy, map, sortWith, sum } from 'ramda';
 import { JobModel } from '../models/job.model';
 import { Language } from '../models/language-model';
 import { ProfileModel } from '../models/profile.model';
@@ -33,6 +42,10 @@ export interface TimeEntryPair {
   enter: Date;
   exit: Date;
 }
+
+const getHoursFromAbsences = map<TimeAbsenceEntryModel, number>(
+  t => differenceInMinutes(t.end, t.start) / 60,
+);
 
 export function getTimeEntryPairsByJob(
   timeEntries: TimeEntryListModel[],
@@ -180,18 +193,18 @@ function getNearestExit(
 
 export interface TimeStatisticTile {
   title: string;
+  titleValues: { [key: string]: string };
   subtitle?: string;
   text: string;
 }
 
 export function getWorkingHoursStatistics(
-  date: Date,
   language: Language,
   profile: ProfileModel,
   entries: TimeEntryListModel[],
   absences: TimeAbsenceEntryModel[],
   holidays: TimeHolidayEntryModel[],
-): TimeStatisticTile[] {
+) {
   //# { title: 'remaining today', subtitle: 'Monday, 16', text: '8h' },
   // { title: 'remaining this week', subtitle: '12 -> 19', text: '30' },
   // { title: 'remaining this month', subtitle: 'August', text: '30' },
@@ -212,66 +225,87 @@ export function getWorkingHoursStatistics(
   // { title: 'overtime previous year', subtitle: '2018', text: '30' },
   // { title: 'overtime all previous years', text: '30' },
 
-  const statistics: TimeStatisticTile[] = [];
+  const statistics: { [key: string]: TimeStatisticTile } = {};
 
+  const now = startOfDay(new Date());
   const maxDate = new Date(8640000000000000);
 
-  const jobsInDate = filter(
+  const start = startOfYear(now);
+  const end = endOfYear(now);
+
+  const differencesByDateByJob = getDifferencesByRangeByJobAndDate(entries, {
+    start,
+    end,
+  });
+
+  const jobsInRange = filter(
     job =>
-      isWithinInterval(date, {
+      isWithinInterval(start, {
         start: job.start,
         end: !!job.end ? job.end : maxDate,
       }),
     profile.jobs,
   );
 
-  const differencesByDateByJob = getDifferencesByRangeByJobAndDate(entries, {
-    start: startOfDay(date),
-    end: endOfDay(date),
-  });
+  for (const job of jobsInRange) {
+    const differencesByDate = differencesByDateByJob[job.id.toString()];
 
-  // const absenceInDate = filter(
-  //   absence =>
-  //     isWithinInterval(date, {
-  //       start: absence.start,
-  //       end: !!absence.end ? absence.end : maxDate,
-  //     }),
-  //   absences,
-  // );
+    // today
+    const todayJobHours = buildJobHoursForRange(
+      startOfDay(now),
+      endOfDay(now),
+      job,
+      differencesByDate,
+      absences,
+      holidays,
+    );
 
-  const holidayInDate = find(
-    holiday =>
-      isWithinInterval(date, {
-        start: startOfDay(holiday.when),
-        end: endOfDay(holiday.when),
-      }),
-    holidays,
-  );
+    statistics['RemainingToday'] = {
+      title: i18n._(t`TimeStatistics.RemainingToday`),
+      titleValues: { job: job.name },
+      subtitle: formatDate(now, language, 'MMMM dd'),
+      text: `${todayJobHours.remainingHours}h`,
+    };
 
-  for (const job of jobsInDate) {
-    let remainingHours = 0;
-    if (!!holidayInDate) {
-      remainingHours = 0;
-    } else {
-      const differencesByDate = differencesByDateByJob[job.id.toString()];
-      const difference = !!differencesByDate
-        ? differencesByDate[getUnixTime(date)]
-        : 0;
-      const workingHours = getDayWorkingHours(date, job);
+    statistics['OvertimeToday'] = {
+      title: i18n._(t`TimeStatistics.OvertimeToday`),
+      titleValues: { job: job.name },
+      subtitle: formatDate(start, language, 'MMMM dd'),
+      text: `${todayJobHours.overtimeHours}h`,
+    };
 
-      remainingHours = workingHours - (!!difference ? difference / 3600000 : 0);
-    }
 
-    statistics.push({
-      title: i18n._(
-        /*i18n*/ {
-          id: 'TimeStatistics.RemainingToday',
-          values: { job: job.name },
-        },
-      ),
-      subtitle: formatDate(date, language, 'MMMM dd'),
-      text: `${remainingHours}h`,
-    });
+    // week
+    const weekJobHours = buildJobHoursForRange(
+      startOfWeek(now),
+      endOfWeek(now),
+      job,
+      differencesByDate,
+      absences,
+      holidays,
+    );
+
+    statistics['RemainingWeek'] = {
+      title: i18n._(t`TimeStatistics.RemainingWeek`),
+      titleValues: { job: job.name },
+      subtitle: `${formatDate(
+        startOfWeek(now),
+        language,
+        'MMMM dd',
+      )} - ${formatDate(endOfWeek(now), language, 'MMMM dd')}`,
+      text: `${weekJobHours.remainingHours}h`,
+    };    
+    
+    statistics['OvertimeWeek'] = {
+      title: i18n._(t`TimeStatistics.OvertimeWeek`),
+      titleValues: { job: job.name },
+      subtitle: `${formatDate(
+        startOfWeek(now),
+        language,
+        'MMMM dd',
+      )} - ${formatDate(endOfWeek(now), language, 'MMMM dd')}`,
+      text: `${weekJobHours.overtimeHours}h`,
+    };
   }
 
   return statistics;
@@ -280,12 +314,12 @@ export function getWorkingHoursStatistics(
 export function getVacationStatistics(
   language: Language,
   absences: TimeAbsenceEntryModel[],
-): TimeStatisticTile[] {
+) {
   // { title: 'remaining this year', subtitle: '2019', text: '0' },
   // { title: 'done this year', subtitle: '2019', text: '30' },
   // { title: 'remaining previous years', text: '30' },
 
-  const statistics: TimeStatisticTile[] = [];
+  const statistics: { [key: string]: TimeStatisticTile } = {};
 
   return statistics;
 }
@@ -293,10 +327,10 @@ export function getVacationStatistics(
 export function getIllnessStatistics(
   language: Language,
   absences: TimeAbsenceEntryModel[],
-): TimeStatisticTile[] {
+) {
   // { title: 'done this year', subtitle: '2019', text: '5d' }
 
-  const statistics: TimeStatisticTile[] = [];
+  const statistics: { [key: string]: TimeStatisticTile } = {};
 
   return statistics;
 }
@@ -324,4 +358,75 @@ function getDayWorkingHours(day: Date, job: JobModel): number {
     return job.sunday;
   }
   return 0;
+}
+
+function roundHours(hours: number) {
+  return new Decimal(hours)
+    .mul(100)
+    .ceil()
+    .div(100);
+}
+
+function buildJobHoursForRange(
+  start: Date,
+  end: Date,
+  job: JobModel,
+  differencesByDate: { [date: number]: number },
+  absences: TimeAbsenceEntryModel[],
+  holidays: TimeHolidayEntryModel[],
+) {
+  const results: {
+    workedHours: Decimal;
+    remainingHours: Decimal;
+    overtimeHours: Decimal;
+  } = {
+    workedHours: new Decimal(0),
+    remainingHours: new Decimal(0),
+    overtimeHours: new Decimal(0),
+  };
+
+  const days = eachDayOfInterval({ start, end });
+
+  for (const day of days) {
+    const absencesInDate = filter(
+      absence =>
+        isWithinInterval(day, {
+          start: startOfDay(absence.start),
+          end: endOfDay(absence.end),
+        }),
+      absences,
+    );
+
+    const holidayInDate = find(
+      holiday =>
+        isWithinInterval(day, {
+          start: startOfDay(holiday.when),
+          end: endOfDay(holiday.when),
+        }),
+      holidays,
+    );
+
+    let remainingHours = new Decimal(0);
+    let workedHours = new Decimal(0);
+    let overtimeHours = new Decimal(0);
+    if (!holidayInDate) {
+      const absenceHours = sum(getHoursFromAbsences(absencesInDate));
+      const difference = !!differencesByDate
+        ? differencesByDate[getUnixTime(day)]
+        : 0;
+      const workingHours = new Decimal(getDayWorkingHours(day, job));
+      workedHours = new Decimal(
+        !!difference ? roundHours(difference / 3600000) : 0,
+      );
+
+      remainingHours = workingHours.minus(workedHours.plus(absenceHours));
+      overtimeHours = remainingHours.lessThan(0)
+        ? remainingHours.abs()
+        : new Decimal(0);
+    }
+    results.workedHours = results.workedHours.add(workedHours);
+    results.remainingHours = results.remainingHours.add(remainingHours);
+    results.overtimeHours = results.overtimeHours.add(overtimeHours);
+  }
+  return results;
 }
