@@ -19,7 +19,9 @@ export const createTimeEntryAsync = createAsyncAction(
   CREATE_TIME_ENTRY_FAILURE,
 )<TimeEntryModel, void, string>();
 
-function* doCreateTimeEntry({ payload }: ReturnType<typeof createTimeEntryAsync.request>) {
+function* doCreateTimeEntry({
+  payload,
+}: ReturnType<typeof createTimeEntryAsync.request>) {
   try {
     yield call(createTimeEntry, payload);
 
@@ -29,16 +31,14 @@ function* doCreateTimeEntry({ payload }: ReturnType<typeof createTimeEntryAsync.
   }
 }
 
-function* doCloseDrawer() {
-  yield put(closeTimeEntryDrawerAction());
-}
-
 export function* createTimeEntrySaga() {
   yield takeLatest(CREATE_TIME_ENTRY, doCreateTimeEntry);
-  yield takeLatest(CREATE_TIME_ENTRY_SUCCESS, doCloseDrawer);
 }
 
-export const createTimeEntryReducer = (state: SharedState, action: SharedActions): SharedState =>
+export const createTimeEntryReducer = (
+  state: SharedState,
+  action: SharedActions,
+): SharedState =>
   produce(state, draft => {
     switch (action.type) {
       case CREATE_TIME_ENTRY:

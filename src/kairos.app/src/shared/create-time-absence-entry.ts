@@ -19,7 +19,9 @@ export const createTimeAbsenceEntryAsync = createAsyncAction(
   CREATE_TIME_ABSENCE_ENTRY_FAILURE,
 )<TimeAbsenceEntryModel, void, string>();
 
-function* doCreateTimeAbsenceEntry({ payload }: ReturnType<typeof createTimeAbsenceEntryAsync.request>) {
+function* doCreateTimeAbsenceEntry({
+  payload,
+}: ReturnType<typeof createTimeAbsenceEntryAsync.request>) {
   try {
     yield call(createTimeAbsenceEntry, payload);
 
@@ -29,16 +31,14 @@ function* doCreateTimeAbsenceEntry({ payload }: ReturnType<typeof createTimeAbse
   }
 }
 
-function* doCloseDrawer() {
-  yield put(closeTimeAbsenceEntryDrawerAction());
-}
-
 export function* createTimeAbsenceEntrySaga() {
   yield takeLatest(CREATE_TIME_ABSENCE_ENTRY, doCreateTimeAbsenceEntry);
-  yield takeLatest(CREATE_TIME_ABSENCE_ENTRY_SUCCESS, doCloseDrawer);
 }
 
-export const createTimeAbsenceEntryReducer = (state: SharedState, action: SharedActions): SharedState =>
+export const createTimeAbsenceEntryReducer = (
+  state: SharedState,
+  action: SharedActions,
+): SharedState =>
   produce(state, draft => {
     switch (action.type) {
       case CREATE_TIME_ABSENCE_ENTRY:
