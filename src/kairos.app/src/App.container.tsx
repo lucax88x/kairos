@@ -8,7 +8,7 @@ import { selectUser } from './auth/selectors';
 import { closeLeftDrawerAction, closeTimeAbsenceEntryDrawerAction, closeTimeEntryDrawerAction, openLeftDrawerAction, openTimeAbsenceEntryDrawerAction, openTimeEntryDrawerAction, openRightDrawerAction, closeRightDrawerAction } from './layout/actions';
 import { selectIsLeftDrawerOpen, selectIsTimeAbsenceEntryDrawerOpen, selectIsTimeEntryDrawerOpen, selectIsRightDrawerOpen } from './layout/selectors';
 import { Language } from './models/language-model';
-import { Routes } from './routes';
+import { RouteMatcher } from './routes';
 import { selectYear } from './shared/actions';
 import { selectLanguage } from './shared/select-language';
 import { selectSelectedLanguage, selectSelectedYear } from './shared/selectors';
@@ -36,7 +36,7 @@ const mapDispatchToProps = (dispatch: Dispatch<Actions>): AppDispatches => ({
   openTimeAbsenceEntryDrawer: () => dispatch(openTimeAbsenceEntryDrawerAction()),
   closeTimeAbsenceEntryDrawer: () => dispatch(closeTimeAbsenceEntryDrawerAction()),
   onLogout: () => dispatch(logout()),
-  onNavigateToProfile: () => dispatch(push(Routes.Profile)),
+  onNavigateToProfile: () => dispatch(push(RouteMatcher.Profile)),
 });
 
 export const App = connect(

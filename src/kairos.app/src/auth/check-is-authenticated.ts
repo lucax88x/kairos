@@ -5,15 +5,21 @@ import { action } from 'typesafe-actions';
 import { AuthActions } from '../actions';
 import { UserModel } from '../models/user.model';
 import { getProfileAsync } from '../profile/actions';
-import { Routes } from '../routes';
+import { RouteMatcher, buildPrivateRouteWithYear } from '../routes';
 import { authService } from './auth.service';
-import { CHECK_IS_AUTHENTICATED, IS_ANONYMOUS, IS_AUTHENTICATED } from './constants';
+import {
+  CHECK_IS_AUTHENTICATED,
+  IS_ANONYMOUS,
+  IS_AUTHENTICATED,
+} from './constants';
 import { AuthState } from './state';
 import { selectLoginRoute } from '../shared/router.selectors';
 import { Route } from '../models/route.model';
+import { selectSelectedYear } from '../shared/selectors';
 
 export const checkIsAuthenticated = () => action(CHECK_IS_AUTHENTICATED);
-export const isAuthenticated = (user: UserModel) => action(IS_AUTHENTICATED, user);
+export const isAuthenticated = (user: UserModel) =>
+  action(IS_AUTHENTICATED, user);
 export const isAnonymous = () => action(IS_ANONYMOUS);
 
 function* initAuth0() {
@@ -27,7 +33,7 @@ function* initAuth0() {
 }
 
 function* redirectIfAnonymous() {
-  yield put(push(Routes.Login));
+  yield put(push(RouteMatcher.Login));
 }
 
 function* doWhenAuthenticated() {
@@ -36,7 +42,8 @@ function* doWhenAuthenticated() {
   const loginRoute: Route = yield select(selectLoginRoute);
 
   if (!!loginRoute) {
-    yield put(push(Routes.Dashboard));
+    const selectedYear = yield select(selectSelectedYear);
+    yield put(push(buildPrivateRouteWithYear(RouteMatcher.Dashboard, selectedYear)));
   }
 }
 
@@ -47,7 +54,10 @@ export function* checkIsAuthenticatedSaga() {
   yield put(checkIsAuthenticated());
 }
 
-export const checkIsAuthenticatedReducer = (state: AuthState, action: AuthActions): AuthState =>
+export const checkIsAuthenticatedReducer = (
+  state: AuthState,
+  action: AuthActions,
+): AuthState =>
   produce(state, draft => {
     switch (action.type) {
       case CHECK_IS_AUTHENTICATED:

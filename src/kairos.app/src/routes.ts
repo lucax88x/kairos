@@ -1,15 +1,25 @@
-export class Routes {
+export class RouteMatcher {
   static Login = '/login';
   static Private = '/private';
-  static Profile = '/private/profile';
-  static Dashboard = '/private/dashboard';
-  static Navigator = '/private/navigator/:date';
-  static TimeEntries = '/private/time-entries';
-  static TimeAbsenceEntries = '/private/time-absence-entries';
-  static TimeHolidayEntries = '/private/time-holiday-entries';
-  static EditTimeEntry = '/private/entry/:id';
-  static EditTimeAbsenceEntry = '/private/absence/:id';
-  static EditTimeHolidayEntry = '/private/holiday/:id';
-  static BulkInsert = '/private/bulk-insert';
-  static Export = '/private/export';
+  static PrivateWithYear = '/private/:year';
+
+  static Profile = buildRouteMatcher(RouteMatcher.Private, '/profile');
+  static Dashboard = buildRouteMatcher(RouteMatcher.PrivateWithYear, '/dashboard');
+  static Navigator = buildRouteMatcher(RouteMatcher.PrivateWithYear, '/navigator/:date');
+  static TimeEntries = buildRouteMatcher(RouteMatcher.PrivateWithYear, '/time-entries');
+  static TimeAbsenceEntries = buildRouteMatcher(RouteMatcher.PrivateWithYear, '/time-absence-entries');
+  static TimeHolidayEntries = buildRouteMatcher(RouteMatcher.PrivateWithYear, '/time-holiday-entries');
+  static EditTimeEntry = buildRouteMatcher(RouteMatcher.Private, '/entry/:id');
+  static EditTimeAbsenceEntry = buildRouteMatcher(RouteMatcher.Private, '/absence/:id');
+  static EditTimeHolidayEntry = buildRouteMatcher(RouteMatcher.Private, '/holiday/:id');
+  static BulkInsert = buildRouteMatcher(RouteMatcher.Private, '/bulk-insert');
+  static Export = buildRouteMatcher(RouteMatcher.Private, '/export');
+}
+
+function buildRouteMatcher(prefix: string, route: string) {
+  return `${prefix}${route}`;
+}
+
+export function buildPrivateRouteWithYear(route: string, year: number) {
+  return route.replace(':year', year.toString());
 }

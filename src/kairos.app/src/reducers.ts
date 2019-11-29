@@ -22,7 +22,7 @@ const basePersistConfig = {
 const sharedPersistConfig = {
   ...basePersistConfig,
   key: 'shared',
-  whitelist: ['selectedLanguage', 'selectedYear'],
+  whitelist: ['selectedLanguage'],
 };
 
 // tslint:disable-next-line: no-any

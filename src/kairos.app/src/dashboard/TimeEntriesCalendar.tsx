@@ -16,7 +16,7 @@ import {
 } from '../models/time-absence-entry.model';
 import { TimeEntryListModel } from '../models/time-entry-list.model';
 import { TimeHolidayEntryModel } from '../models/time-holiday-entry.model';
-import { Routes } from '../routes';
+import { RouteMatcher } from '../routes';
 import { t } from '@lingui/macro';
 
 const localizer = momentLocalizer(moment);
@@ -177,13 +177,13 @@ export const TimeEntriesCalendarComponent: React.FC<TimeEntriesCalendarEntryProp
       const { type, id } = event.resource;
       switch (type as EventType) {
         case EventType.Work:
-          onNavigate(Routes.EditTimeEntry.replace(':id', id.toString()));
+          onNavigate(RouteMatcher.EditTimeEntry.replace(':id', id.toString()));
           break;
         case EventType.Absence:
-          onNavigate(Routes.EditTimeAbsenceEntry.replace(':id', id.toString()));
+          onNavigate(RouteMatcher.EditTimeAbsenceEntry.replace(':id', id.toString()));
           break;
         case EventType.Holiday:
-          onNavigate(Routes.EditTimeHolidayEntry.replace(':id', id.toString()));
+          onNavigate(RouteMatcher.EditTimeHolidayEntry.replace(':id', id.toString()));
           break;
         default:
           break;
