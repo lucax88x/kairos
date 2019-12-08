@@ -10,6 +10,7 @@ import { LayoutState } from '../layout/state';
 import { NotificationManagerState } from '../notification-manager/state';
 import { ProfileState } from '../profile/state';
 import { SharedState } from '../shared/state';
+import { NavigatorState } from '../navigator/state';
 
 export interface State {
   router: RouterState;
@@ -18,6 +19,7 @@ export interface State {
   auth: AuthState;
   profile: ProfileState;
   notificationManager: NotificationManagerState;
+  navigator: NavigatorState;
   editTimeEntry: EditTimeEntryState;
   editTimeAbsenceEntry: EditTimeAbsenceEntryState;
   editTimeHolidayEntry: EditTimeHolidayEntryState;
@@ -32,6 +34,7 @@ export type States =
   | AuthState
   | ProfileState
   | NotificationManagerState
+  | NavigatorState
   | EditTimeEntryState
   | EditTimeAbsenceEntryState
   | BulkInsertState

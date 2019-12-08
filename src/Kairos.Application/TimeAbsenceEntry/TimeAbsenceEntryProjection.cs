@@ -55,22 +55,16 @@ namespace Kairos.Application.TimeAbsenceEntry
         public async Task<ImmutableList<TimeAbsenceEntryReadDto>> Handle(GetTimeAbsenceEntries request,
             CancellationToken cancellationToken)
         {
-            return await _timeAbsenceEntryReadRepository.Get(_authProvider.GetUser(), request.Year);
+            return await _timeAbsenceEntryReadRepository.Get(_authProvider.GetUser(), request.Start, request.End);
         }
 
         public async Task<ReportModel> Handle(GetTimeAbsenceEntriesReport request, CancellationToken cancellationToken)
         {
             var sb = new StringBuilder();
-            var fromYear = request.From.Year;
-            var toYear = request.To.Year;
+            var absences = await _timeAbsenceEntryReadRepository.Get(_authProvider.GetUser(), request.From, request.To);
 
-            for (var year = fromYear; year <= toYear; year++)
-            {
-                var absences = await _timeAbsenceEntryReadRepository.Get(_authProvider.GetUser(), year);
-
-                foreach (var absence in absences.Where(e => e.Start >= request.From && e.End <= request.To))
-                    sb.AppendLine($"{absence.Start},{absence.End},{absence.Type}{absence.Description}");
-            }
+            foreach (var absence in absences)
+                sb.AppendLine($"{absence.Start},{absence.End},{absence.Type}{absence.Description}");
 
             var stream = new MemoryStream(Encoding.UTF8.GetBytes(sb.ToString()));
 

@@ -1,9 +1,7 @@
 import produce from 'immer';
 import { call, put, takeLatest } from 'redux-saga/effects';
 import { createAsyncAction } from 'typesafe-actions';
-
 import { SharedActions } from '../actions';
-import { closeTimeEntryDrawerAction } from '../layout/actions';
 import { TimeEntryModel } from '../models/time-entry.model';
 import { createTimeEntry } from '../services/time-entry/time-entry.service';
 import {
@@ -12,6 +10,7 @@ import {
   CREATE_TIME_ENTRY_SUCCESS,
 } from './constants';
 import { SharedState } from './state';
+import { closeTimeEntryDrawerAction } from '../layout/actions';
 
 export const createTimeEntryAsync = createAsyncAction(
   CREATE_TIME_ENTRY,
@@ -31,8 +30,13 @@ function* doCreateTimeEntry({
   }
 }
 
+function* doCloseDrawer() {
+  yield put(closeTimeEntryDrawerAction());
+}
+
 export function* createTimeEntrySaga() {
   yield takeLatest(CREATE_TIME_ENTRY, doCreateTimeEntry);
+  yield takeLatest(CREATE_TIME_ENTRY_SUCCESS, doCloseDrawer);
 }
 
 export const createTimeEntryReducer = (

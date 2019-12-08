@@ -38,7 +38,7 @@ import { UserModel } from './models/user.model';
 import { Navigator } from './navigator/Navigator.container';
 import { NotFound } from './NotFound';
 import { Profile } from './profile/Profile.container';
-import { buildPrivateRouteWithYear, RouteMatcher } from './routes';
+import { buildPrivateRouteWithYear, RouteMatcher, buildNavigatorRoute } from './routes';
 import { ConfirmationModal } from './shared/ConfirmationModal.container';
 import { TimeAbsenceEntries } from './time-absence-entries/TimeAbsenceEntries.container';
 import { TimeEntries } from './time-entries/TimeEntries.container';
@@ -448,7 +448,7 @@ export const AppComponent: React.FC<AppProps> = props => {
               </ListItemIcon>
               <ListItemText primary={<Trans>Dashboard</Trans>} />
             </ListItem>
-            <ListItem button to={buildPrivateRouteWithYear(RouteMatcher.Navigator, selectedYear)} component={Link}>
+            <ListItem button to={buildNavigatorRoute(selectedYear)} component={Link}>
               <ListItemIcon>
                 <SyncAltIcon />
               </ListItemIcon>
@@ -498,6 +498,7 @@ export const AppComponent: React.FC<AppProps> = props => {
           >
             <Switch>
               <Route path={RouteMatcher.Dashboard} component={Dashboard} />
+              <Route path={RouteMatcher.NavigatorCustom} component={Navigator} />
               <Route path={RouteMatcher.Navigator} component={Navigator} />
               <Route path={RouteMatcher.Profile} component={Profile} />
               <Route path={RouteMatcher.TimeEntries} component={TimeEntries} />

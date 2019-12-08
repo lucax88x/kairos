@@ -1,19 +1,9 @@
-import { Grid, makeStyles, Paper } from '@material-ui/core';
 import React from 'react';
 import Spinner from '../components/Spinner';
 import { Language } from '../models/language-model';
 import { ProfileModel } from '../models/profile.model';
 import { TimeEntryModel } from '../models/time-entry.model';
 import { TimeEntryForm } from '../shared/TimeEntryForm';
-
-const useStyles = makeStyles(theme => ({
-  paper: {
-    padding: theme.spacing(2),
-    display: 'grid',
-    overflow: 'auto',
-    gridAutoFlow: 'row',
-  },
-}));
 
 export interface EditTimeEntryInputs {
   isOnline: boolean;
@@ -31,8 +21,6 @@ export interface EditTimeEntryDispatches {
 type EditTimeEntryProps = EditTimeEntryInputs & EditTimeEntryDispatches;
 
 export const EditTimeEntryComponent: React.FC<EditTimeEntryProps> = props => {
-  const classes = useStyles(props);
-
   const {
     isOnline,
     selectedLanguage,
@@ -44,21 +32,15 @@ export const EditTimeEntryComponent: React.FC<EditTimeEntryProps> = props => {
   } = props;
 
   return (
-    <Grid container spacing={3}>
-      <Grid item xs>
-        <Paper className={classes.paper}>
-          <Spinner show={isGetBusy}>
-            <TimeEntryForm
-              isOnline={isOnline}
-              selectedLanguage={selectedLanguage}
-              profile={profile}
-              isBusy={isUpdateBusy}
-              model={timeEntry}
-              onSave={onUpdate}
-            />
-          </Spinner>
-        </Paper>
-      </Grid>
-    </Grid>
+    <Spinner show={isGetBusy}>
+      <TimeEntryForm
+        isOnline={isOnline}
+        selectedLanguage={selectedLanguage}
+        profile={profile}
+        isBusy={isUpdateBusy}
+        model={timeEntry}
+        onSave={onUpdate}
+      />
+    </Spinner>
   );
 };

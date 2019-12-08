@@ -1,9 +1,7 @@
 import produce from 'immer';
 import { call, put, takeLatest } from 'redux-saga/effects';
 import { createAsyncAction } from 'typesafe-actions';
-
 import { SharedActions } from '../actions';
-import { closeTimeAbsenceEntryDrawerAction } from '../layout/actions';
 import { TimeAbsenceEntryModel } from '../models/time-absence-entry.model';
 import { createTimeAbsenceEntry } from '../services/time-absence-entry/time-absence-entry.service';
 import {
@@ -12,6 +10,7 @@ import {
   CREATE_TIME_ABSENCE_ENTRY_SUCCESS,
 } from './constants';
 import { SharedState } from './state';
+import { closeTimeAbsenceEntryDrawerAction } from '../layout/actions';
 
 export const createTimeAbsenceEntryAsync = createAsyncAction(
   CREATE_TIME_ABSENCE_ENTRY,
@@ -31,8 +30,13 @@ function* doCreateTimeAbsenceEntry({
   }
 }
 
+function* doCloseDrawer() {
+  yield put(closeTimeAbsenceEntryDrawerAction());
+}
+
 export function* createTimeAbsenceEntrySaga() {
   yield takeLatest(CREATE_TIME_ABSENCE_ENTRY, doCreateTimeAbsenceEntry);
+  yield takeLatest(CREATE_TIME_ABSENCE_ENTRY_SUCCESS, doCloseDrawer);
 }
 
 export const createTimeAbsenceEntryReducer = (
