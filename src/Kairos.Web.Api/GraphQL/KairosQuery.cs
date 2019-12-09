@@ -1,6 +1,5 @@
 using System;
 using GraphQL.Types;
-using Kairos.Application;
 using Kairos.Application.Country.Queries;
 using Kairos.Application.TimeAbsenceEntry.Queries;
 using Kairos.Application.TimeEntry.Queries;
@@ -54,13 +53,15 @@ namespace Kairos.Web.Api.GraphQL
                 "timeEntries",
                 "The time entries of user",
                 arguments: new QueryArguments(
-                    new QueryArgument<IntGraphType> {Name = "year"}
+                    new QueryArgument<DateTimeOffsetGraphType> {Name = "start"},
+                    new QueryArgument<DateTimeOffsetGraphType> {Name = "end"}
                 ),
                 resolve: async context =>
                 {
-                    var year = context.GetArgument<int>("year");
+                    var start = context.GetArgument<DateTimeOffset>("start");
+                    var end = context.GetArgument<DateTimeOffset>("end");
 
-                    return await _mediator.Send(new GetTimeEntries(year));
+                    return await _mediator.Send(new GetTimeEntries(start, end));
                 });
         }
 
@@ -79,13 +80,15 @@ namespace Kairos.Web.Api.GraphQL
                 "timeAbsenceEntries",
                 "The time absence entries of user",
                 arguments: new QueryArguments(
-                    new QueryArgument<IntGraphType> {Name = "year"}
+                    new QueryArgument<DateTimeOffsetGraphType> {Name = "start"},
+                    new QueryArgument<DateTimeOffsetGraphType> {Name = "end"}
                 ),
                 resolve: async context =>
                 {
-                    var year = context.GetArgument<int>("year");
+                    var start = context.GetArgument<DateTimeOffset>("start");
+                    var end = context.GetArgument<DateTimeOffset>("end");
 
-                    return await _mediator.Send(new GetTimeAbsenceEntries(year));
+                    return await _mediator.Send(new GetTimeAbsenceEntries(start, end));
                 });
         }
 
@@ -104,13 +107,15 @@ namespace Kairos.Web.Api.GraphQL
                 "timeHolidayEntries",
                 "The time holiday entries of user",
                 arguments: new QueryArguments(
-                    new QueryArgument<IntGraphType> {Name = "year"}
+                    new QueryArgument<DateTimeOffsetGraphType> {Name = "start"},
+                    new QueryArgument<DateTimeOffsetGraphType> {Name = "end"}
                 ),
                 resolve: async context =>
                 {
-                    var year = context.GetArgument<int>("year");
+                    var start = context.GetArgument<DateTimeOffset>("start");
+                    var end = context.GetArgument<DateTimeOffset>("end");
 
-                    return await _mediator.Send(new GetTimeHolidayEntries(year));
+                    return await _mediator.Send(new GetTimeHolidayEntries(start, end));
                 });
         }
 

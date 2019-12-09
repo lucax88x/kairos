@@ -29,7 +29,7 @@ function* doBulkTimeAbsenceEntries({
 }
 
 function* doNotifySuccess() {
-  yield put(enqueueSnackbarAction(i18n._(t`Messages.BulkAbsencesSaved`), { variant: 'success' }));
+  yield put(enqueueSnackbarAction(i18n._(t`Saved Absences`), { variant: 'success' }));
 }
 
 export function* bulkInsertTimeAbsenceEntriesSaga() {

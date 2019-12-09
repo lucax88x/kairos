@@ -53,22 +53,17 @@ namespace Kairos.Application.TimeEntry
         public async Task<ImmutableList<TimeEntryAggregationReadDto>> Handle(GetTimeEntries request,
             CancellationToken cancellationToken)
         {
-            return await _timeEntryReadRepository.Get(_authProvider.GetUser(), request.Year);
+            return await _timeEntryReadRepository.Get(_authProvider.GetUser(), request.Start, request.End);
         }
 
         public async Task<ReportModel> Handle(GetTimeEntriesReport request, CancellationToken cancellationToken)
         {
             var sb = new StringBuilder();
-            var fromYear = request.From.Year;
-            var toYear = request.To.Year;
 
-            for (var year = fromYear; year <= toYear; year++)
-            {
-                var entries = await _timeEntryReadRepository.Get(_authProvider.GetUser(), year);
+            var entries = await _timeEntryReadRepository.Get(_authProvider.GetUser(), request.From, request.To);
 
-                foreach (var entry in entries.Where(e => e.When >= request.From && e.When <= request.To))
-                    sb.AppendLine($"{entry.When},{entry.Type},{entry.Job.Name}");
-            }
+            foreach (var entry in entries)
+                sb.AppendLine($"{entry.When},{entry.Type},{entry.Job.Name}");
 
             var stream = new MemoryStream(Encoding.UTF8.GetBytes(sb.ToString()));
 

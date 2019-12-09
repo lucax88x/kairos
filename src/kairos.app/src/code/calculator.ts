@@ -1,27 +1,6 @@
 import { i18n } from '@lingui/core';
 import { t } from '@lingui/macro';
-import {
-  differenceInMinutes,
-  endOfDay,
-  format,
-  getUnixTime,
-  isFriday,
-  isMonday,
-  isSameDay,
-  isSaturday,
-  isSunday,
-  isThursday,
-  isTuesday,
-  isWednesday,
-  isWithinInterval,
-  startOfDay,
-  eachDayOfInterval,
-  startOfYear,
-  endOfYear,
-  startOfWeek,
-  endOfWeek,
-  fromUnixTime,
-} from 'date-fns';
+import { differenceInMinutes, eachDayOfInterval, endOfDay, endOfWeek, endOfYear, format, getUnixTime, isFriday, isMonday, isSameDay, isSaturday, isSunday, isThursday, isTuesday, isWednesday, isWithinInterval, startOfDay, startOfWeek, startOfYear } from 'date-fns';
 import { Decimal } from 'decimal.js';
 import { ascend, filter, find, groupBy, map, sortWith, sum } from 'ramda';
 import { JobModel } from '../models/job.model';
@@ -34,7 +13,7 @@ import { TimeHolidayEntryModel } from '../models/time-holiday-entry.model';
 import { UUID } from '../models/uuid.model';
 import { formatAsDate } from './constants';
 import { formatDate } from './formatters';
-import { filterByInterval, humanDifference } from './functions';
+import { filterByInterval, humanDifference, getHumanHours } from './functions';
 
 export interface TimeEntryPair {
   enterId: UUID;
@@ -258,22 +237,21 @@ export function getWorkingHoursStatistics(
       differencesByDate,
       absences,
       holidays,
-    );
+    );``
 
     statistics['RemainingToday'] = {
-      title: i18n._(t`TimeStatistics.RemainingToday`),
+      title: i18n._(t`Remaining Today: ${job.name}`),
       titleValues: { job: job.name },
       subtitle: formatDate(now, language, 'MMMM dd'),
-      text: `${todayJobHours.remainingHours}h`,
+      text: getHumanHours(todayJobHours.remainingHours.toNumber()),
     };
 
     statistics['OvertimeToday'] = {
-      title: i18n._(t`TimeStatistics.OvertimeToday`),
+      title: i18n._(t`Overtime Today: ${job.name}`),
       titleValues: { job: job.name },
       subtitle: formatDate(start, language, 'MMMM dd'),
-      text: `${todayJobHours.overtimeHours}h`,
+      text: getHumanHours(todayJobHours.overtimeHours.toNumber()),
     };
-
 
     // week
     const weekJobHours = buildJobHoursForRange(
@@ -286,25 +264,25 @@ export function getWorkingHoursStatistics(
     );
 
     statistics['RemainingWeek'] = {
-      title: i18n._(t`TimeStatistics.RemainingWeek`),
+      title: i18n._(t`Remaining Week: ${job.name}`),
       titleValues: { job: job.name },
       subtitle: `${formatDate(
         startOfWeek(now),
         language,
         'MMMM dd',
       )} - ${formatDate(endOfWeek(now), language, 'MMMM dd')}`,
-      text: `${weekJobHours.remainingHours}h`,
-    };    
-    
+      text: getHumanHours(weekJobHours.remainingHours.toNumber()),
+    };
+
     statistics['OvertimeWeek'] = {
-      title: i18n._(t`TimeStatistics.OvertimeWeek`),
+      title: i18n._(t`Overtime Week: ${job.name}`),
       titleValues: { job: job.name },
       subtitle: `${formatDate(
         startOfWeek(now),
         language,
         'MMMM dd',
       )} - ${formatDate(endOfWeek(now), language, 'MMMM dd')}`,
-      text: `${weekJobHours.overtimeHours}h`,
+      text: getHumanHours(weekJobHours.overtimeHours.toNumber()),
     };
   }
 

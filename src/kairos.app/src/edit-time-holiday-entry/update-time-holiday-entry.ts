@@ -30,7 +30,7 @@ function* doUpdateTimeHolidayEntry({
 }
 
 function* doNotifySuccess() {
-  yield put(enqueueSnackbarAction(i18n._(t`Messages.HolidayUpdated`), { variant: 'success' }));
+  yield put(enqueueSnackbarAction(i18n._(t`Holiday Updated`), { variant: 'success' }));
 }
 
 export function* updateTimeHolidayEntrySaga() {

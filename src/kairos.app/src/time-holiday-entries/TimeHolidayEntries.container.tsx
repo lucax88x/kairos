@@ -21,6 +21,7 @@ import {
   TimeHolidayEntriesDispatches,
   TimeHolidayEntriesInputs,
 } from './TimeHolidayEntries';
+import { RouteMatcher } from '../routes';
 
 const mapStateToProps = (state: State): TimeHolidayEntriesInputs => ({
   timeHolidayEntries: selectTimeHolidayEntries(state),
@@ -33,7 +34,7 @@ const mapStateToProps = (state: State): TimeHolidayEntriesInputs => ({
 
 const mapDispatchToProps = (dispatch: Dispatch<Actions>): TimeHolidayEntriesDispatches => ({
   onCreate: () => dispatch(openTimeHolidayEntryModalAction()),
-  onUpdate: (model: TimeHolidayEntryModel) => dispatch(push(`/holiday/${model.id}`)),
+  onUpdate: (model: TimeHolidayEntryModel) => dispatch(push(RouteMatcher.EditTimeHolidayEntry.replace(':id', model.id.toString()))),
   onDelete: (ids: UUID[]) => dispatch(tryDeleteTimeHolidayEntriesAction(ids)),
   onUpdateHolidays: (countryCode: string) =>
     dispatch(updateTimeHolidayEntriesByCountryAsync.request({ countryCode })),

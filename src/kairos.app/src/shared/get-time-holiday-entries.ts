@@ -21,6 +21,8 @@ import {
 } from './constants';
 import { selectIsOnline, selectSelectedYear } from './selectors';
 import { SharedState } from './state';
+import { getRangeFromYear } from '../code/get-range-from-year';
+import { LOCATION_CHANGE } from 'connected-react-router';
 
 export const getTimeHolidayEntriesAsync = createAsyncAction(
   GET_TIME_HOLIDAY_ENTRIES,
@@ -39,6 +41,17 @@ function* doGetTimeHolidayEntriesOnOtherActions() {
   }
 }
 
+function* doGetTimeHolidayEntriesOnLocationChange() {
+  const timeHolidayEntriesRoute: Route = yield select(
+    selectTimeHolidayEntriesRoute,
+  );
+
+  // don't put dashboard, it already has REFRESH
+  if (!!timeHolidayEntriesRoute) {
+    yield put(getTimeHolidayEntriesAsync.request());
+  }
+}
+
 function* doGetTimeHolidayEntries() {
   const isOnline = yield select(selectIsOnline);
   if (!isOnline) {
@@ -48,7 +61,8 @@ function* doGetTimeHolidayEntries() {
 
   try {
     const year = yield select(selectSelectedYear);
-    const timeHolidayEntries = yield call(getTimeHolidayEntries, year);
+    const [start, end] = getRangeFromYear(year);
+    const timeHolidayEntries = yield call(getTimeHolidayEntries, start, end);
 
     yield put(getTimeHolidayEntriesAsync.success(timeHolidayEntries));
   } catch (error) {
@@ -65,6 +79,7 @@ export function* getTimeHolidayEntriesSaga() {
     ],
     doGetTimeHolidayEntriesOnOtherActions,
   );
+  yield takeLatest([LOCATION_CHANGE], doGetTimeHolidayEntriesOnLocationChange);
   yield takeLatest(GET_TIME_HOLIDAY_ENTRIES, doGetTimeHolidayEntries);
 }
 

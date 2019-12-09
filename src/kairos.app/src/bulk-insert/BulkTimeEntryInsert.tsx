@@ -89,17 +89,17 @@ export const BulkTimeEntryInsertComponent: React.FC<BulkTimeEntryInsertProps> = 
           } else {
             invalidModels.push({
               id: UUID.Generate(),
-              when: isWhenValid ? when : i18n._(t`Validation.InvalidDate`),
-              type: isTypeValid ? (type as TimeEntryTypes) : i18n._(t`Validation.InvalidType`),
-              job: isJobValid ? job.id : i18n._(t`Validation.InvalidJob`),
+              when: isWhenValid ? when : i18n._(t`Invalid Date`),
+              type: isTypeValid ? (type as TimeEntryTypes) : i18n._(t`Invalid Type`),
+              job: isJobValid ? job.id : i18n._(t`Invalid Job`),
             });
           }
         } else {
           invalidModels.push({
             id: UUID.Generate(),
-            when: i18n._(t`Validation.InvalidDate`),
-            type: i18n._(t`Validation.InvalidType`),
-            job: i18n._(t`Validation.InvalidJob`),
+            when: i18n._(t`Invalid Date`),
+            type: i18n._(t`Invalid Type`),
+            job: i18n._(t`Invalid Job`),
           });
         }
       }
@@ -127,7 +127,7 @@ export const BulkTimeEntryInsertComponent: React.FC<BulkTimeEntryInsertProps> = 
     <Grid container spacing={2} direction="column" justify="center">
       <Grid item>
         <Typography component="h1" variant="h6" noWrap>
-          <Trans>BulkTimeEntryInsert.Title</Trans>
+          <Trans>Entries</Trans>
         </Typography>
       </Grid>
       <Grid item>
@@ -151,7 +151,7 @@ export const BulkTimeEntryInsertComponent: React.FC<BulkTimeEntryInsertProps> = 
         <>
           <Grid item>
             <VirtualizedTable
-              title={i18n._(t`TimeHolidayEntries.Title`)}
+              title={i18n._(t`Holidays`)}
               height="250px"
               rowCount={validModels.length}
               rowIds={map(m => m.id.toString(), validModels)}
@@ -160,20 +160,20 @@ export const BulkTimeEntryInsertComponent: React.FC<BulkTimeEntryInsertProps> = 
               columns={[
                 {
                   width: 100,
-                  label: i18n._(t`BulkTimeEntryInsert.TypeTableHeader`),
+                  label: i18n._(t`Type`),
                   dataKey: 'type',
                   formatter: entryTypeFormatter,
                 },
                 {
                   width: 200,
-                  label: i18n._(t`BulkTimeEntryInsert.WhenTableHeader`),
+                  label: i18n._(t`When`),
                   dataKey: 'when',
                   flexGrow: 1,
                   formatter: dateTimeFormatter,
                 },
                 {
                   width: 200,
-                  label: i18n._(t`BulkTimeEntryInsert.JobTableHeader`),
+                  label: i18n._(t`Job`),
                   dataKey: 'job',
                   formatter: jobFormatter,
                 },
@@ -186,7 +186,7 @@ export const BulkTimeEntryInsertComponent: React.FC<BulkTimeEntryInsertProps> = 
         <>
           <Grid item>
             <VirtualizedTable
-              title={i18n._(t`BulkTimeEntryInsert.InvalidEntries`)}
+              title={i18n._(t`Invalid Entries`)}
               height="250px"
               rowCount={invalidModels.length}
               rowIds={map(m => m.id.toString(), invalidModels)}
@@ -195,20 +195,20 @@ export const BulkTimeEntryInsertComponent: React.FC<BulkTimeEntryInsertProps> = 
               columns={[
                 {
                   width: 100,
-                  label: i18n._(t`BulkTimeEntryInsert.TypeTableHeader`),
+                  label: i18n._(t`Type`),
                   dataKey: 'type',
                   formatter: entryTypeFormatter,
                 },
                 {
                   width: 200,
-                  label: i18n._(t`BulkTimeEntryInsert.WhenTableHeader`),
+                  label: i18n._(t`When`),
                   dataKey: 'when',
                   flexGrow: 1,
                   formatter: dateTimeFormatter,
                 },
                 {
                   width: 200,
-                  label: i18n._(t`BulkTimeEntryInsert.JobTableHeader`),
+                  label: i18n._(t`Job`),
                   dataKey: 'job',
                   formatter: jobFormatter,
                 },

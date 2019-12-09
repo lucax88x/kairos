@@ -86,14 +86,14 @@ export const BulkTimeHolidayEntryInsertComponent: React.FC<BulkTimeHolidayEntryI
             invalidModels.push({
               id: UUID.Generate(),
               description,
-              when: isWhenValid ? when : i18n._(t`Validation.InvalidDate`),
+              when: isWhenValid ? when : i18n._(t`Invalid Date`),
             });
           }
         } else {
           invalidModels.push({
             id: UUID.Generate(),
             description: '',
-            when: i18n._(t`Validation.InvalidDate`),
+            when: i18n._(t`Invalid Date`),
           });
         }
       }
@@ -116,7 +116,7 @@ export const BulkTimeHolidayEntryInsertComponent: React.FC<BulkTimeHolidayEntryI
     <Grid container spacing={2} direction="column" justify="center">
       <Grid item>
         <Typography component="h1" variant="h6" noWrap>
-          <Trans>BulkTimeHolidayEntryInsert.Title</Trans>
+          <Trans>Holidays</Trans>
         </Typography>
       </Grid>
       <Grid item>
@@ -140,7 +140,7 @@ export const BulkTimeHolidayEntryInsertComponent: React.FC<BulkTimeHolidayEntryI
         <>
           <Grid item>
             <VirtualizedTable
-              title={i18n._(t`BulkTimeHolidayEntryInsert.ValidEntries`)}
+              title={i18n._(t`Valid Entries`)}
               height="250px"
               rowCount={validModels.length}
               rowIds={map(m => m.id.toString(), validModels)}
@@ -150,13 +150,13 @@ export const BulkTimeHolidayEntryInsertComponent: React.FC<BulkTimeHolidayEntryI
                 {
                   width: 200,
                   label: i18n._(
-                    t`BulkTimeHolidayEntryInsert.DescriptionTableHeader`,
+                    t`Description`,
                   ),
                   dataKey: 'description',
                 },
                 {
                   width: 200,
-                  label: i18n._(t`BulkTimeHolidayEntryInsert.WhenTableHeader`),
+                  label: i18n._(t`Invalid Entries`),
                   dataKey: 'when',
                   flexGrow: 1,
                   formatter: dateTimeFormatter,
@@ -170,7 +170,7 @@ export const BulkTimeHolidayEntryInsertComponent: React.FC<BulkTimeHolidayEntryI
         <>
           <Grid item>
             <VirtualizedTable
-              title={i18n._(t`BulkTimeHolidayEntryInsert.InvalidEntries`)}
+              title={i18n._(t`Invalid Entries`)}
               height="250px"
               rowCount={invalidModels.length}
               rowIds={map(m => m.id.toString(), invalidModels)}
@@ -180,13 +180,13 @@ export const BulkTimeHolidayEntryInsertComponent: React.FC<BulkTimeHolidayEntryI
                 {
                   width: 200,
                   label: i18n._(
-                    t`BulkTimeHolidayEntryInsert.DescriptionTableHeader`,
+                    t`Description`,
                   ),
                   dataKey: 'description',
                 },
                 {
                   width: 200,
-                  label: i18n._(t`BulkTimeHolidayEntryInsert.WhenTableHeader`),
+                  label: i18n._(t`Invalid Entries`),
                   dataKey: 'when',
                   flexGrow: 1,
                   formatter: dateTimeFormatter,

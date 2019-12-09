@@ -30,5 +30,5 @@ spec:
             - name: SECRET
               value: kairos-tls
             - name: STAGING
-              value: 'true'
+              value: 'false'
           restartPolicy: Never

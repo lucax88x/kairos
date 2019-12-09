@@ -3,6 +3,7 @@ import { map, values } from 'ramda';
 
 import * as authSagas from './auth/sagas';
 import * as bulkInsertSagas from './bulk-insert/sagas';
+import * as navigatorSagas from './navigator/sagas';
 import * as editTimeAbsenceEntrySagas from './edit-time-absence-entry/sagas';
 import * as editTimeHolidayEntrySagas from './edit-time-holiday-entry/sagas';
 import * as editTimeEntrySagas from './edit-time-entry/sagas';
@@ -16,6 +17,7 @@ export const featureSagas: any[] = [
   sharedSagas,
   authSagas,
   layoutSagas,
+  navigatorSagas,
   editTimeEntrySagas,
   editTimeAbsenceEntrySagas,
   editTimeHolidayEntrySagas,

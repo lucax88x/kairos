@@ -52,7 +52,7 @@ export const TimeEntriesComponent: React.FC<TimeEntriesProps> = props => {
   const handleDelete = useCallback((model: TimeEntryListModel) => onDelete([model.id]), [onDelete]);
 
   const noRowsRenderer = useCallback(
-    () => <p>{isGetTimeEntriesBusy ? '' : <Trans>TimeEntries.NoItems</Trans>}</p>,
+    () => <p>{isGetTimeEntriesBusy ? '' : <Trans>No items</Trans>}</p>,
     [isGetTimeEntriesBusy],
   );
   const rowGetter = useCallback(({ index }: Index) => timeEntries[index], [timeEntries]);
@@ -80,7 +80,7 @@ export const TimeEntriesComponent: React.FC<TimeEntriesProps> = props => {
     <Spinner show={isGetTimeEntriesBusy || isDeleteTimeEntriesBusy}>
       <div className={classes.container}>
         <VirtualizedTable
-          title={i18n._(t`TimeEntries.Title`)}
+          title={i18n._(t`Entries`)}
           rowCount={timeEntries.length}
           rowIds={map(m => m.id.toString(), timeEntries)}
           noRowsRenderer={noRowsRenderer}
@@ -88,20 +88,20 @@ export const TimeEntriesComponent: React.FC<TimeEntriesProps> = props => {
           columns={[
             {
               width: 100,
-              label: i18n._(t`TimeEntries.TypeTableHeader`),
+              label: i18n._(t`Type`),
               dataKey: 'type',
               formatter: entryTypeFormatter,
             },
             {
               width: 200,
-              label: i18n._(t`TimeEntries.WhenTableHeader`),
+              label: i18n._(t`When`),
               dataKey: 'when',
               flexGrow: 1,
               formatter: dateTimeFormatter,
             },
             {
               width: 200,
-              label: i18n._(t`TimeEntries.JobTableHeader`),
+              label: i18n._(t`Job`),
               dataKey: 'job',
               formatter: jobFormatter,
             },
@@ -122,7 +122,7 @@ export const TimeEntriesComponent: React.FC<TimeEntriesProps> = props => {
         />
       </div>
       <Button variant="contained" color="primary" onClick={onCreate}>
-        <Trans>Buttons.Create</Trans>
+        <Trans>Create</Trans>
       </Button>
     </Spinner>
   );

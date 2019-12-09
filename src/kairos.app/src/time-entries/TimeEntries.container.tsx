@@ -9,6 +9,7 @@ import { tryDeleteTimeEntriesAction } from '../shared/delete-time-entries';
 import { selectIsDeleteTimeEntriesBusy, selectIsGetTimeEntriesBusy, selectTimeEntries } from '../shared/selectors';
 import { State } from '../state';
 import { TimeEntriesComponent, TimeEntriesDispatches, TimeEntriesInputs } from './TimeEntries';
+import { RouteMatcher } from '../routes';
 
 const mapStateToProps = (state: State): TimeEntriesInputs => ({
   timeEntries: selectTimeEntries(state),
@@ -18,7 +19,7 @@ const mapStateToProps = (state: State): TimeEntriesInputs => ({
 
 const mapDispatchToProps = (dispatch: Dispatch<Actions>): TimeEntriesDispatches => ({
   onCreate: () => dispatch(openTimeEntryDrawerAction()),
-  onUpdate: (model: TimeEntryListModel) => dispatch(push(`/entry/${model.id}`)),
+  onUpdate: (model: TimeEntryListModel) => dispatch(push(RouteMatcher.EditTimeEntry.replace(':id', model.id.toString()))),
   onDelete: (ids: UUID[]) => dispatch(tryDeleteTimeEntriesAction( ids)),
 });
 

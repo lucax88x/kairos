@@ -63,17 +63,17 @@ export const LoginFormComponent: React.FC<LoginProps> = props => {
         <Divider></Divider>
         <div className={classes.text}>
           <Typography component="h1" variant="h6" color="inherit">
-            <Trans>Login.Message</Trans>
+            <Trans>Kairos is a free time-tracking system. It has been built by myself as tool to be used every day in a quick way to track time, absences and holidays. The goal is to have a clear visualization of how many we have worked, how many vacations we are missing and how many extra-time hours we need to compensate.</Trans>
           </Typography>
         </div>
         <Divider></Divider>
         <div className={classes.button}>
           {isOnline ? (
             <Button variant="contained" color="primary" onClick={onLogin}>
-              <Trans>Login.SignIn</Trans>
+              <Trans>Sign in</Trans>
             </Button>
           ) : (
-            <Trans>Login.YouNeedToBeOnlineToSignIn</Trans>
+            <Trans>You need to be online in order to sign in.</Trans>
           )}
         </div>
       </div>

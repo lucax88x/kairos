@@ -1,21 +1,33 @@
-# Environment variables
+# Kairos
 
-In order to fully run the backend locally, you need to set environment variables (you may need to login again / reboot)
+## What is Kairos
 
-## Linux
+Kairos is a free time-tracking tools done by a developer for developers.
 
-```bash
-sudo -H nano /etc/environment
-```
+It is a pretty simple and straightforward tools.
 
-then manually write & save the following
+It helps you on:
 
-```text
-ASPNETCORE_ENVIRONMENT="development"
+- tracking in&out during your work days
+- tracking your absences
 
-Kairos_WriteRepository__ConnectionString="ConnectTo=tcp://admin:changeit@localhost:1113; HeartBeatTimeout=500"
-Kairos_ReadRepository__Database="1"
-Kairos_ReadRepository__Endpoints__0="localhost"
-Kairos_Auth__Domain="https://kairos.eu.auth0.com/"
-Kairos_Auth__Audience="http://localhost:3000"
-```
+Thanks to this it is and some other informations is easy to calculate your extra-times, vacation, holidays, illness, etc.
+
+It's a PWA, it means it can be also installed on your pc on your smartphone and also works offline.
+
+## Technologies
+
+It is made with most latest technologies in order to ensure max speed & stability on each releases.
+
+- react & dotnet core 3
+- CQRS & event sourcing
+- EventStore & Redis
+- Docker & Kubernetes
+
+## Contributors
+
+Everyone can help me maintaining this project, contribuiting to it.
+
+## Features & Bugs
+
+Feel free to ask for new features & bugs on the issue tracker of GitHub.

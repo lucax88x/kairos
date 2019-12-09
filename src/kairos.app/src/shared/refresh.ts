@@ -4,7 +4,7 @@ import { Route } from 'react-router';
 import { put, select, takeLatest } from 'redux-saga/effects';
 import { action } from 'typesafe-actions';
 import { SharedActions } from '../actions';
-import { IS_ONLINE, SELECT_YEAR } from '../shared/constants';
+import { IS_ONLINE } from '../shared/constants';
 import {
   getTimeAbsenceEntriesAsync,
   getTimeEntriesAsync,
@@ -42,10 +42,7 @@ function* doRefresh() {
 }
 
 export function* refreshSaga() {
-  yield takeLatest(
-    [LOCATION_CHANGE, IS_ONLINE, SELECT_YEAR],
-    doRefreshOnOtherActions,
-  );
+  yield takeLatest([LOCATION_CHANGE, IS_ONLINE], doRefreshOnOtherActions);
   yield takeLatest(REFRESH, doRefresh);
 }
 

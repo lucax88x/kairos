@@ -114,7 +114,7 @@ export const ProfileComponent: React.FC<ProfileProps> = props => {
         <Paper className={classes.paper}>
           <div className={clsx(classes.columns, classes.between)}>
             <Typography color="inherit" noWrap display="inline">
-              <Trans>Profile.JobsTitle</Trans>
+              <Trans>Jobs</Trans>
             </Typography>
             <IconButton onClick={handleAddJob}>
               <AddIcon />
@@ -145,14 +145,14 @@ export const ProfileComponent: React.FC<ProfileProps> = props => {
           ) : (
             <Paper className={classes.paper}>
               <Typography color="inherit" noWrap display="inline">
-                <Trans>Profile.NoJobsDefined</Trans>
+                <Trans>No defined jobs</Trans>
               </Typography>
             </Paper>
           )}
         </div>
 
         <ButtonSpinner onClick={handleUpdate} isBusy={isUpdateBusy} disabled={!isOnline || isUpdateBusy}>
-          <Trans>Buttons.Update</Trans>
+          <Trans>Update</Trans>
           <SaveIcon className={classes.marginLeft} />
         </ButtonSpinner>
       </div>

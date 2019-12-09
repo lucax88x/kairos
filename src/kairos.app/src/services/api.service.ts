@@ -32,20 +32,20 @@ async function call<R>(
             if (!!response.data && !!response.data.message) {
               message = response.data.message;
             } else {
-              message = i18n._(t`ServerMessages.Error`);
+              message = i18n._(t`Error, please retry later`);
             }
             break;
           case HttpStatus.UNAUTHORIZED:
           case HttpStatus.FORBIDDEN:
             authService.logout();
-            message = i18n._(t`ServerMessages.Error`);
+            message = i18n._(t`Error, please retry later`);
             break;
           case HttpStatus.NOT_FOUND:
-            message = i18n._(t`ServerMessages.Error`);
+            message = i18n._(t`Error, please retry later`);
             break;
           default:
           case HttpStatus.INTERNAL_SERVER_ERROR:
-            message = i18n._(t`ServerMessages.Error`);
+            message = i18n._(t`Error, please retry later`);
             break;
         }
         status = response.status;

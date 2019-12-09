@@ -75,7 +75,7 @@ export const TimeHolidayEntriesComponent: React.FC<TimeHolidayEntriesProps> = pr
   ]);
 
   const noRowsRenderer = useCallback(
-    () => <p>{isGetTimeHolidayEntriesBusy ? '' : <Trans>TimeHolidayEntries.NoItems</Trans>}</p>,
+    () => <p>{isGetTimeHolidayEntriesBusy ? '' : <Trans>No items</Trans>}</p>,
     [isGetTimeHolidayEntriesBusy],
   );
   const rowGetter = useCallback(({ index }: Index) => timeHolidayEntries[index], [
@@ -85,7 +85,7 @@ export const TimeHolidayEntriesComponent: React.FC<TimeHolidayEntriesProps> = pr
     model => (
       <IconButton
         color="inherit"
-        aria-label={i18n._(t`TimeHolidayEntries.UpdateHolidayButton`)}
+        aria-label={i18n._(t`Update holiday`)}
         onClick={() => handleUpdate(model)}
       >
         <CreateIcon />
@@ -97,7 +97,7 @@ export const TimeHolidayEntriesComponent: React.FC<TimeHolidayEntriesProps> = pr
     model => (
       <IconButton
         color="inherit"
-        aria-label={i18n._(t`TimeHolidayEntries.DeleteHolidayButton`)}
+        aria-label={i18n._(t`Delete holiday`)}
         onClick={() => handleDelete(model)}
       >
         <DeleteIcon />
@@ -123,7 +123,7 @@ export const TimeHolidayEntriesComponent: React.FC<TimeHolidayEntriesProps> = pr
     >
       <div className={classes.container}>
         <VirtualizedTable
-          title={i18n._(t`TimeHolidayEntries.Title`)}
+          title={i18n._(t`Holidays`)}
           height="50vh"
           rowCount={timeHolidayEntries.length}
           rowIds={map(m => m.id.toString(), timeHolidayEntries)}
@@ -132,7 +132,7 @@ export const TimeHolidayEntriesComponent: React.FC<TimeHolidayEntriesProps> = pr
           columns={[
             {
               width: 100,
-              label: i18n._(t`TimeHolidayEntries.WhenTableHeader`),
+              label: i18n._(t`When`),
               dataKey: 'when',
               flexGrow: 1,
               formatter: dateFormatter,
@@ -140,7 +140,7 @@ export const TimeHolidayEntriesComponent: React.FC<TimeHolidayEntriesProps> = pr
             {
               width: 100,
               flexGrow: 2,
-              label: i18n._(t`TimeHolidayEntries.DescriptionTableHeader`),
+              label: i18n._(t`Description`),
               dataKey: 'description',
             },
             {
@@ -164,7 +164,7 @@ export const TimeHolidayEntriesComponent: React.FC<TimeHolidayEntriesProps> = pr
           onClick={onCreate}
           className={classes.justifySelfStart}
         >
-          <Trans>Buttons.Create</Trans>
+          <Trans>Create</Trans>
         </Button>
         <Divider />
         <Grid container alignItems={'center'} justify={'space-between'}>
@@ -172,8 +172,8 @@ export const TimeHolidayEntriesComponent: React.FC<TimeHolidayEntriesProps> = pr
             <Autocomplete
               isBusy={isGetCountriesBusy}
               data={countriesSuggestion}
-              label={i18n._(t`TimeHolidayEntries.CountryLabel`)}
-              placeholder={i18n._(t`TimeHolidayEntries.SearchForCountry`)}
+              label={i18n._(t`Country`)}
+              placeholder={i18n._(t`Search for country`)}
               value={country}
               onSelectSuggestion={handleCountryChange}
             />
@@ -185,7 +185,7 @@ export const TimeHolidayEntriesComponent: React.FC<TimeHolidayEntriesProps> = pr
               onClick={handleUpdateHolidays}
               disabled={!country}
             >
-              <Trans>TimeHolidayEntries.UpdateHolidaysFromCountryButton</Trans>
+              <Trans>Update holidays from country</Trans>
             </Button>
           </Grid>
         </Grid>

@@ -1,5 +1,5 @@
-export const getTimeAbsenceEntriesQuery = `query ($year: Int!) {
-  timeAbsenceEntries(year: $year) {
+export const getTimeAbsenceEntriesQuery = `query ($start: DateTimeOffset!, $end:DateTimeOffset!) {
+  timeAbsenceEntries(start: $start, end: $end) {
     id
     description
     start

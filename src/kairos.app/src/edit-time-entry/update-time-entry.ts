@@ -29,7 +29,7 @@ function* doUpdateTimeEntry({
 }
 
 function* doNotifySuccess() {
-  yield put(enqueueSnackbarAction(i18n._(t`Messages.EntryUpdated`), { variant: 'success' }));
+  yield put(enqueueSnackbarAction(i18n._(t`Entry Updated`), { variant: 'success' }));
 }
 
 export function* updateTimeEntrySaga() {

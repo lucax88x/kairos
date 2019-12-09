@@ -99,20 +99,20 @@ export const BulkTimeAbsenceEntryInsertComponent: React.FC<
             invalidModels.push({
               id: UUID.Generate(),
               description,
-              start: isStartValid ? start : i18n._(t`Validation.InvalidDate`),
-              end: isEndValid ? end : i18n._(t`Validation.InvalidDate`),
+              start: isStartValid ? start : i18n._(t`Invalid Date`),
+              end: isEndValid ? end : i18n._(t`Invalid Date`),
               type: isTypeValid
                 ? (type as TimeAbsenceEntryTypes)
-                : i18n._(t`Validation.InvalidType`),
+                : i18n._(t`Invalid Type`),
             });
           }
         } else {
           invalidModels.push({
             id: UUID.Generate(),
             description: '',
-            start: i18n._(t`Validation.InvalidDate`),
-            end: i18n._(t`Validation.InvalidDate`),
-            type: i18n._(t`Validation.InvalidType`),
+            start: i18n._(t`Invalid Date`),
+            end: i18n._(t`Invalid Date`),
+            type: i18n._(t`Invalid Type`),
           });
         }
       }
@@ -131,7 +131,7 @@ export const BulkTimeAbsenceEntryInsertComponent: React.FC<
     <Grid container spacing={2} direction="column" justify="center">
       <Grid item>
         <Typography component="h1" variant="h6" noWrap>
-          <Trans>BulkTimeAbsenceEntryInsert.Title</Trans>
+          <Trans>Absences</Trans>
         </Typography>
       </Grid>
       <Grid item>
@@ -155,7 +155,7 @@ export const BulkTimeAbsenceEntryInsertComponent: React.FC<
         <>
           <Grid item>
             <VirtualizedTable
-              title={i18n._(t`BulkTimeAbsenceEntryInsert.ValidEntries`)}
+              title={i18n._(t`Valid Entries`)}
               height="250px"
               rowCount={validModels.length}
               rowIds={map(m => m.id.toString(), validModels)}
@@ -164,25 +164,25 @@ export const BulkTimeAbsenceEntryInsertComponent: React.FC<
               columns={[
                 {
                   width: 100,
-                  label: i18n._(t`BulkTimeAbsenceEntryInsert.TypeTableHeader`),
+                  label: i18n._(t`Type`),
                   dataKey: 'type',
                   formatter: absenceTypeFormatter,
                 },
                 {
                   width: 200,
-                  label: i18n._(t`BulkTimeAbsenceEntryInsert.DescriptionTableHeader`),
+                  label: i18n._(t`Description`),
                   dataKey: 'description',
                 },
                 {
                   width: 200,
-                  label: i18n._(t`BulkTimeAbsenceEntryInsert.StartTableHeader`),
+                  label: i18n._(t`Start`),
                   dataKey: 'start',
                   flexGrow: 1,
                   formatter: dateTimeFormatter,
                 },
                 {
                   width: 200,
-                  label: i18n._(t`BulkTimeAbsenceEntryInsert.EndTableHeader`),
+                  label: i18n._(t`End`),
                   dataKey: 'end',
                   flexGrow: 1,
                   formatter: dateTimeFormatter,
@@ -196,7 +196,7 @@ export const BulkTimeAbsenceEntryInsertComponent: React.FC<
         <>
           <Grid item>
             <VirtualizedTable
-              title={i18n._(t`BulkTimeAbsenceEntryInsert.InvalidEntries`)}
+              title={i18n._(t`Invalid Entries`)}
               height="250px"
               rowCount={invalidModels.length}
               rowIds={map(m => m.id.toString(), invalidModels)}
@@ -205,25 +205,25 @@ export const BulkTimeAbsenceEntryInsertComponent: React.FC<
               columns={[
                 {
                   width: 100,
-                  label: i18n._(t`BulkTimeAbsenceEntryInsert.TypeTableHeader`),
+                  label: i18n._(t`Type`),
                   dataKey: 'type',
                   formatter: absenceTypeFormatter,
                 },
                 {
                   width: 200,
-                  label: i18n._(t`BulkTimeAbsenceEntryInsert.DescriptionTableHeader`),
+                  label: i18n._(t`Description`),
                   dataKey: 'description',
                 },
                 {
                   width: 200,
-                  label: i18n._(t`BulkTimeAbsenceEntryInsert.StartTableHeader`),
+                  label: i18n._(t`Start`),
                   dataKey: 'start',
                   flexGrow: 1,
                   formatter: dateTimeFormatter,
                 },
                 {
                   width: 200,
-                  label: i18n._(t`BulkTimeAbsenceEntryInsert.EndTableHeader`),
+                  label: i18n._(t`End`),
                   dataKey: 'end',
                   flexGrow: 1,
                   formatter: dateTimeFormatter,

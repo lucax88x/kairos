@@ -138,12 +138,12 @@ export const TimeEntryForm: React.FC<TimeEntryFormProps> = props => {
           <FormControlLabel
             value={TimeEntryTypes.IN}
             control={<Radio />}
-            label={<Trans>Values.TimeEntryTypes.In</Trans>}
+            label={<Trans>In</Trans>}
           />
           <FormControlLabel
             value={TimeEntryTypes.OUT}
             control={<Radio />}
-            label={<Trans>Values.TimeEntryTypes.Out</Trans>}
+            label={<Trans>Out</Trans>}
           />
         </RadioGroup>
       </FormControl>
@@ -159,14 +159,14 @@ export const TimeEntryForm: React.FC<TimeEntryFormProps> = props => {
           value={when}
           onChange={handleWhenChange}
           format={formatAsDateTime}
-          label={<Trans>Labels.When</Trans>}
-          invalidDateMessage={<Trans>Validation.InvalidDate</Trans>}
+          label={<Trans>When</Trans>}
+          invalidDateMessage={<Trans>Invalid Date</Trans>}
         />
       </MuiPickersUtilsProvider>
       <div>
         <FormControl fullWidth>
           <InputLabel htmlFor="job">
-            <Trans>Labels.Job</Trans>
+            <Trans>Job</Trans>
           </InputLabel>
           <Select
             value={selectedJobId}
@@ -200,7 +200,7 @@ export const TimeEntryForm: React.FC<TimeEntryFormProps> = props => {
           </>
         ) : (
           <>
-            <Trans>Buttons.Update</Trans>
+            <Trans>Update</Trans>
             <SaveIcon className={classes.marginLeft} />
           </>
         )}

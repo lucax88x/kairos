@@ -1,24 +1,8 @@
 import { t, Trans } from '@lingui/macro';
-import {
-  AppBar,
-  Avatar,
-  Box,
-  Container,
-  Divider,
-  Drawer,
-  IconButton,
-  List,
-  ListItem,
-  ListItemIcon,
-  ListItemText,
-  MenuItem,
-  Select,
-  SwipeableDrawer,
-  Toolbar,
-  Typography,
-} from '@material-ui/core';
+import { AppBar, Avatar, Box, Container, Divider, Drawer, IconButton, List, ListItem, ListItemIcon, ListItemText, MenuItem, Select, SwipeableDrawer, Toolbar, Typography } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
 import BeachAccessIcon from '@material-ui/icons/BeachAccess';
+import SyncAltIcon from '@material-ui/icons/SyncAlt';
 import ChevronLeftIcon from '@material-ui/icons/ChevronLeft';
 import ChevronRightIcon from '@material-ui/icons/ChevronRight';
 import DashboardIcon from '@material-ui/icons/Dashboard';
@@ -32,7 +16,7 @@ import clsx from 'clsx';
 import { getYear } from 'date-fns';
 import { map } from 'ramda';
 import React, { ChangeEvent, useCallback, useState } from 'react';
-import { Link, Route } from 'react-router-dom';
+import { Link, Route, Switch } from 'react-router-dom';
 import { ReactComponent as EnglishFlag } from './assets/images/en.svg';
 import { ReactComponent as ItalianFlag } from './assets/images/it.svg';
 import { ReactComponent as LogoIcon } from './assets/images/logo.svg';
@@ -51,8 +35,10 @@ import { i18n } from './i18nLoader';
 import { IsOnline } from './IsOnline.container';
 import { Language, Languages } from './models/language-model';
 import { UserModel } from './models/user.model';
+import { Navigator } from './navigator/Navigator.container';
+import { NotFound } from './NotFound';
 import { Profile } from './profile/Profile.container';
-import { Routes } from './routes';
+import { buildPrivateRouteWithYear, RouteMatcher, buildNavigatorRoute } from './routes';
 import { ConfirmationModal } from './shared/ConfirmationModal.container';
 import { TimeAbsenceEntries } from './time-absence-entries/TimeAbsenceEntries.container';
 import { TimeEntries } from './time-entries/TimeEntries.container';
@@ -381,13 +367,13 @@ export const AppComponent: React.FC<AppProps> = props => {
                   <IconButton
                     edge="start"
                     color="inherit"
-                    aria-label={i18n._(t`TopBar.OpenMenu`)}
+                    aria-label={i18n._(t`Open Menu`)}
                     onClick={handleLeftDrawerOpen}
                   >
                     <MenuIcon />
                   </IconButton>
                 )}
-                <Link to={Routes.Dashboard}>
+                <Link to={buildPrivateRouteWithYear(RouteMatcher.Dashboard, selectedYear)}>
                   <LogoIcon className={classes.logo} />
                 </Link>
                 <Box component="div" display={{ xs: 'none', sm: 'block' }}>
@@ -398,7 +384,7 @@ export const AppComponent: React.FC<AppProps> = props => {
                     noWrap
                     className={classes.title}
                   >
-                    <Link to={Routes.Dashboard} className={classes.link}>
+                    <Link to={buildPrivateRouteWithYear(RouteMatcher.Dashboard, selectedYear)} className={classes.link}>
                       kairos
                     </Link>
                   </Typography>
@@ -410,8 +396,9 @@ export const AppComponent: React.FC<AppProps> = props => {
                 )}
                 {!isRightDrawerOpen && !isLeftDrawerOpen && (
                   <IconButton
+                    id="hint-time-entry-button"
                     color="inherit"
-                    aria-label={i18n._(t`TopBar.OpenTimeEntry`)}
+                    aria-label={i18n._(t`Open time entry`)}
                     onClick={handleTimeEntryDrawerOpen}
                   >
                     <TimerIcon />
@@ -420,7 +407,7 @@ export const AppComponent: React.FC<AppProps> = props => {
                 {!isRightDrawerOpen && !isLeftDrawerOpen && (
                   <IconButton
                     color="inherit"
-                    aria-label={i18n._(t`TopBar.OpenTimeAbsenceEntry`)}
+                    aria-label={i18n._(t`Open absence`)}
                     onClick={handleTimeAbsenceEntryDrawerOpen}
                   >
                     <WeekendIcon />
@@ -455,47 +442,49 @@ export const AppComponent: React.FC<AppProps> = props => {
           </div>
           <Divider />
           <List>
-            <ListItem button to={Routes.Dashboard} component={Link}>
+            <ListItem button to={buildPrivateRouteWithYear(RouteMatcher.Dashboard, selectedYear)} component={Link}>
               <ListItemIcon>
                 <DashboardIcon />
               </ListItemIcon>
-              <ListItemText primary={<Trans>LeftMenu.Dashboard</Trans>} />
+              <ListItemText primary={<Trans>Dashboard</Trans>} />
+            </ListItem>
+            <ListItem button to={buildNavigatorRoute(selectedYear)} component={Link}>
+              <ListItemIcon>
+                <SyncAltIcon />
+              </ListItemIcon>
+              <ListItemText primary={<Trans>Navigator</Trans>} />
             </ListItem>
             <Divider />
-            <ListItem button to={Routes.TimeEntries} component={Link}>
+            <ListItem button to={buildPrivateRouteWithYear(RouteMatcher.TimeEntries, selectedYear)} component={Link}>
               <ListItemIcon>
                 <TimerIcon />
               </ListItemIcon>
-              <ListItemText primary={<Trans>LeftMenu.TimeEntries</Trans>} />
+              <ListItemText primary={<Trans>Time Entries</Trans>} />
             </ListItem>
-            <ListItem button to={Routes.TimeAbsenceEntries} component={Link}>
+            <ListItem button to={buildPrivateRouteWithYear(RouteMatcher.TimeAbsenceEntries, selectedYear)} component={Link}>
               <ListItemIcon>
                 <WeekendIcon />
               </ListItemIcon>
-              <ListItemText
-                primary={<Trans>LeftMenu.TimeAbsenceEntries</Trans>}
-              />
+              <ListItemText primary={<Trans>Absences</Trans>} />
             </ListItem>
-            <ListItem button to={Routes.TimeHolidayEntries} component={Link}>
+            <ListItem button to={buildPrivateRouteWithYear(RouteMatcher.TimeHolidayEntries, selectedYear)} component={Link}>
               <ListItemIcon>
                 <BeachAccessIcon />
               </ListItemIcon>
-              <ListItemText
-                primary={<Trans>LeftMenu.TimeHolidayEntries</Trans>}
-              />
+              <ListItemText primary={<Trans>Holidays</Trans>} />
             </ListItem>
             <Divider />
-            <ListItem button to={Routes.BulkInsert} component={Link}>
+            <ListItem button to={RouteMatcher.BulkInsert} component={Link}>
               <ListItemIcon>
                 <FastForwardIcon />
               </ListItemIcon>
-              <ListItemText primary={<Trans>LeftMenu.BulkInsert</Trans>} />
+              <ListItemText primary={<Trans>Bulk Insert</Trans>} />
             </ListItem>
-            <ListItem button to={Routes.Export} component={Link}>
+            <ListItem button to={RouteMatcher.Export} component={Link}>
               <ListItemIcon>
                 <InsertDriveFileIcon />
               </ListItemIcon>
-              <ListItemText primary={<Trans>LeftMenu.Export</Trans>} />
+              <ListItemText primary={<Trans>Export</Trans>} />
             </ListItem>
           </List>
         </Drawer>
@@ -507,28 +496,33 @@ export const AppComponent: React.FC<AppProps> = props => {
             maxWidth="lg"
             className={classes.container}
           >
-            <Route path={Routes.Dashboard} component={Dashboard} />
-            <Route path={Routes.Profile} component={Profile} />
-            <Route path={Routes.TimeEntries} component={TimeEntries} />
-            <Route
-              path={Routes.TimeAbsenceEntries}
-              component={TimeAbsenceEntries}
-            />
-            <Route
-              path={Routes.TimeHolidayEntries}
-              component={TimeHolidayEntries}
-            />
-            <Route path={Routes.EditTimeEntry} component={EditTimeEntry} />
-            <Route
-              path={Routes.EditTimeAbsenceEntry}
-              component={EditTimeAbsenceEntry}
-            />
-            <Route
-              path={Routes.EditTimeHolidayEntry}
-              component={EditTimeHolidayEntry}
-            />
-            <Route path={Routes.BulkInsert} component={BulkInsert} />
-            <Route path={Routes.Export} component={Export} />
+            <Switch>
+              <Route path={RouteMatcher.Dashboard} component={Dashboard} />
+              <Route path={RouteMatcher.NavigatorCustom} component={Navigator} />
+              <Route path={RouteMatcher.Navigator} component={Navigator} />
+              <Route path={RouteMatcher.Profile} component={Profile} />
+              <Route path={RouteMatcher.TimeEntries} component={TimeEntries} />
+              <Route
+                path={RouteMatcher.TimeAbsenceEntries}
+                component={TimeAbsenceEntries}
+              />
+              <Route
+                path={RouteMatcher.TimeHolidayEntries}
+                component={TimeHolidayEntries}
+              />
+              <Route path={RouteMatcher.EditTimeEntry} component={EditTimeEntry} />
+              <Route
+                path={RouteMatcher.EditTimeAbsenceEntry}
+                component={EditTimeAbsenceEntry}
+              />
+              <Route
+                path={RouteMatcher.EditTimeHolidayEntry}
+                component={EditTimeHolidayEntry}
+              />
+              <Route path={RouteMatcher.BulkInsert} component={BulkInsert} />
+              <Route path={RouteMatcher.Export} component={Export} />
+              <Route path="*" component={NotFound} />
+            </Switch>
           </Container>
         </main>
 
@@ -546,7 +540,7 @@ export const AppComponent: React.FC<AppProps> = props => {
           </div>
           <Divider />
           <List>
-            <ListItem button to={Routes.Profile} component={Link}>
+            <ListItem button to={RouteMatcher.Profile} component={Link}>
               <ListItemIcon>
                 <Avatar
                   alt={user.name}
@@ -554,22 +548,20 @@ export const AppComponent: React.FC<AppProps> = props => {
                   // className={classes.avatar}
                 />
               </ListItemIcon>
-              <ListItemText primary={<Trans>TopBar.Profile</Trans>} />
+              <ListItemText primary={<Trans>Profile</Trans>} />
             </ListItem>
             <Divider />
             <ListItem button onClick={handleTimeEntryDrawerOpen}>
               <ListItemIcon>
                 <TimerIcon />
               </ListItemIcon>
-              <ListItemText primary={<Trans>TopBar.OpenTimeEntry</Trans>} />
+              <ListItemText primary={<Trans>Open time entry</Trans>} />
             </ListItem>
             <ListItem button onClick={handleTimeAbsenceEntryDrawerOpen}>
               <ListItemIcon>
                 <WeekendIcon />
               </ListItemIcon>
-              <ListItemText
-                primary={<Trans>TopBar.OpenTimeAbsenceEntry</Trans>}
-              />
+              <ListItemText primary={<Trans>Open absence</Trans>} />
             </ListItem>
             <Divider />
             <ListItem>
@@ -619,14 +611,14 @@ export const AppComponent: React.FC<AppProps> = props => {
             <ListItem>
               <ListItemText
                 className={classes.topbarText}
-                primary={i18n._('TopBar.Version', { version: version.version })}
+                primary={i18n._(t`Version ${version.version}`)}
               />
             </ListItem>
             <ListItem button onClick={onLogout}>
               <ListItemIcon>
                 <LogoutIcon />
               </ListItemIcon>
-              <ListItemText primary={<Trans>TopBar.Logout</Trans>} />
+              <ListItemText primary={<Trans>Logout</Trans>} />
             </ListItem>
           </List>
         </Drawer>

@@ -24,13 +24,15 @@ export async function getTimeHolidayEntry(id: UUID) {
   return TimeHolidayEntryModel.fromOutModel(result.timeHolidayEntry);
 }
 
-export async function getTimeHolidayEntries(year: number) {
-  const result = await query<{ timeHolidayEntries: TimeHolidayEntryOutModel[] }>(
-    getTimeHolidayEntriesQuery,
-    { year },
-  );
+export async function getTimeHolidayEntries(start: Date, end: Date) {
+  const result = await query<{
+    timeHolidayEntries: TimeHolidayEntryOutModel[];
+  }>(getTimeHolidayEntriesQuery, { start, end });
 
-  return map(out => TimeHolidayEntryModel.fromOutModel(out), result.timeHolidayEntries);
+  return map(
+    out => TimeHolidayEntryModel.fromOutModel(out),
+    result.timeHolidayEntries,
+  );
 }
 
 export async function createTimeHolidayEntry(model: TimeHolidayEntryModel) {
@@ -38,17 +40,29 @@ export async function createTimeHolidayEntry(model: TimeHolidayEntryModel) {
 }
 
 export async function deleteTimeHolidayEntries(ids: UUID[]) {
-  await mutation(deleteTimeHolidayEntriesMutation, { ids: map(id => id.toString(), ids) });
+  await mutation(deleteTimeHolidayEntriesMutation, {
+    ids: map(id => id.toString(), ids),
+  });
 }
 
 export async function updateTimeHolidayEntry(model: TimeHolidayEntryModel) {
   await mutation(updateTimeHolidayEntryMutation, { timeHolidayEntry: model });
 }
 
-export async function updateTimeHolidayEntriesByCountry(year: number, countryCode: string) {
-  await mutation(updateTimeHolidayEntriesByCountryMutation, { year, countryCode });
+export async function updateTimeHolidayEntriesByCountry(
+  year: number,
+  countryCode: string,
+) {
+  await mutation(updateTimeHolidayEntriesByCountryMutation, {
+    year,
+    countryCode,
+  });
 }
 
-export async function bulkInsertTimeHolidayEntries(models: TimeHolidayEntryModel[]) {
-  await mutation(createTimeHolidayEntriesMutation, { timeHolidayEntries: models });
+export async function bulkInsertTimeHolidayEntries(
+  models: TimeHolidayEntryModel[],
+) {
+  await mutation(createTimeHolidayEntriesMutation, {
+    timeHolidayEntries: models,
+  });
 }

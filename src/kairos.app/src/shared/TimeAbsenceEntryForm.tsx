@@ -117,7 +117,7 @@ export const TimeAbsenceEntryForm: React.FC<TimeAbsenceEntryFormProps> = props =
     <div className={classes.container}>
       <FormControl fullWidth>
         <InputLabel htmlFor="type">
-          <Trans>Label.Type</Trans>
+          <Trans>Type</Trans>
         </InputLabel>
         <Select
           value={type}
@@ -127,16 +127,16 @@ export const TimeAbsenceEntryForm: React.FC<TimeAbsenceEntryFormProps> = props =
           }}
         >
           <MenuItem value={TimeAbsenceEntryTypes.ILLNESS}>
-            <Trans>Values.TimeAbsenceEntryTypes.Illness</Trans>
+            <Trans>Illness</Trans>
           </MenuItem>
           <MenuItem value={TimeAbsenceEntryTypes.VACATION}>
-            <Trans>Values.TimeAbsenceEntryTypes.Vacation</Trans>
+            <Trans>Vacation</Trans>
           </MenuItem>
           <MenuItem value={TimeAbsenceEntryTypes.PERMIT}>
-            <Trans>Values.TimeAbsenceEntryTypes.Permit</Trans>
+            <Trans>Permit</Trans>
           </MenuItem>
           <MenuItem value={TimeAbsenceEntryTypes.COMPENSATION}>
-            <Trans>Values.TimeAbsenceEntryTypes.Compensation</Trans>
+            <Trans>Compensation</Trans>
           </MenuItem>
         </Select>
       </FormControl>
@@ -144,7 +144,7 @@ export const TimeAbsenceEntryForm: React.FC<TimeAbsenceEntryFormProps> = props =
         autoFocus
         margin="dense"
         id="description"
-        label={<Trans>Labels.Description</Trans>}
+        label={<Trans>Description</Trans>}
         type="text"
         value={description}
         onChange={handleDescriptionChange}
@@ -160,8 +160,8 @@ export const TimeAbsenceEntryForm: React.FC<TimeAbsenceEntryFormProps> = props =
           value={start}
           maxDate={end}
           onChange={handleStartChange}
-          label={<Trans>Labels.Start</Trans>}
-          invalidDateMessage={<Trans>Validation.InvalidDate</Trans>}
+          label={<Trans>Start</Trans>}
+          invalidDateMessage={<Trans>Invalid Date</Trans>}
           format={formatAsDateTime}
           fullWidth
         />
@@ -171,8 +171,8 @@ export const TimeAbsenceEntryForm: React.FC<TimeAbsenceEntryFormProps> = props =
           value={end}
           minDate={start}
           onChange={handleEndChange}
-          label={<Trans>Labels.End</Trans>}
-          invalidDateMessage={<Trans>Validation.InvalidDate</Trans>}
+          label={<Trans>End</Trans>}
+          invalidDateMessage={<Trans>Invalid Date</Trans>}
           format={formatAsDateTime}
           fullWidth
         />
@@ -190,7 +190,7 @@ export const TimeAbsenceEntryForm: React.FC<TimeAbsenceEntryFormProps> = props =
           </>
         ) : (
           <>
-            <Trans>Buttons.Update</Trans>
+            <Trans>Update</Trans>
             <SaveIcon className={classes.marginLeft} />
           </>
         )}

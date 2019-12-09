@@ -17,6 +17,7 @@ import {
   TimeStatisticsDispatches,
   TimeStatisticsInputs,
 } from './TimeStatistics';
+import { RouteMatcher } from '../routes';
 
 const mapStateToProps = (state: State): TimeStatisticsInputs => ({
   selectedLanguage: selectSelectedLanguage(state),
@@ -28,7 +29,7 @@ const mapStateToProps = (state: State): TimeStatisticsInputs => ({
 });
 
 const mapDispatchToProps = (dispatch: Dispatch<Actions>): TimeStatisticsDispatches => ({
-  onUpdate: (model: TimeEntryListModel) => dispatch(push(`/entry/${model.id}`)),
+  onUpdate: (model: TimeEntryListModel) => dispatch(push(RouteMatcher.EditTimeEntry.replace(':id', model.id.toString()))),
 });
 
 export const TimeStatistics = connect(
