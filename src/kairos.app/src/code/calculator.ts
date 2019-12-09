@@ -237,7 +237,7 @@ export function getWorkingHoursStatistics(
       differencesByDate,
       absences,
       holidays,
-    );``
+    );
 
     statistics['RemainingToday'] = {
       title: i18n._(t`Remaining Today: ${job.name}`),
