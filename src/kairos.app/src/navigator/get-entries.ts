@@ -1,9 +1,11 @@
 import { LOCATION_CHANGE } from 'connected-react-router';
+import { isEqual, startOfDay } from 'date-fns';
 import produce from 'immer';
-import { put, select, takeLatest, call } from 'redux-saga/effects';
-import { createAsyncAction, PayloadAction, action } from 'typesafe-actions';
+import { call, put, select, takeLatest } from 'redux-saga/effects';
+import { action, createAsyncAction } from 'typesafe-actions';
 import { NavigatorActions } from '../actions';
 import { EntryModel } from '../models/entry-list-model';
+import { Route } from '../models/route.model';
 import { getEntries } from '../services/navigator/navigator.service';
 import {
   CREATE_TIME_ABSENCE_ENTRY_SUCCESS,
@@ -13,20 +15,18 @@ import {
   DELETE_TIME_HOLIDAY_ENTRIES_SUCCESS,
 } from '../shared/constants';
 import {
-  selectNavigatorRoute,
   selectNavigatorCustomRoute,
+  selectNavigatorRoute,
 } from '../shared/router.selectors';
 import { selectIsOnline, selectSelectedYear } from '../shared/selectors';
 import {
+  CLEAR_ENTRIES,
   GET_ENTRIES,
   GET_ENTRIES_FAILURE,
   GET_ENTRIES_SUCCESS,
-  CLEAR_ENTRIES,
 } from './constants';
+import { selectEndDate, selectStartDate } from './selectors';
 import { NavigatorState } from './state';
-import { selectStartDate, selectEndDate } from './selectors';
-import { Route } from '../models/route.model';
-import { isEqual, startOfDay } from 'date-fns';
 
 export const getEntriesAsync = createAsyncAction(
   GET_ENTRIES,

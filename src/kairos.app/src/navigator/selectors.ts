@@ -1,12 +1,12 @@
+import { getUnixTime, startOfDay } from 'date-fns';
+import { groupBy, sortBy } from 'ramda';
 import { createSelector } from 'reselect';
-import { State } from '../state';
-import { sort, sortBy, groupBy } from 'ramda';
 import {
-  isTimeEntryListModel,
   isTimeAbsenceEntryModel,
+  isTimeEntryListModel,
   isTimeHolidayEntryModel,
 } from '../code/is';
-import { getUnixTime, startOfDay } from 'date-fns';
+import { State } from '../state';
 
 const selectState = (state: State) => state.navigator;
 

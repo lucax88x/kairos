@@ -17,3 +17,4 @@ export { selectLanguageSaga } from './select-language';
 export { selectYearSaga } from './select-year';
 export { updateTimeHolidayEntriesByCountrySaga } from './update-time-holiday-entries-by-country';
 export { refreshSaga } from './refresh';
+export { redirectOnDashboardSaga } from './redirect-on-dashboard';

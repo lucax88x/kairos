@@ -24,6 +24,11 @@ export const selectDashboardRoute = createSelector(
   createMatchSelector(RouteMatcher.Dashboard),
 );
 
+export const selectRedirectDashboardRoute = createSelector(
+  (state: State) => state,
+  createMatchSelector(RouteMatcher.RedirectDashboard),
+);
+
 export const selectNavigatorRoute = createSelector(
   (state: State) => state,
   createMatchSelector(RouteMatcher.Navigator),
