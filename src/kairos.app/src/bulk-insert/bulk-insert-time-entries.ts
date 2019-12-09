@@ -33,7 +33,7 @@ function* doBulkTimeEntries({
 }
 
 function* doNotifySuccess() {
-  yield put(enqueueSnackbarAction(i18n._(t`Messages.BulkEntriesSaved`), { variant: 'success' }));
+  yield put(enqueueSnackbarAction(i18n._(t`Saved Entries`), { variant: 'success' }));
 }
 
 export function* bulkInsertTimeEntriesSaga() {

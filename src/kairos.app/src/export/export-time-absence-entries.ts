@@ -33,7 +33,7 @@ function* doExportTimeAbsenceEntries({
 
 function* doNotifySuccess() {
   yield put(
-    enqueueSnackbarAction(i18n._(t`Messages.ExportAbsencesSaved`), {
+    enqueueSnackbarAction(i18n._(t`Absences exported`), {
       variant: 'success',
     }),
   );

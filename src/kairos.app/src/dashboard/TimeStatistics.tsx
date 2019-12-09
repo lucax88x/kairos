@@ -134,10 +134,10 @@ export const TimeStatisticsComponent: React.FC<TimeStatisticsProps> = memo(
           <ExpansionPanel>
             <ExpansionPanelSummary expandIcon={<ExpandMoreIcon />}>
               <Typography className={classes.heading}>
-                <Trans>TimeStatistics.WorkingHours.Title</Trans>
+                <Trans>Working Hours</Trans>
               </Typography>
               <Typography className={classes.secondaryHeading}>
-                <Trans>TimeStatistics.WorkingHours.SecondaryTitle</Trans>
+                <Trans>Working Hours</Trans>
               </Typography>
             </ExpansionPanelSummary>
             <ExpansionPanelDetails>
@@ -150,10 +150,10 @@ export const TimeStatisticsComponent: React.FC<TimeStatisticsProps> = memo(
             <ExpansionPanel>
               <ExpansionPanelSummary expandIcon={<ExpandMoreIcon />}>
                 <Typography className={classes.heading}>
-                  <Trans>TimeStatistics.Vacations.Title</Trans>
+                  <Trans>Vacations</Trans>
                 </Typography>
                 <Typography className={classes.secondaryHeading}>
-                  <Trans>TimeStatistics.Vacations.SubTitle</Trans>
+                  <Trans>Vacations</Trans>
                 </Typography>
               </ExpansionPanelSummary>
               <ExpansionPanelDetails>
@@ -167,10 +167,10 @@ export const TimeStatisticsComponent: React.FC<TimeStatisticsProps> = memo(
             <ExpansionPanel>
               <ExpansionPanelSummary expandIcon={<ExpandMoreIcon />}>
                 <Typography className={classes.heading}>
-                  <Trans>TimeStatistics.Illness.Title</Trans>
+                  <Trans>Illness</Trans>
                 </Typography>
                 <Typography className={classes.secondaryHeading}>
-                  <Trans>TimeStatistics.Illness.SubTitle</Trans>
+                  <Trans>When you are sick</Trans>
                 </Typography>
               </ExpansionPanelSummary>
               <ExpansionPanelDetails>

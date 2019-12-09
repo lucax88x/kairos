@@ -75,7 +75,7 @@ export const TimeHolidayEntryForm: React.FC<TimeHolidayEntryFormProps> = props =
         autoFocus
         margin="dense"
         id="description"
-        label={<Trans>Labels.Description</Trans>}
+        label={<Trans>Description</Trans>}
         type="text"
         value={description}
         onChange={handleDescriptionChange}
@@ -86,8 +86,8 @@ export const TimeHolidayEntryForm: React.FC<TimeHolidayEntryFormProps> = props =
           autoOk
           value={when}
           onChange={handleWhenChange}
-          label={<Trans>Labels.When</Trans>}
-          invalidDateMessage={<Trans>Validation.InvalidDate</Trans>}
+          label={<Trans>When</Trans>}
+          invalidDateMessage={<Trans>Invalid Date</Trans>}
           format={formatAsDate}
           fullWidth
         />
@@ -100,7 +100,7 @@ export const TimeHolidayEntryForm: React.FC<TimeHolidayEntryFormProps> = props =
         className={classes.selfCenter}
       >
         <>
-          <Trans>Buttons.Update</Trans>
+          <Trans>Update</Trans>
           <SaveIcon className={classes.marginLeft} />
         </>
       </ButtonSpinner>

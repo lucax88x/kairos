@@ -6,6 +6,7 @@ import DeleteIcon from '@material-ui/icons/Delete';
 import clsx from 'clsx';
 import React from 'react';
 import { i18n } from '../i18nLoader';
+import { t } from '@lingui/macro';
 
 const useToolbarStyles = makeStyles(theme => ({
   root: {
@@ -52,7 +53,7 @@ export const TableToolbar: React.FC<TableToolbarProps> = props => {
       <div className={classes.title}>
         {numSelected > 0 ? (
           <Typography color="inherit" variant="subtitle1">
-            {i18n._('TableToolbar.Selected', { selected: numSelected })}
+            {i18n._(t`${numSelected} selected`)}
           </Typography>
         ) : (
           <Typography variant="h6" id="tableTitle">

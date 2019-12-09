@@ -33,7 +33,7 @@ function* doBulkTimeHolidayEntries({
 }
 
 function* doNotifySuccess() {
-  yield put(enqueueSnackbarAction(i18n._(t`Messages.BulkHolidaysSaved`), { variant: 'success' }));
+  yield put(enqueueSnackbarAction(i18n._(t`Saved Holidays`), { variant: 'success' }));
 }
 
 export function* bulkInsertTimeHolidayEntriesSaga() {

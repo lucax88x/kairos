@@ -163,13 +163,13 @@ export const ProfileJobForm: React.FC<ProfileJobFormProps> = props => {
       <ExpansionPanelSummary expandIcon={<ExpandMoreIcon />}>
         <div className={clsx(classes.columns, classes.between)}>
           <Typography className={classes.heading}>
-            {!!job.name ? job.name : i18n._(t`Profile.UnknownJob`)}
+            {!!job.name ? job.name : i18n._(t`Unknown`)}
           </Typography>
           <Typography className={classes.secondaryHeading}>
             {`${formatDate(job.start, selectedLanguage, formatAsDate)} - ${
               !!job.end
                 ? formatDate(job.end, selectedLanguage, formatAsDate)
-                : i18n._(t`Profile.CurrentDateLabel`)
+                : i18n._(t`Current Date`)
             }`}
           </Typography>
           <IconButton color="inherit" aria-label="Delete entry" onClick={handleJobDelete}>
@@ -183,7 +183,7 @@ export const ProfileJobForm: React.FC<ProfileJobFormProps> = props => {
             <TextField
               margin="dense"
               fullWidth
-              label={<Trans>Labels.Name</Trans>}
+              label={<Trans>Name</Trans>}
               type="text"
               value={job.name}
               onChange={handleJobNameChange}
@@ -198,8 +198,8 @@ export const ProfileJobForm: React.FC<ProfileJobFormProps> = props => {
                 value={job.start}
                 maxDate={!!job.end ? job.end : maxDate}
                 onChange={handleJobStartDateChange}
-                label={<Trans>Labels.Start</Trans>}
-                invalidDateMessage={<Trans>Validation.InvalidDate</Trans>}
+                label={<Trans>Start</Trans>}
+                invalidDateMessage={<Trans>Invalid Date</Trans>}
                 format={formatAsDate}
               />
               <KeyboardDatePicker
@@ -207,16 +207,16 @@ export const ProfileJobForm: React.FC<ProfileJobFormProps> = props => {
                 fullWidth
                 value={job.end}
                 minDate={!!job.start ? job.start : minDate}
-                invalidDateMessage={<Trans>Validation.InvalidDate</Trans>}
+                invalidDateMessage={<Trans>Invalid Date</Trans>}
                 onChange={handleJobEndDateChange}
-                label={<Trans>Labels.End</Trans>}
+                label={<Trans>End</Trans>}
                 format={formatAsDate}
               />
             </MuiPickersUtilsProvider>
             <TextField
               margin="dense"
               fullWidth
-              label={<Trans>Labels.Holidays</Trans>}
+              label={<Trans>Holidays (days per year)</Trans>}
               inputProps={{ min: 0, max: 365, step: 1 }}
               type="number"
               value={job.holidaysPerYear}
@@ -225,7 +225,7 @@ export const ProfileJobForm: React.FC<ProfileJobFormProps> = props => {
           </div>
           <div className={classes.responsiveColumns}>
             <TextField
-              label={<Trans>Labels.Monday</Trans>}
+              label={<Trans>Monday</Trans>}
               inputProps={{ min: 0, max: 23.59, step: 0.1 }}
               type="number"
               value={job.monday}
@@ -233,7 +233,7 @@ export const ProfileJobForm: React.FC<ProfileJobFormProps> = props => {
             />
             <TextField
               margin="dense"
-              label={<Trans>Labels.Thursday</Trans>}
+              label={<Trans>Thursday</Trans>}
               inputProps={{ min: 0, max: 23.59, step: 0.1 }}
               type="number"
               value={job.tuesday}
@@ -241,7 +241,7 @@ export const ProfileJobForm: React.FC<ProfileJobFormProps> = props => {
             />
             <TextField
               margin="dense"
-              label={<Trans>Labels.Wednesday</Trans>}
+              label={<Trans>Wednesday</Trans>}
               inputProps={{ min: 0, max: 23.59, step: 0.1 }}
               type="number"
               value={job.wednesday}
@@ -249,7 +249,7 @@ export const ProfileJobForm: React.FC<ProfileJobFormProps> = props => {
             />
             <TextField
               margin="dense"
-              label={<Trans>Labels.Thursday</Trans>}
+              label={<Trans>Thursday</Trans>}
               inputProps={{ min: 0, max: 23.59, step: 0.1 }}
               type="number"
               value={job.thursday}
@@ -257,7 +257,7 @@ export const ProfileJobForm: React.FC<ProfileJobFormProps> = props => {
             />
             <TextField
               margin="dense"
-              label={<Trans>Labels.Friday</Trans>}
+              label={<Trans>Friday</Trans>}
               inputProps={{ min: 0, max: 23.59, step: 0.1 }}
               type="number"
               value={job.friday}
@@ -265,7 +265,7 @@ export const ProfileJobForm: React.FC<ProfileJobFormProps> = props => {
             />
             <TextField
               margin="dense"
-              label={<Trans>Labels.Saturday</Trans>}
+              label={<Trans>Saturday</Trans>}
               inputProps={{ min: 0, max: 23.59, step: 0.1 }}
               type="number"
               value={job.saturday}
@@ -273,7 +273,7 @@ export const ProfileJobForm: React.FC<ProfileJobFormProps> = props => {
             />
             <TextField
               margin="dense"
-              label={<Trans>Labels.Sunday</Trans>}
+              label={<Trans>Sunday</Trans>}
               inputProps={{ min: 0, max: 23.59, step: 0.1 }}
               type="number"
               value={job.sunday}

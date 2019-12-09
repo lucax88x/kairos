@@ -1,14 +1,5 @@
 import { t } from '@lingui/macro';
-import {
-  Avatar,
-  Box,
-  Button,
-  Container,
-  createMuiTheme,
-  CssBaseline,
-  IconButton,
-  Typography,
-} from '@material-ui/core';
+import { Avatar, Box, Button, Container, createMuiTheme, CssBaseline, IconButton, Typography } from '@material-ui/core';
 import CloseIcon from '@material-ui/icons/Close';
 import { makeStyles, ThemeProvider } from '@material-ui/styles';
 import { ConnectedRouter } from 'connected-react-router';
@@ -31,8 +22,9 @@ import './index.scss';
 import { NotFound } from './NotFound';
 import { enqueueSnackbarAction } from './notification-manager/enqueue-snackbar';
 import { NotificationManager } from './notification-manager/NotificationManager.container';
-import { Routes } from './routes';
+import { buildPrivateRouteWithYear, RouteMatcher } from './routes';
 import * as serviceWorker from './serviceWorker';
+import { selectSelectedYear } from './shared/selectors';
 
 const theme = createMuiTheme({
   palette: {
@@ -172,10 +164,21 @@ const Index: React.FC = () => {
               <div className={classes.root}>
                 <ConnectedRouter history={history}>
                   <Switch>
-                    <Redirect exact={true} from="/" to={Routes.Dashboard} />
-                    <Route path={Routes.Login} component={LoginForm} />
-                    <Route path="" component={App} />
-                    <Route component={NotFound} />
+                    <Redirect
+                      exact={true}
+                      from="/"
+                      to={buildPrivateRouteWithYear(
+                        RouteMatcher.Dashboard,
+                        selectSelectedYear(store.getState()),
+                      )}
+                    />
+                    <Route path={RouteMatcher.Login} component={LoginForm} />
+                    <Route path={RouteMatcher.Private} component={App} />
+                    <Route
+                      path={RouteMatcher.PrivateWithYear}
+                      component={App}
+                    />
+                    <Route path="*" component={NotFound} />
                   </Switch>
                 </ConnectedRouter>
 
@@ -296,12 +299,16 @@ ReactDOM.render(<Index />, document.getElementById('root'));
 
 serviceWorker.register({
   onSuccess: () => {
-    store.dispatch(enqueueSnackbarAction(i18n._(t`Messages.ContentIsCached`)));
+    store.dispatch(
+      enqueueSnackbarAction(i18n._(t`Content is cached for offline use.`)),
+    );
   },
   onUpdate: () => {
     store.dispatch(
       enqueueSnackbarAction(
-        i18n._(t`Messages.NewContentAvailablePleaseRefresh`),
+        i18n._(
+          t`New content is available and will be used when all tabs for this page are closed.`,
+        ),
         {
           variant: 'warning',
           action: (

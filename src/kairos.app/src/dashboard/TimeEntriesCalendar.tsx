@@ -1,5 +1,6 @@
+import { t } from '@lingui/macro';
 import { makeStyles } from '@material-ui/styles';
-import { endOfDay, endOfYear, startOfDay, startOfYear } from 'date-fns';
+import { endOfDay, endOfYear, getDate, getMonth, startOfDay, startOfYear } from 'date-fns';
 import moment from 'moment';
 import { join, map } from 'ramda';
 import React, { useCallback, useEffect, useState } from 'react';
@@ -10,13 +11,10 @@ import Spinner from '../components/Spinner';
 import { i18n } from '../i18nLoader';
 import { Language } from '../models/language-model';
 import { ProfileModel } from '../models/profile.model';
-import {
-  getTextFromAbsenceType,
-  TimeAbsenceEntryModel,
-} from '../models/time-absence-entry.model';
+import { getTextFromAbsenceType, TimeAbsenceEntryModel } from '../models/time-absence-entry.model';
 import { TimeEntryListModel } from '../models/time-entry-list.model';
 import { TimeHolidayEntryModel } from '../models/time-holiday-entry.model';
-import { Routes } from '../routes';
+import { buildNavigatorRoute } from '../routes';
 
 const localizer = momentLocalizer(moment);
 
@@ -51,6 +49,7 @@ const useStyles = makeStyles({
 export interface TimeEntriesCalendarInputs {
   profile: ProfileModel;
   selectedLanguage: Language;
+  selectedYear: number;
 
   isGetTimeEntriesBusy: boolean;
   timeEntries: TimeEntryListModel[];
@@ -75,6 +74,7 @@ export const TimeEntriesCalendarComponent: React.FC<TimeEntriesCalendarEntryProp
   const {
     profile,
     selectedLanguage,
+    selectedYear,
     isGetTimeEntriesBusy,
     timeEntries,
     isGetTimeAbsenceEntriesBusy,
@@ -101,7 +101,7 @@ export const TimeEntriesCalendarComponent: React.FC<TimeEntriesCalendarEntryProp
               start: enter,
               end: exit,
               title: job,
-              resource: { type: EventType.Work, id: enterId },
+              resource: { type: EventType.Work },
             }),
             pairsByJob[job.id.toString()],
           )
@@ -112,7 +112,7 @@ export const TimeEntriesCalendarComponent: React.FC<TimeEntriesCalendarEntryProp
           start: ab.start,
           end: ab.end,
           title: join(' ', [getTextFromAbsenceType(ab.type), ab.description]),
-          resource: { type: EventType.Absence, id: ab.id },
+          resource: { type: EventType.Absence },
         }),
         timeAbsenceEntries,
       );
@@ -122,7 +122,7 @@ export const TimeEntriesCalendarComponent: React.FC<TimeEntriesCalendarEntryProp
           start: startOfDay(hol.when),
           end: endOfDay(hol.when),
           title: hol.description,
-          resource: { type: EventType.Holiday, id: hol.id },
+          resource: { type: EventType.Holiday },
         }),
         timeHolidayEntries,
       );
@@ -157,35 +157,30 @@ export const TimeEntriesCalendarComponent: React.FC<TimeEntriesCalendarEntryProp
   );
 
   const messages: Messages = {
-    month: i18n._('Calendar.Month'),
-    yesterday: i18n._('Calendar.Yesterday'),
-    day: i18n._('Calendar.Day'),
-    today: i18n._('Calendar.Today'),
-    previous: i18n._('Calendar.Back'),
-    next: i18n._('Calendar.Next'),
-    week: i18n._('Calendar.Week'),
-    work_week: i18n._('Calendar.WorkWeek'),
-    agenda: i18n._('Calendar.Agenda'),
-    noEventsInRange: i18n._('Calendar.NoEventsInRange'),
-    allDay: i18n._('Calendar.AllDay'),
-    showMore: more => i18n._('Calendar.ShowMore', { more }),
+    month: i18n._(t`Month`),
+    yesterday: i18n._(t`Yesterday`),
+    day: i18n._(t`Day`),
+    today: i18n._(t`Today`),
+    previous: i18n._(t`Back`),
+    next: i18n._(t`Next`),
+    week: i18n._(t`Week`),
+    work_week: i18n._(t`Work Week`),
+    agenda: i18n._(t`Agenda`),
+    noEventsInRange: i18n._(t`No Events In Range`),
+    allDay: i18n._(t`All day`),
+    showMore: more => i18n._(t`More ${more}`),
   };
 
   const handleOnDoubleClick = useCallback(
     (event: Event) => {
-      const { type, id } = event.resource;
-      switch (type as EventType) {
-        case EventType.Work:
-          onNavigate(Routes.EditTimeEntry.replace(':id', id.toString()));
-          break;
-        case EventType.Absence:
-          onNavigate(Routes.EditTimeAbsenceEntry.replace(':id', id.toString()));
-          break;
-        case EventType.Holiday:
-          onNavigate(Routes.EditTimeHolidayEntry.replace(':id', id.toString()));
-          break;
-        default:
-          break;
+      if (!!event.start) {
+        onNavigate(
+          buildNavigatorRoute(
+            selectedYear,
+            getMonth(event.start) + 1,
+            getDate(event.start),
+          ),
+        );
       }
     },
     [onNavigate],

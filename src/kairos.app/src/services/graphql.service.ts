@@ -40,7 +40,7 @@ function call<R, P = null>(query: string, data?: P): Promise<R> {
       const error = result.data.errors[0];
       console.error(error);
 
-      reject({ message: i18n._(t`ServerMessages.Error`) });
+      reject({ message: i18n._(t`Error, please retry later`) });
     } catch (error) {
       console.error(error);
 
@@ -52,7 +52,7 @@ function call<R, P = null>(query: string, data?: P): Promise<R> {
           case HttpStatus.UNAUTHORIZED:
           case HttpStatus.FORBIDDEN:
             authService.logout();
-            reject({ message: i18n._(t`ServerMessages.Unauthorized`) });
+            reject({ message: i18n._(t`Unauthorized`) });
             break;
         }
       }
@@ -60,10 +60,10 @@ function call<R, P = null>(query: string, data?: P): Promise<R> {
       // answer from auth0
       if (!!error.error && error.error === 'login_required') {
         authService.logout();
-        reject({ message: i18n._(t`ServerMessages.Unauthorized`) });
+        reject({ message: i18n._(t`Unauthorized`) });
       }
 
-      reject({ message: i18n._(t`ServerMessages.Error`) });
+      reject({ message: i18n._(t`Error, please retry later`) });
     }
   });
 }

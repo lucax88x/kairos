@@ -3,22 +3,13 @@ import produce from 'immer';
 import { call, put, select, takeLatest } from 'redux-saga/effects';
 import { createAsyncAction } from 'typesafe-actions';
 import { SharedActions } from '../actions';
+import { getRangeFromYear } from '../code/get-range-from-year';
 import { Route } from '../models/route.model';
 import { TimeAbsenceEntryModel } from '../models/time-absence-entry.model';
 import { getTimeAbsenceEntries } from '../services/time-absence-entry/time-absence-entry.service';
-import {
-  CREATE_TIME_ABSENCE_ENTRY_SUCCESS,
-  DELETE_TIME_ABSENCE_ENTRIES_SUCCESS,
-} from '../shared/constants';
-import {
-  selectDashboardRoute,
-  selectTimeAbsenceEntriesRoute,
-} from '../shared/router.selectors';
-import {
-  GET_TIME_ABSENCE_ENTRIES,
-  GET_TIME_ABSENCE_ENTRIES_FAILURE,
-  GET_TIME_ABSENCE_ENTRIES_SUCCESS,
-} from './constants';
+import { CREATE_TIME_ABSENCE_ENTRY_SUCCESS, DELETE_TIME_ABSENCE_ENTRIES_SUCCESS } from '../shared/constants';
+import { selectDashboardRoute, selectTimeAbsenceEntriesRoute } from '../shared/router.selectors';
+import { GET_TIME_ABSENCE_ENTRIES, GET_TIME_ABSENCE_ENTRIES_FAILURE, GET_TIME_ABSENCE_ENTRIES_SUCCESS } from './constants';
 import { selectIsOnline, selectSelectedYear } from './selectors';
 import { SharedState } from './state';
 
@@ -60,7 +51,8 @@ function* doGetTimeAbsenceEntries() {
   try {
     const year = yield select(selectSelectedYear);
 
-    const timeAbsenceEntries = yield call(getTimeAbsenceEntries, year);
+    const [start, end] = getRangeFromYear(year);
+    const timeAbsenceEntries = yield call(getTimeAbsenceEntries, start, end);
 
     yield put(getTimeAbsenceEntriesAsync.success(timeAbsenceEntries));
   } catch (error) {

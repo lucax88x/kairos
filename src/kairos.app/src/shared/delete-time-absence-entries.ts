@@ -30,7 +30,7 @@ function* doDeleteTimeAbsenceEntries({
 }: ReturnType<typeof tryDeleteTimeAbsenceEntriesAction>) {
   const confirmed = yield call(askForConfirmation, {
     title: null,
-    message: i18n._(t`ConfirmationModal.DeleteAbsences`),
+    message: i18n._(t`Are you sure you want to delete the selected absences?`),
     rejectButton: null,
     approveButton: null,
   });
@@ -52,7 +52,7 @@ function* doDeleteTimeAbsenceEntries({
 
 function* doNotifySuccess() {
   yield put(
-    enqueueSnackbarAction(i18n._(t`Messages.AbsenceDeleted`), {
+    enqueueSnackbarAction(i18n._(t`Absence Deleted`), {
       variant: 'success',
     }),
   );

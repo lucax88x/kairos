@@ -1,9 +1,7 @@
 import produce from 'immer';
 import { call, put, takeLatest } from 'redux-saga/effects';
 import { createAsyncAction } from 'typesafe-actions';
-
 import { SharedActions } from '../actions';
-import { closeTimeAbsenceEntryDrawerAction } from '../layout/actions';
 import { TimeAbsenceEntryModel } from '../models/time-absence-entry.model';
 import { createTimeAbsenceEntry } from '../services/time-absence-entry/time-absence-entry.service';
 import {
@@ -12,6 +10,7 @@ import {
   CREATE_TIME_ABSENCE_ENTRY_SUCCESS,
 } from './constants';
 import { SharedState } from './state';
+import { closeTimeAbsenceEntryDrawerAction } from '../layout/actions';
 
 export const createTimeAbsenceEntryAsync = createAsyncAction(
   CREATE_TIME_ABSENCE_ENTRY,
@@ -19,7 +18,9 @@ export const createTimeAbsenceEntryAsync = createAsyncAction(
   CREATE_TIME_ABSENCE_ENTRY_FAILURE,
 )<TimeAbsenceEntryModel, void, string>();
 
-function* doCreateTimeAbsenceEntry({ payload }: ReturnType<typeof createTimeAbsenceEntryAsync.request>) {
+function* doCreateTimeAbsenceEntry({
+  payload,
+}: ReturnType<typeof createTimeAbsenceEntryAsync.request>) {
   try {
     yield call(createTimeAbsenceEntry, payload);
 
@@ -38,7 +39,10 @@ export function* createTimeAbsenceEntrySaga() {
   yield takeLatest(CREATE_TIME_ABSENCE_ENTRY_SUCCESS, doCloseDrawer);
 }
 
-export const createTimeAbsenceEntryReducer = (state: SharedState, action: SharedActions): SharedState =>
+export const createTimeAbsenceEntryReducer = (
+  state: SharedState,
+  action: SharedActions,
+): SharedState =>
   produce(state, draft => {
     switch (action.type) {
       case CREATE_TIME_ABSENCE_ENTRY:

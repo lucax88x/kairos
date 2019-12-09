@@ -17,6 +17,7 @@ import {
   TimeAbsenceEntriesDispatches,
   TimeAbsenceEntriesInputs,
 } from './TimeAbsenceEntries';
+import { RouteMatcher } from '../routes';
 
 const mapStateToProps = (state: State): TimeAbsenceEntriesInputs => ({
   timeAbsenceEntries: selectTimeAbsenceEntries(state),
@@ -29,7 +30,7 @@ const mapDispatchToProps = (
 ): TimeAbsenceEntriesDispatches => ({
   onCreate: () => dispatch(openTimeAbsenceEntryDrawerAction()),
   onUpdate: (model: TimeAbsenceEntryModel) =>
-    dispatch(push(`/absence/${model.id}`)),
+    dispatch(push(RouteMatcher.EditTimeAbsenceEntry.replace(':id', model.id.toString()))),
   onDelete: (ids: UUID[]) => dispatch(tryDeleteTimeAbsenceEntriesAction(ids)),
 });
 

@@ -50,7 +50,6 @@
     "start": "yarn lingui:compile && react-scripts start",
     "build": "yarn lingui:compile && react-scripts build",
     "test": "react-scripts test",
-    "eject": "react-scripts eject",
     "lint": "eslint --max-warnings=0 ./src ./tests",
     "prettier": "prettier --check 'src/**/*.js' 'tests/**/*.js'",
     "format": "eslint --fix ./src ./tests && prettier --write 'src/**/*.js' 'tests/**/*.js'",

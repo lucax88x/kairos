@@ -30,7 +30,7 @@ function* doDeleteTimeHolidayEntries({
 }: ReturnType<typeof tryDeleteTimeHolidayEntriesAction>) {
   const confirmed = yield call(askForConfirmation, {
     title: null,
-    message: i18n._(t`ConfirmationModal.DeleteHolidays`),
+    message: i18n._(t`Are you sure you want to delete the selected holidays?`),
     rejectButton: null,
     approveButton: null,
   });
@@ -52,7 +52,7 @@ function* doDeleteTimeHolidayEntries({
 
 function* doNotifySuccess() {
   yield put(
-    enqueueSnackbarAction(i18n._(t`Messages.HolidayDeleted`), {
+    enqueueSnackbarAction(i18n._(t`Holiday Deleted`), {
       variant: 'success',
     }),
   );

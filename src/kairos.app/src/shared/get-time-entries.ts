@@ -21,6 +21,7 @@ import {
 import { selectIsOnline, selectSelectedYear } from './selectors';
 import { SharedState } from './state';
 import { LOCATION_CHANGE } from 'connected-react-router';
+import { getRangeFromYear } from '../code/get-range-from-year';
 
 export const getTimeEntriesAsync = createAsyncAction(
   GET_TIME_ENTRIES,
@@ -56,7 +57,8 @@ function* doGetTimeEntries() {
   try {
     const year = yield select(selectSelectedYear);
 
-    const timeEntries = yield call(getTimeEntries, year);
+    const [start, end] = getRangeFromYear(year);
+    const timeEntries = yield call(getTimeEntries, start, end);
 
     yield put(getTimeEntriesAsync.success(timeEntries));
   } catch (error) {

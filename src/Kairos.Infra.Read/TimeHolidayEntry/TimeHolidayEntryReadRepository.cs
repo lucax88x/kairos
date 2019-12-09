@@ -10,7 +10,7 @@ namespace Kairos.Infra.Read.TimeHolidayEntry
     {
         Task AddOrUpdate(TimeHolidayEntryEventDto timeHolidayEntry);
         Task Delete(Guid id, string? user);
-        Task<ImmutableList<TimeHolidayEntryReadDto>> Get(string user, int year);
+        Task<ImmutableList<TimeHolidayEntryReadDto>> Get(string user, DateTimeOffset start, DateTimeOffset end);
         Task<TimeHolidayEntryReadDto> GetById(Guid id);
     }
 
@@ -25,10 +25,12 @@ namespace Kairos.Infra.Read.TimeHolidayEntry
 
         public async Task AddOrUpdate(TimeHolidayEntryEventDto timeHolidayEntry)
         {
-            var dto = new TimeHolidayEntryReadDto(timeHolidayEntry.Id, timeHolidayEntry.Description, timeHolidayEntry.When);
+            var dto = new TimeHolidayEntryReadDto(timeHolidayEntry.Id, timeHolidayEntry.Description,
+                timeHolidayEntry.When);
 
             await _repository.Set(timeHolidayEntry.Id, dto);
-            await _repository.SortedSetAdd($"by-when|by-user|{timeHolidayEntry.User}", dto.When.UtcTicks, timeHolidayEntry.Id);
+            await _repository.SortedSetAdd($"by-when|by-user|{timeHolidayEntry.User}", dto.When.UtcTicks,
+                timeHolidayEntry.Id);
         }
 
         public async Task Delete(Guid id, string? user)
@@ -37,13 +39,14 @@ namespace Kairos.Infra.Read.TimeHolidayEntry
             await _repository.SortedSetRemove($"by-when|by-user|{user}", id);
         }
 
-        public async Task<ImmutableList<TimeHolidayEntryReadDto>> Get(string user, int year)
+        public async Task<ImmutableList<TimeHolidayEntryReadDto>> Get(string user, DateTimeOffset start,
+            DateTimeOffset end)
         {
             var ids = await _repository.SortedSetRangeByScore($"by-when|by-user|{user}");
 
             var dtos = await _repository.GetMultiple<TimeHolidayEntryReadDto>(ids);
 
-            return dtos.Where(d => d.When.Year == year).ToImmutableList();
+            return dtos.Where(d => d.When >= start && d.When <= end).ToImmutableList();
         }
 
         public async Task<TimeHolidayEntryReadDto> GetById(Guid id)

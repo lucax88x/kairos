@@ -14,5 +14,6 @@ export { getTimeEntriesSaga } from './get-time-entries';
 export { getTimeHolidayEntriesSaga } from './get-time-holiday-entries';
 export { notifyError } from './notify-error';
 export { selectLanguageSaga } from './select-language';
+export { selectYearSaga } from './select-year';
 export { updateTimeHolidayEntriesByCountrySaga } from './update-time-holiday-entries-by-country';
 export { refreshSaga } from './refresh';

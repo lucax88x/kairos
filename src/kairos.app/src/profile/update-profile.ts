@@ -27,7 +27,7 @@ function* doUpdateProfile({ payload: { model } }: ReturnType<typeof updateProfil
 }
 
 function* doNotifySuccess() {
-  yield put(enqueueSnackbarAction(i18n._(t`Messages.ProfileSaved`), { variant: 'success' }));
+  yield put(enqueueSnackbarAction(i18n._(t`Profile Saved`), { variant: 'success' }));
 }
 
 export function* updateProfileSaga() {
