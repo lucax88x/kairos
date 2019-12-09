@@ -11,6 +11,8 @@ import {
   subMinutes,
   subMonths,
   subYears,
+  addHours,
+  addMinutes,
 } from 'date-fns';
 import { filter, groupBy, join } from 'ramda';
 import { padNumber } from '../code/padNumber';
@@ -80,12 +82,15 @@ export const humanDifference = (left: Date, right: Date) => {
   return str;
 };
 
-export const getHumanHours = (hours: number) => {
+export const humanDifferenceFromHours = (hours: number) => {
   const percentualMinutes = hours % 1;
   hours = hours - percentualMinutes;
   const minutes = 60 * percentualMinutes;
-  const hoursStr = hours.toString().padStart(2, '0');
-  const minutesStr = minutes.toFixed(0).padStart(2, '0');
 
-  return minutes > 0 ? `${hoursStr}:${minutesStr}` : hoursStr;
+  let date = new Date(0);
+
+  date = addHours(date, hours);
+  date = addMinutes(date, minutes);
+
+  return humanDifference(new Date(0), date);
 };

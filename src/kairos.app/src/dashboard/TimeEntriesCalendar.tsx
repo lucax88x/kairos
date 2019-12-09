@@ -1,6 +1,13 @@
 import { t } from '@lingui/macro';
 import { makeStyles } from '@material-ui/styles';
-import { endOfDay, endOfYear, getDate, getMonth, startOfDay, startOfYear } from 'date-fns';
+import {
+  endOfDay,
+  endOfYear,
+  getDate,
+  getMonth,
+  startOfDay,
+  startOfYear,
+} from 'date-fns';
 import moment from 'moment';
 import { join, map } from 'ramda';
 import React, { useCallback, useEffect, useState } from 'react';
@@ -11,7 +18,10 @@ import Spinner from '../components/Spinner';
 import { i18n } from '../i18nLoader';
 import { Language } from '../models/language-model';
 import { ProfileModel } from '../models/profile.model';
-import { getTextFromAbsenceType, TimeAbsenceEntryModel } from '../models/time-absence-entry.model';
+import {
+  getTextFromAbsenceType,
+  TimeAbsenceEntryModel,
+} from '../models/time-absence-entry.model';
 import { TimeEntryListModel } from '../models/time-entry-list.model';
 import { TimeHolidayEntryModel } from '../models/time-holiday-entry.model';
 import { buildNavigatorRoute } from '../routes';
@@ -183,7 +193,7 @@ export const TimeEntriesCalendarComponent: React.FC<TimeEntriesCalendarEntryProp
         );
       }
     },
-    [onNavigate],
+    [selectedYear, onNavigate],
   );
 
   return (

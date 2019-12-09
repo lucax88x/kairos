@@ -6,6 +6,7 @@ export class RouteMatcher {
   static PrivateWithYear = '/private/:year';
 
   static Profile = buildRouteMatcher(RouteMatcher.Private, '/profile');
+  static RedirectDashboard = buildRouteMatcher(RouteMatcher.Private, '/dashboard');
   static Dashboard = buildRouteMatcher(
     RouteMatcher.PrivateWithYear,
     '/dashboard',

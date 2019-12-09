@@ -13,7 +13,7 @@ import { TimeHolidayEntryModel } from '../models/time-holiday-entry.model';
 import { UUID } from '../models/uuid.model';
 import { formatAsDate } from './constants';
 import { formatDate } from './formatters';
-import { filterByInterval, humanDifference, getHumanHours } from './functions';
+import { filterByInterval, humanDifference, humanDifferenceFromHours } from './functions';
 
 export interface TimeEntryPair {
   enterId: UUID;
@@ -243,14 +243,14 @@ export function getWorkingHoursStatistics(
       title: i18n._(t`Remaining Today: ${job.name}`),
       titleValues: { job: job.name },
       subtitle: formatDate(now, language, 'MMMM dd'),
-      text: getHumanHours(todayJobHours.remainingHours.toNumber()),
+      text: humanDifferenceFromHours(todayJobHours.remainingHours.toNumber()),
     };
 
     statistics['OvertimeToday'] = {
       title: i18n._(t`Overtime Today: ${job.name}`),
       titleValues: { job: job.name },
       subtitle: formatDate(start, language, 'MMMM dd'),
-      text: getHumanHours(todayJobHours.overtimeHours.toNumber()),
+      text: humanDifferenceFromHours(todayJobHours.overtimeHours.toNumber()),
     };
 
     // week
@@ -271,7 +271,7 @@ export function getWorkingHoursStatistics(
         language,
         'MMMM dd',
       )} - ${formatDate(endOfWeek(now), language, 'MMMM dd')}`,
-      text: getHumanHours(weekJobHours.remainingHours.toNumber()),
+      text: humanDifferenceFromHours(weekJobHours.remainingHours.toNumber()),
     };
 
     statistics['OvertimeWeek'] = {
@@ -282,7 +282,7 @@ export function getWorkingHoursStatistics(
         language,
         'MMMM dd',
       )} - ${formatDate(endOfWeek(now), language, 'MMMM dd')}`,
-      text: getHumanHours(weekJobHours.overtimeHours.toNumber()),
+      text: humanDifferenceFromHours(weekJobHours.overtimeHours.toNumber()),
     };
   }
 

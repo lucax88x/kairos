@@ -12,7 +12,7 @@ import DeleteIcon from '@material-ui/icons/Delete';
 import EditIcon from '@material-ui/icons/Edit';
 import { format } from 'date-fns';
 import React, { useCallback } from 'react';
-import { formatAsDateTime, formatAsDate } from '../code/constants';
+import { formatAsDate } from '../code/constants';
 import { Themes } from '../code/variables';
 import { TimeHolidayEntryModel } from '../models/time-holiday-entry.model';
 
