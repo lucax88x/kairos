@@ -264,14 +264,14 @@ describe('statistics', () => {
       expect(result['RemainingToday']).toEqual(
         expect.objectContaining({
           subtitle: 'January 01',
-          text: '7:30',
+          text: '07:30',
         }),
       );
 
       expect(result['OvertimeToday']).toEqual(
         expect.objectContaining({
           subtitle: 'January 01',
-          text: '0',
+          text: '00',
         }),
       );
     });
@@ -301,14 +301,14 @@ describe('statistics', () => {
       expect(result['RemainingToday']).toEqual(
         expect.objectContaining({
           subtitle: 'January 01',
-          text: '0',
+          text: '00',
         }),
       );
 
       expect(result['OvertimeToday']).toEqual(
         expect.objectContaining({
           subtitle: 'January 01',
-          text: '0',
+          text: '00',
         }),
       );
     });
@@ -345,7 +345,7 @@ describe('statistics', () => {
       expect(result['OvertimeToday']).toEqual(
         expect.objectContaining({
           subtitle: 'January 01',
-          text: '2',
+          text: '02',
         }),
       );
     });
@@ -377,14 +377,14 @@ describe('statistics', () => {
       expect(result['RemainingToday']).toEqual(
         expect.objectContaining({
           subtitle: 'January 01',
-          text: '0',
+          text: '00',
         }),
       );
 
       expect(result['OvertimeToday']).toEqual(
         expect.objectContaining({
           subtitle: 'January 01',
-          text: '0',
+          text: '00',
         }),
       );
     });
@@ -409,14 +409,14 @@ describe('statistics', () => {
       expect(result['RemainingToday']).toEqual(
         expect.objectContaining({
           subtitle: 'January 01',
-          text: '0',
+          text: '00',
         }),
       );
 
       expect(result['OvertimeToday']).toEqual(
         expect.objectContaining({
           subtitle: 'January 01',
-          text: '0',
+          text: '00',
         }),
       );
     });

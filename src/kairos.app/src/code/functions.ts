@@ -83,7 +83,9 @@ export const humanDifference = (left: Date, right: Date) => {
 export const getHumanHours = (hours: number) => {
   const percentualMinutes = hours % 1;
   hours = hours - percentualMinutes;
-  const minutes = (60 * percentualMinutes);
+  const minutes = 60 * percentualMinutes;
+  const hoursStr = hours.toString().padStart(2, '0');
+  const minutesStr = minutes.toFixed(0).padStart(2, '0');
 
-  return minutes > 0 ? `${hours}:${minutes.toFixed(0)}` : hours.toString();
+  return minutes > 0 ? `${hoursStr}:${minutesStr}` : hoursStr;
 };
