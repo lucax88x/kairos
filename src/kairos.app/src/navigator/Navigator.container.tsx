@@ -17,8 +17,8 @@ import {
 } from './Navigator';
 import {
   selectEndDate,
+  selectGroupedEntriesByDate,
   selectIsGetEntriesBusy,
-  selectSortedEntries,
   selectStartDate,
 } from './selectors';
 import { setNavigatorFilters } from './set-navigator-filters';
@@ -28,7 +28,7 @@ const mapStateToProps = (state: State): NavigatorInputs => ({
   startDate: selectStartDate(state),
   endDate: selectEndDate(state),
   isBusy: selectIsGetEntriesBusy(state),
-  entries: selectSortedEntries(state),
+  entriesByDate: selectGroupedEntriesByDate(state),
 });
 
 const mapDispatchToProps = (

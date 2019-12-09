@@ -1,15 +1,11 @@
 import { LOCATION_CHANGE, push } from 'connected-react-router';
-import { endOfDay, getDate, getMonth, isEqual, startOfDay } from 'date-fns';
+import { endOfDay, getDate, getMonth, isEqual, startOfDay, getUnixTime } from 'date-fns';
 import produce from 'immer';
-import { put, select, takeLatest, debounce } from 'redux-saga/effects';
+import { debounce, put, select } from 'redux-saga/effects';
 import { action, PayloadAction } from 'typesafe-actions';
 import { NavigatorActions } from '../actions';
 import { Route } from '../models/route.model';
-import {
-  buildNavigatorRoute,
-  buildPrivateRouteWithYear,
-  RouteMatcher,
-} from '../routes';
+import { buildNavigatorRoute, buildPrivateRouteWithYear, RouteMatcher } from '../routes';
 import { selectNavigatorRoute } from '../shared/router.selectors';
 import { selectSelectedYear } from '../shared/selectors';
 import { SET_NAVIGATOR_FILTERS } from './constants';
@@ -23,6 +19,7 @@ function* doUpdateState() {
   const navigatorRoute: Route<{ month: number; day: number }> = yield select(
     selectNavigatorRoute,
   );
+
   if (!!navigatorRoute) {
     const year = yield select(selectSelectedYear);
     const currentStart = yield select(selectStartDate);
@@ -48,7 +45,7 @@ function* doUpdateRoute({
   const year = yield select(selectSelectedYear);
 
   // it's exactly 1 day difference
-  if (isEqual(start, startOfDay(start)) && isEqual(end, endOfDay(end))) {
+  if (getUnixTime(end) - getUnixTime(start) === 86399) {
     yield put(
       push(buildNavigatorRoute(year, getMonth(start) + 1, getDate(start))),
     );

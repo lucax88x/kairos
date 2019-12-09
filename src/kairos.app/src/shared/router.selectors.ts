@@ -29,6 +29,11 @@ export const selectNavigatorRoute = createSelector(
   createMatchSelector(RouteMatcher.Navigator),
 );
 
+export const selectNavigatorCustomRoute = createSelector(
+  (state: State) => state,
+  createMatchSelector(RouteMatcher.NavigatorCustom),
+);
+
 export const selectTimeEntriesRoute = createSelector(
   (state: State) => state,
   createMatchSelector(RouteMatcher.TimeEntries),

@@ -1,10 +1,18 @@
-import { Avatar, IconButton, ListItem, ListItemAvatar, ListItemSecondaryAction, ListItemText, makeStyles } from '@material-ui/core';
+import {
+  Avatar,
+  IconButton,
+  ListItem,
+  ListItemAvatar,
+  ListItemSecondaryAction,
+  ListItemText,
+  makeStyles,
+} from '@material-ui/core';
 import BeachAccessIcon from '@material-ui/icons/BeachAccess';
 import DeleteIcon from '@material-ui/icons/Delete';
 import EditIcon from '@material-ui/icons/Edit';
 import { format } from 'date-fns';
 import React, { useCallback } from 'react';
-import { formatAsDateTime } from '../code/constants';
+import { formatAsDateTime, formatAsDate } from '../code/constants';
 import { Themes } from '../code/variables';
 import { TimeHolidayEntryModel } from '../models/time-holiday-entry.model';
 
@@ -40,7 +48,7 @@ export const NavigatorTimeHolidayItem: React.FC<NavigatorTimeHolidayItemProps> =
       </ListItemAvatar>
       <ListItemText
         primary={holiday.description}
-        secondary={format(holiday.when, formatAsDateTime)}
+        secondary={format(holiday.when, formatAsDate)}
       />
       <ListItemSecondaryAction>
         <IconButton edge="end" aria-label="edit" onClick={handleEdit}>

@@ -1,33 +1,24 @@
 import DateFnsUtils from '@date-io/date-fns';
 import { Trans } from '@lingui/macro';
-import { Button, List, makeStyles, MenuItem, Select } from '@material-ui/core';
+import { Button, List, makeStyles } from '@material-ui/core';
 import KeyboardArrowLeftIcon from '@material-ui/icons/KeyboardArrowLeft';
 import KeyboardArrowRightIcon from '@material-ui/icons/KeyboardArrowRight';
-import {
-  KeyboardDatePicker,
-  MaterialUiPickersDate,
-  MuiPickersUtilsProvider,
-} from '@material-ui/pickers';
-import { addDays, endOfDay, startOfDay } from 'date-fns';
+import { KeyboardDatePicker, MaterialUiPickersDate, MuiPickersUtilsProvider } from '@material-ui/pickers';
+import { addDays, endOfDay, format, fromUnixTime, startOfDay } from 'date-fns';
 import { map } from 'ramda';
-import React, { ChangeEvent, useCallback, useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import { formatAsDate } from '../code/constants';
 import { getDatepickerLocale } from '../code/get-datepicker-locale';
-import {
-  isString,
-  isTimeAbsenceEntryModel,
-  isTimeEntryListModel,
-  isTimeHolidayEntryModel,
-} from '../code/is';
+import { isTimeAbsenceEntryModel, isTimeEntryListModel, isTimeHolidayEntryModel } from '../code/is';
 import Spinner from '../components/Spinner';
 import { EntryModel } from '../models/entry-list-model';
 import { Language } from '../models/language-model';
+import { TimeAbsenceEntryModel } from '../models/time-absence-entry.model';
+import { TimeEntryListModel } from '../models/time-entry-list.model';
+import { TimeHolidayEntryModel } from '../models/time-holiday-entry.model';
 import { NavigatorTimeAbsenceItem } from './NavigatorTimeAbsenceItem';
 import { NavigatorTimeEntryItem } from './NavigatorTimeEntryItem';
 import { NavigatorTimeHolidayItem } from './NavigatorTimeHolidayItem';
-import { TimeEntryListModel } from '../models/time-entry-list.model';
-import { TimeAbsenceEntryModel } from '../models/time-absence-entry.model';
-import { TimeHolidayEntryModel } from '../models/time-holiday-entry.model';
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -47,6 +38,9 @@ const useStyles = makeStyles(theme => ({
     alignItems: 'center',
     gridGap: theme.spacing(3),
   },
+  center: {
+    textAlign: 'center',
+  },
 }));
 
 export interface NavigatorInputs {
@@ -54,14 +48,14 @@ export interface NavigatorInputs {
   startDate: Date;
   endDate: Date;
   isBusy: boolean;
-  entries: EntryModel[];
+  entriesByDate: { [date: string]: EntryModel[] };
 }
 
 export interface NavigatorDispatches {
   onChange: (filters: { start: Date; end: Date }) => void;
   onEditTimeEntry: (entry: TimeEntryListModel) => void;
   onEditTimeAbsence: (absence: TimeAbsenceEntryModel) => void;
-  onEditTimeHoliday: (holiday: TimeHolidayEntryModel) => void;  
+  onEditTimeHoliday: (holiday: TimeHolidayEntryModel) => void;
   onDeleteTimeEntry: (entry: TimeEntryListModel) => void;
   onDeleteTimeAbsence: (absence: TimeAbsenceEntryModel) => void;
   onDeleteTimeHoliday: (holiday: TimeHolidayEntryModel) => void;
@@ -75,30 +69,30 @@ export const NavigatorComponent: React.FC<NavigatorProps> = props => {
   const {
     selectedLanguage,
     isBusy,
-    entries,
+    entriesByDate,
     startDate,
     endDate,
     onChange,
     onEditTimeEntry,
     onEditTimeAbsence,
-    onEditTimeHoliday,    
+    onEditTimeHoliday,
     onDeleteTimeEntry,
     onDeleteTimeAbsence,
     onDeleteTimeHoliday,
   } = props;
 
-  const [selectedPreset, setSelectedPreset] = useState<string>('custom');
+  // const [selectedPreset, setSelectedPreset] = useState<string>('custom');
   const [start, setStart] = useState<Date>(startOfDay(new Date()));
   const [end, setEnd] = useState<Date>(endOfDay(new Date()));
 
-  const handlePresetChange = useCallback(
-    (event: ChangeEvent<{ value: unknown }>) => {
-      if (isString(event.target.value)) {
-        setSelectedPreset(event.target.value);
-      }
-    },
-    [setSelectedPreset],
-  );
+  // const handlePresetChange = useCallback(
+  //   (event: ChangeEvent<{ value: unknown }>) => {
+  //     if (isString(event.target.value)) {
+  //       setSelectedPreset(event.target.value);
+  //     }
+  //   },
+  //   [setSelectedPreset],
+  // );
   const handleStartChange = useCallback(
     (date: MaterialUiPickersDate) => {
       if (!date) {
@@ -143,11 +137,13 @@ export const NavigatorComponent: React.FC<NavigatorProps> = props => {
     setEnd(endDate);
   }, [startDate, endDate, setStart, setEnd]);
 
+  const dates = Object.keys(entriesByDate);
+
   return (
     <div className={classes.root}>
       <Spinner show={isBusy}>
         <div className={classes.rows}>
-          <Select
+          {/* <Select
             fullWidth
             value={selectedPreset}
             onChange={handlePresetChange}
@@ -155,7 +151,7 @@ export const NavigatorComponent: React.FC<NavigatorProps> = props => {
             <MenuItem value="custom">Custom</MenuItem>
             <MenuItem value="custom1">Custom</MenuItem>
             <MenuItem value="custom2">Custom</MenuItem>
-          </Select>
+          </Select> */}
           <MuiPickersUtilsProvider
             utils={DateFnsUtils}
             locale={getDatepickerLocale(selectedLanguage)}
@@ -188,9 +184,11 @@ export const NavigatorComponent: React.FC<NavigatorProps> = props => {
               </Button>
             </div>
           </MuiPickersUtilsProvider>
-          <List>
-            {!!entries && !!entries.length ? (
-              map(entry => {
+          {!!dates && !!dates.length ? (
+            map(key => {
+              const entries = entriesByDate[key];
+
+              const renderedEntries = map(entry => {
                 if (isTimeEntryListModel(entry)) {
                   return (
                     <NavigatorTimeEntryItem
@@ -221,11 +219,20 @@ export const NavigatorComponent: React.FC<NavigatorProps> = props => {
                 } else {
                   return null;
                 }
-              }, entries)
-            ) : (
-              <Trans>No Entries for this range</Trans>
-            )}
-          </List>
+              }, entries);
+
+              return (
+                <List key={key}>
+                  <div className={classes.center}>
+                    {format(fromUnixTime(parseInt(key)), formatAsDate)}
+                  </div>
+                  {renderedEntries}
+                </List>
+              );
+            }, dates)
+          ) : (
+            <Trans>No Entries for this range</Trans>
+          )}
         </div>
       </Spinner>
     </div>

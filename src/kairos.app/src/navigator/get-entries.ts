@@ -1,8 +1,7 @@
 import { LOCATION_CHANGE } from 'connected-react-router';
 import produce from 'immer';
-import { Route } from 'react-router';
 import { put, select, takeLatest, call } from 'redux-saga/effects';
-import { createAsyncAction, PayloadAction } from 'typesafe-actions';
+import { createAsyncAction, PayloadAction, action } from 'typesafe-actions';
 import { NavigatorActions } from '../actions';
 import { EntryModel } from '../models/entry-list-model';
 import { getEntries } from '../services/navigator/navigator.service';
@@ -13,15 +12,21 @@ import {
   DELETE_TIME_ENTRIES_SUCCESS,
   DELETE_TIME_HOLIDAY_ENTRIES_SUCCESS,
 } from '../shared/constants';
-import { selectNavigatorRoute } from '../shared/router.selectors';
-import { selectIsOnline } from '../shared/selectors';
+import {
+  selectNavigatorRoute,
+  selectNavigatorCustomRoute,
+} from '../shared/router.selectors';
+import { selectIsOnline, selectSelectedYear } from '../shared/selectors';
 import {
   GET_ENTRIES,
   GET_ENTRIES_FAILURE,
   GET_ENTRIES_SUCCESS,
+  CLEAR_ENTRIES,
 } from './constants';
 import { NavigatorState } from './state';
 import { selectStartDate, selectEndDate } from './selectors';
+import { Route } from '../models/route.model';
+import { isEqual, startOfDay } from 'date-fns';
 
 export const getEntriesAsync = createAsyncAction(
   GET_ENTRIES,
@@ -29,10 +34,32 @@ export const getEntriesAsync = createAsyncAction(
   GET_ENTRIES_FAILURE,
 )<void, EntryModel[], string>();
 
+export const clearEntries = () => action(CLEAR_ENTRIES);
+
 function* doGetEntriesOnOtherActions() {
-  const navigatorRoute: Route = yield select(selectNavigatorRoute);
-  if (!!navigatorRoute) {
+  const navigatorRoute: Route<{ month: number; day: number }> = yield select(
+    selectNavigatorRoute,
+  );
+  const navigatorCustomRoute: Route = yield select(selectNavigatorCustomRoute);
+  if (!!navigatorCustomRoute) {
     yield put(getEntriesAsync.request());
+  } else if (!!navigatorRoute) {
+    const year = yield select(selectSelectedYear);
+    const currentStart = yield select(selectStartDate);
+
+    const month = navigatorRoute.params.month - 1;
+    const day = navigatorRoute.params.day;
+
+    const date = new Date(year, month, day);
+
+    const start = startOfDay(date);
+
+    // still needs to sync route with filters
+    if (isEqual(currentStart, start)) {
+      yield put(getEntriesAsync.request());
+    } else {
+      yield put(clearEntries());
+    }
   }
 }
 
@@ -76,6 +103,9 @@ export const getEntriesReducer = (
 ): NavigatorState =>
   produce(state, draft => {
     switch (action.type) {
+      case CLEAR_ENTRIES:
+        draft.entries = [];
+        break;
       case GET_ENTRIES:
         draft.ui.busy.getEntries = true;
         draft.entries = [];

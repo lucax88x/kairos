@@ -1,12 +1,12 @@
 import { createSelector } from 'reselect';
 import { State } from '../state';
-import { sort, sortBy } from 'ramda';
+import { sort, sortBy, groupBy } from 'ramda';
 import {
   isTimeEntryListModel,
   isTimeAbsenceEntryModel,
   isTimeHolidayEntryModel,
 } from '../code/is';
-import { getUnixTime } from 'date-fns';
+import { getUnixTime, startOfDay } from 'date-fns';
 
 const selectState = (state: State) => state.navigator;
 
@@ -26,6 +26,21 @@ export const selectSortedEntries = createSelector(selectEntries, entries =>
     }
     return 0;
   }, entries),
+);
+
+export const selectGroupedEntriesByDate = createSelector(
+  selectSortedEntries,
+  entries =>
+    groupBy(e => {
+      if (isTimeEntryListModel(e)) {
+        return getUnixTime(startOfDay(e.when)).toString();
+      } else if (isTimeAbsenceEntryModel(e)) {
+        return getUnixTime(startOfDay(e.start)).toString();
+      } else if (isTimeHolidayEntryModel(e)) {
+        return getUnixTime(startOfDay(e.when)).toString();
+      }
+      return '0';
+    }, entries),
 );
 
 export const selectStartDate = createSelector(
