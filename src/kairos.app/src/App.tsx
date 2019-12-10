@@ -1,5 +1,22 @@
 import { t, Trans } from '@lingui/macro';
-import { AppBar, Avatar, Box, Container, Divider, Drawer, IconButton, List, ListItem, ListItemIcon, ListItemText, MenuItem, Select, SwipeableDrawer, Toolbar, Typography } from '@material-ui/core';
+import {
+  AppBar,
+  Avatar,
+  Box,
+  Container,
+  Divider,
+  Drawer,
+  IconButton,
+  List,
+  ListItem,
+  ListItemIcon,
+  ListItemText,
+  MenuItem,
+  Select,
+  SwipeableDrawer,
+  Toolbar,
+  Typography,
+} from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
 import BeachAccessIcon from '@material-ui/icons/BeachAccess';
 import SyncAltIcon from '@material-ui/icons/SyncAlt';
@@ -38,7 +55,11 @@ import { UserModel } from './models/user.model';
 import { Navigator } from './navigator/Navigator.container';
 import { NotFound } from './NotFound';
 import { Profile } from './profile/Profile.container';
-import { buildPrivateRouteWithYear, RouteMatcher, buildNavigatorRoute } from './routes';
+import {
+  buildPrivateRouteWithYear,
+  RouteMatcher,
+  buildNavigatorRoute,
+} from './routes';
 import { ConfirmationModal } from './shared/ConfirmationModal.container';
 import { TimeAbsenceEntries } from './time-absence-entries/TimeAbsenceEntries.container';
 import { TimeEntries } from './time-entries/TimeEntries.container';
@@ -57,7 +78,8 @@ for (let i = -10; i < 3; i++) {
 const useStyles = makeStyles(theme => ({
   root: {
     width: '100%',
-    overflowY: 'auto',
+    height: '100%',
+    overflowY: 'hidden',
     overflowX: 'hidden',
   },
   logo: {
@@ -170,21 +192,19 @@ const useStyles = makeStyles(theme => ({
     },
   },
   appBarSpacer: theme.mixins.toolbar,
-  content: {
-    display: 'grid',
+  scroller: {
     width: '100%',
-    flexDirection: 'column',
-    flexGrow: 1,
+    height: 'calc(100% - 64px)',
     overflow: 'auto',
-    marginRight: -drawerWidth,
-    transition: theme.transitions.create('margin', {
-      easing: theme.transitions.easing.sharp,
-      duration: theme.transitions.duration.leavingScreen,
-    }),
   },
-  container: {
+  content: {
+    width: '100%',
+    height: '100%',
     paddingTop: theme.spacing(4),
     paddingBottom: theme.spacing(4),
+  },
+  container: {
+    height: '100%',
   },
   fixedHeight: {
     height: 240,
@@ -373,7 +393,12 @@ export const AppComponent: React.FC<AppProps> = props => {
                     <MenuIcon />
                   </IconButton>
                 )}
-                <Link to={buildPrivateRouteWithYear(RouteMatcher.Dashboard, selectedYear)}>
+                <Link
+                  to={buildPrivateRouteWithYear(
+                    RouteMatcher.Dashboard,
+                    selectedYear,
+                  )}
+                >
                   <LogoIcon className={classes.logo} />
                 </Link>
                 <Box component="div" display={{ xs: 'none', sm: 'block' }}>
@@ -384,7 +409,13 @@ export const AppComponent: React.FC<AppProps> = props => {
                     noWrap
                     className={classes.title}
                   >
-                    <Link to={buildPrivateRouteWithYear(RouteMatcher.Dashboard, selectedYear)} className={classes.link}>
+                    <Link
+                      to={buildPrivateRouteWithYear(
+                        RouteMatcher.Dashboard,
+                        selectedYear,
+                      )}
+                      className={classes.link}
+                    >
                       kairos
                     </Link>
                   </Typography>
@@ -442,32 +473,64 @@ export const AppComponent: React.FC<AppProps> = props => {
           </div>
           <Divider />
           <List>
-            <ListItem button to={buildPrivateRouteWithYear(RouteMatcher.Dashboard, selectedYear)} component={Link}>
+            <ListItem
+              button
+              to={buildPrivateRouteWithYear(
+                RouteMatcher.Dashboard,
+                selectedYear,
+              )}
+              component={Link}
+            >
               <ListItemIcon>
                 <DashboardIcon />
               </ListItemIcon>
               <ListItemText primary={<Trans>Dashboard</Trans>} />
             </ListItem>
-            <ListItem button to={buildNavigatorRoute(selectedYear)} component={Link}>
+            <ListItem
+              button
+              to={buildNavigatorRoute(selectedYear)}
+              component={Link}
+            >
               <ListItemIcon>
                 <SyncAltIcon />
               </ListItemIcon>
               <ListItemText primary={<Trans>Navigator</Trans>} />
             </ListItem>
             <Divider />
-            <ListItem button to={buildPrivateRouteWithYear(RouteMatcher.TimeEntries, selectedYear)} component={Link}>
+            <ListItem
+              button
+              to={buildPrivateRouteWithYear(
+                RouteMatcher.TimeEntries,
+                selectedYear,
+              )}
+              component={Link}
+            >
               <ListItemIcon>
                 <TimerIcon />
               </ListItemIcon>
               <ListItemText primary={<Trans>Time Entries</Trans>} />
             </ListItem>
-            <ListItem button to={buildPrivateRouteWithYear(RouteMatcher.TimeAbsenceEntries, selectedYear)} component={Link}>
+            <ListItem
+              button
+              to={buildPrivateRouteWithYear(
+                RouteMatcher.TimeAbsenceEntries,
+                selectedYear,
+              )}
+              component={Link}
+            >
               <ListItemIcon>
                 <WeekendIcon />
               </ListItemIcon>
               <ListItemText primary={<Trans>Absences</Trans>} />
             </ListItem>
-            <ListItem button to={buildPrivateRouteWithYear(RouteMatcher.TimeHolidayEntries, selectedYear)} component={Link}>
+            <ListItem
+              button
+              to={buildPrivateRouteWithYear(
+                RouteMatcher.TimeHolidayEntries,
+                selectedYear,
+              )}
+              component={Link}
+            >
               <ListItemIcon>
                 <BeachAccessIcon />
               </ListItemIcon>
@@ -488,44 +551,53 @@ export const AppComponent: React.FC<AppProps> = props => {
             </ListItem>
           </List>
         </Drawer>
-
-        <main className={classes.content}>
-          <div className={classes.appBarSpacer} />
-          <Container
-            component="main"
-            maxWidth="lg"
-            className={classes.container}
-          >
-            <Switch>
-              <Route path={RouteMatcher.Dashboard} component={Dashboard} />
-              <Route path={RouteMatcher.NavigatorCustom} component={Navigator} />
-              <Route path={RouteMatcher.Navigator} component={Navigator} />
-              <Route path={RouteMatcher.Profile} component={Profile} />
-              <Route path={RouteMatcher.TimeEntries} component={TimeEntries} />
-              <Route
-                path={RouteMatcher.TimeAbsenceEntries}
-                component={TimeAbsenceEntries}
-              />
-              <Route
-                path={RouteMatcher.TimeHolidayEntries}
-                component={TimeHolidayEntries}
-              />
-              <Route path={RouteMatcher.EditTimeEntry} component={EditTimeEntry} />
-              <Route
-                path={RouteMatcher.EditTimeAbsenceEntry}
-                component={EditTimeAbsenceEntry}
-              />
-              <Route
-                path={RouteMatcher.EditTimeHolidayEntry}
-                component={EditTimeHolidayEntry}
-              />
-              <Route path={RouteMatcher.BulkInsert} component={BulkInsert} />
-              <Route path={RouteMatcher.Export} component={Export} />
-              <Route path="*" component={NotFound} />
-            </Switch>
-          </Container>
-        </main>
-
+        <div className={classes.container}>
+          <div className={classes.appBarSpacer}></div>
+          <div className={classes.scroller}>
+            <Container
+              component="main"
+              maxWidth="lg"
+              className={classes.content}
+            >
+              <Switch>
+                <Route path={RouteMatcher.Dashboard} component={Dashboard} />
+                <Route
+                  path={RouteMatcher.NavigatorCustom}
+                  component={Navigator}
+                />
+                <Route path={RouteMatcher.Navigator} component={Navigator} />
+                <Route path={RouteMatcher.Profile} component={Profile} />
+                <Route
+                  path={RouteMatcher.TimeEntries}
+                  component={TimeEntries}
+                />
+                <Route
+                  path={RouteMatcher.TimeAbsenceEntries}
+                  component={TimeAbsenceEntries}
+                />
+                <Route
+                  path={RouteMatcher.TimeHolidayEntries}
+                  component={TimeHolidayEntries}
+                />
+                <Route
+                  path={RouteMatcher.EditTimeEntry}
+                  component={EditTimeEntry}
+                />
+                <Route
+                  path={RouteMatcher.EditTimeAbsenceEntry}
+                  component={EditTimeAbsenceEntry}
+                />
+                <Route
+                  path={RouteMatcher.EditTimeHolidayEntry}
+                  component={EditTimeHolidayEntry}
+                />
+                <Route path={RouteMatcher.BulkInsert} component={BulkInsert} />
+                <Route path={RouteMatcher.Export} component={Export} />
+                <Route path="*" component={NotFound} />
+              </Switch>
+            </Container>
+          </div>
+        </div>
         <Drawer
           variant="persistent"
           className={classes.rightDrawer}

@@ -1,24 +1,12 @@
 import DateFnsUtils from '@date-io/date-fns';
 import { t, Trans } from '@lingui/macro';
-import {
-  ExpansionPanel,
-  ExpansionPanelDetails,
-  ExpansionPanelSummary,
-  IconButton,
-  makeStyles,
-  TextField,
-  Typography,
-} from '@material-ui/core';
+import { ExpansionPanel, ExpansionPanelDetails, ExpansionPanelSummary, IconButton, makeStyles, TextField, Typography } from '@material-ui/core';
 import DeleteIcon from '@material-ui/icons/Delete';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
-import {
-  KeyboardDatePicker,
-  MaterialUiPickersDate,
-  MuiPickersUtilsProvider,
-} from '@material-ui/pickers';
+import { KeyboardDatePicker, MaterialUiPickersDate, MuiPickersUtilsProvider } from '@material-ui/pickers';
 import clsx from 'clsx';
 import { endOfDay } from 'date-fns';
-import React, { ChangeEvent, useCallback } from 'react';
+import React, { ChangeEvent, useCallback, useState } from 'react';
 import { formatAsDate } from '../code/constants';
 import { formatDate } from '../code/formatters';
 import { getDatepickerLocale } from '../code/get-datepicker-locale';
@@ -108,10 +96,16 @@ export const ProfileJobForm: React.FC<ProfileJobFormProps> = props => {
     onJobDayChange,
   } = props;
 
-  const handleJobDelete = useCallback(() => onJobDelete(job.id), [onJobDelete, job]);
+  const [expanded, setExpanded] = useState(false);
+
+  const handleJobDelete = useCallback(() => onJobDelete(job.id), [
+    onJobDelete,
+    job,
+  ]);
 
   const handleJobNameChange = useCallback(
-    (event: ChangeEvent<HTMLInputElement>) => onJobNameChange(job.id, event.currentTarget.value),
+    (event: ChangeEvent<HTMLInputElement>) =>
+      onJobNameChange(job.id, event.currentTarget.value),
     [onJobNameChange, job],
   );
 
@@ -147,24 +141,58 @@ export const ProfileJobForm: React.FC<ProfileJobFormProps> = props => {
     [onJobDayChange, job],
   );
 
-  const handleMondayChange = useCallback(handleJobDayChange('monday'), [handleJobDayChange]);
-  const handleTuesdayChange = useCallback(handleJobDayChange('tuesday'), [handleJobDayChange]);
-  const handleWednesdayChange = useCallback(handleJobDayChange('wednesday'), [handleJobDayChange]);
-  const handleThursdayChange = useCallback(handleJobDayChange('thursday'), [handleJobDayChange]);
-  const handleFridayChange = useCallback(handleJobDayChange('friday'), [handleJobDayChange]);
-  const handleSaturdayChange = useCallback(handleJobDayChange('saturday'), [handleJobDayChange]);
-  const handleSundayChange = useCallback(handleJobDayChange('sunday'), [handleJobDayChange]);
+  const handleMondayChange = useCallback(handleJobDayChange('monday'), [
+    handleJobDayChange,
+  ]);
+  const handleTuesdayChange = useCallback(handleJobDayChange('tuesday'), [
+    handleJobDayChange,
+  ]);
+  const handleWednesdayChange = useCallback(handleJobDayChange('wednesday'), [
+    handleJobDayChange,
+  ]);
+  const handleThursdayChange = useCallback(handleJobDayChange('thursday'), [
+    handleJobDayChange,
+  ]);
+  const handleFridayChange = useCallback(handleJobDayChange('friday'), [
+    handleJobDayChange,
+  ]);
+  const handleSaturdayChange = useCallback(handleJobDayChange('saturday'), [
+    handleJobDayChange,
+  ]);
+  const handleSundayChange = useCallback(handleJobDayChange('sunday'), [
+    handleJobDayChange,
+  ]);
+
+  const handleExpanded = useCallback((evt, newExp) => setExpanded(newExp), [
+    setExpanded,
+  ]);
+
+  const handlePreventCompress = useCallback(evt => evt.stopPropagation(), []);
 
   const maxDate = new Date(8640000000000000);
   const minDate = new Date(0);
 
   return (
-    <ExpansionPanel>
+    <ExpansionPanel expanded={expanded} onChange={handleExpanded}>
       <ExpansionPanelSummary expandIcon={<ExpandMoreIcon />}>
         <div className={clsx(classes.columns, classes.between)}>
-          <Typography className={classes.heading}>
-            {!!job.name ? job.name : i18n._(t`Unknown`)}
-          </Typography>
+          <div className={classes.heading}>
+            {expanded ? (
+              <TextField
+                margin="dense"
+                fullWidth
+                label={<Trans>Name</Trans>}
+                type="text"
+                value={job.name}
+                onClick={handlePreventCompress}
+                onChange={handleJobNameChange}
+              />
+            ) : (
+              <Typography>
+                {!!job.name ? job.name : i18n._(t`Unknown`)}
+              </Typography>
+            )}
+          </div>
           <Typography className={classes.secondaryHeading}>
             {`${formatDate(job.start, selectedLanguage, formatAsDate)} - ${
               !!job.end
@@ -172,7 +200,11 @@ export const ProfileJobForm: React.FC<ProfileJobFormProps> = props => {
                 : i18n._(t`Current Date`)
             }`}
           </Typography>
-          <IconButton color="inherit" aria-label="Delete entry" onClick={handleJobDelete}>
+          <IconButton
+            color="inherit"
+            aria-label="Delete entry"
+            onClick={handleJobDelete}
+          >
             <DeleteIcon />
           </IconButton>
         </div>
@@ -180,14 +212,6 @@ export const ProfileJobForm: React.FC<ProfileJobFormProps> = props => {
       <ExpansionPanelDetails>
         <div className={classes.rows}>
           <div className={classes.responsiveColumns}>
-            <TextField
-              margin="dense"
-              fullWidth
-              label={<Trans>Name</Trans>}
-              type="text"
-              value={job.name}
-              onChange={handleJobNameChange}
-            />
             <MuiPickersUtilsProvider
               utils={DateFnsUtils}
               locale={getDatepickerLocale(selectedLanguage)}

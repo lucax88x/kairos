@@ -50,15 +50,24 @@
     "start": "yarn lingui:compile && react-scripts start",
     "build": "yarn lingui:compile && react-scripts build",
     "test": "react-scripts test",
-    "lint": "eslint --max-warnings=0 ./src ./tests",
-    "prettier": "prettier --check 'src/**/*.js' 'tests/**/*.js'",
-    "format": "eslint --fix ./src ./tests && prettier --write 'src/**/*.js' 'tests/**/*.js'",
+    "lint": "eslint --max-warnings=0 ./src/**/*.{tsx,ts}",
+    "prettier": "prettier --check 'src/**/*.ts' 'src/**/*.tsx'",
+    "format": "eslint --fix ./src/**/*.{tsx,ts} && prettier --write 'src/**/*.ts' 'src/**/*.tsx'",
     "lingui:add-locale": "lingui add-locale",
     "lingui:extract": "lingui extract",
     "lingui:compile": "lingui compile"
   },
   "eslintConfig": {
-    "extends": "react-app"
+    "extends": [
+      "react-app",
+      "plugin:@typescript-eslint/recommended"
+    ],
+    "plugins": [
+      "@typescript-eslint"
+    ],
+    "rules": {
+      "no-explicit-any": "off"
+    }
   },
   "browserslist": {
     "production": [
