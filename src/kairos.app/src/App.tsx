@@ -139,6 +139,10 @@ const useStyles = makeStyles(theme => ({
     padding: '0 8px',
     ...theme.mixins.toolbar,
   },
+  onlinePadding:{
+    paddingRight: '5px',
+    paddingTop: '3px',
+  },
   appBar: {
     zIndex: theme.zIndex.drawer + 1,
     transition: theme.transitions.create(['width', 'margin'], {
@@ -423,7 +427,9 @@ export const AppComponent: React.FC<AppProps> = props => {
               </div>
               <div className={classes.toolbarContentRight}>
                 {!isRightDrawerOpen && !isLeftDrawerOpen && (
-                  <IsOnline></IsOnline>
+                  <div className={classes.onlinePadding}>
+                    <IsOnline></IsOnline>
+                  </div>
                 )}
                 {!isRightDrawerOpen && !isLeftDrawerOpen && (
                   <IconButton

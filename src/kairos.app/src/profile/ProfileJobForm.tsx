@@ -10,6 +10,7 @@ import React, { ChangeEvent, useCallback, useState } from 'react';
 import { formatAsDate } from '../code/constants';
 import { formatDate } from '../code/formatters';
 import { getDatepickerLocale } from '../code/get-datepicker-locale';
+import { useFocus } from '../code/use-focus';
 import { Themes } from '../code/variables';
 import { i18n } from '../i18nLoader';
 import { JobModel } from '../models/job.model';
@@ -98,6 +99,8 @@ export const ProfileJobForm: React.FC<ProfileJobFormProps> = props => {
 
   const [expanded, setExpanded] = useState(false);
 
+  const [inputRef, setInputFocus] = useFocus();
+
   const handleJobDelete = useCallback(() => onJobDelete(job.id), [
     onJobDelete,
     job,
@@ -163,9 +166,13 @@ export const ProfileJobForm: React.FC<ProfileJobFormProps> = props => {
     handleJobDayChange,
   ]);
 
-  const handleExpanded = useCallback((evt, newExp) => setExpanded(newExp), [
-    setExpanded,
-  ]);
+  const handleExpanded = useCallback(
+    (evt, newExp) => {
+      setTimeout(() => setInputFocus(), 200);
+      setExpanded(newExp);
+    },
+    [setExpanded, setInputFocus],
+  );
 
   const handlePreventCompress = useCallback(evt => evt.stopPropagation(), []);
 
@@ -179,6 +186,7 @@ export const ProfileJobForm: React.FC<ProfileJobFormProps> = props => {
           <div className={classes.heading}>
             {expanded ? (
               <TextField
+                inputRef={inputRef}
                 margin="dense"
                 fullWidth
                 label={<Trans>Name</Trans>}

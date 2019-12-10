@@ -13,9 +13,6 @@ import { ExportTimeAbsenceEntries } from './ExportTimeAbsenceEntries.container';
 import { ExportTimeEntries } from './ExportTimeEntries.container';
 
 const useStyles = makeStyles(theme => ({
-  root: {
-    backgroundColor: theme.palette.background.paper,
-  },
   tabContent: {
     padding: theme.spacing(1),
   },
@@ -47,7 +44,7 @@ export const ExportComponent: React.FC<ExportInputs> = props => {
   }
 
   return (
-    <div className={classes.root}>
+    <>
       <Tabs value={tab} onChange={handleChangeTab} centered>
         <Tab label={i18n._(t`Entries`)} icon={<TimerIcon />} />
         <Tab label={i18n._(t`Absences`)} icon={<WeekendIcon />} />
@@ -56,7 +53,7 @@ export const ExportComponent: React.FC<ExportInputs> = props => {
         {tab === 0 && <ExportTimeEntries />}
         {tab === 1 && <ExportTimeAbsenceEntries />}
       </div>
-    </div>
+    </>
   );
 };
 
