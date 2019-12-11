@@ -1,5 +1,14 @@
 import { t } from '@lingui/macro';
-import { Avatar, Box, Button, Container, createMuiTheme, CssBaseline, IconButton, Typography } from '@material-ui/core';
+import {
+  Avatar,
+  Box,
+  Button,
+  Container,
+  createMuiTheme,
+  CssBaseline,
+  IconButton,
+  Typography,
+} from '@material-ui/core';
 import CloseIcon from '@material-ui/icons/Close';
 import { makeStyles, ThemeProvider } from '@material-ui/styles';
 import { ConnectedRouter } from 'connected-react-router';
@@ -61,7 +70,7 @@ const theme = createMuiTheme({
     MuiExpansionPanelSummary: {
       root: {
         '&$focused': {
-          backgroundColor: Themes.Second.backgroundColor,
+          backgroundColor: Themes.First.backgroundColor,
         },
       },
     },
@@ -73,6 +82,7 @@ const useStyles = makeStyles(() => ({
   error: { color: 'white' },
   root: {
     display: 'grid',
+    gridTemplateRows: 'auto min-content',
     height: '100vh',
     width: '100vw',
   },

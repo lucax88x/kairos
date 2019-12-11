@@ -15,9 +15,6 @@ import { ProfileModel } from '../models/profile.model';
 import { YouNeedAtLeastOneJob } from '../components/YouNeedAtLeastOneJob';
 
 const useStyles = makeStyles(theme => ({
-  root: {
-    backgroundColor: theme.palette.background.paper,
-  },
   tabContent: {
     padding: theme.spacing(1),
   },
@@ -49,7 +46,7 @@ const BulkInsertComponent: React.FC<BulkInsertInputs> = props => {
   }
 
   return (
-    <div className={classes.root}>
+    <>
       <Tabs value={tab} onChange={handleChangeTab} centered>
         <Tab label={i18n._(t`Time Entries`)} icon={<TimerIcon />} />
         <Tab label={i18n._(t`Absences`)} icon={<WeekendIcon />} />
@@ -60,7 +57,7 @@ const BulkInsertComponent: React.FC<BulkInsertInputs> = props => {
         {tab === 1 && <BulkTimeAbsenceEntryInsert />}
         {tab === 2 && <BulkTimeHolidayEntryInsert />}
       </div>
-    </div>
+    </>
   );
 };
 

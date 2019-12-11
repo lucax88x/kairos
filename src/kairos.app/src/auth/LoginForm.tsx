@@ -63,7 +63,44 @@ export const LoginFormComponent: React.FC<LoginProps> = props => {
         <Divider></Divider>
         <div className={classes.text}>
           <Typography component="h1" variant="h6" color="inherit">
-            <Trans>Kairos is a free time-tracking system. It has been built by myself as tool to be used every day in a quick way to track time, absences and holidays. The goal is to have a clear visualization of how many we have worked, how many vacations we are missing and how many extra-time hours we need to compensate.</Trans>
+            <Trans>
+              Kairos is a free time-tracking tools done by a developer for
+              developers. It is a pretty simple and straightforward tool.
+            </Trans>
+            <br />
+            <br />
+            <Trans>It helps you on:</Trans>
+            <br />
+            <ul>
+              <li>
+                <Trans>tracking in&out during your work days</Trans>
+              </li>
+              <li>
+                <Trans>tracking your absences</Trans>
+              </li>
+              <li>
+                <Trans>report & export</Trans>
+              </li>
+            </ul>
+            <br />
+            <Trans>
+              Thanks to this and some other informations it's easy to calculate
+              your extra-times, vacation, holidays, illness, etc.
+            </Trans>
+            <br />
+            <br />
+            <strong>
+              <Trans>
+                It's a PWA, it means it can be also installed on your pc, on your
+                smartphone and also works offline.
+              </Trans>
+            </strong>
+            <br />
+            <br />
+            <Trans>
+              Feel free to request for new bugfixes / features with any link in the footer.
+            </Trans>
+            <br />
           </Typography>
         </div>
         <Divider></Divider>

@@ -117,28 +117,31 @@ export const TimeEntriesCalendarComponent: React.FC<TimeEntriesCalendarEntryProp
           )
         : [];
 
-      const absences = map(
-        ab => ({
-          start: ab.start,
-          end: ab.end,
-          title: join(' ', [getTextFromAbsenceType(ab.type), ab.description]),
-          resource: { type: EventType.Absence },
-        }),
-        timeAbsenceEntries,
-      );
-
-      const holidays = map(
-        hol => ({
-          start: startOfDay(hol.when),
-          end: endOfDay(hol.when),
-          title: hol.description,
-          resource: { type: EventType.Holiday },
-        }),
-        timeHolidayEntries,
-      );
-
-      toSetEvents = [...toSetEvents, ...entries, ...absences, ...holidays];
+      toSetEvents.push(...entries);
     }
+
+    const absences = map(
+      ab => ({
+        start: ab.start,
+        end: ab.end,
+        title: join(' ', [getTextFromAbsenceType(ab.type), ab.description]),
+        resource: { type: EventType.Absence },
+      }),
+      timeAbsenceEntries,
+    );
+
+    const holidays = map(
+      hol => ({
+        start: startOfDay(hol.when),
+        end: endOfDay(hol.when),
+        title: hol.description,
+        resource: { type: EventType.Holiday },
+      }),
+      timeHolidayEntries,
+    );
+
+    toSetEvents.push(...absences);
+    toSetEvents.push(...holidays);
 
     setEvents(toSetEvents);
   }, [profile, timeEntries, timeAbsenceEntries, timeHolidayEntries]);
