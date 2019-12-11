@@ -2,7 +2,7 @@
 
 ## What is Kairos
 
-Kairos is a free time-tracking tools done by a developer for developers.
+Kairos is a free time-tracking tool done by a developer for developers.
 
 It is a pretty simple and straightforward tools.
 
@@ -10,10 +10,11 @@ It helps you on:
 
 - tracking in&out during your work days
 - tracking your absences
+- report & export
 
-Thanks to this it is and some other informations is easy to calculate your extra-times, vacation, holidays, illness, etc.
+Thanks to this and some other informations it's easy to calculate your extra-times, vacation, holidays, illness, etc.
 
-It's a PWA, it means it can be also installed on your pc on your smartphone and also works offline.
+It's a PWA, it means it can be also installed on your pc, on your smartphone and also works offline.
 
 ## Technologies
 

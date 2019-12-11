@@ -27,7 +27,7 @@ msgstr "Absence Deleted"
 msgid "Absence Updated"
 msgstr "Absence Updated"
 
-#: src/App.tsx:328
+#: src/App.tsx:316
 #: src/bulk-insert/BulkInsert.tsx:38
 #: src/bulk-insert/BulkTimeAbsenceEntryInsert.tsx:90
 #: src/export/Export.tsx:36
@@ -71,7 +71,7 @@ msgstr "Are you sure?"
 msgid "Back"
 msgstr "Back"
 
-#: src/App.tsx:341
+#: src/App.tsx:329
 msgid "Bulk Insert"
 msgstr "Bulk Insert"
 
@@ -86,7 +86,7 @@ msgstr "Compensation"
 msgid "Confirm"
 msgstr "Confirm"
 
-#: src/index.tsx:198
+#: src/index.tsx:200
 msgid "Content is cached for offline use."
 msgstr "Content is cached for offline use."
 
@@ -108,7 +108,7 @@ msgstr "Create Holiday"
 msgid "Current Date"
 msgstr "Current Date"
 
-#: src/App.tsx:315
+#: src/App.tsx:297
 msgid "Dashboard"
 msgstr "Dashboard"
 
@@ -139,6 +139,7 @@ msgstr "Description"
 #: src/bulk-insert/BulkTimeAbsenceEntryInsert.tsx:155
 #: src/export/ExportTimeAbsenceEntries.tsx:47
 #: src/export/ExportTimeEntries.tsx:47
+#: src/navigator/Navigator.tsx:98
 #: src/profile/ProfileJobForm.tsx:115
 #: src/shared/TimeAbsenceEntryForm.tsx:80
 #: src/time-absence-entries/TimeAbsenceEntries.tsx:53
@@ -179,7 +180,7 @@ msgstr "Entry Updated"
 msgid "Error, please retry later"
 msgstr "Error, please retry later"
 
-#: src/App.tsx:347
+#: src/App.tsx:335
 #: src/export/ExportTimeAbsenceEntries.tsx:52
 #: src/export/ExportTimeEntries.tsx:52
 msgid "Export"
@@ -192,6 +193,10 @@ msgstr "Export absences"
 #: src/export/ExportTimeEntries.tsx:42
 msgid "Export entries"
 msgstr "Export entries"
+
+#: src/auth/LoginForm.tsx:79
+msgid "Feel free to request for new bugfixes / features with any link in the footer."
+msgstr "Feel free to request for new bugfixes / features with any link in the footer."
 
 #: src/profile/ProfileJobForm.tsx:124
 msgid "Friday"
@@ -207,7 +212,7 @@ msgstr "Holiday Deleted"
 msgid "Holiday Updated"
 msgstr "Holiday Updated"
 
-#: src/App.tsx:334
+#: src/App.tsx:322
 #: src/bulk-insert/BulkInsert.tsx:39
 #: src/bulk-insert/BulkTimeEntryInsert.tsx:103
 #: src/bulk-insert/BulkTimeHolidayEntryInsert.tsx:72
@@ -245,6 +250,8 @@ msgstr "In"
 #: src/export/ExportTimeAbsenceEntries.tsx:47
 #: src/export/ExportTimeEntries.tsx:46
 #: src/export/ExportTimeEntries.tsx:47
+#: src/navigator/Navigator.tsx:97
+#: src/navigator/Navigator.tsx:98
 #: src/profile/ProfileJobForm.tsx:114
 #: src/profile/ProfileJobForm.tsx:115
 #: src/shared/TimeAbsenceEntryForm.tsx:79
@@ -278,6 +285,14 @@ msgstr "Invalid Job"
 msgid "Invalid Type"
 msgstr "Invalid Type"
 
+#: src/auth/LoginForm.tsx:51
+msgid "It helps you on:"
+msgstr "It helps you on:"
+
+#: src/auth/LoginForm.tsx:72
+msgid "It's a PWA, it means it can be also installed on your pc, on your smartphone and also works offline."
+msgstr "It's a PWA, it means it can be also installed on your pc, on your smartphone and also works offline."
+
 #: src/bulk-insert/BulkTimeEntryInsert.tsx:119
 #: src/bulk-insert/BulkTimeEntryInsert.tsx:144
 #: src/shared/TimeEntryForm.tsx:82
@@ -290,10 +305,10 @@ msgid "Jobs"
 msgstr "Jobs"
 
 #: src/auth/LoginForm.tsx:45
-msgid "Kairos is a free time-tracking system. It has been built by myself as tool to be used every day in a quick way to track time, absences and holidays. The goal is to have a clear visualization of how many we have worked, how many vacations we are missing and how many extra-time hours we need to compensate."
-msgstr "Kairos is a free time-tracking system. It has been built by myself as tool to be used every day in a quick way to track time, absences and holidays. The goal is to have a clear visualization of how many we have worked, how many vacations we are missing and how many extra-time hours we need to compensate."
+msgid "Kairos is a free time-tracking tools done by a developer for developers. It is a pretty simple and straightforward tool."
+msgstr "Kairos is a free time-tracking tools done by a developer for developers. It is a pretty simple and straightforward tool."
 
-#: src/App.tsx:419
+#: src/App.tsx:412
 msgid "Logout"
 msgstr "Logout"
 
@@ -313,13 +328,21 @@ msgstr "More {more}"
 msgid "Name"
 msgstr "Name"
 
-#: src/index.tsx:201
+#: src/App.tsx:303
+msgid "Navigator"
+msgstr "Navigator"
+
+#: src/index.tsx:203
 msgid "New content is available and will be used when all tabs for this page are closed."
 msgstr "New content is available and will be used when all tabs for this page are closed."
 
 #: src/dashboard/TimeEntriesCalendar.tsx:96
 msgid "Next"
 msgstr "Next"
+
+#: src/navigator/Navigator.tsx:126
+msgid "No Entries for this range"
+msgstr "No Entries for this range"
 
 #: src/dashboard/TimeEntriesCalendar.tsx:100
 msgid "No Events In Range"
@@ -335,17 +358,17 @@ msgstr "No defined jobs"
 msgid "No items"
 msgstr "No items"
 
-#: src/App.tsx:274
+#: src/App.tsx:256
 msgid "Open Menu"
 msgstr "Open Menu"
 
-#: src/App.tsx:293
-#: src/App.tsx:393
+#: src/App.tsx:275
+#: src/App.tsx:386
 msgid "Open absence"
 msgstr "Open absence"
 
-#: src/App.tsx:290
-#: src/App.tsx:387
+#: src/App.tsx:272
+#: src/App.tsx:380
 msgid "Open time entry"
 msgstr "Open time entry"
 
@@ -369,7 +392,7 @@ msgstr "Overtime Week: {0}"
 msgid "Permit"
 msgstr "Permit"
 
-#: src/App.tsx:380
+#: src/App.tsx:373
 msgid "Profile"
 msgstr "Profile"
 
@@ -409,7 +432,7 @@ msgstr "Saved Holidays"
 msgid "Search for country"
 msgstr "Search for country"
 
-#: src/auth/LoginForm.tsx:51
+#: src/auth/LoginForm.tsx:88
 msgid "Sign in"
 msgstr "Sign in"
 
@@ -417,6 +440,7 @@ msgstr "Sign in"
 #: src/bulk-insert/BulkTimeAbsenceEntryInsert.tsx:148
 #: src/export/ExportTimeAbsenceEntries.tsx:46
 #: src/export/ExportTimeEntries.tsx:46
+#: src/navigator/Navigator.tsx:97
 #: src/profile/ProfileJobForm.tsx:114
 #: src/shared/TimeAbsenceEntryForm.tsx:79
 #: src/time-absence-entries/TimeAbsenceEntries.tsx:46
@@ -427,12 +451,16 @@ msgstr "Start"
 msgid "Sunday"
 msgstr "Sunday"
 
+#: src/auth/LoginForm.tsx:65
+msgid "Thanks to this and some other informations it's easy to calculate your extra-times, vacation, holidays, illness, etc."
+msgstr "Thanks to this and some other informations it's easy to calculate your extra-times, vacation, holidays, illness, etc."
+
 #: src/profile/ProfileJobForm.tsx:121
 #: src/profile/ProfileJobForm.tsx:123
 msgid "Thursday"
 msgstr "Thursday"
 
-#: src/App.tsx:322
+#: src/App.tsx:310
 #: src/bulk-insert/BulkInsert.tsx:37
 msgid "Time Entries"
 msgstr "Time Entries"
@@ -495,7 +523,7 @@ msgstr "Vacations"
 msgid "Valid Entries"
 msgstr "Valid Entries"
 
-#: src/App.tsx:413
+#: src/App.tsx:406
 msgid "Version {0}"
 msgstr "Version {0}"
 
@@ -506,10 +534,6 @@ msgstr "Wednesday"
 #: src/dashboard/TimeEntriesCalendar.tsx:97
 msgid "Week"
 msgstr "Week"
-
-#: src/App.tsx:253
-msgid "Welcome"
-msgstr "Welcome"
 
 #: src/bulk-insert/BulkTimeEntryInsert.tsx:112
 #: src/bulk-insert/BulkTimeEntryInsert.tsx:137
@@ -541,9 +565,21 @@ msgstr "Yesterday"
 msgid "You need at least one job, connect to <0>Profile</0>"
 msgstr "You need at least one job, connect to <0>Profile</0>"
 
-#: src/auth/LoginForm.tsx:52
+#: src/auth/LoginForm.tsx:89
 msgid "You need to be online in order to sign in."
 msgstr "You need to be online in order to sign in."
+
+#: src/auth/LoginForm.tsx:61
+msgid "report & export"
+msgstr "report & export"
+
+#: src/auth/LoginForm.tsx:55
+msgid "tracking in&out during your work days"
+msgstr "tracking in&out during your work days"
+
+#: src/auth/LoginForm.tsx:58
+msgid "tracking your absences"
+msgstr "tracking your absences"
 
 #: src/components/TableToolbar.tsx:42
 msgid "{numSelected} selected"

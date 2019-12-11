@@ -25,7 +25,11 @@ import { ProfileModel } from '../models/profile.model';
 import { TimeEntryListModel } from '../models/time-entry-list.model';
 
 const useStyles = makeStyles(theme => ({
-  container: {},
+  container: {
+    width: '100%',
+    display: 'grid',
+    gridGap: theme.spacing(1)
+  },
   header: {
     display: 'grid',
     gridAutoFlow: 'column',
@@ -42,6 +46,8 @@ const useStyles = makeStyles(theme => ({
     display: 'grid',
     justifyItems: 'center',
     borderLeft: `1px solid ${theme.palette.primary.main}`,
+
+    overflow: 'auto',
   },
   headerCell: {
     textAlign: 'center',
