@@ -145,7 +145,7 @@ export const ProfileComponent: React.FC<ProfileProps> = props => {
           ) : (
             <Paper className={classes.paper}>
               <Typography color="inherit" noWrap display="inline">
-                <Trans>No defined jobs</Trans>
+                <Trans>No jobs defined</Trans>
               </Typography>
             </Paper>
           )}

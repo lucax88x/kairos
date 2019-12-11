@@ -11,6 +11,9 @@ import {
 } from './constants';
 import { SharedState } from './state';
 import { closeTimeAbsenceEntryDrawerAction } from '../layout/actions';
+import { enqueueSnackbarAction } from '../notification-manager/actions';
+import { i18n } from '../i18nLoader';
+import { t } from '@lingui/macro';
 
 export const createTimeAbsenceEntryAsync = createAsyncAction(
   CREATE_TIME_ABSENCE_ENTRY,
@@ -32,6 +35,7 @@ function* doCreateTimeAbsenceEntry({
 
 function* doCloseDrawer() {
   yield put(closeTimeAbsenceEntryDrawerAction());
+  yield put(enqueueSnackbarAction(i18n._(t`Absence Created`), { variant: 'success' }));
 }
 
 export function* createTimeAbsenceEntrySaga() {

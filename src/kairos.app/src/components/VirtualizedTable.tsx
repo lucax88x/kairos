@@ -66,6 +66,7 @@ interface MuiVirtualizedTableProps<T> extends WithStyles<typeof styles> {
   noRowsRenderer: () => JSX.Element;
   rowHeight?: number;
   onSelect?: (selecteIds: string[]) => void;
+  onCreate?: () => void;
   onDelete?: (selecteIds: string[]) => void;
 }
 
@@ -226,6 +227,14 @@ class MuiVirtualizedTable<T> extends React.PureComponent<
     );
   };
 
+  handleCreate = () => {
+    const { onCreate } = this.props;
+
+    if (!!onCreate) {
+      onCreate();
+    }
+  };
+
   handleDelete = () => {
     const { onDelete } = this.props;
 
@@ -250,6 +259,7 @@ class MuiVirtualizedTable<T> extends React.PureComponent<
         <TableToolbar
           title={title}
           numSelected={this.state.selectedIds.length}
+          onCreate={this.handleCreate}
           onDelete={this.handleDelete}
         />
         <div style={{ height: !!height ? height : '70vh' }}>

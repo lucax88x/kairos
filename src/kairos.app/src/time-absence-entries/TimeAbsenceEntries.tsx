@@ -1,5 +1,5 @@
 import { t, Trans } from '@lingui/macro';
-import { Button, IconButton, makeStyles } from '@material-ui/core';
+import { IconButton } from '@material-ui/core';
 import CreateIcon from '@material-ui/icons/Create';
 import DeleteIcon from '@material-ui/icons/Delete';
 import { map } from 'ramda';
@@ -11,13 +11,6 @@ import { VirtualizedTable } from '../components/VirtualizedTable';
 import { i18n } from '../i18nLoader';
 import { TimeAbsenceEntryModel } from '../models/time-absence-entry.model';
 import { UUID } from '../models/uuid.model';
-
-const useStyles = makeStyles(theme => ({
-  container: {
-    width: '100%',
-    marginBottom: theme.spacing(1),
-  },
-}));
 
 export interface TimeAbsenceEntriesInputs {
   timeAbsenceEntries: TimeAbsenceEntryModel[];
@@ -31,7 +24,8 @@ export interface TimeAbsenceEntriesDispatches {
   onDelete: (ids: UUID[]) => void;
 }
 
-type TimeAbsenceEntriesProps = TimeAbsenceEntriesInputs & TimeAbsenceEntriesDispatches;
+type TimeAbsenceEntriesProps = TimeAbsenceEntriesInputs &
+  TimeAbsenceEntriesDispatches;
 
 export const TimeAbsenceEntriesComponent: React.FC<TimeAbsenceEntriesProps> = props => {
   const {
@@ -43,20 +37,23 @@ export const TimeAbsenceEntriesComponent: React.FC<TimeAbsenceEntriesProps> = pr
     onDelete,
   } = props;
 
-  const classes = useStyles(props);
-
-  const handleUpdate = useCallback((model: TimeAbsenceEntryModel) => onUpdate(model), [onUpdate]);
-  const handleDelete = useCallback((model: TimeAbsenceEntryModel) => onDelete([model.id]), [
-    onDelete,
-  ]);
+  const handleUpdate = useCallback(
+    (model: TimeAbsenceEntryModel) => onUpdate(model),
+    [onUpdate],
+  );
+  const handleDelete = useCallback(
+    (model: TimeAbsenceEntryModel) => onDelete([model.id]),
+    [onDelete],
+  );
 
   const noRowsRenderer = useCallback(
     () => <p>{isGetTimeAbsenceEntriesBusy ? '' : <Trans>No items</Trans>}</p>,
     [isGetTimeAbsenceEntriesBusy],
   );
-  const rowGetter = useCallback(({ index }: Index) => timeAbsenceEntries[index], [
-    timeAbsenceEntries,
-  ]);
+  const rowGetter = useCallback(
+    ({ index }: Index) => timeAbsenceEntries[index],
+    [timeAbsenceEntries],
+  );
   const updateCellRenderer = useCallback(
     model => (
       <IconButton
@@ -85,59 +82,57 @@ export const TimeAbsenceEntriesComponent: React.FC<TimeAbsenceEntriesProps> = pr
   const handleDeleteSelected = useCallback(ids => onDelete(ids), [onDelete]);
 
   return (
-    <Spinner show={isGetTimeAbsenceEntriesBusy || isDeleteTimeAbsenceEntriesBusy}>
-      <div className={classes.container}>
-        <VirtualizedTable
-          title={i18n._(t`Absences`)}
-          rowCount={timeAbsenceEntries.length}
-          rowIds={map(m => m.id.toString(), timeAbsenceEntries)}
-          noRowsRenderer={noRowsRenderer}
-          rowGetter={rowGetter}
-          columns={[
-            {
-              width: 100,
-              label: i18n._(t`Type`),
-              dataKey: 'type',
-              formatter: absenceTypeFormatter,
-            },
-            {
-              width: 200,
-              label: i18n._(t`Start`),
-              dataKey: 'start',
-              flexGrow: 1,
-              formatter: dateTimeFormatter,
-            },
-            {
-              width: 200,
-              label: i18n._(t`End`),
-              dataKey: 'end',
-              flexGrow: 1,
-              formatter: dateTimeFormatter,
-            },
-            {
-              width: 200,
-              label: i18n._(t`Description`),
-              dataKey: 'description',
-            },
-            {
-              width: 100,
-              label: '',
-              dataKey: '',
-              cellRenderer: updateCellRenderer,
-            },
-            {
-              width: 100,
-              label: '',
-              dataKey: '',
-              cellRenderer: deleteCellRenderer,
-            },
-          ]}
-          onDelete={handleDeleteSelected}
-        />
-      </div>
-      <Button variant="contained" color="primary" onClick={onCreate}>
-        <Trans>Create</Trans>
-      </Button>
+    <Spinner
+      show={isGetTimeAbsenceEntriesBusy || isDeleteTimeAbsenceEntriesBusy}
+    >
+      <VirtualizedTable
+        title={i18n._(t`Absences`)}
+        rowCount={timeAbsenceEntries.length}
+        rowIds={map(m => m.id.toString(), timeAbsenceEntries)}
+        noRowsRenderer={noRowsRenderer}
+        rowGetter={rowGetter}
+        columns={[
+          {
+            width: 100,
+            label: i18n._(t`Type`),
+            dataKey: 'type',
+            formatter: absenceTypeFormatter,
+          },
+          {
+            width: 200,
+            label: i18n._(t`Start`),
+            dataKey: 'start',
+            flexGrow: 1,
+            formatter: dateTimeFormatter,
+          },
+          {
+            width: 200,
+            label: i18n._(t`End`),
+            dataKey: 'end',
+            flexGrow: 1,
+            formatter: dateTimeFormatter,
+          },
+          {
+            width: 200,
+            label: i18n._(t`Description`),
+            dataKey: 'description',
+          },
+          {
+            width: 100,
+            label: '',
+            dataKey: '',
+            cellRenderer: updateCellRenderer,
+          },
+          {
+            width: 100,
+            label: '',
+            dataKey: '',
+            cellRenderer: deleteCellRenderer,
+          },
+        ]}
+        onCreate={onCreate}
+        onDelete={handleDeleteSelected}
+      />
     </Spinner>
   );
 };
