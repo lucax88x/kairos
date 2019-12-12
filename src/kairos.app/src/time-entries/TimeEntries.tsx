@@ -5,14 +5,12 @@ import DeleteIcon from '@material-ui/icons/Delete';
 import { map } from 'ramda';
 import React, { useCallback } from 'react';
 import { Index } from 'react-virtualized';
-import { dateTimeFormatter, entryTypeFormatter } from '../code/formatters';
+import { dateTimeFormatter } from '../code/formatters';
+import { entryTypeRenderer } from '../code/renderers';
 import Spinner from '../components/Spinner';
 import { VirtualizedTable } from '../components/VirtualizedTable';
 import { i18n } from '../i18nLoader';
-import {
-  TimeEntryListJobModel,
-  TimeEntryListModel,
-} from '../models/time-entry-list.model';
+import { TimeEntryListJobModel, TimeEntryListModel } from '../models/time-entry-list.model';
 import { UUID } from '../models/uuid.model';
 
 export interface TimeEntriesInputs {
@@ -99,7 +97,8 @@ export const TimeEntriesComponent: React.FC<TimeEntriesProps> = props => {
             width: 100,
             label: i18n._(t`Type`),
             dataKey: 'type',
-            formatter: entryTypeFormatter,
+            // formatter: entryTypeFormatter,
+            cellRenderer: entryTypeRenderer,
           },
           {
             width: 200,
