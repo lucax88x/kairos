@@ -8,6 +8,11 @@ RUN yarn
 
 WORKDIR /build/src/kairos.app
 
+ARG FONTAWESOME_AUTH_TOKEN
+
+RUN npm config set "@fortawesome:registry" https://npm.fontawesome.com/
+RUN npm config set "//npm.fontawesome.com/:_authToken" ${FONTAWESOME_AUTH_TOKEN}
+
 RUN yarn
 
 WORKDIR /build
