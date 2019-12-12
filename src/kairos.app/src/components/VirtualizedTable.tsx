@@ -19,6 +19,7 @@ const styles = (theme: Theme) =>
     flexContainer: {
       display: 'flex',
       alignItems: 'center',
+      justifyContent: 'center',
       boxSizing: 'border-box',
     },
     tableRow: {
