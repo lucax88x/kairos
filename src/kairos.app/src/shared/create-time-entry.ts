@@ -11,6 +11,9 @@ import {
 } from './constants';
 import { SharedState } from './state';
 import { closeTimeEntryDrawerAction } from '../layout/actions';
+import { enqueueSnackbarAction } from '../notification-manager/actions';
+import { i18n } from '../i18nLoader';
+import { t } from '@lingui/macro';
 
 export const createTimeEntryAsync = createAsyncAction(
   CREATE_TIME_ENTRY,
@@ -32,6 +35,7 @@ function* doCreateTimeEntry({
 
 function* doCloseDrawer() {
   yield put(closeTimeEntryDrawerAction());
+  yield put(enqueueSnackbarAction(i18n._(t`Entry Created`), { variant: 'success' }));
 }
 
 export function* createTimeEntrySaga() {

@@ -5,6 +5,7 @@ import React from 'react';
 import { i18n } from '../i18nLoader';
 import { JobOutModel } from './job.model';
 import { UUID } from './uuid.model';
+import { FontAwesomeIcon, FontAwesomeIconProps } from '@fortawesome/react-fontawesome';
 
 export enum TimeEntryTypes {
   IN = 'IN',
@@ -65,6 +66,17 @@ export function getTransFromEntryType(type: TimeEntryTypes) {
       return <Trans>In</Trans>;
     case TimeEntryTypes.OUT:
       return <Trans>Out</Trans>;
+    default:
+      return <Trans>Invalid Type</Trans>;
+  }
+}
+
+export function getIconFromEntryType(type: TimeEntryTypes, iconProps?: Partial<FontAwesomeIconProps>) {
+  switch (type) {
+    case TimeEntryTypes.IN:
+      return <FontAwesomeIcon icon={['fad', 'portal-enter']} {...iconProps} />;
+    case TimeEntryTypes.OUT:
+      return <FontAwesomeIcon icon={['fad', 'portal-exit']} {...iconProps} />;
     default:
       return <Trans>Invalid Type</Trans>;
   }

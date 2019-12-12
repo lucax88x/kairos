@@ -1,26 +1,17 @@
 import { t, Trans } from '@lingui/macro';
-import { Button, IconButton, makeStyles } from '@material-ui/core';
+import { IconButton } from '@material-ui/core';
 import CreateIcon from '@material-ui/icons/Create';
 import DeleteIcon from '@material-ui/icons/Delete';
 import { map } from 'ramda';
 import React, { useCallback } from 'react';
 import { Index } from 'react-virtualized';
-import { dateTimeFormatter, entryTypeFormatter } from '../code/formatters';
+import { dateTimeFormatter } from '../code/formatters';
+import { entryTypeRenderer } from '../code/renderers';
 import Spinner from '../components/Spinner';
 import { VirtualizedTable } from '../components/VirtualizedTable';
 import { i18n } from '../i18nLoader';
-import {
-  TimeEntryListJobModel,
-  TimeEntryListModel,
-} from '../models/time-entry-list.model';
+import { TimeEntryListJobModel, TimeEntryListModel } from '../models/time-entry-list.model';
 import { UUID } from '../models/uuid.model';
-
-const useStyles = makeStyles(theme => ({
-  container: {
-    width: '100%',
-    marginBottom: theme.spacing(1),
-  },
-}));
 
 export interface TimeEntriesInputs {
   timeEntries: TimeEntryListModel[];
@@ -46,20 +37,33 @@ export const TimeEntriesComponent: React.FC<TimeEntriesProps> = props => {
     onDelete,
   } = props;
 
-  const classes = useStyles(props);
-
-  const handleUpdate = useCallback((model: TimeEntryListModel) => onUpdate(model), [onUpdate]);
-  const handleDelete = useCallback((model: TimeEntryListModel) => onDelete([model.id]), [onDelete]);
+  const handleUpdate = useCallback(
+    (model: TimeEntryListModel) => onUpdate(model),
+    [onUpdate],
+  );
+  const handleDelete = useCallback(
+    (model: TimeEntryListModel) => onDelete([model.id]),
+    [onDelete],
+  );
 
   const noRowsRenderer = useCallback(
     () => <p>{isGetTimeEntriesBusy ? '' : <Trans>No items</Trans>}</p>,
     [isGetTimeEntriesBusy],
   );
-  const rowGetter = useCallback(({ index }: Index) => timeEntries[index], [timeEntries]);
-  const jobFormatter = useCallback((job: TimeEntryListJobModel) => job.name, []);
+  const rowGetter = useCallback(({ index }: Index) => timeEntries[index], [
+    timeEntries,
+  ]);
+  const jobFormatter = useCallback(
+    (job: TimeEntryListJobModel) => job.name,
+    [],
+  );
   const updateCellRenderer = useCallback(
     model => (
-      <IconButton color="inherit" aria-label="Update entry" onClick={() => handleUpdate(model)}>
+      <IconButton
+        color="inherit"
+        aria-label="Update entry"
+        onClick={() => handleUpdate(model)}
+      >
         <CreateIcon />
       </IconButton>
     ),
@@ -67,7 +71,11 @@ export const TimeEntriesComponent: React.FC<TimeEntriesProps> = props => {
   );
   const deleteCellRenderer = useCallback(
     model => (
-      <IconButton color="inherit" aria-label="Delete entry" onClick={() => handleDelete(model)}>
+      <IconButton
+        color="inherit"
+        aria-label="Delete entry"
+        onClick={() => handleDelete(model)}
+      >
         <DeleteIcon />
       </IconButton>
     ),
@@ -78,52 +86,49 @@ export const TimeEntriesComponent: React.FC<TimeEntriesProps> = props => {
 
   return (
     <Spinner show={isGetTimeEntriesBusy || isDeleteTimeEntriesBusy}>
-      <div className={classes.container}>
-        <VirtualizedTable
-          title={i18n._(t`Entries`)}
-          rowCount={timeEntries.length}
-          rowIds={map(m => m.id.toString(), timeEntries)}
-          noRowsRenderer={noRowsRenderer}
-          rowGetter={rowGetter}
-          columns={[
-            {
-              width: 100,
-              label: i18n._(t`Type`),
-              dataKey: 'type',
-              formatter: entryTypeFormatter,
-            },
-            {
-              width: 200,
-              label: i18n._(t`When`),
-              dataKey: 'when',
-              flexGrow: 1,
-              formatter: dateTimeFormatter,
-            },
-            {
-              width: 200,
-              label: i18n._(t`Job`),
-              dataKey: 'job',
-              formatter: jobFormatter,
-            },
-            {
-              width: 100,
-              label: '',
-              dataKey: '',
-              cellRenderer: updateCellRenderer,
-            },
-            {
-              width: 100,
-              label: '',
-              dataKey: '',
-              cellRenderer: deleteCellRenderer,
-            },
-          ]}
-          onDelete={handleDeleteSelected}
-        />
-      </div>
-      <Button variant="contained" color="primary" onClick={onCreate}>
-        <Trans>Create</Trans>
-      </Button>
+      <VirtualizedTable
+        title={i18n._(t`Entries`)}
+        rowCount={timeEntries.length}
+        rowIds={map(m => m.id.toString(), timeEntries)}
+        noRowsRenderer={noRowsRenderer}
+        rowGetter={rowGetter}
+        columns={[
+          {
+            width: 100,
+            label: i18n._(t`Type`),
+            dataKey: 'type',
+            // formatter: entryTypeFormatter,
+            cellRenderer: entryTypeRenderer,
+          },
+          {
+            width: 200,
+            label: i18n._(t`When`),
+            dataKey: 'when',
+            flexGrow: 1,
+            formatter: dateTimeFormatter,
+          },
+          {
+            width: 200,
+            label: i18n._(t`Job`),
+            dataKey: 'job',
+            formatter: jobFormatter,
+          },
+          {
+            width: 100,
+            label: '',
+            dataKey: '',
+            cellRenderer: updateCellRenderer,
+          },
+          {
+            width: 100,
+            label: '',
+            dataKey: '',
+            cellRenderer: deleteCellRenderer,
+          },
+        ]}
+        onCreate={onCreate}
+        onDelete={handleDeleteSelected}
+      />
     </Spinner>
   );
 };

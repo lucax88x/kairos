@@ -1,4 +1,4 @@
-import { Button, CircularProgress, makeStyles } from '@material-ui/core';
+import { Button, CircularProgress, makeStyles, PropTypes } from '@material-ui/core';
 import clsx from 'clsx';
 import React from 'react';
 import './Spinner.scss';
@@ -6,6 +6,7 @@ import './Spinner.scss';
 export interface ButtonSpinnerProps {
   isBusy: boolean;
   disabled: boolean;
+  color?: PropTypes.Color;
   className?: string;
   onClick: () => void;
 }
@@ -33,14 +34,15 @@ const useStyles = makeStyles(theme => ({
 const ButtonSpinner: React.FC<ButtonSpinnerProps> = props => {
   const classes = useStyles(props);
 
-  const { children, disabled, isBusy, onClick } = props;
+  const { children, disabled, isBusy, onClick, color, className } = props;
 
   return (
     <div className={clsx(classes.root, props.className)}>
       <div className={classes.wrapper}>
         <Button
           variant="contained"
-          color="primary"
+          color={!!color ? color : 'primary'}
+          className={className}
           disabled={isBusy || disabled}
           onClick={onClick}
         >
