@@ -32,4 +32,9 @@ $current-time-color: #74ad31;
 
 $rbc-css-prefix: rbc-i;
 
-$today-highlight-bg: $first-color;
+$today-highlight-bg: 'transparent';
+
+.rbc-date-cell.rbc-now {
+  font-weight: bold;
+  text-decoration: underline;
+}

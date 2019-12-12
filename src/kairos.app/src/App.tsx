@@ -67,6 +67,8 @@ import { TimeHolidayEntries } from './time-holiday-entries/TimeHolidayEntries.co
 import version from './version.json';
 
 const drawerWidth = 240;
+const transitionSpeedInMs = 750;
+const transitionSpeedInS = `${transitionSpeedInMs / 1000}s`;
 
 const currentYear = getYear(new Date());
 
@@ -139,32 +141,24 @@ const useStyles = makeStyles(theme => ({
     padding: '0 8px',
     ...theme.mixins.toolbar,
   },
-  onlinePadding:{
+  onlinePadding: {
     paddingRight: '5px',
     paddingTop: '3px',
   },
   appBar: {
     zIndex: theme.zIndex.drawer + 1,
     transition: theme.transitions.create(['width', 'margin'], {
-      easing: theme.transitions.easing.sharp,
-      duration: theme.transitions.duration.leavingScreen,
+      easing: theme.transitions.easing.easeOut,
+      duration: transitionSpeedInS,
     }),
   },
   appBarLeftShift: {
     marginLeft: drawerWidth,
     width: `calc(100% - ${drawerWidth}px)`,
-    transition: theme.transitions.create(['width', 'margin'], {
-      easing: theme.transitions.easing.sharp,
-      duration: theme.transitions.duration.enteringScreen,
-    }),
   },
   appBarRightShift: {
     marginRight: drawerWidth,
     width: `calc(100% - ${drawerWidth}px)`,
-    transition: theme.transitions.create(['width', 'margin'], {
-      easing: theme.transitions.easing.sharp,
-      duration: theme.transitions.duration.enteringScreen,
-    }),
   },
   title: {
     flexGrow: 1,
@@ -180,20 +174,9 @@ const useStyles = makeStyles(theme => ({
   leftDrawerPaper: {
     width: drawerWidth,
     transition: theme.transitions.create('width', {
-      easing: theme.transitions.easing.sharp,
-      duration: theme.transitions.duration.enteringScreen,
+      // `easing`: theme.transitions.easing.sharp,
+      duration: transitionSpeedInS,
     }),
-  },
-  drawerPaperClose: {
-    overflowX: 'hidden',
-    transition: theme.transitions.create('width', {
-      easing: theme.transitions.easing.sharp,
-      duration: theme.transitions.duration.leavingScreen,
-    }),
-    width: theme.spacing(7),
-    [theme.breakpoints.up('sm')]: {
-      width: theme.spacing(9),
-    },
   },
   appBarSpacer: theme.mixins.toolbar,
   scroller: {
@@ -464,12 +447,8 @@ export const AppComponent: React.FC<AppProps> = props => {
         </AppBar>
         <Drawer
           variant="persistent"
-          classes={{
-            paper: clsx(
-              classes.leftDrawerPaper,
-              !isLeftDrawerOpen && classes.drawerPaperClose,
-            ),
-          }}
+          classes={{ paper: classes.leftDrawerPaper }}
+          transitionDuration={transitionSpeedInMs}
           open={isLeftDrawerOpen}
         >
           <div className={classes.toolbarLeftIcon}>
@@ -607,8 +586,9 @@ export const AppComponent: React.FC<AppProps> = props => {
         <Drawer
           variant="persistent"
           className={classes.rightDrawer}
-          classes={{ paper: clsx(classes.rightDrawerPaper) }}
+          classes={{ paper: classes.rightDrawerPaper }}
           anchor="right"
+          transitionDuration={transitionSpeedInMs}
           open={isRightDrawerOpen}
         >
           <div className={classes.toolbarRightIcon}>
@@ -706,6 +686,7 @@ export const AppComponent: React.FC<AppProps> = props => {
           onClose={handleTimeEntryDrawerClose}
           onOpen={handleTimeEntryDrawerOpen}
           disableBackdropTransition={!isIOS}
+          transitionDuration={transitionSpeedInMs}
           disableDiscovery={isIOS}
         >
           <div className={classes.toolbarRightIcon}>
@@ -722,6 +703,7 @@ export const AppComponent: React.FC<AppProps> = props => {
           onClose={handleTimeAbsenceEntryDrawerClose}
           onOpen={handleTimeAbsenceEntryDrawerOpen}
           disableBackdropTransition={!isIOS}
+          transitionDuration={transitionSpeedInMs}
           disableDiscovery={isIOS}
         >
           <div className={classes.toolbarRightIcon}>
