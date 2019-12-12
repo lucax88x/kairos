@@ -18,6 +18,10 @@ spec:
           - path: /graphql
             backend:
               serviceName: web-api
+              servicePort: 80          
+          - path: /api
+            backend:
+              serviceName: web-api
               servicePort: 80
           - path: /
             backend:

@@ -1,14 +1,5 @@
 import { t } from '@lingui/macro';
-import {
-  Avatar,
-  Box,
-  Button,
-  Container,
-  createMuiTheme,
-  CssBaseline,
-  IconButton,
-  Typography,
-} from '@material-ui/core';
+import { Avatar, Box, Button, Container, createMuiTheme, CssBaseline, IconButton, Typography } from '@material-ui/core';
 import CloseIcon from '@material-ui/icons/Close';
 import { makeStyles, ThemeProvider } from '@material-ui/styles';
 import { ConnectedRouter } from 'connected-react-router';
@@ -34,6 +25,7 @@ import { NotificationManager } from './notification-manager/NotificationManager.
 import { buildPrivateRouteWithYear, RouteMatcher } from './routes';
 import * as serviceWorker from './serviceWorker';
 import { selectSelectedYear } from './shared/selectors';
+import { configureIcons } from './configureIcons';
 
 const theme = createMuiTheme({
   palette: {
@@ -76,6 +68,8 @@ const theme = createMuiTheme({
     },
   },
 });
+
+configureIcons();
 
 const useStyles = makeStyles(() => ({
   success: { color: 'white' },

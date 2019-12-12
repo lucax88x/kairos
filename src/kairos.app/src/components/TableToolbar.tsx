@@ -1,12 +1,13 @@
-import IconButton from '@material-ui/core/IconButton';
+import { t } from '@lingui/macro';
+import { Fab } from '@material-ui/core';
 import { lighten, makeStyles } from '@material-ui/core/styles';
 import Toolbar from '@material-ui/core/Toolbar';
 import Typography from '@material-ui/core/Typography';
+import AddIcon from '@material-ui/icons/Add';
 import DeleteIcon from '@material-ui/icons/Delete';
 import clsx from 'clsx';
 import React from 'react';
 import { i18n } from '../i18nLoader';
-import { t } from '@lingui/macro';
 
 const useToolbarStyles = makeStyles(theme => ({
   root: {
@@ -27,6 +28,9 @@ const useToolbarStyles = makeStyles(theme => ({
     flex: '1 1 100%',
   },
   actions: {
+    display: 'grid',
+    gridAutoFlow: 'column',
+    gridGap: theme.spacing(1),
     color: theme.palette.text.secondary,
   },
   title: {
@@ -37,12 +41,13 @@ const useToolbarStyles = makeStyles(theme => ({
 export interface TableToolbarProps {
   title: string;
   numSelected: number;
+  onCreate: () => void;
   onDelete: () => void;
 }
 
 export const TableToolbar: React.FC<TableToolbarProps> = props => {
   const classes = useToolbarStyles(props);
-  const { title, numSelected, onDelete } = props;
+  const { title, numSelected, onCreate, onDelete } = props;
 
   return (
     <Toolbar
@@ -63,10 +68,13 @@ export const TableToolbar: React.FC<TableToolbarProps> = props => {
       </div>
       <div className={classes.spacer} />
       <div className={classes.actions}>
+        <Fab color="primary" aria-label="create" onClick={onCreate}>
+          <AddIcon />
+        </Fab>
         {numSelected > 0 && (
-          <IconButton aria-label="delete" onClick={onDelete}>
+          <Fab aria-label="delete" onClick={onDelete}>
             <DeleteIcon />
-          </IconButton>
+          </Fab>
         )}
       </div>
     </Toolbar>

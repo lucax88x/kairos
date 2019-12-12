@@ -20,9 +20,6 @@ const useStyles = makeStyles(theme => ({
     display: 'grid',
     gridGap: theme.spacing(1),
   },
-  justifySelfStart: {
-    justifySelf: 'self-start',
-  },
 }));
 
 export interface TimeHolidayEntriesInputs {
@@ -156,16 +153,9 @@ export const TimeHolidayEntriesComponent: React.FC<TimeHolidayEntriesProps> = pr
               cellRenderer: deleteCellRenderer,
             },
           ]}
+          onCreate={onCreate}
           onDelete={handleDeleteSelected}
         />
-        <Button
-          variant="contained"
-          color="primary"
-          onClick={onCreate}
-          className={classes.justifySelfStart}
-        >
-          <Trans>Create</Trans>
-        </Button>
         <Divider />
         <Grid container alignItems={'center'} justify={'space-between'}>
           <Grid item>

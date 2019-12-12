@@ -1,5 +1,5 @@
 import DateFnsUtils from '@date-io/date-fns';
-import { Trans } from '@lingui/react';
+import { Trans } from '@lingui/macro';
 import { Divider, makeStyles, TextField } from '@material-ui/core';
 import SaveIcon from '@material-ui/icons/Save';
 import {
