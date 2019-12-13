@@ -11,8 +11,8 @@ export class TimeEntryListJobModel {
 
   static empty = new TimeEntryListJobModel(new UUID(), '');
 
-  isEmpty() {
-    return this.id.equals(TimeEntryListJobModel.empty.id) && !this.name;
+  static isEmpty(model: TimeEntryListJobModel) {
+    return UUID.isEmpty(model.id) && !model.name;
   }
 }
 
@@ -42,11 +42,11 @@ export class TimeEntryListModel {
     TimeEntryListJobModel.empty,
   );
 
-  isEmpty() {
+  static isEmpty(model: TimeEntryListModel) {
     return (
-      this.id.equals(TimeEntryListModel.empty.id) &&
-      this.when === TimeEntryListModel.empty.when &&
-      this.job.isEmpty()
+      UUID.isEmpty(model.id) &&
+      model.when === TimeEntryListModel.empty.when &&
+      TimeEntryListJobModel.isEmpty(model.job)
     );
   }
 }

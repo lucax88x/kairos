@@ -1,11 +1,10 @@
 using System.Reflection;
 using Autofac;
-using Autofac.Extras.DynamicProxy;
 using AutofacSerilogIntegration;
 using FluentValidation;
 using Kairos.Application.Behaviors;
 using Kairos.Application.Country;
-using Kairos.Common.Interceptors;
+using Kairos.Common;
 using MediatR;
 using MediatR.Pipeline;
 
@@ -46,13 +45,10 @@ namespace Kairos.Application.Ioc
                 return t => c.Resolve(t);
             });
 
-            builder.RegisterType<MediatorInterceptor>();
             builder
-                .RegisterType<Mediator>()
+                .RegisterType<MediatorWithInterceptors>()
                 .As<IMediator>()
-                .InstancePerLifetimeScope()
-                .EnableInterfaceInterceptors()
-                .InterceptedBy(typeof(MediatorInterceptor));
+                .InstancePerLifetimeScope();
         }
     }
 }

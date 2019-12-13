@@ -15,7 +15,7 @@ export class ProfileModel {
   static empty: ProfileModel = new ProfileModel(new UUID(), []);
 
   isEmpty() {
-    return this.id.equals(ProfileModel.empty.id);
+    return UUID.equals(this.id, ProfileModel.empty.id);
   }
 }
 export interface ProfileOutModel {

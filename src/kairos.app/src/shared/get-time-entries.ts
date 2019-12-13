@@ -84,7 +84,6 @@ export const getTimeEntriesReducer = (
     switch (action.type) {
       case GET_TIME_ENTRIES:
         draft.ui.busy.getTimeEntries = true;
-        draft.timeEntries = [];
         break;
       case GET_TIME_ENTRIES_SUCCESS:
         draft.ui.busy.getTimeEntries = false;

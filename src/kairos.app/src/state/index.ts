@@ -17,7 +17,7 @@ export interface State {
   layout: LayoutState;
   shared: SharedState & PersistPartial;
   auth: AuthState;
-  profile: ProfileState;
+  profile: ProfileState & PersistPartial;
   notificationManager: NotificationManagerState;
   navigator: NavigatorState;
   editTimeEntry: EditTimeEntryState;

@@ -40,10 +40,10 @@ export class TimeAbsenceEntryModel {
     new Date(0),
   );
 
-  isEmpty() {
+  static isEmpty(model: TimeAbsenceEntryModel) {
     return (
-      this.id.equals(TimeAbsenceEntryModel.empty.id) &&
-      this.description === TimeAbsenceEntryModel.empty.description
+      UUID.isEmpty(model.id) &&
+      model.description === TimeAbsenceEntryModel.empty.description
     );
   }
 }

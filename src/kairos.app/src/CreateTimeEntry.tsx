@@ -9,7 +9,8 @@ export interface CreateTimeEntryInputs {
   isOnline: boolean;
   selectedLanguage: Language;
   profile: ProfileModel;
-  isBusy: boolean;
+  isCreateAsInBusy: boolean;
+  isCreateAsOutBusy: boolean;
 }
 
 export interface CreateTimeEntryDispatches {
@@ -19,14 +20,16 @@ export interface CreateTimeEntryDispatches {
 type CreateTimeEntryProps = CreateTimeEntryInputs & CreateTimeEntryDispatches;
 
 export const CreateTimeEntryComponent: React.FC<CreateTimeEntryProps> = props => {
-  const { isOnline, selectedLanguage, profile, isBusy, onCreate } = props;
+  const { isOnline, selectedLanguage, profile, isCreateAsInBusy, isCreateAsOutBusy, onCreate } = props;
 
   return (
     <TimeEntryForm
       isOnline={isOnline}
       selectedLanguage={selectedLanguage}
       profile={profile}
-      isBusy={isBusy}
+      isCreateAsInBusy={isCreateAsInBusy}
+      isCreateAsOutBusy={isCreateAsOutBusy}
+      isUpdateBusy={false}
       model={TimeEntryModel.empty}
       onSave={onCreate}
     />

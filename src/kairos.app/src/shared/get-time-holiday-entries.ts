@@ -91,7 +91,6 @@ export const getTimeHolidayEntriesReducer = (
     switch (action.type) {
       case GET_TIME_HOLIDAY_ENTRIES:
         draft.ui.busy.getTimeHolidayEntries = true;
-        draft.timeHolidayEntries = [];
         break;
       case GET_TIME_HOLIDAY_ENTRIES_SUCCESS:
         draft.ui.busy.getTimeHolidayEntries = false;

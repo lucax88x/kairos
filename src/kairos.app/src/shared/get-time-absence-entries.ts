@@ -77,7 +77,6 @@ export const getTimeAbsenceEntriesReducer = (
     switch (action.type) {
       case GET_TIME_ABSENCE_ENTRIES:
         draft.ui.busy.getTimeAbsenceEntries = true;
-        draft.timeAbsenceEntries = [];
         break;
       case GET_TIME_ABSENCE_ENTRIES_SUCCESS:
         draft.ui.busy.getTimeAbsenceEntries = false;

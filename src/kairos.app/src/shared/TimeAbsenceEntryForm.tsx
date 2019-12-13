@@ -106,7 +106,7 @@ export const TimeAbsenceEntryForm: React.FC<TimeAbsenceEntryFormProps> = props =
   );
 
   useEffect(() => {
-    if (!model.isEmpty()) {
+    if (!TimeAbsenceEntryModel.isEmpty(model)) {
       dispatch(SetModel(model));
     } else {
       dispatch(ResetModel());
@@ -183,7 +183,7 @@ export const TimeAbsenceEntryForm: React.FC<TimeAbsenceEntryFormProps> = props =
         disabled={!isOnline || !start || !end || start > end || isBusy}
         className={classes.selfCenter}
       >
-        {model.isEmpty() ? (
+        {TimeAbsenceEntryModel.isEmpty(model) ? (
           <>
             {getTransFromAbsenceType(type)}
             <SaveIcon className={classes.marginLeft} />

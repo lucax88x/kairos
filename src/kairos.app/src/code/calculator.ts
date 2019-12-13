@@ -61,7 +61,7 @@ export function getTimeEntryPairsByJob(
           exit: new Date(0),
         };
 
-        if (!exit.isEmpty()) {
+        if (!TimeEntryListModel.isEmpty(exit)) {
           pairsByJob[job].push({
             ...pair,
             exit: exit.when,

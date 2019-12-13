@@ -18,11 +18,11 @@ export class TimeHolidayEntryModel {
 
   static empty: TimeHolidayEntryModel = new TimeHolidayEntryModel(new UUID(), '', new Date(0));
 
-  isEmpty() {
+  static isEmpty(model: TimeHolidayEntryModel) {
     return (
-      this.id.equals(TimeHolidayEntryModel.empty.id) &&
-      this.description === TimeHolidayEntryModel.empty.description &&
-      this.when === TimeHolidayEntryModel.empty.when
+      UUID.isEmpty(model.id) &&
+      model.description === TimeHolidayEntryModel.empty.description &&
+      model.when === TimeHolidayEntryModel.empty.when
     );
   }
 }
