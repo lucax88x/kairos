@@ -1,7 +1,21 @@
 import DateFnsUtils from '@date-io/date-fns';
 import { Trans } from '@lingui/macro';
-import { FormControl, InputLabel, makeStyles, MenuItem, Select } from '@material-ui/core';
-import { KeyboardDateTimePicker, MaterialUiPickersDate, MuiPickersUtilsProvider } from '@material-ui/pickers';
+import {
+  FormControl,
+  FormControlLabel,
+  InputLabel,
+  makeStyles,
+  MenuItem,
+  Radio,
+  RadioGroup,
+  Select,
+} from '@material-ui/core';
+import SaveIcon from '@material-ui/icons/Save';
+import {
+  KeyboardDateTimePicker,
+  MaterialUiPickersDate,
+  MuiPickersUtilsProvider,
+} from '@material-ui/pickers';
 import { map } from 'ramda';
 import React, { ChangeEvent, useCallback, useEffect } from 'react';
 import { formatAsDateTime } from '../code/constants';
@@ -11,9 +25,22 @@ import ButtonSpinner from '../components/ButtonSpinner';
 import { YouNeedAtLeastOneJob } from '../components/YouNeedAtLeastOneJob';
 import { Language } from '../models/language-model';
 import { ProfileModel } from '../models/profile.model';
-import { getIconFromEntryType, getTransFromEntryType, TimeEntryModel, TimeEntryTypes } from '../models/time-entry.model';
+import {
+  getIconFromEntryType,
+  getTransFromEntryType,
+  TimeEntryModel,
+  TimeEntryTypes,
+} from '../models/time-entry.model';
 import { UUID } from '../models/uuid.model';
-import { RefreshSelectsTimeEntryAction, ResetModel, SetModel, SetTimeEntrySelectedJobAction, SetTimeEntryTypeAction, SetTimeEntryWhenAction, useTimeEntryFormReducer } from './TimeEntryForm.store';
+import {
+  RefreshSelectsTimeEntryAction,
+  ResetModel,
+  SetModel,
+  SetTimeEntrySelectedJobAction,
+  SetTimeEntryTypeAction,
+  SetTimeEntryWhenAction,
+  useTimeEntryFormReducer,
+} from './TimeEntryForm.store';
 
 const useStyles = makeStyles(theme => ({
   container: {
@@ -41,6 +68,9 @@ const useStyles = makeStyles(theme => ({
   marginLeft: {
     marginLeft: theme.spacing(1),
   },
+  selfCenter: {
+    justifySelf: 'center',
+  },
 }));
 
 export interface TimeEntryFormProps {
@@ -48,15 +78,25 @@ export interface TimeEntryFormProps {
   selectedLanguage: Language;
   profile: ProfileModel;
   model: TimeEntryModel;
-  isAsInBusy: boolean;
-  isAsOutBusy: boolean;
+  isCreateAsInBusy: boolean;
+  isCreateAsOutBusy: boolean;
+  isUpdateBusy: boolean;
   onSave: (model: TimeEntryModel) => void;
 }
 
 export const TimeEntryForm: React.FC<TimeEntryFormProps> = props => {
   const classes = useStyles(props);
 
-  const { isOnline, selectedLanguage, isAsInBusy, isAsOutBusy, profile, model, onSave } = props;
+  const {
+    isOnline,
+    selectedLanguage,
+    isCreateAsInBusy,
+    isCreateAsOutBusy,
+    isUpdateBusy,
+    profile,
+    model,
+    onSave,
+  } = props;
 
   const [state, dispatch] = useTimeEntryFormReducer();
   const { id, when, type, jobs, selectedJobId } = state;
@@ -83,6 +123,12 @@ export const TimeEntryForm: React.FC<TimeEntryFormProps> = props => {
     handleSave,
   ]);
 
+  const handleUpdate = useCallback(() => {
+    if (!!when) {
+      onSave(new TimeEntryModel(id, when, type, new UUID(selectedJobId)));
+    }
+  }, [onSave, id, when, selectedJobId, type]);
+
   const handleWhenChange = useCallback(
     (when: MaterialUiPickersDate) => {
       dispatch(SetTimeEntryWhenAction(!!when ? when : new Date()));
@@ -101,6 +147,12 @@ export const TimeEntryForm: React.FC<TimeEntryFormProps> = props => {
     [dispatch, profile],
   );
 
+  const handleTypeChange = useCallback(
+    (_, value: string) =>
+      dispatch(SetTimeEntryTypeAction(value as TimeEntryTypes)),
+    [dispatch],
+  );
+
   useEffect(() => {
     if (!TimeEntryModel.isEmpty(model)) {
       dispatch(SetModel(model));
@@ -117,11 +169,32 @@ export const TimeEntryForm: React.FC<TimeEntryFormProps> = props => {
     );
   }
 
-  const isSaveDisabled =
-    !isOnline || !when || selectedJobId === UUID.Empty;
+  const isSaveDisabled = !isOnline || !when || selectedJobId === UUID.Empty;
 
   return (
     <div className={classes.container}>
+      {!TimeEntryModel.isEmpty(model) && (
+        <FormControl component="fieldset" className={classes.selfCenter}>
+          <RadioGroup
+            aria-label="timeEntryType"
+            name="timeEntryType"
+            row
+            value={type}
+            onChange={handleTypeChange}
+          >
+            <FormControlLabel
+              value={TimeEntryTypes.IN}
+              control={<Radio />}
+              label={getIconFromEntryType(TimeEntryTypes.IN)}
+            />
+            <FormControlLabel
+              value={TimeEntryTypes.OUT}
+              control={<Radio />}
+              label={getIconFromEntryType(TimeEntryTypes.OUT)}
+            />
+          </RadioGroup>
+        </FormControl>
+      )}
       <MuiPickersUtilsProvider
         utils={DateFnsUtils}
         locale={getDatepickerLocale(selectedLanguage)}
@@ -162,31 +235,43 @@ export const TimeEntryForm: React.FC<TimeEntryFormProps> = props => {
           </Select>
         </FormControl>
       </div>
-      <div className={classes.fabs}>
+      {!TimeEntryModel.isEmpty(model) ? (
         <ButtonSpinner
-          onClick={handleSaveAsIn}
-          isBusy={isAsInBusy}
-          disabled={isAsOutBusy || isSaveDisabled}
-          className={classes.button}
-          color={type === TimeEntryTypes.IN ? 'primary' : 'secondary'}
+          onClick={handleUpdate}
+          isBusy={isUpdateBusy}
+          disabled={isSaveDisabled || isUpdateBusy}
+          className={classes.selfCenter}
         >
-          <div className={classes.button}>
-            {getIconFromEntryType(TimeEntryTypes.IN)}
-            {getTransFromEntryType(TimeEntryTypes.IN)}
-          </div>
+          <Trans>Update</Trans>
+          <SaveIcon className={classes.marginLeft} />
         </ButtonSpinner>
-        <ButtonSpinner
-          onClick={handleSaveAsOut}
-          isBusy={isAsOutBusy}
-          disabled={isAsInBusy || isSaveDisabled}
-          color={type === TimeEntryTypes.OUT ? 'primary' : 'secondary'}
-        >
-          <div className={classes.button}>
-            {getIconFromEntryType(TimeEntryTypes.OUT)}
-            {getTransFromEntryType(TimeEntryTypes.OUT)}
-          </div>
-        </ButtonSpinner>
-      </div>
+      ) : (
+        <div className={classes.fabs}>
+          <ButtonSpinner
+            onClick={handleSaveAsIn}
+            isBusy={isCreateAsInBusy}
+            disabled={isCreateAsOutBusy || isSaveDisabled}
+            className={classes.button}
+            color="primary"
+          >
+            <div className={classes.button}>
+              {getIconFromEntryType(TimeEntryTypes.IN)}
+              {getTransFromEntryType(TimeEntryTypes.IN)}
+            </div>
+          </ButtonSpinner>
+          <ButtonSpinner
+            onClick={handleSaveAsOut}
+            isBusy={isCreateAsOutBusy}
+            disabled={isCreateAsInBusy || isSaveDisabled}
+            color="primary"
+          >
+            <div className={classes.button}>
+              {getIconFromEntryType(TimeEntryTypes.OUT)}
+              {getTransFromEntryType(TimeEntryTypes.OUT)}
+            </div>
+          </ButtonSpinner>
+        </div>
+      )}
     </div>
   );
 };

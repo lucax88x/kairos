@@ -1,3 +1,4 @@
+import { FontAwesomeIcon, FontAwesomeIconProps } from '@fortawesome/react-fontawesome';
 import { t, Trans } from '@lingui/macro';
 import { parseISO } from 'date-fns';
 import { immerable } from 'immer';
@@ -5,8 +6,6 @@ import React from 'react';
 import { i18n } from '../i18nLoader';
 import { JobOutModel } from './job.model';
 import { UUID } from './uuid.model';
-import { FontAwesomeIcon, FontAwesomeIconProps } from '@fortawesome/react-fontawesome';
-import { TimeEntryListJobModel } from './time-entry-list.model';
 
 export enum TimeEntryTypes {
   IN = 'IN',

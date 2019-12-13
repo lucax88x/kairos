@@ -27,8 +27,9 @@ export const CreateTimeEntryComponent: React.FC<CreateTimeEntryProps> = props =>
       isOnline={isOnline}
       selectedLanguage={selectedLanguage}
       profile={profile}
-      isAsInBusy={isCreateAsInBusy}
-      isAsOutBusy={isCreateAsOutBusy}
+      isCreateAsInBusy={isCreateAsInBusy}
+      isCreateAsOutBusy={isCreateAsOutBusy}
+      isUpdateBusy={false}
       model={TimeEntryModel.empty}
       onSave={onCreate}
     />

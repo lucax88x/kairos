@@ -11,8 +11,7 @@ export interface EditTimeEntryInputs {
   profile: ProfileModel;
   timeEntry: TimeEntryModel;
   isGetBusy: boolean;
-  isUpdateAsInBusy: boolean;
-  isUpdateAsOutBusy: boolean;
+  isUpdateBusy: boolean;
 }
 
 export interface EditTimeEntryDispatches {
@@ -28,8 +27,7 @@ export const EditTimeEntryComponent: React.FC<EditTimeEntryProps> = props => {
     profile,
     timeEntry,
     isGetBusy,
-    isUpdateAsInBusy,
-    isUpdateAsOutBusy,
+    isUpdateBusy,
     onUpdate,
   } = props;
 
@@ -39,8 +37,9 @@ export const EditTimeEntryComponent: React.FC<EditTimeEntryProps> = props => {
         isOnline={isOnline}
         selectedLanguage={selectedLanguage}
         profile={profile}
-        isAsInBusy={isUpdateAsInBusy}
-        isAsOutBusy={isUpdateAsOutBusy}
+        isCreateAsInBusy={false}
+        isCreateAsOutBusy={false}
+        isUpdateBusy={isUpdateBusy}
         model={timeEntry}
         onSave={onUpdate}
       />

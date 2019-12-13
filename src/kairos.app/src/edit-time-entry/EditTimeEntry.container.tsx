@@ -12,8 +12,7 @@ import {
 } from './EditTimeEntry';
 import {
   selectIsGetTimeEntryBusy,
-  selectIsUpdateTimeEntryAsInBusy,
-  selectIsUpdateTimeEntryAsOutBusy,
+  selectIsUpdateTimeEntryBusy,
   selectTimeEntry,
 } from './selectors';
 import { updateTimeEntryAsync } from './update-time-entry';
@@ -24,8 +23,7 @@ const mapStateToProps = (state: State): EditTimeEntryInputs => ({
   profile: selectProfile(state),
   timeEntry: selectTimeEntry(state),
   isGetBusy: selectIsGetTimeEntryBusy(state),
-  isUpdateAsInBusy: selectIsUpdateTimeEntryAsInBusy(state),
-  isUpdateAsOutBusy: selectIsUpdateTimeEntryAsOutBusy(state),
+  isUpdateBusy: selectIsUpdateTimeEntryBusy(state),
 });
 
 const mapDispatchToProps = (

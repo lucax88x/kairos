@@ -6,8 +6,7 @@ export interface EditTimeEntryState {
   ui: {
     busy: {
       getTimeEntry: boolean;
-      updateTimeEntryAsIn: boolean;
-      updateTimeEntryAsOut: boolean;
+      updateTimeEntry: boolean;
     };
   };
 }
@@ -18,8 +17,7 @@ export const editTimeEntryInitialState: EditTimeEntryState = {
   ui: {
     busy: {
       getTimeEntry: false,
-      updateTimeEntryAsIn: false,
-      updateTimeEntryAsOut: false,
+      updateTimeEntry: false,
     },
   },
 };

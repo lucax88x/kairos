@@ -4,7 +4,7 @@ import { call, put, takeLatest } from 'redux-saga/effects';
 import { createAsyncAction } from 'typesafe-actions';
 import { EditTimeEntryActions } from '../actions';
 import { i18n } from '../i18nLoader';
-import { TimeEntryModel, TimeEntryTypes } from '../models/time-entry.model';
+import { TimeEntryModel } from '../models/time-entry.model';
 import { enqueueSnackbarAction } from '../notification-manager/actions';
 import { updateTimeEntry } from '../services/time-entry/time-entry.service';
 import {
@@ -50,19 +50,13 @@ export const updateTimeEntryReducer = (
   produce(state, draft => {
     switch (action.type) {
       case UPDATE_TIME_ENTRY:
-        if (action.payload.model.type === TimeEntryTypes.IN) {
-          draft.ui.busy.updateTimeEntryAsIn = true;
-        } else if (action.payload.model.type === TimeEntryTypes.OUT) {
-          draft.ui.busy.updateTimeEntryAsOut = true;
-        }
+        draft.ui.busy.updateTimeEntry = true;
         break;
       case UPDATE_TIME_ENTRY_SUCCESS:
-        draft.ui.busy.updateTimeEntryAsIn = false;
-        draft.ui.busy.updateTimeEntryAsOut = false;
+        draft.ui.busy.updateTimeEntry = false;
         break;
       case UPDATE_TIME_ENTRY_FAILURE:
-        draft.ui.busy.updateTimeEntryAsIn = false;
-        draft.ui.busy.updateTimeEntryAsOut = false;
+        draft.ui.busy.updateTimeEntry = false;
         break;
     }
   });
