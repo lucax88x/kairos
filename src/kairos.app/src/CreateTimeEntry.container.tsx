@@ -10,7 +10,8 @@ import { TimeEntryModel } from './models/time-entry.model';
 import { selectProfile } from './profile/selectors';
 import { createTimeEntryAsync } from './shared/create-time-entry';
 import {
-  selectIsCreateTimeEntryBusy,
+  selectIsCreateTimeEntryAsInBusy,
+  selectIsCreateTimeEntryAsOutBusy,
   selectIsOnline,
   selectSelectedLanguage,
 } from './shared/selectors';
@@ -20,7 +21,8 @@ const mapStateToProps = (state: State): CreateTimeEntryInputs => ({
   isOnline: selectIsOnline(state),
   selectedLanguage: selectSelectedLanguage(state),
   profile: selectProfile(state),
-  isBusy: selectIsCreateTimeEntryBusy(state),
+  isCreateAsInBusy: selectIsCreateTimeEntryAsInBusy(state),
+  isCreateAsOutBusy: selectIsCreateTimeEntryAsOutBusy(state),
 });
 
 const mapDispatchToProps = (

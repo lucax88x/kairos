@@ -27,8 +27,8 @@ export class UserModel {
 
   static empty: UserModel = new UserModel();
 
-  isEmpty() {
-    return this.name === '' && this.email === '';
+  static isEmpty(model: UserModel) {
+    return model.name === '' && model.email === '';
   }
 }
 

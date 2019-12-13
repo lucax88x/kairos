@@ -40,7 +40,7 @@ export class JobModel {
   static empty: JobModel = new JobModel(new UUID(), '', new Date(0), null, 0, 0, 0, 0, 0, 0, 0, 0);
 
   isEmpty() {
-    return this.id.equals(JobModel.empty.id) && this.name === JobModel.empty.name;
+    return UUID.equals(this.id, JobModel.empty.id) && this.name === JobModel.empty.name;
   }
 }
 

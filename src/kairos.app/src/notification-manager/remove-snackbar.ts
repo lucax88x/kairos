@@ -17,7 +17,7 @@ export const removeSnackbarReducer = (
     switch (action.type) {
       case REMOVE_SNACKBAR:
         draft.notifications.splice(
-          findIndex(n => n.key.equals(action.payload), draft.notifications),
+          findIndex(n => UUID.equals(n.key, action.payload), draft.notifications),
         );
         break;
     }

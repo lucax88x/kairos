@@ -6,6 +6,7 @@ import { i18n } from '../i18nLoader';
 import { JobOutModel } from './job.model';
 import { UUID } from './uuid.model';
 import { FontAwesomeIcon, FontAwesomeIconProps } from '@fortawesome/react-fontawesome';
+import { TimeEntryListJobModel } from './time-entry-list.model';
 
 export enum TimeEntryTypes {
   IN = 'IN',
@@ -33,11 +34,11 @@ export class TimeEntryModel {
 
   static empty: TimeEntryModel = new TimeEntryModel(new UUID(), new Date(0));
 
-  isEmpty() {
+  static isEmpty(model: TimeEntryModel) {
     return (
-      this.id.equals(TimeEntryModel.empty.id) &&
-      this.when === TimeEntryModel.empty.when &&
-      this.job.isEmpty
+      UUID.equals(model.id, TimeEntryModel.empty.id) &&
+      model.when === TimeEntryModel.empty.when &&
+      UUID.isEmpty(model.job)
     );
   }
 }

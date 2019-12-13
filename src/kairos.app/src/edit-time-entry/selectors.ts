@@ -24,7 +24,12 @@ export const selectIsGetTimeEntryBusy = createSelector(
   busy => busy.getTimeEntry,
 );
 
-export const selectIsUpdateTimeEntryBusy = createSelector(
+export const selectIsUpdateTimeEntryAsInBusy = createSelector(
   selectBusy,
-  busy => busy.updateTimeEntry,
+  busy => busy.updateTimeEntryAsIn,
+);
+
+export const selectIsUpdateTimeEntryAsOutBusy = createSelector(
+  selectBusy,
+  busy => busy.updateTimeEntryAsOut,
 );

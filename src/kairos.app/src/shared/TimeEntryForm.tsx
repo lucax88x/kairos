@@ -48,14 +48,15 @@ export interface TimeEntryFormProps {
   selectedLanguage: Language;
   profile: ProfileModel;
   model: TimeEntryModel;
-  isBusy: boolean;
+  isAsInBusy: boolean;
+  isAsOutBusy: boolean;
   onSave: (model: TimeEntryModel) => void;
 }
 
 export const TimeEntryForm: React.FC<TimeEntryFormProps> = props => {
   const classes = useStyles(props);
 
-  const { isOnline, selectedLanguage, isBusy, profile, model, onSave } = props;
+  const { isOnline, selectedLanguage, isAsInBusy, isAsOutBusy, profile, model, onSave } = props;
 
   const [state, dispatch] = useTimeEntryFormReducer();
   const { id, when, type, jobs, selectedJobId } = state;
@@ -101,7 +102,7 @@ export const TimeEntryForm: React.FC<TimeEntryFormProps> = props => {
   );
 
   useEffect(() => {
-    if (!model.isEmpty()) {
+    if (!TimeEntryModel.isEmpty(model)) {
       dispatch(SetModel(model));
     } else {
       dispatch(ResetModel());
@@ -117,7 +118,7 @@ export const TimeEntryForm: React.FC<TimeEntryFormProps> = props => {
   }
 
   const isSaveDisabled =
-    !isOnline || !when || selectedJobId === UUID.Empty || isBusy;
+    !isOnline || !when || selectedJobId === UUID.Empty;
 
   return (
     <div className={classes.container}>
@@ -164,8 +165,8 @@ export const TimeEntryForm: React.FC<TimeEntryFormProps> = props => {
       <div className={classes.fabs}>
         <ButtonSpinner
           onClick={handleSaveAsIn}
-          isBusy={isBusy}
-          disabled={isSaveDisabled}
+          isBusy={isAsInBusy}
+          disabled={isAsOutBusy || isSaveDisabled}
           className={classes.button}
           color={type === TimeEntryTypes.IN ? 'primary' : 'secondary'}
         >
@@ -176,8 +177,8 @@ export const TimeEntryForm: React.FC<TimeEntryFormProps> = props => {
         </ButtonSpinner>
         <ButtonSpinner
           onClick={handleSaveAsOut}
-          isBusy={isBusy}
-          disabled={isSaveDisabled}
+          isBusy={isAsOutBusy}
+          disabled={isAsInBusy || isSaveDisabled}
           color={type === TimeEntryTypes.OUT ? 'primary' : 'secondary'}
         >
           <div className={classes.button}>

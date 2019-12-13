@@ -63,7 +63,6 @@ export const getProfileReducer = (
     switch (action.type) {
       case GET_PROFILE:
         draft.ui.busy.getProfile = true;
-        draft.profile = ProfileModel.empty;
         break;
       case GET_PROFILE_SUCCESS:
         draft.ui.busy.getProfile = false;
