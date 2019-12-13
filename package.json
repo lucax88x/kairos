@@ -23,6 +23,7 @@
     "registry:login": "sh ./scripts/registry.login.sh",
     "docker:push": "sh ./scripts/docker.push.sh",
     "deploy:ssh": "ssh lucatrazzi@kairos.rocks",
-    "k8s:deploy": "sh ./scripts/k8s.deploy.sh"
+    "k8s:deploy": "sh ./scripts/k8s.deploy.sh",
+    "flow:deploy": "sh ./scripts/flow.deploy.sh"
   }
 }
