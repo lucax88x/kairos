@@ -49,7 +49,7 @@ export const TimeHolidayEntryForm: React.FC<TimeHolidayEntryFormProps> = props =
   const [when, setWhen] = useState<Date | null>(model.when);
 
   useEffect(() => {
-    if (!model.isEmpty()) {
+    if (!TimeHolidayEntryModel.isEmpty(model)) {
       setId(model.id);
       setDescription(model.description);
       setWhen(model.when);

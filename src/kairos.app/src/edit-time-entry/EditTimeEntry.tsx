@@ -37,7 +37,9 @@ export const EditTimeEntryComponent: React.FC<EditTimeEntryProps> = props => {
         isOnline={isOnline}
         selectedLanguage={selectedLanguage}
         profile={profile}
-        isBusy={isUpdateBusy}
+        isCreateAsInBusy={false}
+        isCreateAsOutBusy={false}
+        isUpdateBusy={isUpdateBusy}
         model={timeEntry}
         onSave={onUpdate}
       />

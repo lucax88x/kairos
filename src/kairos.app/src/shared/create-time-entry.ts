@@ -2,7 +2,7 @@ import produce from 'immer';
 import { call, put, takeLatest } from 'redux-saga/effects';
 import { createAsyncAction } from 'typesafe-actions';
 import { SharedActions } from '../actions';
-import { TimeEntryModel } from '../models/time-entry.model';
+import { TimeEntryModel, TimeEntryTypes } from '../models/time-entry.model';
 import { createTimeEntry } from '../services/time-entry/time-entry.service';
 import {
   CREATE_TIME_ENTRY,
@@ -35,7 +35,9 @@ function* doCreateTimeEntry({
 
 function* doCloseDrawer() {
   yield put(closeTimeEntryDrawerAction());
-  yield put(enqueueSnackbarAction(i18n._(t`Entry Created`), { variant: 'success' }));
+  yield put(
+    enqueueSnackbarAction(i18n._(t`Entry Created`), { variant: 'success' }),
+  );
 }
 
 export function* createTimeEntrySaga() {
@@ -50,13 +52,19 @@ export const createTimeEntryReducer = (
   produce(state, draft => {
     switch (action.type) {
       case CREATE_TIME_ENTRY:
-        draft.ui.busy.createTimeEntry = true;
+        if (action.payload.type === TimeEntryTypes.IN) {
+          draft.ui.busy.createTimeEntryAsIn = true;
+        } else if (action.payload.type === TimeEntryTypes.OUT) {
+          draft.ui.busy.createTimeEntryAsOut = true;
+        }
         break;
       case CREATE_TIME_ENTRY_SUCCESS:
-        draft.ui.busy.createTimeEntry = false;
+        draft.ui.busy.createTimeEntryAsIn = false;
+        draft.ui.busy.createTimeEntryAsOut = false;
         break;
       case CREATE_TIME_ENTRY_FAILURE:
-        draft.ui.busy.createTimeEntry = false;
+        draft.ui.busy.createTimeEntryAsIn = false;
+        draft.ui.busy.createTimeEntryAsOut = false;
         break;
     }
   });

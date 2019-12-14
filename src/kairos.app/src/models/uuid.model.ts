@@ -33,12 +33,12 @@ export class UUID {
     }
   }
 
-  public get isEmpty() {
-    return this.value === UUID.Empty;
+  public static isEmpty(uuid: UUID) {
+    return uuid.value === UUID.Empty;
   }
 
-  public equals(other: UUID): boolean {
-    return this.value === other.value;
+  public static equals(uuid: UUID, other: UUID): boolean {
+    return uuid.value === other.value;
   }
 
   public toString = (): string => {

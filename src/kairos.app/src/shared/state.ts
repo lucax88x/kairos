@@ -19,7 +19,8 @@ export interface SharedState {
     busy: {
       getCountries: boolean;
       getTimeEntries: boolean;
-      createTimeEntry: boolean;
+      createTimeEntryAsIn: boolean;
+      createTimeEntryAsOut: boolean;
       deleteTimeEntries: boolean;
       getTimeAbsenceEntries: boolean;
       createTimeAbsenceEntry: boolean;
@@ -55,7 +56,8 @@ export const sharedInitialState: SharedState = {
     busy: {
       getCountries: false,
       getTimeEntries: false,
-      createTimeEntry: false,
+      createTimeEntryAsIn: false,
+      createTimeEntryAsOut: false,
       deleteTimeEntries: false,
       getTimeAbsenceEntries: false,
       createTimeAbsenceEntry: false,
