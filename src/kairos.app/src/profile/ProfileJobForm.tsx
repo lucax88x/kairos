@@ -1,9 +1,21 @@
 import DateFnsUtils from '@date-io/date-fns';
 import { t, Trans } from '@lingui/macro';
-import { ExpansionPanel, ExpansionPanelDetails, ExpansionPanelSummary, IconButton, makeStyles, TextField, Typography } from '@material-ui/core';
+import {
+  ExpansionPanel,
+  ExpansionPanelDetails,
+  ExpansionPanelSummary,
+  IconButton,
+  makeStyles,
+  TextField,
+  Typography,
+} from '@material-ui/core';
 import DeleteIcon from '@material-ui/icons/Delete';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
-import { KeyboardDatePicker, MaterialUiPickersDate, MuiPickersUtilsProvider } from '@material-ui/pickers';
+import {
+  KeyboardDatePicker,
+  MuiPickersUtilsProvider,
+} from '@material-ui/pickers';
+import { MaterialUiPickersDate } from '@material-ui/pickers/typings/date';
 import clsx from 'clsx';
 import { endOfDay } from 'date-fns';
 import React, { ChangeEvent, useCallback, useState } from 'react';

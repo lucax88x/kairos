@@ -3,13 +3,21 @@ import { Trans } from '@lingui/macro';
 import { Button, List, makeStyles } from '@material-ui/core';
 import KeyboardArrowLeftIcon from '@material-ui/icons/KeyboardArrowLeft';
 import KeyboardArrowRightIcon from '@material-ui/icons/KeyboardArrowRight';
-import { KeyboardDatePicker, MaterialUiPickersDate, MuiPickersUtilsProvider } from '@material-ui/pickers';
+import {
+  KeyboardDatePicker,
+  MuiPickersUtilsProvider,
+} from '@material-ui/pickers';
+import { MaterialUiPickersDate } from '@material-ui/pickers/typings/date';
 import { addDays, endOfDay, format, fromUnixTime, startOfDay } from 'date-fns';
 import { map } from 'ramda';
 import React, { useCallback, useEffect, useState } from 'react';
 import { formatAsDate } from '../code/constants';
 import { getDatepickerLocale } from '../code/get-datepicker-locale';
-import { isTimeAbsenceEntryModel, isTimeEntryListModel, isTimeHolidayEntryModel } from '../code/is';
+import {
+  isTimeAbsenceEntryModel,
+  isTimeEntryListModel,
+  isTimeHolidayEntryModel,
+} from '../code/is';
 import Spinner from '../components/Spinner';
 import { EntryModel } from '../models/entry-list-model';
 import { Language } from '../models/language-model';

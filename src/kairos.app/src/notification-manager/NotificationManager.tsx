@@ -1,5 +1,5 @@
 import { OptionsObject, withSnackbar, WithSnackbarProps } from 'notistack';
-import { forEach, merge } from 'ramda';
+import { forEach, mergeRight } from 'ramda';
 import React from 'react';
 
 import { NotificationModel } from '../models/notification.model';
@@ -17,7 +17,9 @@ type NotificationManagerProps = NotificationManagerInputs &
   NotificationManagerDispatches &
   WithSnackbarProps;
 
-class NotificationManager extends React.PureComponent<NotificationManagerProps> {
+class NotificationManager extends React.PureComponent<
+  NotificationManagerProps
+> {
   private optionDefaults: OptionsObject;
 
   /**
@@ -43,7 +45,10 @@ class NotificationManager extends React.PureComponent<NotificationManagerProps> 
       // if (displayed.indexOf(notification.key) > -1) return;
       // Display notification using notistack
 
-      const options = merge(this.optionDefaults, notification.options);
+      let options = this.optionDefaults;
+      if (!!notification.options) {
+        options = mergeRight(this.optionDefaults, notification.options);
+      }
       enqueueSnackbar(notification.message, options);
 
       this.removeSnackbar(notification.key);
