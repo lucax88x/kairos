@@ -1,9 +1,7 @@
 import { getUnixTime } from 'date-fns';
 import { advanceTo, clear } from 'jest-date-mock';
 import { TimeAbsenceEntryTypes } from '../models/time-absence-entry.model';
-import { TimeEntryListModel } from '../models/time-entry-list.model';
 import { TimeEntryTypes } from '../models/time-entry.model';
-import { TimeHolidayEntryModel } from '../models/time-holiday-entry.model';
 import { UUID } from '../models/uuid.model';
 import { TimeAbsenceEntryBuilder } from '../tests/time-absence-entry.builder';
 import { TimeEntryBuilder } from '../tests/time-entry.builder';
@@ -338,14 +336,14 @@ describe('statistics', () => {
       expect(result['RemainingToday']).toEqual(
         expect.objectContaining({
           subtitle: 'January 01',
-          text: '-2',
+          text: '-2:00',
         }),
       );
 
       expect(result['OvertimeToday']).toEqual(
         expect.objectContaining({
           subtitle: 'January 01',
-          text: '02',
+          text: '02:00',
         }),
       );
     });

@@ -48,28 +48,12 @@ export const humanDifference = (left: Date, right: Date) => {
   const time: string[] = [];
 
   const hours = differenceInHours(right, left);
-  if (hours > 0) {
-    time.push(`${padNumber(hours)}`);
-    right = subHours(right, hours);
-  } else {
-    time.push('00');
-  }
+  time.push(`${padNumber(hours)}`);
+  right = subHours(right, hours);
 
   const minutes = differenceInMinutes(right, left);
-  if (minutes > 0) {
-    time.push(`${padNumber(minutes)}`);
-    right = subMinutes(right, minutes);
-  } else {
-    time.push('00');
-  }
-
-  // const seconds = differenceInSeconds(right, left);
-  // if (seconds > 0) {
-  //   time.push(`${padNumber(seconds)}`);
-  //   right = subSeconds(right, seconds);
-  // } else {
-  //   time.push('00');
-  // }
+  time.push(`${padNumber(minutes)}`);
+  right = subMinutes(right, minutes);
 
   result.push(join(':', time));
 
