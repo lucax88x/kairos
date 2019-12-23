@@ -14,7 +14,7 @@ import { values } from 'ramda';
 import React, { memo, useCallback, useMemo } from 'react';
 import {
   getIllnessStatistics,
-  getVacationStatistics,
+  getAbsenceStatistics,
   getWorkingHoursStatistics,
   TimeStatisticTile,
 } from '../code/calculator';
@@ -102,8 +102,8 @@ export const TimeStatisticsComponent: React.FC<TimeStatisticsProps> = memo(
     );
 
     const vacationTiles: TimeStatisticTile[] = useMemo(
-      () => values(getVacationStatistics(selectedLanguage, absences)),
-      [selectedLanguage, absences],
+      () => values(getAbsenceStatistics(selectedLanguage, profile, absences)),
+      [selectedLanguage, profile, absences],
     );
 
     const illnessTiles: TimeStatisticTile[] = useMemo(
