@@ -7,7 +7,7 @@ namespace Kairos.Application.TimeAbsenceEntry.Dtos
     public class TimeAbsenceEntryModel
     {
         public Guid Id { get; set; }
-        public string? Description { get; set; }
+        public string Description { get; set; } = "";
         public DateTimeOffset Start { get; set; }
         public DateTimeOffset End { get; set; }
         public int Type { get; set; }
