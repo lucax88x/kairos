@@ -1,18 +1,19 @@
 import { getUnixTime } from 'date-fns';
 import { advanceTo, clear } from 'jest-date-mock';
 import { TimeAbsenceEntryTypes } from '../models/time-absence-entry.model';
-import { TimeEntryListModel } from '../models/time-entry-list.model';
 import { TimeEntryTypes } from '../models/time-entry.model';
-import { TimeHolidayEntryModel } from '../models/time-holiday-entry.model';
 import { UUID } from '../models/uuid.model';
 import { TimeAbsenceEntryBuilder } from '../tests/time-absence-entry.builder';
 import { TimeEntryBuilder } from '../tests/time-entry.builder';
 import { TimeHolidayEntryBuilder } from '../tests/time-holiday-entry.builder';
 import { ProfileBuilder } from './../tests/profile.builder';
 import {
+  getAbsenceStatistics,
   getHumanDifferencesByRange,
   getWorkingHoursStatistics,
+  getDiffHoursFromAbsences,
 } from './calculator';
+import { JobModel } from '../models/job.model';
 
 describe('calculations', () => {
   it('should get differences with only 2 entries', () => {
@@ -233,6 +234,9 @@ describe('calculations', () => {
 });
 
 describe('statistics', () => {
+  const jobId = UUID.Generate().toString();
+  const profile = new ProfileBuilder().withJob(new UUID(jobId)).build();
+
   beforeEach(() => {
     advanceTo(new Date('January 1 2019 15:00'));
   });
@@ -240,15 +244,213 @@ describe('statistics', () => {
     clear();
   });
 
-  describe('single day', () => {
-    it('build working hour statistics with a simple entry', () => {
-      // given
-      const jobId = UUID.Generate().toString();
-      const profile = new ProfileBuilder().withJob(new UUID(jobId)).build();
+  describe('working hours', () => {
+    describe('single day', () => {
+      it('build working hour statistics with a simple entry', () => {
+        // given
+        const timeEntries = [
+          buildTimeEntry(jobId, TimeEntryTypes.IN, 'January 1 2019 08:30'),
+          buildTimeEntry(jobId, TimeEntryTypes.OUT, 'January 1 2019 09:30'),
+        ];
 
+        // when
+        const result = getWorkingHoursStatistics(
+          'en',
+          profile,
+          timeEntries,
+          [],
+          [],
+        );
+
+        // then
+        expect(result['RemainingToday'][0]).toEqual(
+          expect.objectContaining({
+            subtitle: 'January 01',
+            text: '07:30',
+          }),
+        );
+
+        expect(result['OvertimeToday'][0]).toEqual(
+          expect.objectContaining({
+            subtitle: 'January 01',
+            text: '-',
+          }),
+        );
+      });
+
+      it('build working hour statistics with a complete example', () => {
+        // given
+        const timeEntries = [
+          buildTimeEntry(jobId, TimeEntryTypes.IN, 'January 1 2019 08:30'),
+          buildTimeEntry(jobId, TimeEntryTypes.OUT, 'January 1 2019 12:30'),
+          buildTimeEntry(jobId, TimeEntryTypes.IN, 'January 1 2019 13:30'),
+          buildTimeEntry(jobId, TimeEntryTypes.OUT, 'January 1 2019 18:00'),
+        ];
+
+        // when
+        const result = getWorkingHoursStatistics(
+          'en',
+          profile,
+          timeEntries,
+          [],
+          [],
+        );
+
+        // then
+        expect(result['RemainingToday'][0]).toEqual(
+          expect.objectContaining({
+            subtitle: 'January 01',
+            text: '-',
+          }),
+        );
+
+        expect(result['OvertimeToday'][0]).toEqual(
+          expect.objectContaining({
+            subtitle: 'January 01',
+            text: '-',
+          }),
+        );
+      });
+
+      it('build working hour statistics with a overtimes', () => {
+        // given
+        const timeEntries = [
+          buildTimeEntry(jobId, TimeEntryTypes.IN, 'January 1 2019 08:30'),
+          buildTimeEntry(jobId, TimeEntryTypes.OUT, 'January 1 2019 12:30'),
+          buildTimeEntry(jobId, TimeEntryTypes.IN, 'January 1 2019 13:30'),
+          buildTimeEntry(jobId, TimeEntryTypes.OUT, 'January 1 2019 20:00'),
+        ];
+
+        // when
+        const result = getWorkingHoursStatistics(
+          'en',
+          profile,
+          timeEntries,
+          [],
+          [],
+        );
+
+        // then
+        expect(result['RemainingToday'][0]).toEqual(
+          expect.objectContaining({
+            subtitle: 'January 01',
+            text: '-2:00',
+          }),
+        );
+
+        expect(result['OvertimeToday'][0]).toEqual(
+          expect.objectContaining({
+            subtitle: 'January 01',
+            text: '02:00',
+          }),
+        );
+      });
+
+      it('build working hour statistics with multiple absences', () => {
+        // given
+        const timeEntries = [
+          buildTimeEntry(jobId, TimeEntryTypes.IN, 'January 1 2019 08:30'),
+          buildTimeEntry(jobId, TimeEntryTypes.OUT, 'January 1 2019 12:30'),
+        ];
+
+        const timeAbsenceEntries = [
+          buildTimeAbsenceEntry(
+            jobId,
+            'January 1 2019 13:00',
+            'January 1 2019 17:30',
+          ),
+        ];
+
+        // when
+        const result = getWorkingHoursStatistics(
+          'en',
+          profile,
+          timeEntries,
+          timeAbsenceEntries,
+          [],
+        );
+
+        // then
+        expect(result['RemainingToday'][0]).toEqual(
+          expect.objectContaining({
+            subtitle: 'January 01',
+            text: '-',
+          }),
+        );
+
+        expect(result['OvertimeToday'][0]).toEqual(
+          expect.objectContaining({
+            subtitle: 'January 01',
+            text: '-',
+          }),
+        );
+      });
+
+      it('build working hour statistics with a holiday', () => {
+        // given
+        const timeHolidayEntries = [buildTimeHolidayEntry('January 1 2019')];
+
+        // when
+        const result = getWorkingHoursStatistics(
+          'en',
+          profile,
+          [],
+          [],
+          timeHolidayEntries,
+        );
+
+        // then
+        expect(result['RemainingToday'][0]).toEqual(
+          expect.objectContaining({
+            subtitle: 'January 01',
+            text: '-',
+          }),
+        );
+
+        expect(result['OvertimeToday'][0]).toEqual(
+          expect.objectContaining({
+            subtitle: 'January 01',
+            text: '-',
+          }),
+        );
+      });
+    });
+
+    describe('complete-week', () => {
+      it('build working hour statistics with a complete example', () => {
+        // given
+        const timeEntries = [
+          buildTimeEntry(jobId, TimeEntryTypes.IN, 'January 1 2019 08:30'),
+          buildTimeEntry(jobId, TimeEntryTypes.OUT, 'January 1 2019 18:00'),
+          buildTimeEntry(jobId, TimeEntryTypes.IN, 'January 2 2019 08:30'),
+          buildTimeEntry(jobId, TimeEntryTypes.OUT, 'January 2 2019 16:00'),
+        ];
+
+        // when
+        const result = getWorkingHoursStatistics(
+          'en',
+          profile,
+          timeEntries,
+          [],
+          [],
+        );
+
+        // then
+        expect(result['RemainingWeek'][0]).toEqual(
+          expect.objectContaining({
+            subtitle: 'December 30 - January 05',
+            text: '01d 01:30',
+          }),
+        );
+      });
+    });
+
+    it('should not go overflow with forgotten entries', () => {
+      advanceTo(new Date('January 3 2019 15:00'));
+
+      // given
       const timeEntries = [
         buildTimeEntry(jobId, TimeEntryTypes.IN, 'January 1 2019 08:30'),
-        buildTimeEntry(jobId, TimeEntryTypes.OUT, 'January 1 2019 09:30'),
       ];
 
       // when
@@ -261,107 +463,37 @@ describe('statistics', () => {
       );
 
       // then
-      expect(result['RemainingToday']).toEqual(
+      expect(result['RemainingToday'][0]).toEqual(
         expect.objectContaining({
-          subtitle: 'January 01',
-          text: '07:30',
+          subtitle: 'January 03',
+          text: '08:30',
         }),
       );
 
-      expect(result['OvertimeToday']).toEqual(
+      expect(result['OvertimeToday'][0]).toEqual(
         expect.objectContaining({
-          subtitle: 'January 01',
-          text: '-',
-        }),
-      );
-    });
-
-    it('build working hour statistics with a complete example', () => {
-      // given
-      const jobId = UUID.Generate().toString();
-      const profile = new ProfileBuilder().withJob(new UUID(jobId)).build();
-
-      const timeEntries = [
-        buildTimeEntry(jobId, TimeEntryTypes.IN, 'January 1 2019 08:30'),
-        buildTimeEntry(jobId, TimeEntryTypes.OUT, 'January 1 2019 12:30'),
-        buildTimeEntry(jobId, TimeEntryTypes.IN, 'January 1 2019 13:30'),
-        buildTimeEntry(jobId, TimeEntryTypes.OUT, 'January 1 2019 18:00'),
-      ];
-
-      // when
-      const result = getWorkingHoursStatistics(
-        'en',
-        profile,
-        timeEntries,
-        [],
-        [],
-      );
-
-      // then
-      expect(result['RemainingToday']).toEqual(
-        expect.objectContaining({
-          subtitle: 'January 01',
+          subtitle: 'January 03',
           text: '-',
         }),
       );
 
-      expect(result['OvertimeToday']).toEqual(
-        expect.objectContaining({
-          subtitle: 'January 01',
-          text: '-',
-        }),
-      );
+      clear();
     });
 
-    it('build working hour statistics with a overtimes', () => {
+    it('absence should not last more than working hours', () => {
       // given
-      const jobId = UUID.Generate().toString();
-      const profile = new ProfileBuilder().withJob(new UUID(jobId)).build();
-
       const timeEntries = [
         buildTimeEntry(jobId, TimeEntryTypes.IN, 'January 1 2019 08:30'),
-        buildTimeEntry(jobId, TimeEntryTypes.OUT, 'January 1 2019 12:30'),
-        buildTimeEntry(jobId, TimeEntryTypes.IN, 'January 1 2019 13:30'),
-        buildTimeEntry(jobId, TimeEntryTypes.OUT, 'January 1 2019 20:00'),
-      ];
-
-      // when
-      const result = getWorkingHoursStatistics(
-        'en',
-        profile,
-        timeEntries,
-        [],
-        [],
-      );
-
-      // then
-      expect(result['RemainingToday']).toEqual(
-        expect.objectContaining({
-          subtitle: 'January 01',
-          text: '-2',
-        }),
-      );
-
-      expect(result['OvertimeToday']).toEqual(
-        expect.objectContaining({
-          subtitle: 'January 01',
-          text: '02',
-        }),
-      );
-    });
-
-    it('build working hour statistics with multiple absences', () => {
-      // given
-      const jobId = UUID.Generate().toString();
-      const profile = new ProfileBuilder().withJob(new UUID(jobId)).build();
-
-      const timeEntries = [
-        buildTimeEntry(jobId, TimeEntryTypes.IN, 'January 1 2019 08:30'),
-        buildTimeEntry(jobId, TimeEntryTypes.OUT, 'January 1 2019 12:30'),
+        buildTimeEntry(jobId, TimeEntryTypes.OUT, 'January 1 2019 08:30'),
       ];
 
       const timeAbsenceEntries = [
-        buildTimeAbsenceEntry('January 1 2019 13:00', 'January 1 2019 17:30'),
+        buildTimeAbsenceEntry(
+          jobId,
+          'January 1 2019 00:00',
+          'January 1 2019 23:59',
+          TimeAbsenceEntryTypes.COMPENSATION,
+        ),
       ];
 
       // when
@@ -374,65 +506,40 @@ describe('statistics', () => {
       );
 
       // then
-      expect(result['RemainingToday']).toEqual(
+      expect(result['RemainingToday'][0]).toEqual(
         expect.objectContaining({
           subtitle: 'January 01',
           text: '-',
         }),
       );
 
-      expect(result['OvertimeToday']).toEqual(
-        expect.objectContaining({
-          subtitle: 'January 01',
-          text: '-',
-        }),
-      );
-    });
-
-    it('build working hour statistics with a holiday', () => {
-      // given
-      const jobId = UUID.Generate().toString();
-      const profile = new ProfileBuilder().withJob(new UUID(jobId)).build();
-
-      const timeHolidayEntries = [buildTimeHolidayEntry('January 1 2019')];
-
-      // when
-      const result = getWorkingHoursStatistics(
-        'en',
-        profile,
-        [],
-        [],
-        timeHolidayEntries,
-      );
-
-      // then
-      expect(result['RemainingToday']).toEqual(
-        expect.objectContaining({
-          subtitle: 'January 01',
-          text: '-',
-        }),
-      );
-
-      expect(result['OvertimeToday']).toEqual(
+      expect(result['OvertimeToday'][0]).toEqual(
         expect.objectContaining({
           subtitle: 'January 01',
           text: '-',
         }),
       );
     });
-  });
 
-  describe('complete-week', () => {
-    it('build working hour statistics with a complete example', () => {
+    it('get current year overtimes', () => {
       // given
-      const jobId = UUID.Generate().toString();
-      const profile = new ProfileBuilder().withJob(new UUID(jobId)).build();
-
       const timeEntries = [
-        buildTimeEntry(jobId, TimeEntryTypes.IN, 'January 1 2019 08:30'),
-        buildTimeEntry(jobId, TimeEntryTypes.OUT, 'January 1 2019 18:00'),
-        buildTimeEntry(jobId, TimeEntryTypes.IN, 'January 2 2019 08:30'),
-        buildTimeEntry(jobId, TimeEntryTypes.OUT, 'January 2 2019 16:00'),
+        buildTimeEntry(jobId, TimeEntryTypes.IN, 'January 1 2019 06:00'),
+        buildTimeEntry(jobId, TimeEntryTypes.OUT, 'January 1 2019 20:00'),
+        buildTimeEntry(jobId, TimeEntryTypes.IN, 'January 2 2019 06:00'),
+        buildTimeEntry(jobId, TimeEntryTypes.OUT, 'January 2 2019 20:00'),
+        buildTimeEntry(jobId, TimeEntryTypes.IN, 'January 3 2019 06:00'),
+        buildTimeEntry(jobId, TimeEntryTypes.OUT, 'January 3 2019 20:00'),
+        buildTimeEntry(jobId, TimeEntryTypes.IN, 'January 4 2019 06:00'),
+        buildTimeEntry(jobId, TimeEntryTypes.OUT, 'January 4 2019 20:00'),
+        buildTimeEntry(jobId, TimeEntryTypes.IN, 'January 5 2019 06:00'),
+        buildTimeEntry(jobId, TimeEntryTypes.OUT, 'January 5 2019 20:00'),
+        buildTimeEntry(jobId, TimeEntryTypes.IN, 'January 6 2019 06:00'),
+        buildTimeEntry(jobId, TimeEntryTypes.OUT, 'January 6 2019 20:00'),
+        buildTimeEntry(jobId, TimeEntryTypes.IN, 'January 7 2019 06:00'),
+        buildTimeEntry(jobId, TimeEntryTypes.OUT, 'January 7 2019 20:00'),
+        buildTimeEntry(jobId, TimeEntryTypes.IN, 'January 8 2019 06:00'),
+        buildTimeEntry(jobId, TimeEntryTypes.OUT, 'January 8 2019 20:00'),
       ];
 
       // when
@@ -445,13 +552,152 @@ describe('statistics', () => {
       );
 
       // then
-      expect(result['RemainingWeek']).toEqual(
+      expect(result['OvertimeYear'][0]).toEqual(
         expect.objectContaining({
-          subtitle: 'December 30 - January 05',
-          text: '01d 01:30',
+          subtitle: '2019',
+          text: '02d 13:00',
         }),
       );
     });
+  });
+
+  describe('absences', () => {
+    it('build absence statistics', () => {
+      // given
+      const timeAbsenceEntries = [
+        buildTimeAbsenceEntry(
+          jobId,
+          'January 1 2019 15:00',
+          'January 1 2019 18:00',
+          TimeAbsenceEntryTypes.COMPENSATION,
+        ),
+        buildTimeAbsenceEntry(
+          jobId,
+          'January 1 2019 09:00',
+          'January 1 2019 12:00',
+          TimeAbsenceEntryTypes.ILLNESS,
+        ),
+        buildTimeAbsenceEntry(
+          jobId,
+          'January 1 2019 08:00',
+          'January 1 2019 09:00',
+          TimeAbsenceEntryTypes.VACATION,
+        ),
+        buildTimeAbsenceEntry(
+          jobId,
+          'January 1 2019 18:00',
+          'January 1 2019 21:00',
+          TimeAbsenceEntryTypes.PERMIT,
+        ),
+        buildTimeAbsenceEntry(
+          jobId,
+          'January 1 2019 20:00',
+          'January 1 2019 21:30',
+          TimeAbsenceEntryTypes.COMPENSATION,
+        ),
+      ];
+
+      // when
+      const result = getAbsenceStatistics('en', profile, timeAbsenceEntries);
+
+      // then
+      expect(result['CompensationToday'][0]).toEqual(
+        expect.objectContaining({
+          subtitle: 'January 01',
+          text: '04:30',
+        }),
+      );
+      expect(result['IllnessToday'][0]).toEqual(
+        expect.objectContaining({
+          subtitle: 'January 01',
+          text: '03:00',
+        }),
+      );
+      expect(result['VacationToday'][0]).toEqual(
+        expect.objectContaining({
+          subtitle: 'January 01',
+          text: '01:00',
+        }),
+      );
+      expect(result['PermitToday'][0]).toEqual(
+        expect.objectContaining({
+          subtitle: 'January 01',
+          text: '03:00',
+        }),
+      );
+    });
+  });
+});
+
+describe('getHoursFromAbsences', () => {
+  const jobId = UUID.Generate().toString();
+  const job = new JobModel(
+    new UUID(jobId),
+    'job',
+    new Date(0),
+    new Date(8640000000000000),
+    20,
+    5,
+    6,
+    7,
+    8,
+    9,
+    0,
+    0,
+  );
+
+  it(`should get normal hour differences when they don't exceed job times`, () => {
+    // given
+    const timeAbsenceEntries = [
+      buildTimeAbsenceEntry(
+        jobId,
+        'January 1 2019 13:00',
+        'January 1 2019 17:00',
+        TimeAbsenceEntryTypes.COMPENSATION,
+      ),
+    ];
+
+    // when
+    const hours = getDiffHoursFromAbsences(job)(timeAbsenceEntries);
+
+    // then
+    expect(hours).toEqual([4]);
+  });
+
+  it(`should get reduced hour differences when they exceed job times`, () => {
+    // given
+    const timeAbsenceEntries = [
+      buildTimeAbsenceEntry(
+        jobId,
+        'January 1 2019 00:00',
+        'January 1 2019 23:59',
+        TimeAbsenceEntryTypes.COMPENSATION,
+      ),
+    ];
+
+    // when
+    const hours = getDiffHoursFromAbsences(job)(timeAbsenceEntries);
+
+    // then
+    expect(hours).toEqual([6]);
+  });
+
+  it(`should get reduced hour differences when they exceed job times for each day`, () => {
+    // given
+    const timeAbsenceEntries = [
+      buildTimeAbsenceEntry(
+        jobId,
+        'January 1 2019 00:00',
+        'January 3 2019 23:59',
+        TimeAbsenceEntryTypes.COMPENSATION,
+      ),
+    ];
+
+    // when
+    const hours = getDiffHoursFromAbsences(job)(timeAbsenceEntries);
+
+    // then
+    expect(hours).toEqual([21]);
   });
 });
 
@@ -464,11 +710,13 @@ function buildTimeEntry(jobId: string, type: TimeEntryTypes, date: string) {
 }
 
 function buildTimeAbsenceEntry(
+  jobId: string,
   start: string,
   end: string,
   type = TimeAbsenceEntryTypes.COMPENSATION,
 ) {
   return new TimeAbsenceEntryBuilder()
+    .withJob(new UUID(jobId))
     .withType(type)
     .withStart(start)
     .withEnd(end)

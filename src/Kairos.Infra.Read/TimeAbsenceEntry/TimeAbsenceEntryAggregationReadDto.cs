@@ -1,17 +1,19 @@
 using System;
+using Kairos.Infra.Read.UserProfile;
 
 namespace Kairos.Infra.Read.TimeAbsenceEntry
 {
-    public class TimeAbsenceEntryReadDto
+    public class TimeAbsenceEntryAggregationReadDto
     {
         public Guid Id { get; }
-        public string Description { get; }
+        public string? Description { get; }
         public DateTimeOffset Start { get; }
         public DateTimeOffset End { get; }
         public int Type { get; }
-        public Guid Job { get; }
+        public UserJobReadDto Job { get; }
 
-        public TimeAbsenceEntryReadDto(Guid id, string description, DateTimeOffset start, DateTimeOffset end, int type, Guid job)
+        public TimeAbsenceEntryAggregationReadDto(Guid id, string? description, DateTimeOffset start,
+            DateTimeOffset end, int type, UserJobReadDto job)
         {
             Id = id;
             Description = description;

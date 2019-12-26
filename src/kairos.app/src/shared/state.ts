@@ -1,9 +1,9 @@
 import { getYear } from 'date-fns';
 import { CountryModel } from '../models/country.model';
 import { Language } from '../models/language-model';
-import { TimeAbsenceEntryModel } from '../models/time-absence-entry.model';
 import { TimeEntryListModel } from '../models/time-entry-list.model';
 import { TimeHolidayEntryModel } from '../models/time-holiday-entry.model';
+import { TimeAbsenceEntryListModel } from '../models/time-absence-entry-list.model';
 
 export interface SharedState {
   isOnline: boolean;
@@ -12,7 +12,7 @@ export interface SharedState {
   selectedYear: number;
   countries: CountryModel[];
   timeEntries: TimeEntryListModel[];
-  timeAbsenceEntries: TimeAbsenceEntryModel[];
+  timeAbsenceEntries: TimeAbsenceEntryListModel[];
   timeHolidayEntries: TimeHolidayEntryModel[];
 
   ui: {
@@ -80,7 +80,7 @@ export const sharedInitialState: SharedState = {
 };
 
 function getBrowserLanguage(): Language {
-  // tslint:disable-next-line: no-any
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const browserLanguage = navigator.language || (navigator as any).userLanguage;
 
   // TODO: find some utility to convert from culture to language safely

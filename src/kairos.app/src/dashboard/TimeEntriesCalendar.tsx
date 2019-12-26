@@ -18,10 +18,8 @@ import Spinner from '../components/Spinner';
 import { i18n } from '../i18nLoader';
 import { Language } from '../models/language-model';
 import { ProfileModel } from '../models/profile.model';
-import {
-  getTextFromAbsenceType,
-  TimeAbsenceEntryModel,
-} from '../models/time-absence-entry.model';
+import { TimeAbsenceEntryListModel } from '../models/time-absence-entry-list.model';
+import { getTextFromAbsenceType } from '../models/time-absence-entry.model';
 import { TimeEntryListModel } from '../models/time-entry-list.model';
 import { TimeHolidayEntryModel } from '../models/time-holiday-entry.model';
 import { buildNavigatorRoute } from '../routes';
@@ -65,7 +63,7 @@ export interface TimeEntriesCalendarInputs {
   timeEntries: TimeEntryListModel[];
 
   isGetTimeAbsenceEntriesBusy: boolean;
-  timeAbsenceEntries: TimeAbsenceEntryModel[];
+  timeAbsenceEntries: TimeAbsenceEntryListModel[];
 
   isGetTimeHolidayEntriesBusy: boolean;
   timeHolidayEntries: TimeHolidayEntryModel[];

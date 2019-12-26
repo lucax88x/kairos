@@ -3,17 +3,25 @@ import { Trans } from '@lingui/macro';
 import { Button, List, makeStyles } from '@material-ui/core';
 import KeyboardArrowLeftIcon from '@material-ui/icons/KeyboardArrowLeft';
 import KeyboardArrowRightIcon from '@material-ui/icons/KeyboardArrowRight';
-import { KeyboardDatePicker, MaterialUiPickersDate, MuiPickersUtilsProvider } from '@material-ui/pickers';
+import {
+  KeyboardDatePicker,
+  MuiPickersUtilsProvider,
+} from '@material-ui/pickers';
+import { MaterialUiPickersDate } from '@material-ui/pickers/typings/date';
 import { addDays, endOfDay, format, fromUnixTime, startOfDay } from 'date-fns';
 import { map } from 'ramda';
 import React, { useCallback, useEffect, useState } from 'react';
 import { formatAsDate } from '../code/constants';
 import { getDatepickerLocale } from '../code/get-datepicker-locale';
-import { isTimeAbsenceEntryModel, isTimeEntryListModel, isTimeHolidayEntryModel } from '../code/is';
+import {
+  isTimeAbsenceEntryListModel,
+  isTimeEntryListModel,
+  isTimeHolidayEntryModel,
+} from '../code/is';
 import Spinner from '../components/Spinner';
 import { EntryModel } from '../models/entry-list-model';
 import { Language } from '../models/language-model';
-import { TimeAbsenceEntryModel } from '../models/time-absence-entry.model';
+import { TimeAbsenceEntryListModel } from '../models/time-absence-entry-list.model';
 import { TimeEntryListModel } from '../models/time-entry-list.model';
 import { TimeHolidayEntryModel } from '../models/time-holiday-entry.model';
 import { NavigatorTimeAbsenceItem } from './NavigatorTimeAbsenceItem';
@@ -54,10 +62,10 @@ export interface NavigatorInputs {
 export interface NavigatorDispatches {
   onChange: (filters: { start: Date; end: Date }) => void;
   onEditTimeEntry: (entry: TimeEntryListModel) => void;
-  onEditTimeAbsence: (absence: TimeAbsenceEntryModel) => void;
+  onEditTimeAbsence: (absence: TimeAbsenceEntryListModel) => void;
   onEditTimeHoliday: (holiday: TimeHolidayEntryModel) => void;
   onDeleteTimeEntry: (entry: TimeEntryListModel) => void;
-  onDeleteTimeAbsence: (absence: TimeAbsenceEntryModel) => void;
+  onDeleteTimeAbsence: (absence: TimeAbsenceEntryListModel) => void;
   onDeleteTimeHoliday: (holiday: TimeHolidayEntryModel) => void;
 }
 
@@ -198,7 +206,7 @@ export const NavigatorComponent: React.FC<NavigatorProps> = props => {
                       onDelete={onDeleteTimeEntry}
                     ></NavigatorTimeEntryItem>
                   );
-                } else if (isTimeAbsenceEntryModel(entry)) {
+                } else if (isTimeAbsenceEntryListModel(entry)) {
                   return (
                     <NavigatorTimeAbsenceItem
                       key={entry.id.toString()}

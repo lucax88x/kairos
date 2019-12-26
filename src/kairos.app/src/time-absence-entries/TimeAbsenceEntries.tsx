@@ -9,18 +9,19 @@ import { absenceTypeFormatter, dateTimeFormatter } from '../code/formatters';
 import Spinner from '../components/Spinner';
 import { VirtualizedTable } from '../components/VirtualizedTable';
 import { i18n } from '../i18nLoader';
-import { TimeAbsenceEntryModel } from '../models/time-absence-entry.model';
+import { JobListModel } from '../models/job.model';
+import { TimeAbsenceEntryListModel } from '../models/time-absence-entry-list.model';
 import { UUID } from '../models/uuid.model';
 
 export interface TimeAbsenceEntriesInputs {
-  timeAbsenceEntries: TimeAbsenceEntryModel[];
+  timeAbsenceEntries: TimeAbsenceEntryListModel[];
   isGetTimeAbsenceEntriesBusy: boolean;
   isDeleteTimeAbsenceEntriesBusy: boolean;
 }
 
 export interface TimeAbsenceEntriesDispatches {
   onCreate: () => void;
-  onUpdate: (item: TimeAbsenceEntryModel) => void;
+  onUpdate: (item: TimeAbsenceEntryListModel) => void;
   onDelete: (ids: UUID[]) => void;
 }
 
@@ -38,11 +39,11 @@ export const TimeAbsenceEntriesComponent: React.FC<TimeAbsenceEntriesProps> = pr
   } = props;
 
   const handleUpdate = useCallback(
-    (model: TimeAbsenceEntryModel) => onUpdate(model),
+    (model: TimeAbsenceEntryListModel) => onUpdate(model),
     [onUpdate],
   );
   const handleDelete = useCallback(
-    (model: TimeAbsenceEntryModel) => onDelete([model.id]),
+    (model: TimeAbsenceEntryListModel) => onDelete([model.id]),
     [onDelete],
   );
 
@@ -53,6 +54,10 @@ export const TimeAbsenceEntriesComponent: React.FC<TimeAbsenceEntriesProps> = pr
   const rowGetter = useCallback(
     ({ index }: Index) => timeAbsenceEntries[index],
     [timeAbsenceEntries],
+  );
+  const jobFormatter = useCallback(
+    (job: JobListModel) => (!!job ? job.name : ''),
+    [],
   );
   const updateCellRenderer = useCallback(
     model => (
@@ -116,6 +121,12 @@ export const TimeAbsenceEntriesComponent: React.FC<TimeAbsenceEntriesProps> = pr
             width: 200,
             label: i18n._(t`Description`),
             dataKey: 'description',
+          },
+          {
+            width: 200,
+            label: i18n._(t`Job`),
+            dataKey: 'job',
+            formatter: jobFormatter,
           },
           {
             width: 100,

@@ -52,7 +52,9 @@ interface Row {
   index: number;
 }
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 type CellRendererFunction = (row: any) => JSX.Element;
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 type FormatterFunction = (data: any) => string;
 
 interface MuiVirtualizedTableProps<T> extends WithStyles<typeof styles> {

@@ -14,7 +14,7 @@ import {
   addHours,
   addMinutes,
 } from 'date-fns';
-import { filter, groupBy, join } from 'ramda';
+import { filter, groupBy, join, divide, converge, sum, length } from 'ramda';
 import { padNumber } from '../code/padNumber';
 import { TimeEntryListModel } from '../models/time-entry-list.model';
 
@@ -25,7 +25,16 @@ export const groupByDate = groupBy((te: TimeEntryListModel) =>
   getDate(te.when).toString(),
 );
 
-export const humanDifference = (left: Date, right: Date) => {
+export const average = converge(divide, [sum, length]);
+
+export const humanDifference = (
+  left: Date,
+  right: Date,
+  relativeToWorkingHours = 0,
+) => {
+
+  // relative to working hours tbd
+  
   const result = [];
   const years = differenceInYears(right, left);
   if (years > 0) {
@@ -48,28 +57,12 @@ export const humanDifference = (left: Date, right: Date) => {
   const time: string[] = [];
 
   const hours = differenceInHours(right, left);
-  if (hours > 0) {
-    time.push(`${padNumber(hours)}`);
-    right = subHours(right, hours);
-  } else {
-    time.push('00');
-  }
+  time.push(`${padNumber(hours)}`);
+  right = subHours(right, hours);
 
   const minutes = differenceInMinutes(right, left);
-  if (minutes > 0) {
-    time.push(`${padNumber(minutes)}`);
-    right = subMinutes(right, minutes);
-  } else {
-    time.push('00');
-  }
-
-  // const seconds = differenceInSeconds(right, left);
-  // if (seconds > 0) {
-  //   time.push(`${padNumber(seconds)}`);
-  //   right = subSeconds(right, seconds);
-  // } else {
-  //   time.push('00');
-  // }
+  time.push(`${padNumber(minutes)}`);
+  right = subMinutes(right, minutes);
 
   result.push(join(':', time));
 
@@ -82,7 +75,10 @@ export const humanDifference = (left: Date, right: Date) => {
   return str;
 };
 
-export const humanDifferenceFromHours = (hours: number) => {
+export const humanDifferenceFromHours = (
+  hours: number,
+  relativeToWorkingHours = 0,
+) => {
   const percentualMinutes = hours % 1;
   hours = hours - percentualMinutes;
   const minutes = 60 * percentualMinutes;
@@ -92,5 +88,5 @@ export const humanDifferenceFromHours = (hours: number) => {
   date = addHours(date, hours);
   date = addMinutes(date, minutes);
 
-  return humanDifference(new Date(0), date);
+  return humanDifference(new Date(0), date, relativeToWorkingHours);
 };

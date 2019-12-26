@@ -83,7 +83,7 @@ namespace Kairos.Web.Api.GraphQL
                     new QueryArgument<DateTimeOffsetGraphType> {Name = "start"},
                     new QueryArgument<DateTimeOffsetGraphType> {Name = "end"}
                 ),
-                resolve: async context =>
+                async context =>
                 {
                     var start = context.GetArgument<DateTimeOffset>("start");
                     var end = context.GetArgument<DateTimeOffset>("end");

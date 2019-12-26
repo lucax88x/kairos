@@ -7,9 +7,11 @@ import { State } from '../state';
 import { EditTimeAbsenceEntryComponent, EditTimeAbsenceEntryDispatches, EditTimeAbsenceEntryInputs } from './EditTimeAbsenceEntry';
 import { selectIsGetTimeAbsenceEntryBusy, selectIsUpdateTimeAbsenceEntryBusy, selectTimeAbsenceEntry } from './selectors';
 import { updateTimeAbsenceEntryAsync } from './update-time-absence-entry';
+import { selectProfile } from '../profile/selectors';
 
 const mapStateToProps = (state: State): EditTimeAbsenceEntryInputs => ({
   isOnline: selectIsOnline(state),
+  profile: selectProfile(state),
   selectedLanguage: selectSelectedLanguage(state),
   timeAbsenceEntry: selectTimeAbsenceEntry(state),
   isGetBusy: selectIsGetTimeAbsenceEntryBusy(state),

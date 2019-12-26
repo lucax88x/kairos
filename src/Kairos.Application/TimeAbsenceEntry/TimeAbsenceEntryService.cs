@@ -12,7 +12,7 @@ using MediatR;
 
 namespace Kairos.Application.TimeAbsenceEntry
 {
-    public class TimeAbsenceEntryService : 
+    public class TimeAbsenceEntryService :
         IRequestHandler<CreateTimeAbsenceEntries, ImmutableList<Guid>>,
         IRequestHandler<UpdateTimeAbsenceEntry, Guid>,
         IRequestHandler<DeleteTimeAbsenceEntries, ImmutableList<Guid>>
@@ -41,10 +41,11 @@ namespace Kairos.Application.TimeAbsenceEntry
 
             foreach (var evt in events) await _mediator.Publish(evt, cancellationToken);
 
-                            return timeAbsenceEntries.Select(te => te.Id).ToImmutableList();
+            return timeAbsenceEntries.Select(te => te.Id).ToImmutableList();
         }
 
-        public async Task<ImmutableList<Guid>> Handle(DeleteTimeAbsenceEntries request, CancellationToken cancellationToken)
+        public async Task<ImmutableList<Guid>> Handle(DeleteTimeAbsenceEntries request,
+            CancellationToken cancellationToken)
         {
             foreach (var id in request.Ids)
             {
@@ -65,10 +66,11 @@ namespace Kairos.Application.TimeAbsenceEntry
 
             return request.Ids;
         }
-        
+
         public async Task<Guid> Handle(UpdateTimeAbsenceEntry request, CancellationToken cancellationToken)
         {
-            var toUpdateEntry = await _writeRepository.GetOrDefault<Domain.TimeAbsenceEntry>(request.TimeAbsenceEntry.Id.ToString());
+            var toUpdateEntry =
+                await _writeRepository.GetOrDefault<Domain.TimeAbsenceEntry>(request.TimeAbsenceEntry.Id.ToString());
 
             if (toUpdateEntry == null)
             {

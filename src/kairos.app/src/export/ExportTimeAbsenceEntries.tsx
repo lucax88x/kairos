@@ -4,15 +4,15 @@ import { makeStyles, Typography } from '@material-ui/core';
 import InsertDriveFileIcon from '@material-ui/icons/InsertDriveFile';
 import {
   KeyboardDateTimePicker,
-  MaterialUiPickersDate,
   MuiPickersUtilsProvider,
 } from '@material-ui/pickers';
+import { MaterialUiPickersDate } from '@material-ui/pickers/typings/date';
 import { endOfMonth, startOfMonth } from 'date-fns';
 import React, { useCallback, useState } from 'react';
+import { formatAsDateTime } from '../code/constants';
 import { getDatepickerLocale } from '../code/get-datepicker-locale';
 import ButtonSpinner from '../components/ButtonSpinner';
 import { Language } from '../models/language-model';
-import { formatAsDateTime } from '../code/constants';
 
 const useStyles = makeStyles(theme => ({
   rows: {
@@ -40,7 +40,8 @@ export interface ExportTimeAbsenceEntriesDispatches {
   onExport: (start: Date, end: Date) => void;
 }
 
-type ExportTimeAbsenceEntriesProps = ExportTimeAbsenceEntriesInputs & ExportTimeAbsenceEntriesDispatches;
+type ExportTimeAbsenceEntriesProps = ExportTimeAbsenceEntriesInputs &
+  ExportTimeAbsenceEntriesDispatches;
 
 export const ExportTimeAbsenceEntriesComponent: React.FC<ExportTimeAbsenceEntriesProps> = props => {
   const classes = useStyles(props);
@@ -50,10 +51,14 @@ export const ExportTimeAbsenceEntriesComponent: React.FC<ExportTimeAbsenceEntrie
   const [start, setStart] = useState<Date | null>(startOfMonth(new Date()));
   const [end, setEnd] = useState<Date | null>(endOfMonth(new Date()));
 
-  const handleStartChange = useCallback((date: MaterialUiPickersDate) => setStart(date), [
-    setStart,
-  ]);
-  const handleEndChange = useCallback((date: MaterialUiPickersDate) => setEnd(date), [setEnd]);
+  const handleStartChange = useCallback(
+    (date: MaterialUiPickersDate) => setStart(date),
+    [setStart],
+  );
+  const handleEndChange = useCallback(
+    (date: MaterialUiPickersDate) => setEnd(date),
+    [setEnd],
+  );
 
   const handleExport = useCallback(() => onExport(start as Date, end as Date), [
     onExport,
@@ -66,7 +71,10 @@ export const ExportTimeAbsenceEntriesComponent: React.FC<ExportTimeAbsenceEntrie
       <Typography component="h1" variant="h6" noWrap>
         <Trans>Export absences</Trans>
       </Typography>
-      <MuiPickersUtilsProvider utils={DateFnsUtils} locale={getDatepickerLocale(selectedLanguage)}>
+      <MuiPickersUtilsProvider
+        utils={DateFnsUtils}
+        locale={getDatepickerLocale(selectedLanguage)}
+      >
         <div className={classes.columns}>
           <KeyboardDateTimePicker
             autoOk
@@ -92,7 +100,11 @@ export const ExportTimeAbsenceEntriesComponent: React.FC<ExportTimeAbsenceEntrie
           />
         </div>
       </MuiPickersUtilsProvider>
-      <ButtonSpinner onClick={handleExport} isBusy={isBusy} disabled={!isOnline || isBusy || !start || !end}>
+      <ButtonSpinner
+        onClick={handleExport}
+        isBusy={isBusy}
+        disabled={!isOnline || isBusy || !start || !end}
+      >
         <InsertDriveFileIcon />
         <Trans>Export</Trans>
       </ButtonSpinner>

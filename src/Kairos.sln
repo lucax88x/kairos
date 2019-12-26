@@ -33,6 +33,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Kairos.Web.Api", "Kairos.We
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Kairos.Console.ScenarioBuilder", "Kairos.Console.ScenarioBuilder\Kairos.Console.ScenarioBuilder.csproj", "{182D0D84-16B4-41FC-8FC7-F9E86EA805A9}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Kairos.Console.Patcher", "Kairos.Console.Patcher\Kairos.Console.Patcher.csproj", "{E3E3C368-2C0C-47C5-AB64-EA1A9A6F6385}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -103,5 +105,9 @@ Global
 		{182D0D84-16B4-41FC-8FC7-F9E86EA805A9}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{182D0D84-16B4-41FC-8FC7-F9E86EA805A9}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{182D0D84-16B4-41FC-8FC7-F9E86EA805A9}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E3E3C368-2C0C-47C5-AB64-EA1A9A6F6385}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E3E3C368-2C0C-47C5-AB64-EA1A9A6F6385}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E3E3C368-2C0C-47C5-AB64-EA1A9A6F6385}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E3E3C368-2C0C-47C5-AB64-EA1A9A6F6385}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal

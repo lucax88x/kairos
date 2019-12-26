@@ -3,7 +3,6 @@ import { connect } from 'react-redux';
 import { Dispatch } from 'redux';
 import { Actions } from '../actions';
 import { openTimeAbsenceEntryDrawerAction } from '../layout/actions';
-import { TimeAbsenceEntryModel } from '../models/time-absence-entry.model';
 import { UUID } from '../models/uuid.model';
 import { tryDeleteTimeAbsenceEntriesAction } from '../shared/delete-time-absence-entries';
 import {
@@ -18,6 +17,7 @@ import {
   TimeAbsenceEntriesInputs,
 } from './TimeAbsenceEntries';
 import { RouteMatcher } from '../routes';
+import { TimeAbsenceEntryListModel } from '../models/time-absence-entry-list.model';
 
 const mapStateToProps = (state: State): TimeAbsenceEntriesInputs => ({
   timeAbsenceEntries: selectTimeAbsenceEntries(state),
@@ -29,7 +29,7 @@ const mapDispatchToProps = (
   dispatch: Dispatch<Actions>,
 ): TimeAbsenceEntriesDispatches => ({
   onCreate: () => dispatch(openTimeAbsenceEntryDrawerAction()),
-  onUpdate: (model: TimeAbsenceEntryModel) =>
+  onUpdate: (model: TimeAbsenceEntryListModel) =>
     dispatch(push(RouteMatcher.EditTimeAbsenceEntry.replace(':id', model.id.toString()))),
   onDelete: (ids: UUID[]) => dispatch(tryDeleteTimeAbsenceEntriesAction(ids)),
 });

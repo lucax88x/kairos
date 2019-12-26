@@ -1,4 +1,5 @@
-import { TimeEntryListJobModel, TimeEntryListModel } from '../models/time-entry-list.model';
+import { JobListModel } from '../models/job.model';
+import { TimeEntryListModel } from '../models/time-entry-list.model';
 import { TimeEntryTypes } from '../models/time-entry.model';
 import { UUID } from '../models/uuid.model';
 
@@ -27,7 +28,7 @@ export class TimeEntryBuilder {
       UUID.Generate(),
       new Date(this.date),
       this.type,
-      new TimeEntryListJobModel(this.jobId, '')
+      new JobListModel(this.jobId, ''),
     );
   }
 }
