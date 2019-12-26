@@ -5,7 +5,7 @@ using Kairos.Infra.Read.TimeAbsenceEntry;
 
 namespace Kairos.Application.TimeAbsenceEntry.Queries
 {
-    public class GetTimeAbsenceEntries : Query<ImmutableList<TimeAbsenceEntryReadDto>>
+    public class GetTimeAbsenceEntries : Query<ImmutableList<TimeAbsenceEntryAggregationReadDto>>
     {
         public DateTimeOffset Start { get; }
         public DateTimeOffset End { get; }

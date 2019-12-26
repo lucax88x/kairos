@@ -14,22 +14,28 @@ import {
   MuiPickersUtilsProvider,
 } from '@material-ui/pickers';
 import { MaterialUiPickersDate } from '@material-ui/pickers/typings/date';
+import { map } from 'ramda';
 import React, { ChangeEvent, useCallback, useEffect } from 'react';
 import { formatAsDateTime } from '../code/constants';
 import { getDatepickerLocale } from '../code/get-datepicker-locale';
 import { isString } from '../code/is';
 import ButtonSpinner from '../components/ButtonSpinner';
+import { YouNeedAtLeastOneJob } from '../components/YouNeedAtLeastOneJob';
 import { Language } from '../models/language-model';
+import { ProfileModel } from '../models/profile.model';
 import {
   getTransFromAbsenceType,
   TimeAbsenceEntryModel,
   TimeAbsenceEntryTypes,
 } from '../models/time-absence-entry.model';
+import { UUID } from '../models/uuid.model';
 import {
+  RefreshSelectsTimeAbsenceEntryAction,
   ResetModel,
   SetModel,
   SetTimeAbsenceEntryDescriptionAction,
   SetTimeAbsenceEntryEndAction,
+  SetTimeAbsenceEntrySelectedJobAction,
   SetTimeAbsenceEntryStartAction,
   SetTimeAbsenceEntryTypeAction,
   useTimeAbsenceEntryFormReducer,
@@ -55,6 +61,7 @@ const useStyles = makeStyles(theme => ({
 export interface TimeAbsenceEntryFormProps {
   isOnline: boolean;
   selectedLanguage: Language;
+  profile: ProfileModel;
   model: TimeAbsenceEntryModel;
   isBusy: boolean;
   onSave: (model: TimeAbsenceEntryModel) => void;
@@ -63,16 +70,29 @@ export interface TimeAbsenceEntryFormProps {
 export const TimeAbsenceEntryForm: React.FC<TimeAbsenceEntryFormProps> = props => {
   const classes = useStyles(props);
 
-  const { isOnline, selectedLanguage, isBusy, model, onSave } = props;
+  const { isOnline, selectedLanguage, isBusy, profile, model, onSave } = props;
 
   const [state, dispatch] = useTimeAbsenceEntryFormReducer();
-  const { id, type, description, start, end } = state;
+  const { id, type, description, start, end, jobs, selectedJobId } = state;
+
+  useEffect(() => {
+    dispatch(RefreshSelectsTimeAbsenceEntryAction(profile));
+  }, [dispatch, profile]);
 
   const handleSave = useCallback(() => {
     if (!!start && !!end) {
-      onSave(new TimeAbsenceEntryModel(id, description, start, end, type));
+      onSave(
+        new TimeAbsenceEntryModel(
+          id,
+          description,
+          start,
+          end,
+          type,
+          new UUID(selectedJobId),
+        ),
+      );
     }
-  }, [onSave, id, type, description, start, end]);
+  }, [onSave, id, type, description, start, end, selectedJobId]);
 
   const handleTypeChange = useCallback(
     (event: ChangeEvent<{ value: unknown }>) => {
@@ -105,6 +125,16 @@ export const TimeAbsenceEntryForm: React.FC<TimeAbsenceEntryFormProps> = props =
     [dispatch],
   );
 
+  const handleJobChange = useCallback(
+    (event: ChangeEvent<{ value: unknown }>) => {
+      if (isString(event.target.value)) {
+        dispatch(SetTimeAbsenceEntrySelectedJobAction(event.target.value));
+        dispatch(RefreshSelectsTimeAbsenceEntryAction(profile));
+      }
+    },
+    [dispatch, profile],
+  );
+
   useEffect(() => {
     if (!TimeAbsenceEntryModel.isEmpty(model)) {
       dispatch(SetModel(model));
@@ -112,6 +142,14 @@ export const TimeAbsenceEntryForm: React.FC<TimeAbsenceEntryFormProps> = props =
       dispatch(ResetModel());
     }
   }, [dispatch, model]);
+
+  if (profile.jobs.length === 0) {
+    return (
+      <div className={classes.hasPadding}>
+        <YouNeedAtLeastOneJob />
+      </div>
+    );
+  }
 
   return (
     <div className={classes.container}>
@@ -177,6 +215,30 @@ export const TimeAbsenceEntryForm: React.FC<TimeAbsenceEntryFormProps> = props =
           fullWidth
         />
       </MuiPickersUtilsProvider>
+      <div>
+        <FormControl fullWidth>
+          <InputLabel htmlFor="job">
+            <Trans>Job</Trans>
+          </InputLabel>
+          <Select
+            value={selectedJobId}
+            onChange={handleJobChange}
+            disabled={jobs.length === 1}
+            inputProps={{
+              id: 'job',
+            }}
+          >
+            {map(
+              job => (
+                <MenuItem key={job.id.toString()} value={job.id.toString()}>
+                  {job.name}
+                </MenuItem>
+              ),
+              jobs,
+            )}
+          </Select>
+        </FormControl>
+      </div>
       <ButtonSpinner
         onClick={handleSave}
         isBusy={isBusy}

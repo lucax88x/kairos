@@ -17,8 +17,8 @@ namespace Kairos.Application.TimeAbsenceEntry
         INotificationHandler<TimeAbsenceEntryAdded>,
         INotificationHandler<TimeAbsenceEntryUpdated>,
         INotificationHandler<TimeAbsenceEntryDeleted>,
-        IRequestHandler<GetTimeAbsenceEntryById, TimeAbsenceEntryReadDto>,
-        IRequestHandler<GetTimeAbsenceEntries, ImmutableList<TimeAbsenceEntryReadDto>>,
+        IRequestHandler<GetTimeAbsenceEntryById, TimeAbsenceEntryAggregationReadDto>,
+        IRequestHandler<GetTimeAbsenceEntries, ImmutableList<TimeAbsenceEntryAggregationReadDto>>,
         IRequestHandler<GetTimeAbsenceEntriesReport, ReportModel>
     {
         private readonly ITimeAbsenceEntryReadRepository _timeAbsenceEntryReadRepository;
@@ -46,13 +46,13 @@ namespace Kairos.Application.TimeAbsenceEntry
             await _timeAbsenceEntryReadRepository.Delete(notification.Id, notification.User);
         }
 
-        public async Task<TimeAbsenceEntryReadDto> Handle(GetTimeAbsenceEntryById request,
+        public async Task<TimeAbsenceEntryAggregationReadDto> Handle(GetTimeAbsenceEntryById request,
             CancellationToken cancellationToken)
         {
             return await _timeAbsenceEntryReadRepository.GetById(request.Id);
         }
 
-        public async Task<ImmutableList<TimeAbsenceEntryReadDto>> Handle(GetTimeAbsenceEntries request,
+        public async Task<ImmutableList<TimeAbsenceEntryAggregationReadDto>> Handle(GetTimeAbsenceEntries request,
             CancellationToken cancellationToken)
         {
             return await _timeAbsenceEntryReadRepository.Get(_authProvider.GetUser(), request.Start, request.End);
@@ -64,7 +64,7 @@ namespace Kairos.Application.TimeAbsenceEntry
             var absences = await _timeAbsenceEntryReadRepository.Get(_authProvider.GetUser(), request.From, request.To);
 
             foreach (var absence in absences)
-                sb.AppendLine($"{absence.Start},{absence.End},{absence.Type}{absence.Description}");
+                sb.AppendLine($"{absence.Start},{absence.End},{absence.Type},{absence.Job.Name},{absence.Description}");
 
             var stream = new MemoryStream(Encoding.UTF8.GetBytes(sb.ToString()));
 

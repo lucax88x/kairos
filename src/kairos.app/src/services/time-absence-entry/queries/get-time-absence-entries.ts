@@ -5,5 +5,9 @@ export const getTimeAbsenceEntriesQuery = `query ($start: DateTimeOffset!, $end:
     start
     end
     type
+    job {
+      id
+      name
+    }
   }
 }`;

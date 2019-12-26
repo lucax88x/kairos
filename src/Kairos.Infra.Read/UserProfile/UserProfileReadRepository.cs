@@ -12,6 +12,7 @@ namespace Kairos.Infra.Read.UserProfile
         Task<UserProfileReadDto> GetByUser(string user);
         Task<UserJobReadDto> GetJobById(Guid id);
         Task<ImmutableList<UserJobReadDto>> GetMultipleJobs(IEnumerable<Guid> jobIds);
+        Task<ImmutableArray<string>> GetUsernames();
     }
 
     public class UserProfileReadRepository : IUserProfileReadRepository
@@ -51,6 +52,11 @@ namespace Kairos.Infra.Read.UserProfile
         {
             var result = await _jobRepository.GetMultiple<UserJobReadDto>(jobIds);
             return result.ToImmutableList();
+        }        
+        
+        public async Task<ImmutableArray<string>> GetUsernames()
+        {
+            return await _repository.GetKeys();
         }
     }
 }

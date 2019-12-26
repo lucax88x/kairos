@@ -6,14 +6,16 @@ namespace Kairos.Domain.Events.TimeAbsenceEntry.EventDtos
     {
         public Guid Id { get; }
         public string? User { get; }
-        public string? Description { get; }
+        public string Description { get; }
         public DateTimeOffset Start { get; }
         public DateTimeOffset End { get; }
         public TimeAbsenceEntryType Type { get; }
+        public Guid Job { get; }
 
-        public TimeAbsenceEntryEventDto(Guid id, string? user, string? description, DateTimeOffset start,
+        public TimeAbsenceEntryEventDto(Guid id, string? user, string description, DateTimeOffset start,
             DateTimeOffset end,
-            TimeAbsenceEntryType type)
+            TimeAbsenceEntryType type,
+            Guid job)
         {
             Id = id;
             User = user;
@@ -21,6 +23,7 @@ namespace Kairos.Domain.Events.TimeAbsenceEntry.EventDtos
             Start = start;
             End = end;
             Type = type;
+            Job = job;
         }
     }
 }

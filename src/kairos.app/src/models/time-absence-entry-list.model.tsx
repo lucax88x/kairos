@@ -1,64 +1,60 @@
 import { t, Trans } from '@lingui/macro';
-import { endOfDay, parseISO, startOfDay } from 'date-fns';
+import { parseISO } from 'date-fns';
 import { immerable } from 'immer';
 import React from 'react';
 import { i18n } from '../i18nLoader';
-import { JobOutModel } from './job.model';
+import { JobListModel, JobListOutModel } from './job.model';
+import { TimeAbsenceEntryTypes } from './time-absence-entry.model';
 import { UUID } from './uuid.model';
 
-export enum TimeAbsenceEntryTypes {
-  VACATION = 'VACATION',
-  ILLNESS = 'ILLNESS',
-  PERMIT = 'PERMIT',
-  COMPENSATION = 'COMPENSATION',
-}
-
-export class TimeAbsenceEntryModel {
+export class TimeAbsenceEntryListModel {
   [immerable] = true;
 
   constructor(
-    public id = UUID.Generate(),
-    public description = '',
-    public start = startOfDay(new Date()),
-    public end = endOfDay(new Date()),
-    public type = TimeAbsenceEntryTypes.VACATION,
-    public job = new UUID(UUID.Empty),
+    public id: UUID,
+    public description: string,
+    public start: Date,
+    public end: Date,
+    public type: TimeAbsenceEntryTypes,
+    public job: JobListModel,
   ) {}
 
-  static fromOutModel(outModel: TimeAbsenceEntryOutModel) {
-    return new TimeAbsenceEntryModel(
+  static fromOutModel(outModel: TimeAbsenceEntryListOutModel) {
+    return new TimeAbsenceEntryListModel(
       new UUID(outModel.id),
       outModel.description,
       parseISO(outModel.start),
       parseISO(outModel.end),
       TimeAbsenceEntryTypes[outModel.type],
-      new UUID(outModel.job.id),
+      JobListModel.fromOutModel(outModel.job),
     );
   }
 
-  static empty: TimeAbsenceEntryModel = new TimeAbsenceEntryModel(
+  static empty: TimeAbsenceEntryListModel = new TimeAbsenceEntryListModel(
     new UUID(),
     '',
     new Date(0),
     new Date(0),
+    TimeAbsenceEntryTypes.COMPENSATION,
+    JobListModel.empty,
   );
 
-  static isEmpty(model: TimeAbsenceEntryModel) {
+  static isEmpty(model: TimeAbsenceEntryListModel) {
     return (
       UUID.isEmpty(model.id) &&
-      model.description === TimeAbsenceEntryModel.empty.description &&
-      UUID.isEmpty(model.job)
+      model.description === TimeAbsenceEntryListModel.empty.description &&
+      JobListModel.isEmpty(model.job)
     );
   }
 }
 
-export interface TimeAbsenceEntryOutModel {
+export interface TimeAbsenceEntryListOutModel {
   id: string;
   description: string;
   start: string;
   end: string;
   type: TimeAbsenceEntryTypes;
-  job: Partial<JobOutModel>;
+  job: JobListOutModel;
 }
 
 export function getTextFromAbsenceType(type: TimeAbsenceEntryTypes) {

@@ -89,3 +89,22 @@ export interface JobOutModel {
   saturday: number;
   sunday: number;
 }
+
+export class JobListModel {
+  constructor(public id: UUID, public name: string) {}
+  static fromOutModel(outModel: JobListOutModel) {
+    return new JobListModel(new UUID(outModel.id), outModel.name);
+  }
+
+  static empty = new JobListModel(new UUID(), '');
+
+  static isEmpty(model: JobListModel) {
+    return UUID.isEmpty(model.id) && !model.name;
+  }
+}
+
+
+export interface JobListOutModel {
+  id: string;
+  name: string;
+}

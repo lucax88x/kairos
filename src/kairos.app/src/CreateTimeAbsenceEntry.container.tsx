@@ -6,9 +6,11 @@ import { TimeAbsenceEntryModel } from './models/time-absence-entry.model';
 import { createTimeAbsenceEntryAsync } from './shared/create-time-absence-entry';
 import { selectIsCreateTimeAbsenceEntryBusy, selectIsOnline, selectSelectedLanguage } from './shared/selectors';
 import { State } from './state';
+import { selectProfile } from './profile/selectors';
 
 const mapStateToProps = (state: State): CreateTimeAbsenceEntryInputs => ({
   isOnline: selectIsOnline(state),
+  profile: selectProfile(state),
   selectedLanguage: selectSelectedLanguage(state),
   isBusy: selectIsCreateTimeAbsenceEntryBusy(state),
 });

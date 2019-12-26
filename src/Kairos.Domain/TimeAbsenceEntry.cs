@@ -21,6 +21,7 @@ namespace Kairos.Domain
 
         public DateTimeOffset End { get; private set; }
         public TimeAbsenceEntryType Type { get; private set; }
+        public Guid Job { get; private set; }
 
         protected override void Apply(Event @event)
         {
@@ -34,6 +35,7 @@ namespace Kairos.Domain
                     End = added.TimeAbsenceEntry.End;
                     Start = added.TimeAbsenceEntry.Start;
                     Type = added.TimeAbsenceEntry.Type;
+                    Job = added.TimeAbsenceEntry.Job;
                     return;
                 }
 
@@ -43,6 +45,7 @@ namespace Kairos.Domain
                     End = updated.TimeAbsenceEntry.End;
                     Start = updated.TimeAbsenceEntry.Start;
                     Type = updated.TimeAbsenceEntry.Type;
+                    Job = updated.TimeAbsenceEntry.Job;
                     return;
                 }
 

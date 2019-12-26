@@ -143,8 +143,8 @@ export const TimeEntriesByRangeComponent: React.FC<TimeEntriesByRangeProps> = me
 
         return map<JobModel, JSX.Element | null>(job => {
           const humanDifferencesByRange =
-            humanDifferencesByRangeByJob[job.id.toString()];
-
+          humanDifferencesByRangeByJob[job.id.toString()];
+          
           if (!humanDifferencesByRange) {
             return null;
           }

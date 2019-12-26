@@ -10,8 +10,9 @@ import { entryTypeRenderer } from '../code/renderers';
 import Spinner from '../components/Spinner';
 import { VirtualizedTable } from '../components/VirtualizedTable';
 import { i18n } from '../i18nLoader';
-import { TimeEntryListJobModel, TimeEntryListModel } from '../models/time-entry-list.model';
+import { TimeEntryListModel } from '../models/time-entry-list.model';
 import { UUID } from '../models/uuid.model';
+import { JobListModel } from '../models/job.model';
 
 export interface TimeEntriesInputs {
   timeEntries: TimeEntryListModel[];
@@ -54,7 +55,7 @@ export const TimeEntriesComponent: React.FC<TimeEntriesProps> = props => {
     timeEntries,
   ]);
   const jobFormatter = useCallback(
-    (job: TimeEntryListJobModel) => job.name,
+    (job: JobListModel) => (!!job ? job.name : ''),
     [],
   );
   const updateCellRenderer = useCallback(
