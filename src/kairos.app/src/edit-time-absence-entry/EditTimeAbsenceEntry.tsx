@@ -1,6 +1,7 @@
 import React from 'react';
 import Spinner from '../components/Spinner';
 import { Language } from '../models/language-model';
+import { ProfileModel } from '../models/profile.model';
 import { TimeAbsenceEntryModel } from '../models/time-absence-entry.model';
 import { TimeAbsenceEntryForm } from '../shared/TimeAbsenceEntryForm';
 
@@ -10,6 +11,7 @@ export interface EditTimeAbsenceEntryInputs {
   timeAbsenceEntry: TimeAbsenceEntryModel;
   isGetBusy: boolean;
   isUpdateBusy: boolean;
+  profile: ProfileModel;
 }
 
 export interface EditTimeAbsenceEntryDispatches {
@@ -26,6 +28,7 @@ export const EditTimeAbsenceEntryComponent: React.FC<EditTimeAbsenceEntryProps> 
     timeAbsenceEntry,
     isGetBusy,
     isUpdateBusy,
+    profile,
     onUpdate,
   } = props;
 
@@ -36,6 +39,7 @@ export const EditTimeAbsenceEntryComponent: React.FC<EditTimeAbsenceEntryProps> 
         selectedLanguage={selectedLanguage}
         isBusy={isUpdateBusy}
         model={timeAbsenceEntry}
+        profile={profile}
         onSave={onUpdate}
       />
     </Spinner>

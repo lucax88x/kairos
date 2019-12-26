@@ -13,9 +13,9 @@ import {
 import SaveIcon from '@material-ui/icons/Save';
 import {
   KeyboardDateTimePicker,
-  MaterialUiPickersDate,
   MuiPickersUtilsProvider,
 } from '@material-ui/pickers';
+import { MaterialUiPickersDate } from '@material-ui/pickers/typings/date';
 import { map } from 'ramda';
 import React, { ChangeEvent, useCallback, useEffect } from 'react';
 import { formatAsDateTime } from '../code/constants';

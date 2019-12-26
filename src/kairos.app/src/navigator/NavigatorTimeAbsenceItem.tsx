@@ -14,10 +14,8 @@ import { format } from 'date-fns';
 import React, { useCallback } from 'react';
 import { formatAsDateTime } from '../code/constants';
 import { Themes } from '../code/variables';
-import {
-  getTextFromAbsenceType,
-  TimeAbsenceEntryModel,
-} from '../models/time-absence-entry.model';
+import { TimeAbsenceEntryListModel } from '../models/time-absence-entry-list.model';
+import { getTextFromAbsenceType } from '../models/time-absence-entry.model';
 
 const useStyles = makeStyles(theme => ({
   container: {
@@ -27,9 +25,9 @@ const useStyles = makeStyles(theme => ({
 }));
 
 export interface NavigatorTimeAbsenceItemProps {
-  absence: TimeAbsenceEntryModel;
-  onEdit: (absence: TimeAbsenceEntryModel) => void;
-  onDelete: (absence: TimeAbsenceEntryModel) => void;
+  absence: TimeAbsenceEntryListModel;
+  onEdit: (absence: TimeAbsenceEntryListModel) => void;
+  onDelete: (absence: TimeAbsenceEntryListModel) => void;
 }
 
 export const NavigatorTimeAbsenceItem: React.FC<NavigatorTimeAbsenceItemProps> = props => {
@@ -52,7 +50,7 @@ export const NavigatorTimeAbsenceItem: React.FC<NavigatorTimeAbsenceItemProps> =
       <ListItemText
         primary={`${getTextFromAbsenceType(absence.type)} - ${
           absence.description
-        }`}
+        } - ${absence.job.name}`}
         secondary={`${format(absence.start, formatAsDateTime)} - ${format(
           absence.end,
           formatAsDateTime,

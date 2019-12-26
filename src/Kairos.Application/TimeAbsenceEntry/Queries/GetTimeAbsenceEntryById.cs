@@ -4,7 +4,7 @@ using Kairos.Infra.Read.TimeAbsenceEntry;
 
 namespace Kairos.Application.TimeAbsenceEntry.Queries
 {
-    public class GetTimeAbsenceEntryById : Query<TimeAbsenceEntryReadDto>
+    public class GetTimeAbsenceEntryById : Query<TimeAbsenceEntryAggregationReadDto>
     {
         public GetTimeAbsenceEntryById(Guid id)
         {

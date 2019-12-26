@@ -4,9 +4,9 @@ import { Divider, makeStyles, TextField } from '@material-ui/core';
 import SaveIcon from '@material-ui/icons/Save';
 import {
   KeyboardDatePicker,
-  MaterialUiPickersDate,
   MuiPickersUtilsProvider,
 } from '@material-ui/pickers';
+import { MaterialUiPickersDate } from '@material-ui/pickers/typings/date';
 import React, { ChangeEvent, useCallback, useEffect, useState } from 'react';
 import { formatAsDate } from '../code/constants';
 import { getDatepickerLocale } from '../code/get-datepicker-locale';
@@ -63,11 +63,15 @@ export const TimeHolidayEntryForm: React.FC<TimeHolidayEntryFormProps> = props =
   }, [onSave, id, description, when]);
 
   const handleDescriptionChange = useCallback(
-    (event: ChangeEvent<HTMLInputElement>) => setDescription(event.currentTarget.value),
+    (event: ChangeEvent<HTMLInputElement>) =>
+      setDescription(event.currentTarget.value),
     [setDescription],
   );
 
-  const handleWhenChange = useCallback((date: MaterialUiPickersDate) => setWhen(date), [setWhen]);
+  const handleWhenChange = useCallback(
+    (date: MaterialUiPickersDate) => setWhen(date),
+    [setWhen],
+  );
 
   return (
     <div className={classes.container}>
@@ -81,7 +85,10 @@ export const TimeHolidayEntryForm: React.FC<TimeHolidayEntryFormProps> = props =
         onChange={handleDescriptionChange}
         fullWidth
       />
-      <MuiPickersUtilsProvider utils={DateFnsUtils} locale={getDatepickerLocale(selectedLanguage)}>
+      <MuiPickersUtilsProvider
+        utils={DateFnsUtils}
+        locale={getDatepickerLocale(selectedLanguage)}
+      >
         <KeyboardDatePicker
           autoOk
           value={when}

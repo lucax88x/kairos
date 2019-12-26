@@ -12,6 +12,7 @@ import { updateTimeAbsenceEntryMutation } from './mutations/update-time-absence-
 import { getTimeAbsenceEntriesQuery } from './queries/get-time-absence-entries';
 import { getTimeAbsenceEntryQuery } from './queries/get-time-absence-entry';
 import { downloadFile } from '../api.service';
+import { TimeAbsenceEntryListOutModel, TimeAbsenceEntryListModel } from '../../models/time-absence-entry-list.model';
 
 export async function getTimeAbsenceEntry(id: UUID) {
   const result = await query<{ timeAbsenceEntry: TimeAbsenceEntryOutModel }>(
@@ -25,12 +26,12 @@ export async function getTimeAbsenceEntry(id: UUID) {
 }
 
 export async function getTimeAbsenceEntries(start: Date, end: Date) {
-  const result = await query<{ timeAbsenceEntries: TimeAbsenceEntryOutModel[] }>(
+  const result = await query<{ timeAbsenceEntries: TimeAbsenceEntryListOutModel[] }>(
     getTimeAbsenceEntriesQuery,
     { start, end },
   );
 
-  return map(out => TimeAbsenceEntryModel.fromOutModel(out), result.timeAbsenceEntries);
+  return map(out => TimeAbsenceEntryListModel.fromOutModel(out), result.timeAbsenceEntries);
 }
 
 export async function createTimeAbsenceEntry(model: TimeAbsenceEntryModel) {

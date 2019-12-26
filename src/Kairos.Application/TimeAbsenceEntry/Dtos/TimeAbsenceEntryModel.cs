@@ -11,16 +11,19 @@ namespace Kairos.Application.TimeAbsenceEntry.Dtos
         public DateTimeOffset Start { get; set; }
         public DateTimeOffset End { get; set; }
         public int Type { get; set; }
+        public Guid Job { get; set; }
 
         public TimeAbsenceEntryModel()
         {
         }
 
-        public TimeAbsenceEntryModel(string description, DateTimeOffset start, DateTimeOffset end, Guid? id = null)
+        public TimeAbsenceEntryModel(string description, DateTimeOffset start, DateTimeOffset end, int type, Guid job, Guid? id = null)
         {
             Description = description;
             Start = start;
             End = end;
+            Type = type;
+            Job = job;
             Id = !id.HasValue || id.Value == Guid.Empty ? Guid.NewGuid() : id.Value;
         }
 
@@ -31,7 +34,8 @@ namespace Kairos.Application.TimeAbsenceEntry.Dtos
                 Description,
                 Start,
                 End,
-                (TimeAbsenceEntryType) Type);
+                (TimeAbsenceEntryType) Type,
+                Job);
         }
     }
 }

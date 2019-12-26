@@ -1,8 +1,8 @@
 import { map } from 'ramda';
 import {
-  TimeAbsenceEntryModel,
-  TimeAbsenceEntryOutModel,
-} from '../../models/time-absence-entry.model';
+  TimeAbsenceEntryListModel,
+  TimeAbsenceEntryListOutModel,
+} from '../../models/time-absence-entry-list.model';
 import {
   TimeEntryListModel,
   TimeEntryListOutModel,
@@ -17,7 +17,7 @@ import { getEntriesQuery } from './queries/get-entries';
 export async function getEntries(start: Date, end: Date) {
   const result = await query<{
     timeEntries: TimeEntryListOutModel[];
-    timeAbsenceEntries: TimeAbsenceEntryOutModel[];
+    timeAbsenceEntries: TimeAbsenceEntryListOutModel[];
     timeHolidayEntries: TimeHolidayEntryOutModel[];
   }>(getEntriesQuery, {
     start,
@@ -27,7 +27,7 @@ export async function getEntries(start: Date, end: Date) {
   return [
     ...map(out => TimeEntryListModel.fromOutModel(out), result.timeEntries),
     ...map(
-      out => TimeAbsenceEntryModel.fromOutModel(out),
+      out => TimeAbsenceEntryListModel.fromOutModel(out),
       result.timeAbsenceEntries,
     ),
     ...map(

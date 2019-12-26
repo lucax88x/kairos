@@ -1,5 +1,7 @@
 import { parseISO, startOfDay } from 'date-fns';
 import { immerable } from 'immer';
+import { filter } from 'ramda';
+import { average } from '../code/functions';
 import { UUID } from './uuid.model';
 
 export class JobModel {
@@ -37,10 +39,39 @@ export class JobModel {
     );
   }
 
-  static empty: JobModel = new JobModel(new UUID(), '', new Date(0), null, 0, 0, 0, 0, 0, 0, 0, 0);
+  static empty: JobModel = new JobModel(
+    new UUID(),
+    '',
+    new Date(0),
+    null,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+  );
 
-  isEmpty() {
-    return UUID.equals(this.id, JobModel.empty.id) && this.name === JobModel.empty.name;
+  static isEmpty(model: JobModel) {
+    return (
+      UUID.equals(model.id, JobModel.empty.id) &&
+      model.name === JobModel.empty.name
+    );
+  }
+  static getAverageWorkingHours(model: JobModel) {
+    return average(
+      filter(wh => wh > 0, [
+        model.monday,
+        model.tuesday,
+        model.wednesday,
+        model.thursday,
+        model.friday,
+        model.saturday,
+        model.sunday,
+      ]),
+    );
   }
 }
 
@@ -57,4 +88,23 @@ export interface JobOutModel {
   friday: number;
   saturday: number;
   sunday: number;
+}
+
+export class JobListModel {
+  constructor(public id: UUID, public name: string) {}
+  static fromOutModel(outModel: JobListOutModel) {
+    return new JobListModel(new UUID(outModel.id), outModel.name);
+  }
+
+  static empty = new JobListModel(new UUID(), '');
+
+  static isEmpty(model: JobListModel) {
+    return UUID.isEmpty(model.id) && !model.name;
+  }
+}
+
+
+export interface JobListOutModel {
+  id: string;
+  name: string;
 }

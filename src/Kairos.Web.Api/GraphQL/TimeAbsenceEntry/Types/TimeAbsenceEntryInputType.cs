@@ -13,6 +13,7 @@ namespace Kairos.Web.Api.GraphQL.TimeAbsenceEntry.Types
             Field(x => x.Start);
             Field(x => x.End);
             Field(x => x.Type, type: typeof(TimeAbsenceEntryTypeEnum));
+            Field(x => x.Job, type: typeof(IdGraphType));
         }
     }
 }

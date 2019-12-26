@@ -13,7 +13,11 @@ export const getEntriesQuery = `query ($start: DateTimeOffset!, $end:DateTimeOff
     type,
     start,
     end,
-    description
+    description,
+    job {
+      id
+      name
+    }
   }
   timeHolidayEntries(start: $start, end: $end) {
     id,

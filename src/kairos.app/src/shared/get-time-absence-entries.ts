@@ -5,11 +5,21 @@ import { createAsyncAction } from 'typesafe-actions';
 import { SharedActions } from '../actions';
 import { getRangeFromYear } from '../code/get-range-from-year';
 import { Route } from '../models/route.model';
-import { TimeAbsenceEntryModel } from '../models/time-absence-entry.model';
+import { TimeAbsenceEntryListModel } from '../models/time-absence-entry-list.model';
 import { getTimeAbsenceEntries } from '../services/time-absence-entry/time-absence-entry.service';
-import { CREATE_TIME_ABSENCE_ENTRY_SUCCESS, DELETE_TIME_ABSENCE_ENTRIES_SUCCESS } from '../shared/constants';
-import { selectDashboardRoute, selectTimeAbsenceEntriesRoute } from '../shared/router.selectors';
-import { GET_TIME_ABSENCE_ENTRIES, GET_TIME_ABSENCE_ENTRIES_FAILURE, GET_TIME_ABSENCE_ENTRIES_SUCCESS } from './constants';
+import {
+  CREATE_TIME_ABSENCE_ENTRY_SUCCESS,
+  DELETE_TIME_ABSENCE_ENTRIES_SUCCESS,
+} from '../shared/constants';
+import {
+  selectDashboardRoute,
+  selectTimeAbsenceEntriesRoute,
+} from '../shared/router.selectors';
+import {
+  GET_TIME_ABSENCE_ENTRIES,
+  GET_TIME_ABSENCE_ENTRIES_FAILURE,
+  GET_TIME_ABSENCE_ENTRIES_SUCCESS,
+} from './constants';
 import { selectIsOnline, selectSelectedYear } from './selectors';
 import { SharedState } from './state';
 
@@ -17,7 +27,7 @@ export const getTimeAbsenceEntriesAsync = createAsyncAction(
   GET_TIME_ABSENCE_ENTRIES,
   GET_TIME_ABSENCE_ENTRIES_SUCCESS,
   GET_TIME_ABSENCE_ENTRIES_FAILURE,
-)<void, TimeAbsenceEntryModel[], string>();
+)<void, TimeAbsenceEntryListModel[], string>();
 
 function* doGetTimeAbsenceEntriesOnOtherActions() {
   const timeAbsenceEntriesRoute: Route = yield select(

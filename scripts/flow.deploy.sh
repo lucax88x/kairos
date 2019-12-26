@@ -32,3 +32,6 @@ git push -u origin develop
 # push master
 git checkout master
 git push -u origin master
+
+# back to develop branch
+git checkout develop

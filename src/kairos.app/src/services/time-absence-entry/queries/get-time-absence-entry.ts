@@ -5,5 +5,9 @@ export const getTimeAbsenceEntryQuery = `query ($id: ID!) {
     start
     end
     type
+    job {
+      id
+      name
+    }
   }
 }`;

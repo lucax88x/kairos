@@ -10,11 +10,10 @@ import {
   Typography,
 } from '@material-ui/core';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
-import { values } from 'ramda';
+import { values, flatten } from 'ramda';
 import React, { memo, useCallback, useMemo } from 'react';
 import {
-  getIllnessStatistics,
-  getVacationStatistics,
+  getAbsenceStatistics,
   getWorkingHoursStatistics,
   TimeStatisticTile,
 } from '../code/calculator';
@@ -24,9 +23,9 @@ import Spinner from '../components/Spinner';
 import { i18n } from '../i18nLoader';
 import { Language } from '../models/language-model';
 import { ProfileModel } from '../models/profile.model';
-import { TimeAbsenceEntryModel } from '../models/time-absence-entry.model';
 import { TimeEntryListModel } from '../models/time-entry-list.model';
 import { TimeHolidayEntryModel } from '../models/time-holiday-entry.model';
+import { TimeAbsenceEntryListModel } from '../models/time-absence-entry-list.model';
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -63,7 +62,7 @@ export interface TimeStatisticsInputs {
   selectedLanguage: Language;
   profile: ProfileModel;
   timeEntries: TimeEntryListModel[];
-  absences: TimeAbsenceEntryModel[];
+  absences: TimeAbsenceEntryListModel[];
   holidays: TimeHolidayEntryModel[];
   isGetTimeEntriesBusy: boolean;
 }
@@ -89,7 +88,7 @@ export const TimeStatisticsComponent: React.FC<TimeStatisticsProps> = memo(
 
     const workingHourTiles: TimeStatisticTile[] = useMemo(
       () =>
-        values(
+        flatten(values(
           getWorkingHoursStatistics(
             selectedLanguage,
             profile,
@@ -97,18 +96,13 @@ export const TimeStatisticsComponent: React.FC<TimeStatisticsProps> = memo(
             absences,
             holidays,
           ),
-        ),
+        )),
       [selectedLanguage, profile, timeEntries, absences, holidays],
     );
 
-    const vacationTiles: TimeStatisticTile[] = useMemo(
-      () => values(getVacationStatistics(selectedLanguage, absences)),
-      [selectedLanguage, absences],
-    );
-
-    const illnessTiles: TimeStatisticTile[] = useMemo(
-      () => values(getIllnessStatistics(selectedLanguage, absences)),
-      [selectedLanguage, absences],
+    const absenceTiles: TimeStatisticTile[] = useMemo(
+      () => flatten(values(getAbsenceStatistics(selectedLanguage, profile, absences))),
+      [selectedLanguage, profile, absences],
     );
 
     const generateTiles = useCallback(
@@ -137,7 +131,7 @@ export const TimeStatisticsComponent: React.FC<TimeStatisticsProps> = memo(
                 <Trans>Working Hours</Trans>
               </Typography>
               <Typography className={classes.secondaryHeading}>
-                <Trans>Working Hours</Trans>
+                <Trans>Summary of your working hours</Trans>
               </Typography>
             </ExpansionPanelSummary>
             <ExpansionPanelDetails>
@@ -146,36 +140,19 @@ export const TimeStatisticsComponent: React.FC<TimeStatisticsProps> = memo(
               </GridList>
             </ExpansionPanelDetails>
           </ExpansionPanel>
-          {!!vacationTiles.length && (
+          {!!absenceTiles.length && (
             <ExpansionPanel>
               <ExpansionPanelSummary expandIcon={<ExpandMoreIcon />}>
                 <Typography className={classes.heading}>
-                  <Trans>Vacations</Trans>
+                  <Trans>Absences</Trans>
                 </Typography>
                 <Typography className={classes.secondaryHeading}>
-                  <Trans>Vacations</Trans>
+                  <Trans>Summary of your absences</Trans>
                 </Typography>
               </ExpansionPanelSummary>
               <ExpansionPanelDetails>
                 <GridList cellHeight={180} className={classes.gridList}>
-                  {generateTiles(vacationTiles)}
-                </GridList>
-              </ExpansionPanelDetails>
-            </ExpansionPanel>
-          )}
-          {!!illnessTiles.length && (
-            <ExpansionPanel>
-              <ExpansionPanelSummary expandIcon={<ExpandMoreIcon />}>
-                <Typography className={classes.heading}>
-                  <Trans>Illness</Trans>
-                </Typography>
-                <Typography className={classes.secondaryHeading}>
-                  <Trans>When you are sick</Trans>
-                </Typography>
-              </ExpansionPanelSummary>
-              <ExpansionPanelDetails>
-                <GridList cellHeight={180} className={classes.gridList}>
-                  {generateTiles(illnessTiles)}
+                  {generateTiles(absenceTiles)}
                 </GridList>
               </ExpansionPanelDetails>
             </ExpansionPanel>

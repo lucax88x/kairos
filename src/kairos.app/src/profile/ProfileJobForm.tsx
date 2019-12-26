@@ -1,9 +1,22 @@
 import DateFnsUtils from '@date-io/date-fns';
 import { t, Trans } from '@lingui/macro';
-import { ExpansionPanel, ExpansionPanelDetails, ExpansionPanelSummary, IconButton, makeStyles, TextField, Typography } from '@material-ui/core';
+import {
+  ExpansionPanel,
+  ExpansionPanelDetails,
+  ExpansionPanelSummary,
+  IconButton,
+  makeStyles,
+  TextField,
+  Typography,
+  Tooltip,
+} from '@material-ui/core';
 import DeleteIcon from '@material-ui/icons/Delete';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
-import { KeyboardDatePicker, MaterialUiPickersDate, MuiPickersUtilsProvider } from '@material-ui/pickers';
+import {
+  KeyboardDatePicker,
+  MuiPickersUtilsProvider,
+} from '@material-ui/pickers';
+import { MaterialUiPickersDate } from '@material-ui/pickers/typings/date';
 import clsx from 'clsx';
 import { endOfDay } from 'date-fns';
 import React, { ChangeEvent, useCallback, useState } from 'react';
@@ -179,6 +192,8 @@ export const ProfileJobForm: React.FC<ProfileJobFormProps> = props => {
   const maxDate = new Date(8640000000000000);
   const minDate = new Date(0);
 
+  const timeTooltip = <Trans>Percentual values (0.5 is 30 minutes)</Trans>;
+
   return (
     <ExpansionPanel expanded={expanded} onChange={handleExpanded}>
       <ExpansionPanelSummary expandIcon={<ExpandMoreIcon />}>
@@ -245,72 +260,89 @@ export const ProfileJobForm: React.FC<ProfileJobFormProps> = props => {
                 format={formatAsDate}
               />
             </MuiPickersUtilsProvider>
-            <TextField
-              margin="dense"
-              fullWidth
-              label={<Trans>Holidays (days per year)</Trans>}
-              inputProps={{ min: 0, max: 365, step: 1 }}
-              type="number"
-              value={job.holidaysPerYear}
-              onChange={handleHolidaysPerYear}
-            />
+
+            <Tooltip title={<Trans>Days per year</Trans>}>
+              <TextField
+                margin="dense"
+                fullWidth
+                label={<Trans>Holidays</Trans>}
+                inputProps={{ min: 0, max: 365, step: 1 }}
+                type="number"
+                value={job.holidaysPerYear}
+                onChange={handleHolidaysPerYear}
+              />
+            </Tooltip>
           </div>
           <div className={classes.responsiveColumns}>
-            <TextField
-              label={<Trans>Monday</Trans>}
-              inputProps={{ min: 0, max: 23.59, step: 0.1 }}
-              type="number"
-              value={job.monday}
-              onChange={handleMondayChange}
-            />
-            <TextField
-              margin="dense"
-              label={<Trans>Thursday</Trans>}
-              inputProps={{ min: 0, max: 23.59, step: 0.1 }}
-              type="number"
-              value={job.tuesday}
-              onChange={handleTuesdayChange}
-            />
-            <TextField
-              margin="dense"
-              label={<Trans>Wednesday</Trans>}
-              inputProps={{ min: 0, max: 23.59, step: 0.1 }}
-              type="number"
-              value={job.wednesday}
-              onChange={handleWednesdayChange}
-            />
-            <TextField
-              margin="dense"
-              label={<Trans>Thursday</Trans>}
-              inputProps={{ min: 0, max: 23.59, step: 0.1 }}
-              type="number"
-              value={job.thursday}
-              onChange={handleThursdayChange}
-            />
-            <TextField
-              margin="dense"
-              label={<Trans>Friday</Trans>}
-              inputProps={{ min: 0, max: 23.59, step: 0.1 }}
-              type="number"
-              value={job.friday}
-              onChange={handleFridayChange}
-            />
-            <TextField
-              margin="dense"
-              label={<Trans>Saturday</Trans>}
-              inputProps={{ min: 0, max: 23.59, step: 0.1 }}
-              type="number"
-              value={job.saturday}
-              onChange={handleSaturdayChange}
-            />
-            <TextField
-              margin="dense"
-              label={<Trans>Sunday</Trans>}
-              inputProps={{ min: 0, max: 23.59, step: 0.1 }}
-              type="number"
-              value={job.sunday}
-              onChange={handleSundayChange}
-            />
+            <Tooltip title={timeTooltip}>
+              <TextField
+                label={<Trans>Monday</Trans>}
+                inputProps={{ min: 0, max: 23.59, step: 0.1 }}
+                type="number"
+                value={job.monday}
+                onChange={handleMondayChange}
+              />
+            </Tooltip>
+            <Tooltip title={timeTooltip}>
+              <TextField
+                margin="dense"
+                label={<Trans>Thursday</Trans>}
+                inputProps={{ min: 0, max: 23.59, step: 0.1 }}
+                type="number"
+                value={job.tuesday}
+                onChange={handleTuesdayChange}
+              />
+            </Tooltip>
+            <Tooltip title={timeTooltip}>
+              <TextField
+                margin="dense"
+                label={<Trans>Wednesday</Trans>}
+                inputProps={{ min: 0, max: 23.59, step: 0.1 }}
+                type="number"
+                value={job.wednesday}
+                onChange={handleWednesdayChange}
+              />
+            </Tooltip>
+            <Tooltip title={timeTooltip}>
+              <TextField
+                margin="dense"
+                label={<Trans>Thursday</Trans>}
+                inputProps={{ min: 0, max: 23.59, step: 0.1 }}
+                type="number"
+                value={job.thursday}
+                onChange={handleThursdayChange}
+              />
+            </Tooltip>
+            <Tooltip title={timeTooltip}>
+              <TextField
+                margin="dense"
+                label={<Trans>Friday</Trans>}
+                inputProps={{ min: 0, max: 23.59, step: 0.1 }}
+                type="number"
+                value={job.friday}
+                onChange={handleFridayChange}
+              />
+            </Tooltip>
+            <Tooltip title={timeTooltip}>
+              <TextField
+                margin="dense"
+                label={<Trans>Saturday</Trans>}
+                inputProps={{ min: 0, max: 23.59, step: 0.1 }}
+                type="number"
+                value={job.saturday}
+                onChange={handleSaturdayChange}
+              />
+            </Tooltip>
+            <Tooltip title={timeTooltip}>
+              <TextField
+                margin="dense"
+                label={<Trans>Sunday</Trans>}
+                inputProps={{ min: 0, max: 23.59, step: 0.1 }}
+                type="number"
+                value={job.sunday}
+                onChange={handleSundayChange}
+              />
+            </Tooltip>
           </div>
         </div>
       </ExpansionPanelDetails>

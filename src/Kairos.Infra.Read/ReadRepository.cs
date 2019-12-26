@@ -42,16 +42,20 @@ namespace Kairos.Infra.Read
             Order order = Order.Ascending,
             long skip = 0,
             long take = -1);
+
+        Task<ImmutableArray<string>> GetKeys();
     }
 
     public class ReadRepository : IReadRepository
     {
         private readonly ISerializer _serializer;
+        private readonly string _prefix;
         private readonly IDatabase _database;
 
         public ReadRepository(IConnectionMultiplexer connection, ISerializer serializer, int database, string prefix)
         {
             _serializer = serializer;
+            _prefix = prefix;
 
             _database = connection.GetDatabase(database).WithKeyPrefix(prefix);
         }
@@ -164,6 +168,13 @@ namespace Kairos.Infra.Read
 
             return result.Select(m => m == RedisValue.Null ? default : m.ToString())
                 .ToImmutableArray();
+        }
+
+        public async Task<ImmutableArray<string>> GetKeys()
+        {
+            var keys = await _database.ExecuteAsync("KEYS", $"{_prefix}*");
+
+            return ((RedisValue[]) keys).Select(key => key.ToString().Replace(_prefix, string.Empty)).ToImmutableArray();
         }
     }
 }

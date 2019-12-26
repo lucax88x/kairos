@@ -2,7 +2,7 @@ import { getUnixTime, startOfDay } from 'date-fns';
 import { groupBy, sortBy } from 'ramda';
 import { createSelector } from 'reselect';
 import {
-  isTimeAbsenceEntryModel,
+  isTimeAbsenceEntryListModel,
   isTimeEntryListModel,
   isTimeHolidayEntryModel,
 } from '../code/is';
@@ -19,7 +19,7 @@ export const selectSortedEntries = createSelector(selectEntries, entries =>
   sortBy(e => {
     if (isTimeEntryListModel(e)) {
       return getUnixTime(e.when);
-    } else if (isTimeAbsenceEntryModel(e)) {
+    } else if (isTimeAbsenceEntryListModel(e)) {
       return getUnixTime(e.start);
     } else if (isTimeHolidayEntryModel(e)) {
       return getUnixTime(e.when);
@@ -34,7 +34,7 @@ export const selectGroupedEntriesByDate = createSelector(
     groupBy(e => {
       if (isTimeEntryListModel(e)) {
         return getUnixTime(startOfDay(e.when)).toString();
-      } else if (isTimeAbsenceEntryModel(e)) {
+      } else if (isTimeAbsenceEntryListModel(e)) {
         return getUnixTime(startOfDay(e.start)).toString();
       } else if (isTimeHolidayEntryModel(e)) {
         return getUnixTime(startOfDay(e.when)).toString();
