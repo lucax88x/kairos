@@ -47,11 +47,8 @@ import { TimeHolidayEntryModel } from '../models/time-holiday-entry.model';
 import { UUID } from '../models/uuid.model';
 import { formatAsDate } from './constants';
 import { formatDate } from './formatters';
-import {
-  filterByInterval,
-  humanDifference,
-  humanDifferenceFromHours,
-} from './functions';
+import { filterByInterval } from './functions';
+import { humanDifference, humanDifferenceFromHours } from './humanDifference';
 
 export interface TimeEntryPair {
   enterId: UUID;
@@ -408,11 +405,11 @@ export function getAbsenceStatistics(
     CompensationToday: [],
     IllnessToday: [],
     VacationToday: [],
-    PermitToday: [],    
+    PermitToday: [],
     CompensationMonth: [],
     IllnessMonth: [],
     VacationMonth: [],
-    PermitMonth: [],    
+    PermitMonth: [],
     CompensationYear: [],
     IllnessYear: [],
     VacationYear: [],
@@ -533,9 +530,7 @@ export function getAbsenceStatistics(
       title: i18n._(t`Compensation Year: ${job.name}`),
       titleValues: { job: job.name },
       subtitle: formatDate(now, language, 'yyyy'),
-      text: humanDifferenceFromHours(
-        yearAbsences.compensationHours.toNumber(),
-      ),
+      text: humanDifferenceFromHours(yearAbsences.compensationHours.toNumber()),
     });
 
     statistics['IllnessYear'].push({
