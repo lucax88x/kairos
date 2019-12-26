@@ -35,8 +35,9 @@ msgstr "Assenza aggiornata"
 #: src/App.tsx:302
 #: src/bulk-insert/BulkInsert.tsx:35
 #: src/bulk-insert/BulkTimeAbsenceEntryInsert.tsx:90
+#: src/dashboard/TimeStatistics.tsx:70
 #: src/export/Export.tsx:33
-#: src/time-absence-entries/TimeAbsenceEntries.tsx:25
+#: src/time-absence-entries/TimeAbsenceEntries.tsx:26
 msgid "Absences"
 msgstr "Assenze"
 
@@ -80,11 +81,25 @@ msgstr "Indietro"
 msgid "Bulk Insert"
 msgstr "Inserimento multiplo"
 
-#: src/models/time-absence-entry.model.tsx:37
-#: src/models/time-absence-entry.model.tsx:51
-#: src/shared/TimeAbsenceEntryForm.tsx:73
+#: src/models/time-absence-entry-list.model.tsx:34
+#: src/models/time-absence-entry-list.model.tsx:48
+#: src/models/time-absence-entry.model.tsx:39
+#: src/models/time-absence-entry.model.tsx:53
+#: src/shared/TimeAbsenceEntryForm.tsx:90
 msgid "Compensation"
 msgstr "Compensazione"
+
+#: src/code/calculator.ts:260
+msgid "Compensation Month: {0}"
+msgstr "Compensazioni mese: {0}"
+
+#: src/code/calculator.ts:234
+msgid "Compensation Today: {0}"
+msgstr "Compensazioni oggi: {0}"
+
+#: src/code/calculator.ts:286
+msgid "Compensation Year: {0}"
+msgstr "Compensazioni anno: {0}"
 
 #: src/shared/ConfirmationModal.tsx:7
 #: src/shared/ConfirmationModal.tsx:14
@@ -117,9 +132,9 @@ msgstr "Giorno"
 
 #: src/profile/ProfileJobForm.tsx:145
 msgid "Days per year"
-msgstr ""
+msgstr "Giorni all'anno"
 
-#: src/time-absence-entries/TimeAbsenceEntries.tsx:20
+#: src/time-absence-entries/TimeAbsenceEntries.tsx:21
 msgid "Delete Absence"
 msgstr "Cancella assenza"
 
@@ -131,9 +146,9 @@ msgstr "Cancella vacanza"
 #: src/bulk-insert/BulkTimeAbsenceEntryInsert.tsx:143
 #: src/bulk-insert/BulkTimeHolidayEntryInsert.tsx:88
 #: src/bulk-insert/BulkTimeHolidayEntryInsert.tsx:106
-#: src/shared/TimeAbsenceEntryForm.tsx:77
+#: src/shared/TimeAbsenceEntryForm.tsx:94
 #: src/shared/TimeHolidayEntryForm.tsx:48
-#: src/time-absence-entries/TimeAbsenceEntries.tsx:48
+#: src/time-absence-entries/TimeAbsenceEntries.tsx:49
 #: src/time-holiday-entries/TimeHolidayEntries.tsx:59
 msgid "Description"
 msgstr "Descrizione"
@@ -144,8 +159,8 @@ msgstr "Descrizione"
 #: src/export/ExportTimeEntries.tsx:45
 #: src/navigator/Navigator.tsx:98
 #: src/profile/ProfileJobForm.tsx:142
-#: src/shared/TimeAbsenceEntryForm.tsx:80
-#: src/time-absence-entries/TimeAbsenceEntries.tsx:41
+#: src/shared/TimeAbsenceEntryForm.tsx:97
+#: src/time-absence-entries/TimeAbsenceEntries.tsx:42
 msgid "End"
 msgstr "Fine"
 
@@ -234,16 +249,25 @@ msgstr "Vacanza aggiornata"
 msgid "Holidays"
 msgstr "Vacanze"
 
-#: src/profile/ProfileJobForm.tsx:143
-#~ msgid "Holidays (days per year)"
-#~ msgstr "Vacanze (giorni all'anno)"
-
-#: src/dashboard/TimeStatistics.tsx:86
-#: src/models/time-absence-entry.model.tsx:43
-#: src/models/time-absence-entry.model.tsx:57
-#: src/shared/TimeAbsenceEntryForm.tsx:64
+#: src/models/time-absence-entry-list.model.tsx:40
+#: src/models/time-absence-entry-list.model.tsx:54
+#: src/models/time-absence-entry.model.tsx:45
+#: src/models/time-absence-entry.model.tsx:59
+#: src/shared/TimeAbsenceEntryForm.tsx:81
 msgid "Illness"
 msgstr "Malattia"
+
+#: src/code/calculator.ts:266
+msgid "Illness Month: {0}"
+msgstr "Malattie mese: {0}"
+
+#: src/code/calculator.ts:240
+msgid "Illness Today: {0}"
+msgstr "Malattie oggi: {0}"
+
+#: src/code/calculator.ts:292
+msgid "Illness Year: {0}"
+msgstr "Malattie anno: {0}"
 
 #: src/models/time-entry.model.tsx:36
 #: src/models/time-entry.model.tsx:46
@@ -267,8 +291,8 @@ msgstr "Ingresso"
 #: src/navigator/Navigator.tsx:98
 #: src/profile/ProfileJobForm.tsx:141
 #: src/profile/ProfileJobForm.tsx:142
-#: src/shared/TimeAbsenceEntryForm.tsx:79
-#: src/shared/TimeAbsenceEntryForm.tsx:80
+#: src/shared/TimeAbsenceEntryForm.tsx:96
+#: src/shared/TimeAbsenceEntryForm.tsx:97
 #: src/shared/TimeEntryForm.tsx:104
 #: src/shared/TimeHolidayEntryForm.tsx:50
 msgid "Invalid Date"
@@ -291,8 +315,10 @@ msgstr "Impiego invalido"
 #: src/bulk-insert/BulkTimeAbsenceEntryInsert.tsx:74
 #: src/bulk-insert/BulkTimeEntryInsert.tsx:58
 #: src/bulk-insert/BulkTimeEntryInsert.tsx:67
-#: src/models/time-absence-entry.model.tsx:45
-#: src/models/time-absence-entry.model.tsx:59
+#: src/models/time-absence-entry-list.model.tsx:42
+#: src/models/time-absence-entry-list.model.tsx:56
+#: src/models/time-absence-entry.model.tsx:47
+#: src/models/time-absence-entry.model.tsx:61
 #: src/models/time-entry.model.tsx:40
 #: src/models/time-entry.model.tsx:50
 #: src/models/time-entry.model.tsx:60
@@ -309,7 +335,9 @@ msgstr "E' un PWA, significa che può essere installato anche sul vostro pc, sul
 
 #: src/bulk-insert/BulkTimeEntryInsert.tsx:119
 #: src/bulk-insert/BulkTimeEntryInsert.tsx:144
+#: src/shared/TimeAbsenceEntryForm.tsx:102
 #: src/shared/TimeEntryForm.tsx:109
+#: src/time-absence-entries/TimeAbsenceEntries.tsx:54
 #: src/time-entries/TimeEntries.tsx:46
 msgid "Job"
 msgstr "Impiego"
@@ -391,23 +419,41 @@ msgstr "Inserisci ingresso"
 msgid "Out"
 msgstr "Uscita"
 
-#: src/code/calculator.ts:144
+#: src/code/calculator.ts:173
 msgid "Overtime Today: {0}"
 msgstr "Straordinari oggi: {0}"
 
-#: src/code/calculator.ts:158
+#: src/code/calculator.ts:187
 msgid "Overtime Week: {0}"
 msgstr "Straordinari settimana: {0}"
 
+#: src/code/calculator.ts:195
+msgid "Overtime Year: {0}"
+msgstr "Straordinari anno"
+
 #: src/profile/ProfileJobForm.tsx:118
 msgid "Percentual values (0.5 is 30 minutes)"
-msgstr ""
+msgstr "Valori percentuali (0.5 sono 30 minuti)"
 
-#: src/models/time-absence-entry.model.tsx:39
-#: src/models/time-absence-entry.model.tsx:53
-#: src/shared/TimeAbsenceEntryForm.tsx:70
+#: src/models/time-absence-entry-list.model.tsx:36
+#: src/models/time-absence-entry-list.model.tsx:50
+#: src/models/time-absence-entry.model.tsx:41
+#: src/models/time-absence-entry.model.tsx:55
+#: src/shared/TimeAbsenceEntryForm.tsx:87
 msgid "Permit"
 msgstr "Permesso"
+
+#: src/code/calculator.ts:278
+msgid "Permit Month: {0}"
+msgstr "Permessi mese: {0}"
+
+#: src/code/calculator.ts:252
+msgid "Permit Today: {0}"
+msgstr "Permessi oggi: {0}"
+
+#: src/code/calculator.ts:304
+msgid "Permit Year: {0}"
+msgstr "Permessi anno: {0}"
 
 #: src/App.tsx:359
 msgid "Profile"
@@ -418,11 +464,11 @@ msgstr "Profilo"
 msgid "Profile Saved"
 msgstr "Profilo salvato"
 
-#: src/code/calculator.ts:138
+#: src/code/calculator.ts:167
 msgid "Remaining Today: {0}"
 msgstr "Rimanenti oggi: {0}"
 
-#: src/code/calculator.ts:152
+#: src/code/calculator.ts:181
 msgid "Remaining Week: {0}"
 msgstr "Rimanenti settimana: {0}"
 
@@ -459,10 +505,18 @@ msgstr "Accedi"
 #: src/export/ExportTimeEntries.tsx:44
 #: src/navigator/Navigator.tsx:97
 #: src/profile/ProfileJobForm.tsx:141
-#: src/shared/TimeAbsenceEntryForm.tsx:79
-#: src/time-absence-entries/TimeAbsenceEntries.tsx:34
+#: src/shared/TimeAbsenceEntryForm.tsx:96
+#: src/time-absence-entries/TimeAbsenceEntries.tsx:35
 msgid "Start"
 msgstr "Inizio"
+
+#: src/dashboard/TimeStatistics.tsx:73
+msgid "Summary of your absences"
+msgstr "Riassunto delle tue assenze"
+
+#: src/dashboard/TimeStatistics.tsx:58
+msgid "Summary of your working hours"
+msgstr "Riassunto dei tuoi orari lavorativi"
 
 #: src/profile/ProfileJobForm.tsx:169
 msgid "Sunday"
@@ -490,8 +544,8 @@ msgstr "Oggi"
 #: src/bulk-insert/BulkTimeAbsenceEntryInsert.tsx:137
 #: src/bulk-insert/BulkTimeEntryInsert.tsx:106
 #: src/bulk-insert/BulkTimeEntryInsert.tsx:131
-#: src/shared/TimeAbsenceEntryForm.tsx:58
-#: src/time-absence-entries/TimeAbsenceEntries.tsx:28
+#: src/shared/TimeAbsenceEntryForm.tsx:75
+#: src/time-absence-entries/TimeAbsenceEntries.tsx:29
 #: src/time-entries/TimeEntries.tsx:32
 msgid "Type"
 msgstr "Tipo"
@@ -506,13 +560,13 @@ msgid "Unknown"
 msgstr "Sconosciuto"
 
 #: src/profile/Profile.tsx:96
-#: src/shared/TimeAbsenceEntryForm.tsx:87
+#: src/shared/TimeAbsenceEntryForm.tsx:118
 #: src/shared/TimeEntryForm.tsx:121
 #: src/shared/TimeHolidayEntryForm.tsx:55
 msgid "Update"
 msgstr "Salva"
 
-#: src/time-absence-entries/TimeAbsenceEntries.tsx:17
+#: src/time-absence-entries/TimeAbsenceEntries.tsx:18
 msgid "Update Absence"
 msgstr "Salva assenza"
 
@@ -524,16 +578,25 @@ msgstr "Salva vacanza"
 msgid "Update holidays from country"
 msgstr "Salva vacanze col paese"
 
-#: src/models/time-absence-entry.model.tsx:41
-#: src/models/time-absence-entry.model.tsx:55
-#: src/shared/TimeAbsenceEntryForm.tsx:67
+#: src/models/time-absence-entry-list.model.tsx:38
+#: src/models/time-absence-entry-list.model.tsx:52
+#: src/models/time-absence-entry.model.tsx:43
+#: src/models/time-absence-entry.model.tsx:57
+#: src/shared/TimeAbsenceEntryForm.tsx:84
 msgid "Vacation"
 msgstr "Ferie"
 
-#: src/dashboard/TimeStatistics.tsx:71
-#: src/dashboard/TimeStatistics.tsx:74
-msgid "Vacations"
-msgstr "Ferie"
+#: src/code/calculator.ts:272
+msgid "Vacation Month: {0}"
+msgstr "Ferie mese: {0}"
+
+#: src/code/calculator.ts:246
+msgid "Vacation Today: {0}"
+msgstr "Ferie oggi: {0}"
+
+#: src/code/calculator.ts:298
+msgid "Vacation Year: {0}"
+msgstr "Ferie anno: {0}"
 
 #: src/bulk-insert/BulkTimeAbsenceEntryInsert.tsx:103
 #: src/bulk-insert/BulkTimeHolidayEntryInsert.tsx:85
@@ -561,16 +624,11 @@ msgstr "Settimana"
 msgid "When"
 msgstr "Quando"
 
-#: src/dashboard/TimeStatistics.tsx:89
-msgid "When you are sick"
-msgstr "Malattia"
-
 #: src/dashboard/TimeEntriesCalendar.tsx:100
 msgid "Work Week"
 msgstr "Settimana lavorativa"
 
-#: src/dashboard/TimeStatistics.tsx:56
-#: src/dashboard/TimeStatistics.tsx:59
+#: src/dashboard/TimeStatistics.tsx:55
 msgid "Working Hours"
 msgstr "Ore lavorative"
 
