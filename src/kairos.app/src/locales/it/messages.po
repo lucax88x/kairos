@@ -89,15 +89,15 @@ msgstr "Inserimento multiplo"
 msgid "Compensation"
 msgstr "Compensazione"
 
-#: src/code/calculator.ts:260
+#: src/code/calculator.ts:262
 msgid "Compensation Month: {0}"
 msgstr "Compensazioni mese: {0}"
 
-#: src/code/calculator.ts:234
+#: src/code/calculator.ts:236
 msgid "Compensation Today: {0}"
 msgstr "Compensazioni oggi: {0}"
 
-#: src/code/calculator.ts:286
+#: src/code/calculator.ts:288
 msgid "Compensation Year: {0}"
 msgstr "Compensazioni anno: {0}"
 
@@ -118,7 +118,7 @@ msgstr "Paese"
 msgid "Create Holiday"
 msgstr "Crea vacanza"
 
-#: src/profile/ProfileJobForm.tsx:130
+#: src/profile/ProfileJobForm.tsx:129
 msgid "Current Date"
 msgstr "Data attuale"
 
@@ -130,7 +130,7 @@ msgstr "Dashboard"
 msgid "Day"
 msgstr "Giorno"
 
-#: src/profile/ProfileJobForm.tsx:145
+#: src/profile/ProfileJobForm.tsx:144
 msgid "Days per year"
 msgstr "Giorni all'anno"
 
@@ -158,7 +158,7 @@ msgstr "Descrizione"
 #: src/export/ExportTimeAbsenceEntries.tsx:45
 #: src/export/ExportTimeEntries.tsx:45
 #: src/navigator/Navigator.tsx:98
-#: src/profile/ProfileJobForm.tsx:142
+#: src/profile/ProfileJobForm.tsx:141
 #: src/shared/TimeAbsenceEntryForm.tsx:97
 #: src/time-absence-entries/TimeAbsenceEntries.tsx:42
 msgid "End"
@@ -221,7 +221,7 @@ msgstr "Esporta ingressi"
 msgid "Feel free to request for new bugfixes / features with any link in the footer."
 msgstr "Sentitevi liberi di richiedere nuovi bugfixes / features con qualsiasi link nel piè di pagina."
 
-#: src/profile/ProfileJobForm.tsx:163
+#: src/profile/ProfileJobForm.tsx:162
 msgid "Friday"
 msgstr "Venerdì"
 
@@ -242,9 +242,8 @@ msgstr "Vacanza aggiornata"
 
 #: src/App.tsx:308
 #: src/bulk-insert/BulkInsert.tsx:36
-#: src/bulk-insert/BulkTimeEntryInsert.tsx:103
 #: src/bulk-insert/BulkTimeHolidayEntryInsert.tsx:72
-#: src/profile/ProfileJobForm.tsx:146
+#: src/profile/ProfileJobForm.tsx:145
 #: src/time-holiday-entries/TimeHolidayEntries.tsx:48
 msgid "Holidays"
 msgstr "Festività"
@@ -257,15 +256,15 @@ msgstr "Festività"
 msgid "Illness"
 msgstr "Malattia"
 
-#: src/code/calculator.ts:266
+#: src/code/calculator.ts:268
 msgid "Illness Month: {0}"
 msgstr "Malattie mese: {0}"
 
-#: src/code/calculator.ts:240
+#: src/code/calculator.ts:242
 msgid "Illness Today: {0}"
 msgstr "Malattie oggi: {0}"
 
-#: src/code/calculator.ts:292
+#: src/code/calculator.ts:294
 msgid "Illness Year: {0}"
 msgstr "Malattie anno: {0}"
 
@@ -289,8 +288,8 @@ msgstr "Ingresso"
 #: src/export/ExportTimeEntries.tsx:45
 #: src/navigator/Navigator.tsx:97
 #: src/navigator/Navigator.tsx:98
+#: src/profile/ProfileJobForm.tsx:140
 #: src/profile/ProfileJobForm.tsx:141
-#: src/profile/ProfileJobForm.tsx:142
 #: src/shared/TimeAbsenceEntryForm.tsx:96
 #: src/shared/TimeAbsenceEntryForm.tsx:97
 #: src/shared/TimeEntryForm.tsx:104
@@ -354,7 +353,7 @@ msgstr "Kairos è uno strumento di monitoraggio del tempo libero fatto da uno sv
 msgid "Logout"
 msgstr "Esci"
 
-#: src/profile/ProfileJobForm.tsx:151
+#: src/profile/ProfileJobForm.tsx:150
 msgid "Monday"
 msgstr "Lunedì"
 
@@ -366,7 +365,7 @@ msgstr "Mese"
 msgid "More {more}"
 msgstr "Mostra {more}"
 
-#: src/profile/ProfileJobForm.tsx:123
+#: src/profile/ProfileJobForm.tsx:122
 msgid "Name"
 msgstr "Nome"
 
@@ -419,19 +418,19 @@ msgstr "Inserisci ingresso"
 msgid "Out"
 msgstr "Uscita"
 
-#: src/code/calculator.ts:173
+#: src/code/calculator.ts:174
 msgid "Overtime Today: {0}"
 msgstr "Straordinari oggi: {0}"
 
-#: src/code/calculator.ts:187
+#: src/code/calculator.ts:188
 msgid "Overtime Week: {0}"
 msgstr "Straordinari settimana: {0}"
 
-#: src/code/calculator.ts:195
+#: src/code/calculator.ts:196
 msgid "Overtime Year: {0}"
 msgstr "Straordinari anno"
 
-#: src/profile/ProfileJobForm.tsx:118
+#: src/profile/ProfileJobForm.tsx:117
 msgid "Percentual values (0.5 is 30 minutes)"
 msgstr "Valori percentuali (0.5 sono 30 minuti)"
 
@@ -443,15 +442,15 @@ msgstr "Valori percentuali (0.5 sono 30 minuti)"
 msgid "Permit"
 msgstr "Permesso"
 
-#: src/code/calculator.ts:278
+#: src/code/calculator.ts:280
 msgid "Permit Month: {0}"
 msgstr "Permessi mese: {0}"
 
-#: src/code/calculator.ts:252
+#: src/code/calculator.ts:254
 msgid "Permit Today: {0}"
 msgstr "Permessi oggi: {0}"
 
-#: src/code/calculator.ts:304
+#: src/code/calculator.ts:306
 msgid "Permit Year: {0}"
 msgstr "Permessi anno: {0}"
 
@@ -464,15 +463,15 @@ msgstr "Profilo"
 msgid "Profile Saved"
 msgstr "Profilo salvato"
 
-#: src/code/calculator.ts:167
+#: src/code/calculator.ts:168
 msgid "Remaining Today: {0}"
 msgstr "Rimanenti oggi: {0}"
 
-#: src/code/calculator.ts:181
+#: src/code/calculator.ts:182
 msgid "Remaining Week: {0}"
 msgstr "Rimanenti settimana: {0}"
 
-#: src/profile/ProfileJobForm.tsx:166
+#: src/profile/ProfileJobForm.tsx:165
 msgid "Saturday"
 msgstr "Sabato"
 
@@ -504,7 +503,7 @@ msgstr "Accedi"
 #: src/export/ExportTimeAbsenceEntries.tsx:44
 #: src/export/ExportTimeEntries.tsx:44
 #: src/navigator/Navigator.tsx:97
-#: src/profile/ProfileJobForm.tsx:141
+#: src/profile/ProfileJobForm.tsx:140
 #: src/shared/TimeAbsenceEntryForm.tsx:96
 #: src/time-absence-entries/TimeAbsenceEntries.tsx:35
 msgid "Start"
@@ -518,7 +517,7 @@ msgstr "Riassunto delle tue assenze"
 msgid "Summary of your working hours"
 msgstr "Riassunto dei tuoi orari lavorativi"
 
-#: src/profile/ProfileJobForm.tsx:169
+#: src/profile/ProfileJobForm.tsx:168
 msgid "Sunday"
 msgstr "Domenica"
 
@@ -526,8 +525,8 @@ msgstr "Domenica"
 msgid "Thanks to this and some other informations it's easy to calculate your extra-times, vacation, holidays, illness, etc."
 msgstr "Grazie a queste e ad altre informazioni è facile calcolare gli straordinari, le festività, le ferie, le malattie, ecc."
 
-#: src/profile/ProfileJobForm.tsx:154
-#: src/profile/ProfileJobForm.tsx:160
+#: src/profile/ProfileJobForm.tsx:153
+#: src/profile/ProfileJobForm.tsx:159
 msgid "Thursday"
 msgstr "Giovedì"
 
@@ -555,7 +554,7 @@ msgstr "Tipo"
 msgid "Unauthorized"
 msgstr "Non autorizzato"
 
-#: src/profile/ProfileJobForm.tsx:124
+#: src/profile/ProfileJobForm.tsx:123
 msgid "Unknown"
 msgstr "Sconosciuto"
 
@@ -586,28 +585,35 @@ msgstr "Salva festività col paese"
 msgid "Vacation"
 msgstr "Ferie"
 
-#: src/code/calculator.ts:272
+#: src/code/calculator.ts:274
 msgid "Vacation Month: {0}"
 msgstr "Ferie mese: {0}"
 
-#: src/code/calculator.ts:246
+#: src/code/calculator.ts:248
 msgid "Vacation Today: {0}"
 msgstr "Ferie oggi: {0}"
 
-#: src/code/calculator.ts:298
+#: src/code/calculator.ts:300
 msgid "Vacation Year: {0}"
 msgstr "Ferie anno: {0}"
 
 #: src/bulk-insert/BulkTimeAbsenceEntryInsert.tsx:103
-#: src/bulk-insert/BulkTimeHolidayEntryInsert.tsx:85
+msgid "Valid Absences"
+msgstr "Assenze valide"
+
+#: src/bulk-insert/BulkTimeEntryInsert.tsx:103
 msgid "Valid Entries"
+msgstr "Ingressi validi"
+
+#: src/bulk-insert/BulkTimeHolidayEntryInsert.tsx:85
+msgid "Valid Holidays"
 msgstr "Vacanze valide"
 
 #: src/App.tsx:392
 msgid "Version {0}"
 msgstr "Versione {0}"
 
-#: src/profile/ProfileJobForm.tsx:157
+#: src/profile/ProfileJobForm.tsx:156
 msgid "Wednesday"
 msgstr "Mercoledì"
 
