@@ -442,6 +442,8 @@ export function getAbsenceStatistics(
       absencesInRange,
     );
 
+    const averageWorkingHours = JobModel.getAverageWorkingHours(job);
+
     // today
     const todayAbsences = buildAbsencesForRange(
       startOfDay(now),
@@ -456,6 +458,7 @@ export function getAbsenceStatistics(
       subtitle: formatDate(now, language, 'MMMM dd'),
       text: humanDifferenceFromHours(
         todayAbsences.compensationHours.toNumber(),
+        averageWorkingHours,
       ),
     });
 
@@ -463,21 +466,30 @@ export function getAbsenceStatistics(
       title: i18n._(t`Illness Today: ${job.name}`),
       titleValues: { job: job.name },
       subtitle: formatDate(now, language, 'MMMM dd'),
-      text: humanDifferenceFromHours(todayAbsences.illnessHours.toNumber()),
+      text: humanDifferenceFromHours(
+        todayAbsences.illnessHours.toNumber(),
+        averageWorkingHours,
+      ),
     });
 
     statistics['VacationToday'].push({
       title: i18n._(t`Vacation Today: ${job.name}`),
       titleValues: { job: job.name },
       subtitle: formatDate(now, language, 'MMMM dd'),
-      text: humanDifferenceFromHours(todayAbsences.vacationHours.toNumber()),
+      text: humanDifferenceFromHours(
+        todayAbsences.vacationHours.toNumber(),
+        averageWorkingHours,
+      ),
     });
 
     statistics['PermitToday'].push({
       title: i18n._(t`Permit Today: ${job.name}`),
       titleValues: { job: job.name },
       subtitle: formatDate(now, language, 'MMMM dd'),
-      text: humanDifferenceFromHours(todayAbsences.permitHours.toNumber()),
+      text: humanDifferenceFromHours(
+        todayAbsences.permitHours.toNumber(),
+        averageWorkingHours,
+      ),
     });
 
     // month
@@ -494,6 +506,7 @@ export function getAbsenceStatistics(
       subtitle: formatDate(now, language, 'MMMM'),
       text: humanDifferenceFromHours(
         monthAbsences.compensationHours.toNumber(),
+        averageWorkingHours,
       ),
     });
 
@@ -501,21 +514,30 @@ export function getAbsenceStatistics(
       title: i18n._(t`Illness Month: ${job.name}`),
       titleValues: { job: job.name },
       subtitle: formatDate(now, language, 'MMMM'),
-      text: humanDifferenceFromHours(monthAbsences.illnessHours.toNumber()),
+      text: humanDifferenceFromHours(
+        monthAbsences.illnessHours.toNumber(),
+        averageWorkingHours,
+      ),
     });
 
     statistics['VacationMonth'].push({
       title: i18n._(t`Vacation Month: ${job.name}`),
       titleValues: { job: job.name },
       subtitle: formatDate(now, language, 'MMMM'),
-      text: humanDifferenceFromHours(monthAbsences.vacationHours.toNumber()),
+      text: humanDifferenceFromHours(
+        monthAbsences.vacationHours.toNumber(),
+        averageWorkingHours,
+      ),
     });
 
     statistics['PermitMonth'].push({
       title: i18n._(t`Permit Month: ${job.name}`),
       titleValues: { job: job.name },
       subtitle: formatDate(now, language, 'MMMM'),
-      text: humanDifferenceFromHours(monthAbsences.permitHours.toNumber()),
+      text: humanDifferenceFromHours(
+        monthAbsences.permitHours.toNumber(),
+        averageWorkingHours,
+      ),
     });
 
     // year
@@ -530,28 +552,40 @@ export function getAbsenceStatistics(
       title: i18n._(t`Compensation Year: ${job.name}`),
       titleValues: { job: job.name },
       subtitle: formatDate(now, language, 'yyyy'),
-      text: humanDifferenceFromHours(yearAbsences.compensationHours.toNumber()),
+      text: humanDifferenceFromHours(
+        yearAbsences.compensationHours.toNumber(),
+        averageWorkingHours,
+      ),
     });
 
     statistics['IllnessYear'].push({
       title: i18n._(t`Illness Year: ${job.name}`),
       titleValues: { job: job.name },
       subtitle: formatDate(now, language, 'yyyy'),
-      text: humanDifferenceFromHours(yearAbsences.illnessHours.toNumber()),
+      text: humanDifferenceFromHours(
+        yearAbsences.illnessHours.toNumber(),
+        averageWorkingHours,
+      ),
     });
 
     statistics['VacationYear'].push({
       title: i18n._(t`Vacation Year: ${job.name}`),
       titleValues: { job: job.name },
       subtitle: formatDate(now, language, 'yyyy'),
-      text: humanDifferenceFromHours(yearAbsences.vacationHours.toNumber()),
+      text: humanDifferenceFromHours(
+        yearAbsences.vacationHours.toNumber(),
+        averageWorkingHours,
+      ),
     });
 
     statistics['PermitYear'].push({
       title: i18n._(t`Permit Year: ${job.name}`),
       titleValues: { job: job.name },
       subtitle: formatDate(now, language, 'yyyy'),
-      text: humanDifferenceFromHours(yearAbsences.permitHours.toNumber()),
+      text: humanDifferenceFromHours(
+        yearAbsences.permitHours.toNumber(),
+        averageWorkingHours,
+      ),
     });
   }
   return statistics;

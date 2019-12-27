@@ -1,6 +1,9 @@
 import {
+  addDays,
   addHours,
   addMinutes,
+  addMonths,
+  addYears,
   differenceInDays,
   differenceInHours,
   differenceInMinutes,
@@ -11,28 +14,31 @@ import {
   subMinutes,
   subMonths,
   subYears,
-  addYears,
-  addMonths,
-  addDays,
 } from 'date-fns';
+import Decimal from 'decimal.js';
 import { join } from 'ramda';
 import { padNumber } from '../code/padNumber';
+
+const MONTHS_IN_YEAR = 12;
+const DAYS_IN_MONTH = 30;
+const HOURS_IN_DAY = 24;
+const MINUTES_IN_HOUR = 60;
+
+const DAYS_IN_YEAR = DAYS_IN_MONTH * MONTHS_IN_YEAR;
 
 export const humanDifference = (
   left: Date,
   right: Date,
-  relativeToWorkingHours = 0,
+  relativeToHours = 24,
 ) => {
-  // relative to working hours tbd
-
   const difference = dateDifference(left, right);
-  console.log(difference);
-  return dateToHuman(difference);
+  const totalHours = dateToHours(difference);
+  return hoursToHuman(totalHours, relativeToHours);
 };
 
 export const humanDifferenceFromHours = (
   hours: number,
-  relativeToWorkingHours = 0,
+  relativeToHours = 24,
 ) => {
   const percentualMinutes = hours % 1;
   hours = hours - percentualMinutes;
@@ -43,51 +49,105 @@ export const humanDifferenceFromHours = (
   date = addHours(date, hours);
   date = addMinutes(date, minutes);
 
-  return humanDifference(new Date(0), date, relativeToWorkingHours);
+  return humanDifference(new Date(0), date, relativeToHours);
 };
 
-const dateToHuman = (date: Date) => {
-  const minDate = new Date(0);
+const formatWithoutDecimals = (number: Decimal): [string, Decimal] => {
+  const remaining = number.mod(1);
+  const toFormat = number.minus(remaining).round();
+  return [padNumber(toFormat.toNumber()), remaining];
+};
 
+const hoursToHuman = (totalHours: Decimal, relativeToHours = 24) => {
   const result = [];
-  const years = differenceInYears(date, minDate);
-  if (years > 0) {
-    result.push(`${padNumber(years)}yr`);
-    date = subYears(date, years);
+  const time = [];
+
+  let years = new Decimal(0);
+  let months = new Decimal(0);
+  let days = new Decimal(0);
+  let hours = new Decimal(0);
+  let minutes = new Decimal(0);
+
+  const totalDays = totalHours.div(relativeToHours);
+
+  years = totalDays.div(DAYS_IN_YEAR);
+
+  if (years.greaterThanOrEqualTo(1)) {
+    const [formatted, remaining] = formatWithoutDecimals(years);
+    months = remaining.mul(MONTHS_IN_YEAR);
+    result.push(`${formatted}y`);
+  } else {
+    months = years.mul(MONTHS_IN_YEAR);
   }
 
-  const months = differenceInMonths(date, minDate);
-  if (months > 0) {
-    result.push(`${padNumber(months)}mt`);
-    date = subMonths(date, months);
+  if (months.greaterThanOrEqualTo(1)) {
+    const [formatted, remaining] = formatWithoutDecimals(months);
+    days = remaining.mul(DAYS_IN_MONTH);
+    result.push(`${formatted}m`);
+  } else {
+    days = months.mul(DAYS_IN_MONTH);
   }
 
-  const days = differenceInDays(date, minDate);
-  if (days > 0) {
-    result.push(`${padNumber(days)}d`);
-    date = subDays(date, days);
+  if (days.greaterThanOrEqualTo(1)) {
+    const [formatted, remaining] = formatWithoutDecimals(days);
+    hours = remaining.mul(relativeToHours);
+    const suffix = relativeToHours === HOURS_IN_DAY ? 'd' : 'wd';
+    result.push(`${formatted}${suffix}`);
+  } else {
+    hours = days.mul(relativeToHours);
   }
 
-  const time: string[] = [];
+  if (hours.greaterThanOrEqualTo(1)) {
+    const [formatted, remaining] = formatWithoutDecimals(hours);
+    minutes = remaining.mul(MINUTES_IN_HOUR);
+    time.push(`${formatted}`);
+  } else {
+    minutes = hours.mul(MINUTES_IN_HOUR);
+  }
 
-  const hours = differenceInHours(date, minDate);
-  console.log(hours);
-  time.push(`${padNumber(hours)}`);
-  date = subHours(date, hours);
+  if (minutes.greaterThanOrEqualTo(1)) {
+    const [formatted] = formatWithoutDecimals(minutes);
 
-  const minutes = differenceInMinutes(date, minDate);
-  time.push(`${padNumber(minutes)}`);
-  date = subMinutes(date, minutes);
+    // there is no hour but we have minutes
+    if (time.length === 0) {
+      time.push('00');
+    }
+    time.push(`${formatted}`);
+  } else if (time.length === 1) {
+    // there is no minutes but we have hours
+    time.push('00');
+  }
 
-  result.push(join(':', time));
+  if (time.length > 0) {
+    result.push(join(':', time));
+  }
 
   const str = join(' ', result);
 
-  if (str === '00:00') {
+  if (str === '') {
     return '-';
   }
 
   return str;
+};
+
+const dateToHours = (date: Date): Decimal => {
+  let totalHours = new Decimal(0);
+  const minDate = new Date(0);
+
+  const hours = differenceInHours(date, minDate);
+  if (hours > 0) {
+    date = subHours(date, hours);
+    totalHours = totalHours.plus(hours);
+  }
+
+  const minutes = differenceInMinutes(date, minDate);
+  if (minutes > 0) {
+    date = subMinutes(date, minutes);
+    totalHours = totalHours.plus(new Decimal(minutes).div(MINUTES_IN_HOUR));
+  }
+
+  return totalHours;
 };
 
 const dateDifference = (left: Date, right: Date) => {
