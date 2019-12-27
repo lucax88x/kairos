@@ -10,6 +10,7 @@ import {
   TimeAbsenceEntryTypes,
 } from '../models/time-absence-entry.model';
 import { UUID } from '../models/uuid.model';
+import { maxDate } from '../code/functions';
 
 export interface State {
   id: UUID;
@@ -84,7 +85,6 @@ function reducer(
       case 'REFRESH_SELECTS': {
         draft.jobs = [];
 
-        const maxDate = new Date(8640000000000000);
         const date = !!state.start ? state.start : new Date();
         const jobs = filter(
           job =>

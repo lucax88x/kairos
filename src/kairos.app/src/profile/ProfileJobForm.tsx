@@ -7,8 +7,8 @@ import {
   IconButton,
   makeStyles,
   TextField,
-  Typography,
   Tooltip,
+  Typography,
 } from '@material-ui/core';
 import DeleteIcon from '@material-ui/icons/Delete';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
@@ -22,6 +22,7 @@ import { endOfDay } from 'date-fns';
 import React, { ChangeEvent, useCallback, useState } from 'react';
 import { formatAsDate } from '../code/constants';
 import { formatDate } from '../code/formatters';
+import { minDate, maxDate } from '../code/functions';
 import { getDatepickerLocale } from '../code/get-datepicker-locale';
 import { useFocus } from '../code/use-focus';
 import { Themes } from '../code/variables';
@@ -188,9 +189,6 @@ export const ProfileJobForm: React.FC<ProfileJobFormProps> = props => {
   );
 
   const handlePreventCompress = useCallback(evt => evt.stopPropagation(), []);
-
-  const maxDate = new Date(8640000000000000);
-  const minDate = new Date(0);
 
   const timeTooltip = <Trans>Percentual values (0.5 is 30 minutes)</Trans>;
 

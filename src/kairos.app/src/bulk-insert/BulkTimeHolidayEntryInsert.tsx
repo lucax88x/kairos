@@ -140,7 +140,7 @@ export const BulkTimeHolidayEntryInsertComponent: React.FC<BulkTimeHolidayEntryI
         <>
           <Grid item>
             <VirtualizedTable
-              title={i18n._(t`Valid Entries`)}
+              title={i18n._(t`Valid Holidays`)}
               height="250px"
               rowCount={validModels.length}
               rowIds={map(m => m.id.toString(), validModels)}
