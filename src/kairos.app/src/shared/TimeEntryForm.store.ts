@@ -7,6 +7,7 @@ import { JobModel } from '../models/job.model';
 import { ProfileModel } from '../models/profile.model';
 import { TimeEntryModel, TimeEntryTypes } from '../models/time-entry.model';
 import { UUID } from '../models/uuid.model';
+import { maxDate } from '../code/functions';
 
 
 export interface State {
@@ -64,7 +65,6 @@ function reducer(
       case 'REFRESH_SELECTS': {
         draft.jobs = [];
 
-        const maxDate = new Date(8640000000000000);
         const date = !!state.when ? state.when : new Date();
         const jobs = filter(
           job =>

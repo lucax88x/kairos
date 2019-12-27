@@ -67,7 +67,7 @@ msgstr "Sei sicuro di voler cancellare gli ingressi selezionati?"
 #: src/shared/delete-time-holiday-entries.ts:15
 #: src/shared/delete-time-holiday-entries.ts:15
 msgid "Are you sure you want to delete the selected holidays?"
-msgstr "Sei sicuro di voler cancellare le vacanze selezionate?"
+msgstr "Sei sicuro di voler cancellare le festività selezionate?"
 
 #: src/shared/ConfirmationModal.tsx:8
 msgid "Are you sure?"
@@ -247,7 +247,7 @@ msgstr "Vacanza aggiornata"
 #: src/profile/ProfileJobForm.tsx:146
 #: src/time-holiday-entries/TimeHolidayEntries.tsx:48
 msgid "Holidays"
-msgstr "Vacanze"
+msgstr "Festività"
 
 #: src/models/time-absence-entry-list.model.tsx:40
 #: src/models/time-absence-entry-list.model.tsx:54
@@ -489,7 +489,7 @@ msgstr "Ingressi salvati"
 #: src/bulk-insert/bulk-insert-time-holiday-entries.ts:20
 #: src/bulk-insert/bulk-insert-time-holiday-entries.ts:20
 msgid "Saved Holidays"
-msgstr "Vacanze salvate"
+msgstr "Festività salvate"
 
 #: src/time-holiday-entries/TimeHolidayEntries.tsx:78
 msgid "Search for country"
@@ -524,7 +524,7 @@ msgstr "Domenica"
 
 #: src/auth/LoginForm.tsx:65
 msgid "Thanks to this and some other informations it's easy to calculate your extra-times, vacation, holidays, illness, etc."
-msgstr "Grazie a queste e ad altre informazioni è facile calcolare gli straordinari, le vacanze, le ferie, le malattie, ecc."
+msgstr "Grazie a queste e ad altre informazioni è facile calcolare gli straordinari, le festività, le ferie, le malattie, ecc."
 
 #: src/profile/ProfileJobForm.tsx:154
 #: src/profile/ProfileJobForm.tsx:160
@@ -576,7 +576,7 @@ msgstr "Salva vacanza"
 
 #: src/time-holiday-entries/TimeHolidayEntries.tsx:82
 msgid "Update holidays from country"
-msgstr "Salva vacanze col paese"
+msgstr "Salva festività col paese"
 
 #: src/models/time-absence-entry-list.model.tsx:38
 #: src/models/time-absence-entry-list.model.tsx:52

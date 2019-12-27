@@ -9,4 +9,7 @@ export const groupByDate = groupBy((te: TimeEntryListModel) =>
   getDate(te.when).toString(),
 );
 
+export const maxDate = new Date(7289650740000);
+export const minDate = new Date(0);
+
 export const average = converge(divide, [sum, length]);

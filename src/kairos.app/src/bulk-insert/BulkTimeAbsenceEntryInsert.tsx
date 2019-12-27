@@ -155,7 +155,7 @@ export const BulkTimeAbsenceEntryInsertComponent: React.FC<
         <>
           <Grid item>
             <VirtualizedTable
-              title={i18n._(t`Valid Entries`)}
+              title={i18n._(t`Valid Absences`)}
               height="250px"
               rowCount={validModels.length}
               rowIds={map(m => m.id.toString(), validModels)}

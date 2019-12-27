@@ -18,6 +18,7 @@ import {
 import Decimal from 'decimal.js';
 import { join } from 'ramda';
 import { padNumber } from '../code/padNumber';
+import { minDate } from './functions';
 
 const MONTHS_IN_YEAR = 12;
 const DAYS_IN_MONTH = 30;
@@ -133,7 +134,6 @@ const hoursToHuman = (totalHours: Decimal, relativeToHours = 24) => {
 
 const dateToHours = (date: Date): Decimal => {
   let totalHours = new Decimal(0);
-  const minDate = new Date(0);
 
   const hours = differenceInHours(date, minDate);
   if (hours > 0) {
