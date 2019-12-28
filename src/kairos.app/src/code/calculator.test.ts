@@ -73,9 +73,8 @@ describe('calculations', () => {
     const result = getHumanDifferencesByRange(timeEntries, { start, end });
 
     // then
-    // TODO: should be 08:00
     expect(result[jobId][getUnixTime(new Date('January 1 2019'))]).toBe(
-      '07:59',
+      '08:00',
     );
   });
 
@@ -100,7 +99,7 @@ describe('calculations', () => {
       '04:00',
     );
     expect(result[jobId][getUnixTime(new Date('January 4 2019'))]).toBe(
-      '00:10',
+      '00:15',
     );
   });
 
@@ -119,9 +118,8 @@ describe('calculations', () => {
     const result = getHumanDifferencesByRange(timeEntries, { start, end });
 
     // then
-    // TODO: should be 1:59
     expect(result[jobId][getUnixTime(new Date('January 1 2019'))]).toBe(
-      '01:58',
+      '02:00',
     );
     expect(result[jobId][getUnixTime(new Date('January 2 2019'))]).toBe(
       '02:00',
@@ -184,9 +182,8 @@ describe('calculations', () => {
     const result = getHumanDifferencesByRange(timeEntries, { start, end });
 
     // then
-    // TODO: should be 15:59
     expect(result[jobId][getUnixTime(new Date('January 1 2019'))]).toBe(
-      '15:58',
+      '16:00',
     );
   });
 
@@ -227,10 +224,8 @@ describe('calculations', () => {
     const result = getHumanDifferencesByRange(timeEntries, { start, end });
 
     // then
-    
-    // TODO: should be 15:59
     expect(result[jobId][getUnixTime(new Date('January 1 2019'))]).toBe(
-      '15:58',
+      '16:00',
     );
     expect(result[jobId][getUnixTime(new Date('January 2 2019'))]).toBe(
       '09:00',
@@ -560,8 +555,7 @@ describe('statistics', () => {
       expect(result['OvertimeYear'][0]).toEqual(
         expect.objectContaining({
           subtitle: '2019',
-          // TODO: should be 1:30
-          text: '07wd 01:29',
+          text: '07wd 01:30',
         }),
       );
     });
@@ -613,25 +607,22 @@ describe('statistics', () => {
           text: '04:30',
         }),
       );
-      // TODO: should be 03:00
       expect(result['IllnessToday'][0]).toEqual(
         expect.objectContaining({
           subtitle: 'January 01',
-          text: '02:59',
+          text: '03:00',
         }),
       );
-      // TODO: should be 01:00
       expect(result['VacationToday'][0]).toEqual(
         expect.objectContaining({
           subtitle: 'January 01',
-          text: '00:59',
+          text: '01:00',
         }),
       );
-      // TODO: should be 03:00
       expect(result['PermitToday'][0]).toEqual(
         expect.objectContaining({
           subtitle: 'January 01',
-          text: '02:59',
+          text: '03:00',
         }),
       );
     });

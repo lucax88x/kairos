@@ -125,6 +125,7 @@ namespace Kairos.Infra.Read
             var values = await _database.StringGetAsync(keys);
 
             var result = values
+                .Where(v => !v.IsNull)
                 .Select(value => _serializer.Deserialize<T>(Encoding.UTF8.GetString((byte[]) value))).ToList();
 
             return result.ToImmutableArray();

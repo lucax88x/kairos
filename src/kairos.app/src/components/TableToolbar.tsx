@@ -41,13 +41,22 @@ const useToolbarStyles = makeStyles(theme => ({
 export interface TableToolbarProps {
   title: string;
   numSelected: number;
+  hasCreate: boolean;
+  hasDelete: boolean;
   onCreate: () => void;
   onDelete: () => void;
 }
 
 export const TableToolbar: React.FC<TableToolbarProps> = props => {
   const classes = useToolbarStyles(props);
-  const { title, numSelected, onCreate, onDelete } = props;
+  const {
+    title,
+    numSelected,
+    hasCreate,
+    hasDelete,
+    onCreate,
+    onDelete,
+  } = props;
 
   return (
     <Toolbar
@@ -68,10 +77,12 @@ export const TableToolbar: React.FC<TableToolbarProps> = props => {
       </div>
       <div className={classes.spacer} />
       <div className={classes.actions}>
-        <Fab color="primary" aria-label="create" onClick={onCreate}>
-          <AddIcon />
-        </Fab>
-        {numSelected > 0 && (
+        {hasCreate && (
+          <Fab color="primary" aria-label="create" onClick={onCreate}>
+            <AddIcon />
+          </Fab>
+        )}
+        {hasDelete && numSelected > 0 && (
           <Fab aria-label="delete" onClick={onDelete}>
             <DeleteIcon />
           </Fab>

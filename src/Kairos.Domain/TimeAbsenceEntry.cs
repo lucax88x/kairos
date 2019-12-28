@@ -1,5 +1,6 @@
 using System;
 using Kairos.Common;
+using Kairos.Common.Exceptions.Domain;
 using Kairos.Domain.Events.TimeAbsenceEntry;
 using Kairos.Domain.Events.TimeAbsenceEntry.EventDtos;
 
@@ -29,6 +30,11 @@ namespace Kairos.Domain
             {
                 case TimeAbsenceEntryAdded added:
                 {
+                    if (added.TimeAbsenceEntry.Job == Guid.Empty)
+                    {
+                        throw new InvalidJobException();
+                    }
+                    
                     Id = added.TimeAbsenceEntry.Id;
                     User = added.TimeAbsenceEntry.User;
                     Description = added.TimeAbsenceEntry.Description;
@@ -41,6 +47,11 @@ namespace Kairos.Domain
 
                 case TimeAbsenceEntryUpdated updated:
                 {
+                    if (updated.TimeAbsenceEntry.Job == Guid.Empty)
+                    {
+                        throw new InvalidJobException();
+                    }
+                    
                     Description = updated.TimeAbsenceEntry.Description;
                     End = updated.TimeAbsenceEntry.End;
                     Start = updated.TimeAbsenceEntry.Start;

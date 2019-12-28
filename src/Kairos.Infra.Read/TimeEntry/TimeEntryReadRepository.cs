@@ -58,6 +58,7 @@ namespace Kairos.Infra.Read.TimeEntry
             var indexedJobs = jobs.ToDictionary(job => job.Id, job => job);
 
             return dtos
+                .Where(dto => indexedJobs.ContainsKey(dto.Job))
                 .Select(dto => new TimeEntryAggregationReadDto(dto.Id, dto.When, dto.Type, indexedJobs[dto.Job]))
                 .OrderByDescending(d => d.When)
                 .ToImmutableList();

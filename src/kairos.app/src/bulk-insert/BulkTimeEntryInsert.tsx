@@ -80,8 +80,9 @@ export const BulkTimeEntryInsertComponent: React.FC<BulkTimeEntryInsertProps> = 
           const job = indexedJobsByName[jobName.toString()];
 
           const isWhenValid = isValid(when);
-          const isTypeValid = indexOf(type, [TimeEntryTypes.IN, TimeEntryTypes.OUT]) !== -1;
+          const isTypeValid = indexOf(type.toUpperCase(), [TimeEntryTypes.IN, TimeEntryTypes.OUT]) !== -1;
           const isJobValid = !!job;
+          
           if (isWhenValid && isTypeValid && isJobValid) {
             validModels.push(
               new TimeEntryModel(UUID.Generate(), when, type as TimeEntryTypes, job.id),
@@ -90,7 +91,7 @@ export const BulkTimeEntryInsertComponent: React.FC<BulkTimeEntryInsertProps> = 
             invalidModels.push({
               id: UUID.Generate(),
               when: isWhenValid ? when : i18n._(t`Invalid Date`),
-              type: isTypeValid ? (type as TimeEntryTypes) : i18n._(t`Invalid Type`),
+              type: isTypeValid ? (type.toUpperCase() as TimeEntryTypes) : i18n._(t`Invalid Type`),
               job: isJobValid ? job.id : i18n._(t`Invalid Job`),
             });
           }
@@ -132,7 +133,7 @@ export const BulkTimeEntryInsertComponent: React.FC<BulkTimeEntryInsertProps> = 
       </Grid>
       <Grid item>
         <TextField
-          placeholder="DATE(dd/mm/yyyy hh:MM),TYPE(IN/OUT),JOB"
+          placeholder="DATE(yyyy-mm-ddThh:MMZ),TYPE(IN/OUT),JOB"
           multiline
           variant="filled"
           rows={4}
