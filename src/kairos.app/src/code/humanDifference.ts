@@ -53,15 +53,22 @@ export const humanDifferenceFromHours = (
   return humanDifference(new Date(0), date, relativeToHours);
 };
 
-const formatWithoutDecimals = (number: Decimal): [string, Decimal] => {
+const withoutDecimals = (number: Decimal): [Decimal, Decimal] => {
   const remaining = number.mod(1);
-  const toFormat = number.minus(remaining).round();
-  return [padNumber(toFormat.toNumber()), remaining];
+  return [number.minus(remaining).round(), remaining];
+};
+
+const formatNumber = (number: Decimal): string => {
+  return padNumber(number.toNumber());
+};
+
+const formatWithoutDecimals = (number: Decimal): [string, Decimal] => {
+  const [toFormat, remaining] = withoutDecimals(number);
+  return [formatNumber(toFormat), remaining];
 };
 
 const hoursToHuman = (totalHours: Decimal, relativeToHours = 24) => {
   const result = [];
-  const time = [];
 
   let years = new Decimal(0);
   let months = new Decimal(0);
@@ -98,29 +105,40 @@ const hoursToHuman = (totalHours: Decimal, relativeToHours = 24) => {
     hours = days.mul(relativeToHours);
   }
 
+  let toFormatHours = new Decimal(0);
   if (hours.greaterThanOrEqualTo(1)) {
-    const [formatted, remaining] = formatWithoutDecimals(hours);
+    const [toFormatHoursTemp, remaining] = withoutDecimals(hours);
+    toFormatHours = toFormatHoursTemp;
     minutes = remaining.mul(MINUTES_IN_HOUR);
-    time.push(`${formatted}`);
   } else {
     minutes = hours.mul(MINUTES_IN_HOUR);
   }
 
+  let time = '00:00';
   if (minutes.greaterThanOrEqualTo(1)) {
-    const [formatted] = formatWithoutDecimals(minutes);
-
-    // there is no hour but we have minutes
-    if (time.length === 0) {
-      time.push('00');
+    if (minutes.lessThanOrEqualTo(7)) {
+      minutes = new Decimal(0);
+    } else if (minutes.lessThanOrEqualTo(22)) {
+      minutes = new Decimal(15);
+    } else if (minutes.lessThanOrEqualTo(37)) {
+      minutes = new Decimal(30);
+    } else if (minutes.lessThanOrEqualTo(52)) {
+      minutes = new Decimal(45);
+    } else {
+      toFormatHours = toFormatHours.plus(1);
+      minutes = new Decimal(0);
     }
-    time.push(`${formatted}`);
-  } else if (time.length === 1) {
-    // there is no minutes but we have hours
-    time.push('00');
+
+    const formattedHours = formatNumber(toFormatHours);
+    const formattedMinutes = formatNumber(minutes);
+    time = `${formattedHours}:${formattedMinutes}`;
+  } else {
+    const formattedHours = formatNumber(toFormatHours);
+    time = `${formattedHours}:00`;
   }
 
-  if (time.length > 0) {
-    result.push(join(':', time));
+  if (time !== '00:00') {
+    result.push(time);
   }
 
   const str = join(' ', result);
