@@ -59,6 +59,7 @@ namespace Kairos.Infra.Read.TimeAbsenceEntry
 
             return dtos
                 .Where(d => d.Start >= start && d.End <= end)
+                .Where(dto => indexedJobs.ContainsKey(dto.Job))
                 .Select(dto => new TimeAbsenceEntryAggregationReadDto(dto.Id, dto.Description, dto.Start, dto.End,
                     dto.Type, indexedJobs[dto.Job]))
                 .OrderByDescending(d => d.Start)
