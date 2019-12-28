@@ -16,6 +16,7 @@ import { formatAsDateTime } from '../code/constants';
 import { Themes } from '../code/variables';
 import { TimeAbsenceEntryListModel } from '../models/time-absence-entry-list.model';
 import { getTextFromAbsenceType } from '../models/time-absence-entry.model';
+import { join, filter } from 'ramda';
 
 const useStyles = makeStyles(theme => ({
   container: {
@@ -48,9 +49,14 @@ export const NavigatorTimeAbsenceItem: React.FC<NavigatorTimeAbsenceItemProps> =
         </Avatar>
       </ListItemAvatar>
       <ListItemText
-        primary={`${getTextFromAbsenceType(absence.type)} - ${
-          absence.description
-        } - ${absence.job.name}`}
+        primary={join(
+          ',',
+          filter(t => !!t, [
+            getTextFromAbsenceType(absence.type),
+            absence.description,
+            absence.job.name,
+          ]),
+        )}
         secondary={`${format(absence.start, formatAsDateTime)} - ${format(
           absence.end,
           formatAsDateTime,

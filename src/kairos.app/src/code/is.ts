@@ -11,6 +11,9 @@ export function isString(obj: unknown): obj is string {
 export function isNumber(obj: unknown): obj is number {
   return is(Number, obj);
 }
+export function isBoolean(obj: unknown): obj is boolean {
+  return is(Boolean, obj);
+}
 export function isLanguage(obj: unknown): obj is Language {
   return contains(obj, Languages);
 }
