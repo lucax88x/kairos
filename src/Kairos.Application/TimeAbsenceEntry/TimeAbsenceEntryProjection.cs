@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 using Kairos.Application.TimeAbsenceEntry.Queries;
 using Kairos.Application.TimeEntry.Dtos;
 using Kairos.Application.TimeEntry.Queries;
+using Kairos.Domain;
 using Kairos.Domain.Events.TimeAbsenceEntry;
 using Kairos.Infra.Read.TimeAbsenceEntry;
 using MediatR;
@@ -64,7 +65,7 @@ namespace Kairos.Application.TimeAbsenceEntry
             var absences = await _timeAbsenceEntryReadRepository.Get(_authProvider.GetUser(), request.From, request.To);
 
             foreach (var absence in absences)
-                sb.AppendLine($"{absence.Start},{absence.End},{absence.Type},{absence.Job.Name},{absence.Description}");
+                sb.AppendLine($"{absence.Start:yyyy-MM-ddTHH:mmZ},{absence.End:yyyy-MM-ddTHH:mmZ},{((TimeAbsenceEntryType) absence.Type).ToString()},{absence.Job.Name},{absence.Description}");
 
             var stream = new MemoryStream(Encoding.UTF8.GetBytes(sb.ToString()));
 

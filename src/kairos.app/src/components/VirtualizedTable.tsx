@@ -254,6 +254,7 @@ class MuiVirtualizedTable<T> extends React.PureComponent<
       columns,
       rowHeight,
       headerHeight,
+      onCreate,
       onDelete,
       ...tableProps
     } = this.props;
@@ -262,6 +263,8 @@ class MuiVirtualizedTable<T> extends React.PureComponent<
         <TableToolbar
           title={title}
           numSelected={this.state.selectedIds.length}
+          hasCreate={!!onCreate}
+          hasDelete={!!onDelete}
           onCreate={this.handleCreate}
           onDelete={this.handleDelete}
         />

@@ -6,6 +6,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using Kairos.Application.TimeEntry.Dtos;
 using Kairos.Application.TimeEntry.Queries;
+using Kairos.Domain;
 using Kairos.Domain.Events.TimeEntry;
 using Kairos.Infra.Read.TimeEntry;
 using MediatR;
@@ -63,7 +64,7 @@ namespace Kairos.Application.TimeEntry
             var entries = await _timeEntryReadRepository.Get(_authProvider.GetUser(), request.From, request.To);
 
             foreach (var entry in entries)
-                sb.AppendLine($"{entry.When},{entry.Type},{entry.Job.Name}");
+                sb.AppendLine($"{entry.When:yyyy-MM-ddTHH:mmZ},{((TimeEntryType)entry.Type).ToString()},{entry.Job.Name}");
 
             var stream = new MemoryStream(Encoding.UTF8.GetBytes(sb.ToString()));
 

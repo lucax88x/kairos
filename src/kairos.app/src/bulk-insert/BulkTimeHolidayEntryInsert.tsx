@@ -121,7 +121,7 @@ export const BulkTimeHolidayEntryInsertComponent: React.FC<BulkTimeHolidayEntryI
       </Grid>
       <Grid item>
         <TextField
-          placeholder="WHEN(dd/mm/yyyy hh:MM), DESCRIPTION"
+          placeholder="WHEN(yyyy-mm-ddThh:MMZ), DESCRIPTION"
           multiline
           variant="filled"
           rows={4}

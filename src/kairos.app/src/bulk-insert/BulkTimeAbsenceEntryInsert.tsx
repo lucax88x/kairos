@@ -79,7 +79,7 @@ export const BulkTimeAbsenceEntryInsertComponent: React.FC<
           const isStartValid = isValid(start);
           const isEndValid = isValid(end);
           const isTypeValid =
-            indexOf(type, [
+            indexOf(type.toUpperCase(), [
               TimeAbsenceEntryTypes.VACATION,
               TimeAbsenceEntryTypes.ILLNESS,
               TimeAbsenceEntryTypes.COMPENSATION,
@@ -92,7 +92,7 @@ export const BulkTimeAbsenceEntryInsertComponent: React.FC<
                 description,
                 start,
                 end,
-                type as TimeAbsenceEntryTypes,
+                type.toUpperCase() as TimeAbsenceEntryTypes,
               ),
             );
           } else {
@@ -136,7 +136,7 @@ export const BulkTimeAbsenceEntryInsertComponent: React.FC<
       </Grid>
       <Grid item>
         <TextField
-          placeholder="START(dd/mm/yyyy hh:MM),END(dd/mm/yyyy hh:MM),DESCRIPTION,TYPE(VACATION/ILLNESS)"
+          placeholder="START(yyyy-mm-ddThh:MMZ),END(yyyy-mm-ddThh:MMZ),DESCRIPTION,TYPE(VACATION/ILLNESS)"
           multiline
           variant="filled"
           rows={4}

@@ -90,9 +90,6 @@ export async function downloadFile(method: string): Promise<void> {
     async headers => await Axios.get(`/api/${method}`, { headers, responseType: 'blob' }),
   );
 
-  console.log(response);
-  console.log(response.headers);
-
   saveAs(response.data, estractFileName(response.headers['content-disposition']));
 }
 
