@@ -82,6 +82,7 @@ export const BulkTimeEntryInsertComponent: React.FC<BulkTimeEntryInsertProps> = 
           const isWhenValid = isValid(when);
           const isTypeValid = indexOf(type.toUpperCase(), [TimeEntryTypes.IN, TimeEntryTypes.OUT]) !== -1;
           const isJobValid = !!job;
+          
           if (isWhenValid && isTypeValid && isJobValid) {
             validModels.push(
               new TimeEntryModel(UUID.Generate(), when, type as TimeEntryTypes, job.id),
