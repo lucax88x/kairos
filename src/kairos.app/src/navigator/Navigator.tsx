@@ -148,6 +148,7 @@ export const NavigatorComponent: React.FC<NavigatorProps> = props => {
     [TimeAbsenceEntryTypes.COMPENSATION]: true,
     [TimeAbsenceEntryTypes.PERMIT]: true,
   });
+  const [holidayType, setHolidayType] = useState(true);
 
   const getRangeByPreset = useCallback((preset: string) => {
     let date = new Date();
@@ -243,6 +244,12 @@ export const NavigatorComponent: React.FC<NavigatorProps> = props => {
         [event.currentTarget.value]: event.currentTarget.checked,
       }),
     [setAbsenceTypes, absenceTypes],
+  );
+
+  const handleHolidayTypeChange = useCallback(
+    (event: ChangeEvent<HTMLInputElement>) =>
+      setHolidayType(event.currentTarget.checked),
+    [setHolidayType],
   );
 
   useEffect(() => {
@@ -377,6 +384,16 @@ export const NavigatorComponent: React.FC<NavigatorProps> = props => {
                   )}
                 </FormGroup>
               </FormControl>
+              <FormControl component="fieldset">
+                <FormLabel component="legend">
+                  <Trans>Holiday</Trans>
+                </FormLabel>
+                <Checkbox
+                  checked={holidayType}
+                  onChange={handleHolidayTypeChange}
+                  value="holiday"
+                />
+              </FormControl>
             </ExpansionPanelDetails>
           </ExpansionPanel>
 
@@ -407,7 +424,7 @@ export const NavigatorComponent: React.FC<NavigatorProps> = props => {
                         onDelete={onDeleteTimeAbsence}
                       ></NavigatorTimeAbsenceItem>
                     );
-                  } else if (isTimeHolidayEntryModel(entry)) {
+                  } else if (isTimeHolidayEntryModel(entry) && holidayType) {
                     return (
                       <NavigatorTimeHolidayItem
                         key={entry.id.toString()}
