@@ -50,7 +50,7 @@ export const NavigatorTimeAbsenceItem: React.FC<NavigatorTimeAbsenceItemProps> =
       </ListItemAvatar>
       <ListItemText
         primary={join(
-          ',',
+          ', ',
           filter(t => !!t, [
             getTextFromAbsenceType(absence.type),
             absence.description,

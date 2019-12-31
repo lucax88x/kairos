@@ -335,7 +335,7 @@ export const NavigatorComponent: React.FC<NavigatorProps> = props => {
             <ExpansionPanelDetails>
               <FormControl component="fieldset">
                 <FormLabel component="legend">
-                  <Trans>Entry Types</Trans>
+                  <Trans>Types</Trans>
                 </FormLabel>
                 <FormGroup row={true}>
                   {map(
@@ -354,13 +354,6 @@ export const NavigatorComponent: React.FC<NavigatorProps> = props => {
                     ),
                     [TimeEntryTypes.IN, TimeEntryTypes.OUT],
                   )}
-                </FormGroup>
-              </FormControl>
-              <FormControl component="fieldset">
-                <FormLabel component="legend">
-                  <Trans>Absence Types</Trans>
-                </FormLabel>
-                <FormGroup row={true}>
                   {map(
                     absenceType => (
                       <FormControlLabel
@@ -382,17 +375,17 @@ export const NavigatorComponent: React.FC<NavigatorProps> = props => {
                       TimeAbsenceEntryTypes.PERMIT,
                     ],
                   )}
+                  <FormControlLabel
+                    control={
+                      <Checkbox
+                        checked={holidayType}
+                        onChange={handleHolidayTypeChange}
+                        value="holiday"
+                      />
+                    }
+                    label={<Trans>Holiday</Trans>}
+                  />
                 </FormGroup>
-              </FormControl>
-              <FormControl component="fieldset">
-                <FormLabel component="legend">
-                  <Trans>Holiday</Trans>
-                </FormLabel>
-                <Checkbox
-                  checked={holidayType}
-                  onChange={handleHolidayTypeChange}
-                  value="holiday"
-                />
               </FormControl>
             </ExpansionPanelDetails>
           </ExpansionPanel>
