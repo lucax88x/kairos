@@ -10,7 +10,7 @@ import {
   Typography,
 } from '@material-ui/core';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
-import { values, flatten } from 'ramda';
+import { flatten, values } from 'ramda';
 import React, { memo, useCallback, useMemo } from 'react';
 import {
   getAbsenceStatistics,
@@ -23,9 +23,9 @@ import Spinner from '../components/Spinner';
 import { i18n } from '../i18nLoader';
 import { Language } from '../models/language-model';
 import { ProfileModel } from '../models/profile.model';
+import { TimeAbsenceEntryListModel } from '../models/time-absence-entry-list.model';
 import { TimeEntryListModel } from '../models/time-entry-list.model';
 import { TimeHolidayEntryModel } from '../models/time-holiday-entry.model';
-import { TimeAbsenceEntryListModel } from '../models/time-absence-entry-list.model';
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -59,6 +59,7 @@ const useStyles = makeStyles(theme => ({
 }));
 
 export interface TimeStatisticsInputs {
+  selectedYear: number;
   selectedLanguage: Language;
   profile: ProfileModel;
   timeEntries: TimeEntryListModel[];
@@ -79,6 +80,7 @@ export const TimeStatisticsComponent: React.FC<TimeStatisticsProps> = memo(
 
     const {
       isGetTimeEntriesBusy,
+      selectedYear,
       selectedLanguage,
       profile,
       timeEntries,
@@ -88,21 +90,41 @@ export const TimeStatisticsComponent: React.FC<TimeStatisticsProps> = memo(
 
     const workingHourTiles: TimeStatisticTile[] = useMemo(
       () =>
-        flatten(values(
-          getWorkingHoursStatistics(
-            selectedLanguage,
-            profile,
-            timeEntries,
-            absences,
-            holidays,
+        flatten(
+          values(
+            getWorkingHoursStatistics(
+              selectedYear,
+              selectedLanguage,
+              profile,
+              timeEntries,
+              absences,
+              holidays,
+            ),
           ),
-        )),
-      [selectedLanguage, profile, timeEntries, absences, holidays],
+        ),
+      [
+        selectedYear,
+        selectedLanguage,
+        profile,
+        timeEntries,
+        absences,
+        holidays,
+      ],
     );
 
     const absenceTiles: TimeStatisticTile[] = useMemo(
-      () => flatten(values(getAbsenceStatistics(selectedLanguage, profile, absences))),
-      [selectedLanguage, profile, absences],
+      () =>
+        flatten(
+          values(
+            getAbsenceStatistics(
+              selectedYear,
+              selectedLanguage,
+              profile,
+              absences,
+            ),
+          ),
+        ),
+      [selectedYear, selectedLanguage, profile, absences],
     );
 
     const generateTiles = useCallback(

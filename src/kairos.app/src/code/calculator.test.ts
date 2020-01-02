@@ -1,6 +1,9 @@
 import { getUnixTime } from 'date-fns';
 import { advanceTo, clear } from 'jest-date-mock';
-import { TimeAbsenceEntryTypes } from '../models/time-absence-entry.model';
+import {
+  TimeAbsenceEntryTypes,
+  TimeAbsenceEntryOutModel,
+} from '../models/time-absence-entry.model';
 import { TimeEntryTypes } from '../models/time-entry.model';
 import { UUID } from '../models/uuid.model';
 import { TimeAbsenceEntryBuilder } from '../tests/time-absence-entry.builder';
@@ -14,6 +17,13 @@ import {
   getDiffHoursFromAbsences,
 } from './calculator';
 import { JobModel } from '../models/job.model';
+
+import absenceStatisticScenario1 from '../data/absence-statistic-scenario-1.json';
+import {
+  TimeAbsenceEntryListModel,
+  TimeAbsenceEntryListOutModel,
+} from '../models/time-absence-entry-list.model';
+import { map } from 'ramda';
 
 describe('calculations', () => {
   it('should get differences with only 2 entries', () => {
@@ -255,6 +265,7 @@ describe('statistics', () => {
 
         // when
         const result = getWorkingHoursStatistics(
+          2019,
           'en',
           profile,
           timeEntries,
@@ -289,6 +300,7 @@ describe('statistics', () => {
 
         // when
         const result = getWorkingHoursStatistics(
+          2019,
           'en',
           profile,
           timeEntries,
@@ -323,6 +335,7 @@ describe('statistics', () => {
 
         // when
         const result = getWorkingHoursStatistics(
+          2019,
           'en',
           profile,
           timeEntries,
@@ -363,6 +376,7 @@ describe('statistics', () => {
 
         // when
         const result = getWorkingHoursStatistics(
+          2019,
           'en',
           profile,
           timeEntries,
@@ -392,6 +406,7 @@ describe('statistics', () => {
 
         // when
         const result = getWorkingHoursStatistics(
+          2019,
           'en',
           profile,
           [],
@@ -428,6 +443,7 @@ describe('statistics', () => {
 
         // when
         const result = getWorkingHoursStatistics(
+          2019,
           'en',
           profile,
           timeEntries,
@@ -455,6 +471,7 @@ describe('statistics', () => {
 
       // when
       const result = getWorkingHoursStatistics(
+        2019,
         'en',
         profile,
         timeEntries,
@@ -498,6 +515,7 @@ describe('statistics', () => {
 
       // when
       const result = getWorkingHoursStatistics(
+        2019,
         'en',
         profile,
         timeEntries,
@@ -544,6 +562,7 @@ describe('statistics', () => {
 
       // when
       const result = getWorkingHoursStatistics(
+        2019,
         'en',
         profile,
         timeEntries,
@@ -598,34 +617,70 @@ describe('statistics', () => {
       ];
 
       // when
-      const result = getAbsenceStatistics('en', profile, timeAbsenceEntries);
+      const result = getAbsenceStatistics(
+        2019,
+        'en',
+        profile,
+        timeAbsenceEntries,
+      );
 
       // then
-      expect(result['CompensationToday'][0]).toEqual(
+      expect(result['CompensationMonth'][0]).toEqual(
         expect.objectContaining({
-          subtitle: 'January 01',
+          subtitle: 'January',
           text: '04:30',
         }),
       );
-      expect(result['IllnessToday'][0]).toEqual(
+      expect(result['IllnessMonth'][0]).toEqual(
         expect.objectContaining({
-          subtitle: 'January 01',
+          subtitle: 'January',
           text: '03:00',
         }),
       );
-      expect(result['VacationToday'][0]).toEqual(
+      expect(result['VacationMonth'][0]).toEqual(
         expect.objectContaining({
-          subtitle: 'January 01',
+          subtitle: 'January',
           text: '01:00',
         }),
       );
-      expect(result['PermitToday'][0]).toEqual(
+      expect(result['PermitMonth'][0]).toEqual(
         expect.objectContaining({
-          subtitle: 'January 01',
+          subtitle: 'January',
           text: '03:00',
         }),
       );
     });
+  });
+});
+
+describe('real world scenarios', () => {
+  const jobId = 'd975e9f7-6255-4e6d-b1e6-0c04e60fa574';
+  const profile = new ProfileBuilder().withJob(new UUID(jobId)).build();
+
+  it('scenario 1', () => {
+    // given
+    const timeAbsenceEntriesJson = absenceStatisticScenario1 as TimeAbsenceEntryListOutModel[];
+
+    const timeAbsenceEntries = map(
+      j => TimeAbsenceEntryListModel.fromOutModel(j),
+      timeAbsenceEntriesJson,
+    );
+
+    // when
+    const result = getAbsenceStatistics(
+      2019,
+      'en',
+      profile,
+      timeAbsenceEntries,
+    );
+
+    // then
+    expect(result['CompensationYear'][0]).toEqual(
+      expect.objectContaining({
+        subtitle: '2019',
+        text: '4wd 01:00',
+      }),
+    );
   });
 });
 
@@ -698,6 +753,24 @@ describe('getHoursFromAbsences', () => {
 
     // then
     expect(hours).toEqual([21]);
+  });
+
+  it.only(`should get reduced hour differences with different time zones`, () => {
+    // given
+    const timeAbsenceEntries = [
+      buildTimeAbsenceEntry(
+        jobId,
+        '2019-12-05T00:00:00.000Z',
+        '2019-12-05T23:59:00.000Z',
+        TimeAbsenceEntryTypes.COMPENSATION,
+      ),
+    ];
+
+    // when
+    const hours = getDiffHoursFromAbsences(job)(timeAbsenceEntries);
+
+    // then
+    expect(hours).toEqual([8]);
   });
 });
 

@@ -5,6 +5,7 @@ import {
   differenceInMinutes,
   eachDayOfInterval,
   endOfDay,
+  endOfMonth,
   endOfWeek,
   endOfYear,
   format,
@@ -19,11 +20,11 @@ import {
   isTuesday,
   isWednesday,
   isWithinInterval,
+  setYear,
   startOfDay,
+  startOfMonth,
   startOfWeek,
   startOfYear,
-  startOfMonth,
-  endOfMonth,
 } from 'date-fns';
 import { Decimal } from 'decimal.js';
 import {
@@ -35,6 +36,7 @@ import {
   reduce,
   sortWith,
   sum,
+  unionWith,
 } from 'ramda';
 import { JobModel } from '../models/job.model';
 import { Language } from '../models/language-model';
@@ -238,32 +240,13 @@ export interface TimeStatisticTile {
 }
 
 export function getWorkingHoursStatistics(
+  selectedYear: number,
   language: Language,
   profile: ProfileModel,
   entries: TimeEntryListModel[],
   absences: TimeAbsenceEntryListModel[],
   holidays: TimeHolidayEntryModel[],
 ) {
-  //# { title: 'remaining today', subtitle: 'Monday, 16', text: '8h' },
-  // { title: 'remaining this week', subtitle: '12 -> 19', text: '30' },
-  // { title: 'remaining this month', subtitle: 'August', text: '30' },
-  // { title: 'done today', subtitle: 'July', text: '8h' },
-  // { title: 'done this week', subtitle: 'July', text: '30' },
-  // { title: 'done this month', subtitle: 'August', text: '50' },
-  // { title: 'done previous month', subtitle: 'July', text: '30' },
-  // { title: 'done all previous months', text: '30' },
-  // { title: 'done this year', subtitle: '2019', text: '250' },
-  // { title: 'done previous year', subtitle: '2018', text: '30' },
-  // { title: 'done all previous years', text: '30' },
-  // { title: 'overtime today', subtitle: 'July', text: '8h' },
-  // { title: 'overtime this week', subtitle: 'July', text: '30' },
-  // { title: 'overtime this month', subtitle: 'August', text: '50' },
-  // { title: 'overtime previous month', subtitle: 'July', text: '30' },
-  // { title: 'overtime all previous months', text: '30' },
-  // { title: 'overtime this year', subtitle: '2019', text: '250' },
-  // { title: 'overtime previous year', subtitle: '2018', text: '30' },
-  // { title: 'overtime all previous years', text: '30' },
-
   const statistics: { [key: string]: TimeStatisticTile[] } = {
     RemainingToday: [],
     OvertimeToday: [],
@@ -273,25 +256,71 @@ export function getWorkingHoursStatistics(
   };
 
   const now = startOfDay(new Date());
+  const currentYear = getYear(now);
 
-  const start = startOfYear(now);
-  const end = endOfYear(now);
+  const isSelectedYearDifferent = currentYear !== selectedYear;
 
-  const differencesByDateByJob = getDifferencesByRangeByJobAndDate(entries, {
-    start,
-    end,
-  });
+  const selectedYearDate = setYear(new Date(), selectedYear);
 
-  const jobsInRange = filter(
+  const currentYearStart = startOfYear(now);
+  const currentYearEnd = endOfYear(now);
+
+  const selectedYearStart = startOfYear(selectedYearDate);
+  const selectedYearEnd = endOfYear(selectedYearDate);
+
+  const currentYearDifferencesByDateByJob = getDifferencesByRangeByJobAndDate(
+    entries,
+    {
+      start: currentYearStart,
+      end: currentYearEnd,
+    },
+  );
+
+  let selectedYearDifferencesByDateByJob: {
+    [id: string]: { [date: string]: number };
+  } = {};
+
+  if (isSelectedYearDifferent) {
+    selectedYearDifferencesByDateByJob = getDifferencesByRangeByJobAndDate(
+      entries,
+      {
+        start: selectedYearStart,
+        end: selectedYearEnd,
+      },
+    );
+  }
+
+  let jobsInRange = filter(
     job =>
-      compareAsc(job.start, start) >= 0 && !!job.end
-        ? compareAsc(job.end, end) <= 0
+      compareAsc(job.start, currentYearStart) >= 0 && !!job.end
+        ? compareAsc(job.end, currentYearEnd) <= 0
         : true,
     profile.jobs,
   );
 
+  if (isSelectedYearDifferent) {
+    const selectedYearJobs = filter(
+      job =>
+        compareAsc(job.start, selectedYearStart) >= 0 && !!job.end
+          ? compareAsc(job.end, selectedYearEnd) <= 0
+          : true,
+      profile.jobs,
+    );
+
+    jobsInRange = unionWith(
+      (j1, j2) => j1.id === j2.id,
+      jobsInRange,
+      selectedYearJobs,
+    );
+  }
+
   for (const job of jobsInRange) {
-    const differencesByDate = differencesByDateByJob[job.id.toString()];
+    const currentYearDifferencesByDate =
+      currentYearDifferencesByDateByJob[job.id.toString()];
+
+    const selectedYearDifferencesByDate = isSelectedYearDifferent
+      ? selectedYearDifferencesByDateByJob[job.id.toString()]
+      : currentYearDifferencesByDateByJob[job.id.toString()];
 
     const jobAbsences = filter(
       absence => UUID.equals(absence.job.id, job.id),
@@ -306,7 +335,7 @@ export function getWorkingHoursStatistics(
       startOfDay(now),
       endOfDay(now),
       job,
-      differencesByDate,
+      currentYearDifferencesByDate,
       jobAbsences,
       holidays,
     );
@@ -336,7 +365,7 @@ export function getWorkingHoursStatistics(
       startOfWeek(now),
       endOfWeek(now),
       job,
-      differencesByDate,
+      currentYearDifferencesByDate,
       jobAbsences,
       holidays,
     );
@@ -371,10 +400,10 @@ export function getWorkingHoursStatistics(
 
     // year
     const yearJobHours = buildJobHoursForRange(
-      startOfYear(now),
-      endOfYear(now),
+      selectedYearStart,
+      selectedYearEnd,
       job,
-      differencesByDate,
+      selectedYearDifferencesByDate,
       jobAbsences,
       holidays,
     );
@@ -382,7 +411,7 @@ export function getWorkingHoursStatistics(
     statistics['OvertimeYear'].push({
       title: i18n._(t`Overtime Year: ${jobName}`),
       titleValues: { job: job.name },
-      subtitle: getYear(now).toString(),
+      subtitle: selectedYear.toString(),
       text: humanDifferenceFromHours(
         yearJobHours.overtimeHours.toNumber(),
         averageWorkingHours,
@@ -394,19 +423,12 @@ export function getWorkingHoursStatistics(
 }
 
 export function getAbsenceStatistics(
+  selectedYear: number,
   language: Language,
   profile: ProfileModel,
   absences: TimeAbsenceEntryListModel[],
 ) {
-  // { title: 'remaining this year', subtitle: '2019', text: '0' },
-  // { title: 'done this year', subtitle: '2019', text: '30' },
-  // { title: 'remaining previous years', text: '30' },
-
   const statistics: { [key: string]: TimeStatisticTile[] } = {
-    CompensationToday: [],
-    IllnessToday: [],
-    VacationToday: [],
-    PermitToday: [],
     CompensationMonth: [],
     IllnessMonth: [],
     VacationMonth: [],
@@ -418,88 +440,82 @@ export function getAbsenceStatistics(
   };
 
   const now = startOfDay(new Date());
+  const currentYear = getYear(now);
 
-  const start = startOfYear(now);
-  const end = endOfYear(now);
+  const isSelectedYearDifferent = currentYear !== selectedYear;
 
-  const absencesInRange = filter(
+  const selectedYearDate = setYear(new Date(), selectedYear);
+
+  const currentYearStart = startOfYear(now);
+  const currentYearEnd = endOfYear(now);
+
+  const selectedYearStart = startOfYear(selectedYearDate);
+  const selectedYearEnd = endOfYear(selectedYearDate);
+
+  const currentYearAbsencesInRange = filter(
     absence =>
-      compareAsc(absence.start, start) >= 0 &&
-      compareAsc(absence.end, end) <= 0,
+      compareAsc(absence.start, currentYearStart) >= 0 &&
+      compareAsc(absence.end, currentYearEnd) <= 0,
     absences,
   );
 
-  const jobsInRange = filter(
+  let selectedYearAbsencesInRange: TimeAbsenceEntryListModel[] = [];
+
+  if (isSelectedYearDifferent) {
+    selectedYearAbsencesInRange = filter(
+      absence =>
+        compareAsc(absence.start, selectedYearStart) >= 0 &&
+        compareAsc(absence.end, selectedYearEnd) <= 0,
+      absences,
+    );
+  }
+
+  let jobsInRange = filter(
     job =>
-      compareAsc(job.start, start) >= 0 && !!job.end
-        ? compareAsc(job.end, end) <= 0
+      compareAsc(job.start, currentYearStart) >= 0 && !!job.end
+        ? compareAsc(job.end, currentYearEnd) <= 0
         : true,
     profile.jobs,
   );
 
+  if (isSelectedYearDifferent) {
+    const selectedYearJobs = filter(
+      job =>
+        compareAsc(job.start, selectedYearStart) >= 0 && !!job.end
+          ? compareAsc(job.end, selectedYearEnd) <= 0
+          : true,
+      profile.jobs,
+    );
+
+    jobsInRange = unionWith(
+      (j1, j2) => j1.id === j2.id,
+      jobsInRange,
+      selectedYearJobs,
+    );
+  }
+
   for (const job of jobsInRange) {
-    const jobAbsences = filter(
+    const currentYearJobAbsences = filter(
       absence => UUID.equals(absence.job.id, job.id),
-      absencesInRange,
+      currentYearAbsencesInRange,
+    );
+
+    const selectedYearJobAbsences = filter(
+      absence => UUID.equals(absence.job.id, job.id),
+      isSelectedYearDifferent
+        ? selectedYearAbsencesInRange
+        : currentYearAbsencesInRange,
     );
 
     const averageWorkingHours = JobModel.getAverageWorkingHours(job);
     const jobName = job.name;
-
-    // today
-    const todayAbsences = buildAbsencesForRange(
-      startOfDay(now),
-      endOfDay(now),
-      job,
-      jobAbsences,
-    );
-
-    statistics['CompensationToday'].push({
-      title: i18n._(t`Compensation Today: ${jobName}`),
-      titleValues: { job: job.name },
-      subtitle: formatDate(now, language, 'MMMM dd'),
-      text: humanDifferenceFromHours(
-        todayAbsences.compensationHours.toNumber(),
-        averageWorkingHours,
-      ),
-    });
-
-    statistics['IllnessToday'].push({
-      title: i18n._(t`Illness Today: ${jobName}`),
-      titleValues: { job: job.name },
-      subtitle: formatDate(now, language, 'MMMM dd'),
-      text: humanDifferenceFromHours(
-        todayAbsences.illnessHours.toNumber(),
-        averageWorkingHours,
-      ),
-    });
-
-    statistics['VacationToday'].push({
-      title: i18n._(t`Vacation Today: ${jobName}`),
-      titleValues: { job: job.name },
-      subtitle: formatDate(now, language, 'MMMM dd'),
-      text: humanDifferenceFromHours(
-        todayAbsences.vacationHours.toNumber(),
-        averageWorkingHours,
-      ),
-    });
-
-    statistics['PermitToday'].push({
-      title: i18n._(t`Permit Today: ${jobName}`),
-      titleValues: { job: job.name },
-      subtitle: formatDate(now, language, 'MMMM dd'),
-      text: humanDifferenceFromHours(
-        todayAbsences.permitHours.toNumber(),
-        averageWorkingHours,
-      ),
-    });
 
     // month
     const monthAbsences = buildAbsencesForRange(
       startOfMonth(now),
       endOfMonth(now),
       job,
-      jobAbsences,
+      currentYearJobAbsences,
     );
 
     statistics['CompensationMonth'].push({
@@ -543,19 +559,19 @@ export function getAbsenceStatistics(
     });
 
     // year
-    const yearAbsences = buildAbsencesForRange(
-      startOfYear(now),
-      endOfYear(now),
+    const selectedYearAbsences = buildAbsencesForRange(
+      selectedYearStart,
+      selectedYearEnd,
       job,
-      jobAbsences,
+      selectedYearJobAbsences,
     );
 
     statistics['CompensationYear'].push({
       title: i18n._(t`Compensation Year: ${jobName}`),
       titleValues: { job: job.name },
-      subtitle: formatDate(now, language, 'yyyy'),
+      subtitle: selectedYear.toString(),
       text: humanDifferenceFromHours(
-        yearAbsences.compensationHours.toNumber(),
+        selectedYearAbsences.compensationHours.toNumber(),
         averageWorkingHours,
       ),
     });
@@ -563,9 +579,9 @@ export function getAbsenceStatistics(
     statistics['IllnessYear'].push({
       title: i18n._(t`Illness Year: ${jobName}`),
       titleValues: { job: job.name },
-      subtitle: formatDate(now, language, 'yyyy'),
+      subtitle: selectedYear.toString(),
       text: humanDifferenceFromHours(
-        yearAbsences.illnessHours.toNumber(),
+        selectedYearAbsences.illnessHours.toNumber(),
         averageWorkingHours,
       ),
     });
@@ -573,9 +589,9 @@ export function getAbsenceStatistics(
     statistics['VacationYear'].push({
       title: i18n._(t`Vacation Year: ${jobName}`),
       titleValues: { job: job.name },
-      subtitle: formatDate(now, language, 'yyyy'),
+      subtitle: selectedYear.toString(),
       text: humanDifferenceFromHours(
-        yearAbsences.vacationHours.toNumber(),
+        selectedYearAbsences.vacationHours.toNumber(),
         averageWorkingHours,
       ),
     });
@@ -583,9 +599,9 @@ export function getAbsenceStatistics(
     statistics['PermitYear'].push({
       title: i18n._(t`Permit Year: ${jobName}`),
       titleValues: { job: job.name },
-      subtitle: formatDate(now, language, 'yyyy'),
+      subtitle: selectedYear.toString(),
       text: humanDifferenceFromHours(
-        yearAbsences.permitHours.toNumber(),
+        selectedYearAbsences.permitHours.toNumber(),
         averageWorkingHours,
       ),
     });
@@ -716,7 +732,6 @@ function buildAbsencesForRange(
     absences,
   );
 
-  // const diffByTypes = {};
   const diffByTypes = reduce<
     TimeAbsenceEntryListModel,
     { [key: string]: number[] }

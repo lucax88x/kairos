@@ -7,6 +7,7 @@ import {
   getMonth,
   startOfDay,
   startOfYear,
+  isEqual,
 } from 'date-fns';
 import moment from 'moment';
 import { join, map } from 'ramda';
@@ -19,7 +20,10 @@ import { i18n } from '../i18nLoader';
 import { Language } from '../models/language-model';
 import { ProfileModel } from '../models/profile.model';
 import { TimeAbsenceEntryListModel } from '../models/time-absence-entry-list.model';
-import { getTextFromAbsenceType } from '../models/time-absence-entry.model';
+import {
+  getTextFromAbsenceType,
+  TimeAbsenceEntryTypes,
+} from '../models/time-absence-entry.model';
 import { TimeEntryListModel } from '../models/time-entry-list.model';
 import { TimeHolidayEntryModel } from '../models/time-holiday-entry.model';
 import { buildNavigatorRoute } from '../routes';
@@ -100,7 +104,7 @@ export const TimeEntriesCalendarComponent: React.FC<TimeEntriesCalendarEntryProp
       end: endOfYear(new Date()),
     });
 
-    let toSetEvents: Event[] = [];
+    const toSetEvents: Event[] = [];
 
     for (const job of profile.jobs) {
       const entries = !!pairsByJob[job.id.toString()]
@@ -124,6 +128,9 @@ export const TimeEntriesCalendarComponent: React.FC<TimeEntriesCalendarEntryProp
         end: ab.end,
         title: join(' ', [getTextFromAbsenceType(ab.type), ab.description]),
         resource: { type: EventType.Absence },
+        allDay:
+          isEqual(ab.start, startOfDay(ab.start)) &&
+          isEqual(ab.end, endOfDay(ab.end)),
       }),
       timeAbsenceEntries,
     );
@@ -132,6 +139,7 @@ export const TimeEntriesCalendarComponent: React.FC<TimeEntriesCalendarEntryProp
       hol => ({
         start: startOfDay(hol.when),
         end: endOfDay(hol.when),
+        allDay: true,
         title: hol.description,
         resource: { type: EventType.Holiday },
       }),
@@ -175,6 +183,7 @@ export const TimeEntriesCalendarComponent: React.FC<TimeEntriesCalendarEntryProp
     previous: i18n._(t`Back`),
     next: i18n._(t`Next`),
     week: i18n._(t`Week`),
+    // eslint-disable-next-line @typescript-eslint/camelcase
     work_week: i18n._(t`Work Week`),
     agenda: i18n._(t`Agenda`),
     noEventsInRange: i18n._(t`No Events In Range`),

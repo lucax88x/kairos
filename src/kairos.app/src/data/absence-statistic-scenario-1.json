@@ -1,0 +1,50 @@
+[
+  {
+    "id": "fb69dedc-27c2-4716-ba1d-d815eb1cdb1d",
+    "description": "",
+    "start": "2019-12-06T00:00:00.000Z",
+    "end": "2019-12-06T23:59:00.000Z",
+    "type": "COMPENSATION",
+    "job": { "id": "d975e9f7-6255-4e6d-b1e6-0c04e60fa574", "name": "Triman" }
+  },
+  {
+    "id": "55c7e034-be0d-4318-b723-97f689e1e8a3",
+    "description": "",
+    "start": "2019-12-05T00:00:00.000Z",
+    "end": "2019-12-05T23:59:00.000Z",
+    "type": "COMPENSATION",
+    "job": { "id": "d975e9f7-6255-4e6d-b1e6-0c04e60fa574", "name": "Triman" }
+  },
+  {
+    "id": "c84e0a3d-c84e-45b4-b899-9bdabaa996ae",
+    "description": "",
+    "start": "2019-12-02T00:00:00.000Z",
+    "end": "2019-12-02T23:59:00.000Z",
+    "type": "COMPENSATION",
+    "job": { "id": "d975e9f7-6255-4e6d-b1e6-0c04e60fa574", "name": "Triman" }
+  },
+  {
+    "id": "ec9e5a86-3c2a-4de2-9a1b-56507f20e195",
+    "description": "",
+    "start": "2019-11-15T12:30:00.000Z",
+    "end": "2019-11-15T17:30:00.000Z",
+    "type": "COMPENSATION",
+    "job": { "id": "d975e9f7-6255-4e6d-b1e6-0c04e60fa574", "name": "Triman" }
+  },
+  {
+    "id": "fd215260-281f-4f2d-8d56-47f085c11157",
+    "description": "",
+    "start": "2019-10-22T08:00:00.000Z",
+    "end": "2019-10-22T10:00:00.000Z",
+    "type": "COMPENSATION",
+    "job": { "id": "d975e9f7-6255-4e6d-b1e6-0c04e60fa574", "name": "Triman" }
+  },
+  {
+    "id": "029d7e27-451b-4f03-8efe-ddb2c024f3ac",
+    "description": "",
+    "start": "2019-10-21T17:00:00.000Z",
+    "end": "2019-10-21T19:00:00.000Z",
+    "type": "COMPENSATION",
+    "job": { "id": "d975e9f7-6255-4e6d-b1e6-0c04e60fa574", "name": "Triman" }
+  }
+]
