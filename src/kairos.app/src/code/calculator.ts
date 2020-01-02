@@ -644,8 +644,8 @@ function getDayWorkingHours(day: Date, job: JobModel): number {
   return 0;
 }
 
-function roundHours(hours: number) {
-  return new Decimal(hours)
+function roundHours(hours: Decimal) {
+  return hours
     .mul(100)
     .ceil()
     .div(100);
@@ -679,13 +679,22 @@ function buildJobHoursForRange(
     let workedHours = new Decimal(0);
     let overtimeHours = new Decimal(0);
     if (!holidaysInDay.length) {
-      const absenceHours = sum(
-        getDiffHoursFromAbsences(job, [])(absencesInDay),
-      );
-      const difference = !!differencesByDate
-        ? differencesByDate[getUnixTime(day)]
-        : 0;
       const workingHours = new Decimal(getDayWorkingHours(day, job));
+
+      let absenceHours = new Decimal(
+        sum(getDiffHoursFromAbsences(job, [])(absencesInDay)),
+      );
+
+      if (absenceHours.greaterThanOrEqualTo(workingHours)) {
+        absenceHours = workingHours;
+      }
+
+      const difference = new Decimal(
+        !!differencesByDate && !!differencesByDate[getUnixTime(day)]
+          ? differencesByDate[getUnixTime(day)]
+          : 0,
+      );
+
       workedHours = unixToHours(difference);
 
       remainingHours = workingHours.minus(workedHours.plus(absenceHours));
@@ -700,8 +709,8 @@ function buildJobHoursForRange(
   return results;
 }
 
-function unixToHours(unix: number): Decimal {
-  return new Decimal(!!unix ? roundHours(unix / 3600000) : 0);
+function unixToHours(unix: Decimal): Decimal {
+  return new Decimal(!!unix ? roundHours(unix.div(new Decimal(3600000))) : 0);
 }
 
 function buildAbsencesForRange(

@@ -19,8 +19,8 @@ describe('calculations', () => {
   it('should get differences with only 2 entries', () => {
     // given
     const jobId = UUID.Generate().toString();
-    const start = new Date('January 1 2019 00:00');
-    const end = new Date('January 31 2019 23:59');
+    const start = new Date('January 1 2019 00:00:00');
+    const end = new Date('January 31 2019 23:59:59');
 
     const timeEntries = [
       buildTimeEntry(jobId, TimeEntryTypes.IN, 'January 1 2019 08:30'),
@@ -39,8 +39,8 @@ describe('calculations', () => {
   it('should get differences with only 2 entries even if not ordered', () => {
     // given
     const jobId = UUID.Generate().toString();
-    const start = new Date('January 1 2019 00:00');
-    const end = new Date('January 31 2019 23:59');
+    const start = new Date('January 1 2019 00:00:00');
+    const end = new Date('January 31 2019 23:59:59');
 
     const timeEntries = [
       buildTimeEntry(jobId, TimeEntryTypes.OUT, 'January 1 2019 09:30'),
@@ -59,8 +59,8 @@ describe('calculations', () => {
   it('should get differences with 4 entries in the same day', () => {
     // given
     const jobId = UUID.Generate().toString();
-    const start = new Date('January 1 2019 00:00');
-    const end = new Date('January 31 2019 23:59');
+    const start = new Date('January 1 2019 00:00:00');
+    const end = new Date('January 31 2019 23:59:59');
 
     const timeEntries = [
       buildTimeEntry(jobId, TimeEntryTypes.IN, 'January 1 2019 08:00'),
@@ -81,8 +81,8 @@ describe('calculations', () => {
   it('should get multiple differences with multiple days', () => {
     // given
     const jobId = UUID.Generate().toString();
-    const start = new Date('January 1 2019 00:00');
-    const end = new Date('January 31 2019 23:59');
+    const start = new Date('January 1 2019 00:00:00');
+    const end = new Date('January 31 2019 23:59:59');
 
     const timeEntries = [
       buildTimeEntry(jobId, TimeEntryTypes.IN, 'January 1 2019 08:00'),
@@ -106,8 +106,8 @@ describe('calculations', () => {
   it('should get difference across different days', () => {
     // given
     const jobId = UUID.Generate().toString();
-    const start = new Date('January 1 2019 00:00');
-    const end = new Date('January 31 2019 23:59');
+    const start = new Date('January 1 2019 00:00:00');
+    const end = new Date('January 31 2019 23:59:59');
 
     const timeEntries = [
       buildTimeEntry(jobId, TimeEntryTypes.IN, 'January 1 2019 22:00'),
@@ -129,8 +129,8 @@ describe('calculations', () => {
   it('should not consider double IN', () => {
     // given
     const jobId = UUID.Generate().toString();
-    const start = new Date('January 1 2019 00:00');
-    const end = new Date('January 31 2019 23:59');
+    const start = new Date('January 1 2019 00:00:00');
+    const end = new Date('January 31 2019 23:59:59');
 
     const timeEntries = [
       buildTimeEntry(jobId, TimeEntryTypes.IN, 'January 1 2019 08:00'),
@@ -150,8 +150,8 @@ describe('calculations', () => {
   it('should not consider double OUT', () => {
     // given
     const jobId = UUID.Generate().toString();
-    const start = new Date('January 1 2019 00:00');
-    const end = new Date('January 31 2019 23:59');
+    const start = new Date('January 1 2019 00:00:00');
+    const end = new Date('January 31 2019 23:59:59');
 
     const timeEntries = [
       buildTimeEntry(jobId, TimeEntryTypes.IN, 'January 1 2019 08:00'),
@@ -171,8 +171,8 @@ describe('calculations', () => {
   it('should get max difference when there is no out', () => {
     // given
     const jobId = UUID.Generate().toString();
-    const start = new Date('January 1 2019 00:00');
-    const end = new Date('January 31 2019 23:59');
+    const start = new Date('January 1 2019 00:00:00');
+    const end = new Date('January 31 2019 23:59:59');
 
     const timeEntries = [
       buildTimeEntry(jobId, TimeEntryTypes.IN, 'January 1 2019 08:00'),
@@ -191,8 +191,8 @@ describe('calculations', () => {
     advanceTo(new Date('January 3 2019 15:00'));
     // given
     const jobId = UUID.Generate().toString();
-    const start = new Date('January 1 2019 00:00');
-    const end = new Date('January 31 2019 23:59');
+    const start = new Date('January 1 2019 00:00:00');
+    const end = new Date('January 31 2019 23:59:59');
 
     const timeEntries = [
       buildTimeEntry(jobId, TimeEntryTypes.IN, 'January 3 2019 08:00'),
@@ -211,8 +211,8 @@ describe('calculations', () => {
   it('should get max difference when there is no out even with next days', () => {
     // given
     const jobId = UUID.Generate().toString();
-    const start = new Date('January 1 2019 00:00');
-    const end = new Date('January 31 2019 23:59');
+    const start = new Date('January 1 2019 00:00:00');
+    const end = new Date('January 31 2019 23:59:59');
 
     const timeEntries = [
       buildTimeEntry(jobId, TimeEntryTypes.IN, 'January 1 2019 08:00'),
@@ -449,6 +449,39 @@ describe('statistics', () => {
           }),
         );
       });
+
+      it('build correct remaining overtime with multi-day absence', () => {
+        // given
+        const timeEntries = [
+          buildTimeEntry(jobId, TimeEntryTypes.IN, 'January 1 2019 13:25'),
+        ];
+        const timeAbsenceEntries = [
+          buildTimeAbsenceEntry(
+            jobId,
+            'January 2 2019 00:00:00',
+            'January 4 2019 23:59:59',
+            TimeAbsenceEntryTypes.VACATION,
+          ),
+        ];
+
+        // when
+        const result = getWorkingHoursStatistics(
+          2019,
+          'en',
+          profile,
+          timeEntries,
+          timeAbsenceEntries,
+          [],
+        );
+
+        // then
+        expect(result['OvertimeWeek'][0]).toEqual(
+          expect.objectContaining({
+            subtitle: 'December 30 - January 05',
+            text: '-',
+          }),
+        );
+      });
     });
 
     it('should not go overflow with forgotten entries', () => {
@@ -497,8 +530,8 @@ describe('statistics', () => {
       const timeAbsenceEntries = [
         buildTimeAbsenceEntry(
           jobId,
-          'January 1 2019 00:00',
-          'January 1 2019 23:59',
+          'January 1 2019 00:00:00',
+          'January 1 2019 23:59:59',
           TimeAbsenceEntryTypes.COMPENSATION,
         ),
       ];
@@ -684,8 +717,8 @@ describe('getHoursFromAbsences', () => {
     const timeAbsenceEntries = [
       buildTimeAbsenceEntry(
         jobId,
-        'January 1 2019 00:00',
-        'January 1 2019 23:59',
+        'January 1 2019 00:00:00',
+        'January 1 2019 23:59:59',
         TimeAbsenceEntryTypes.COMPENSATION,
       ),
     ];
@@ -702,8 +735,8 @@ describe('getHoursFromAbsences', () => {
     const timeAbsenceEntries = [
       buildTimeAbsenceEntry(
         jobId,
-        'January 1 2019 00:00',
-        'January 3 2019 23:59',
+        'January 1 2019 00:00:00',
+        'January 3 2019 23:59:59',
         TimeAbsenceEntryTypes.COMPENSATION,
       ),
     ];
@@ -720,8 +753,8 @@ describe('getHoursFromAbsences', () => {
     const timeAbsenceEntries = [
       buildTimeAbsenceEntry(
         jobId,
-        'January 4 2019 00:00',
-        'January 4 2019 23:59',
+        'January 4 2019 00:00:00',
+        'January 4 2019 23:59:59',
         TimeAbsenceEntryTypes.COMPENSATION,
       ),
     ];

@@ -23,6 +23,7 @@ export const minDate = new Date(0);
 
 export const average = converge(divide, [sum, length]);
 
+// remember that an absence can still span in multiple days!
 export const findAbsencesInDay = (day: Date) =>
   filter<TimeAbsenceEntryListModel>(absence =>
     isWithinInterval(day, {
