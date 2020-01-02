@@ -6,6 +6,7 @@ import {
   getDate,
   getMonth,
   isEqual,
+  setYear,
   startOfDay,
   startOfYear,
 } from 'date-fns';
@@ -14,6 +15,7 @@ import { join, map } from 'ramda';
 import React, { useCallback, useEffect, useState } from 'react';
 import { Calendar, Event, Messages, momentLocalizer } from 'react-big-calendar';
 import { getTimeEntryPairsByJob } from '../code/calculator';
+import { findAbsencesInRange, findHolidaysInRange } from '../code/functions';
 import { Themes } from '../code/variables';
 import Spinner from '../components/Spinner';
 import { i18n } from '../i18nLoader';
@@ -96,9 +98,12 @@ export const TimeEntriesCalendarComponent: React.FC<TimeEntriesCalendarEntryProp
   const [events, setEvents] = useState<Event[]>([]);
 
   useEffect(() => {
+    const selectedYearDate = setYear(new Date(), selectedYear);
+    const start = startOfYear(selectedYearDate);
+    const end = endOfYear(selectedYearDate);
     const pairsByJob = getTimeEntryPairsByJob(timeEntries, {
-      start: startOfYear(new Date()),
-      end: endOfYear(new Date()),
+      start,
+      end,
     });
 
     const toSetEvents: Event[] = [];
@@ -129,7 +134,7 @@ export const TimeEntriesCalendarComponent: React.FC<TimeEntriesCalendarEntryProp
           isEqual(ab.start, startOfDay(ab.start)) &&
           isEqual(ab.end, endOfDay(ab.end)),
       }),
-      timeAbsenceEntries,
+      findAbsencesInRange(start, end)(timeAbsenceEntries),
     );
 
     const holidays = map(
@@ -140,14 +145,14 @@ export const TimeEntriesCalendarComponent: React.FC<TimeEntriesCalendarEntryProp
         title: hol.description,
         resource: { type: EventType.Holiday },
       }),
-      timeHolidayEntries,
+      findHolidaysInRange(start, end)(timeHolidayEntries),
     );
 
     toSetEvents.push(...absences);
     toSetEvents.push(...holidays);
 
     setEvents(toSetEvents);
-  }, [profile, timeEntries, timeAbsenceEntries, timeHolidayEntries]);
+  }, [profile, selectedYear, timeEntries, timeAbsenceEntries, timeHolidayEntries]);
 
   const eventPropGetter = useCallback(
     (
