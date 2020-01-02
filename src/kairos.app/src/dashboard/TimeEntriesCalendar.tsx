@@ -5,9 +5,9 @@ import {
   endOfYear,
   getDate,
   getMonth,
+  isEqual,
   startOfDay,
   startOfYear,
-  isEqual,
 } from 'date-fns';
 import moment from 'moment';
 import { join, map } from 'ramda';
@@ -20,10 +20,7 @@ import { i18n } from '../i18nLoader';
 import { Language } from '../models/language-model';
 import { ProfileModel } from '../models/profile.model';
 import { TimeAbsenceEntryListModel } from '../models/time-absence-entry-list.model';
-import {
-  getTextFromAbsenceType,
-  TimeAbsenceEntryTypes,
-} from '../models/time-absence-entry.model';
+import { getTextFromAbsenceType } from '../models/time-absence-entry.model';
 import { TimeEntryListModel } from '../models/time-entry-list.model';
 import { TimeHolidayEntryModel } from '../models/time-holiday-entry.model';
 import { buildNavigatorRoute } from '../routes';

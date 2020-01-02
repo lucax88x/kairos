@@ -121,10 +121,11 @@ export const TimeStatisticsComponent: React.FC<TimeStatisticsProps> = memo(
               selectedLanguage,
               profile,
               absences,
+              holidays,
             ),
           ),
         ),
-      [selectedYear, selectedLanguage, profile, absences],
+      [selectedYear, selectedLanguage, profile, absences, holidays],
     );
 
     const generateTiles = useCallback(

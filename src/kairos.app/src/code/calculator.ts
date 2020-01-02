@@ -19,7 +19,6 @@ import {
   isThursday,
   isTuesday,
   isWednesday,
-  isWithinInterval,
   setYear,
   startOfDay,
   startOfMonth,
@@ -30,7 +29,6 @@ import { Decimal } from 'decimal.js';
 import {
   ascend,
   filter,
-  find,
   groupBy,
   map,
   reduce,
@@ -49,7 +47,14 @@ import { TimeHolidayEntryModel } from '../models/time-holiday-entry.model';
 import { UUID } from '../models/uuid.model';
 import { formatAsDate } from './constants';
 import { formatDate } from './formatters';
-import { filterByInterval } from './functions';
+import {
+  filterByInterval,
+  findAbsencesInDay,
+  findAbsencesInRange,
+  findHolidaysInDay,
+  findHolidaysInRange,
+  findJobsInRange,
+} from './functions';
 import { humanDifference, humanDifferenceFromHours } from './humanDifference';
 
 export interface TimeEntryPair {
@@ -59,14 +64,21 @@ export interface TimeEntryPair {
   exit: Date;
 }
 
-const getDiffHoursFromAbsence = (job: JobModel) => (
-  absence: TimeAbsenceEntryListModel,
-) => {
+const getDiffHoursFromAbsence = (
+  job: JobModel,
+  holidays: TimeHolidayEntryModel[],
+) => (absence: TimeAbsenceEntryListModel) => {
   const days = eachDayOfInterval({ start: absence.start, end: absence.end });
 
   let hourDiff = 0;
   for (const day of days) {
+    const holidaysInDay = findHolidaysInDay(day)(holidays);
+    if (!!holidaysInDay.length) {
+      continue;
+    }
+
     let dayHourDifference = 0;
+
     const dayWorkingHours = getDayWorkingHours(day, job);
     if (compareAsc(day, absence.end) <= 0) {
       dayHourDifference = differenceInMinutes(absence.end, absence.start) / 60;
@@ -85,8 +97,13 @@ const getDiffHoursFromAbsence = (job: JobModel) => (
   return hourDiff;
 };
 
-export const getDiffHoursFromAbsences = (job: JobModel) =>
-  map<TimeAbsenceEntryListModel, number>(getDiffHoursFromAbsence(job));
+export const getDiffHoursFromAbsences = (
+  job: JobModel,
+  holidays: TimeHolidayEntryModel[],
+) =>
+  map<TimeAbsenceEntryListModel, number>(
+    getDiffHoursFromAbsence(job, holidays),
+  );
 
 export function getTimeEntryPairsByJob(
   timeEntries: TimeEntryListModel[],
@@ -276,9 +293,7 @@ export function getWorkingHoursStatistics(
     },
   );
 
-  let selectedYearDifferencesByDateByJob: {
-    [id: string]: { [date: string]: number };
-  } = {};
+  let selectedYearDifferencesByDateByJob = currentYearDifferencesByDateByJob;
 
   if (isSelectedYearDifferent) {
     selectedYearDifferencesByDateByJob = getDifferencesByRangeByJobAndDate(
@@ -290,22 +305,16 @@ export function getWorkingHoursStatistics(
     );
   }
 
-  let jobsInRange = filter(
-    job =>
-      compareAsc(job.start, currentYearStart) >= 0 && !!job.end
-        ? compareAsc(job.end, currentYearEnd) <= 0
-        : true,
-    profile.jobs,
-  );
+  let jobsInRange = findJobsInRange(
+    currentYearStart,
+    currentYearEnd,
+  )(profile.jobs);
 
   if (isSelectedYearDifferent) {
-    const selectedYearJobs = filter(
-      job =>
-        compareAsc(job.start, selectedYearStart) >= 0 && !!job.end
-          ? compareAsc(job.end, selectedYearEnd) <= 0
-          : true,
-      profile.jobs,
-    );
+    const selectedYearJobs = findJobsInRange(
+      selectedYearStart,
+      selectedYearEnd,
+    )(profile.jobs);
 
     jobsInRange = unionWith(
       (j1, j2) => j1.id === j2.id,
@@ -318,9 +327,8 @@ export function getWorkingHoursStatistics(
     const currentYearDifferencesByDate =
       currentYearDifferencesByDateByJob[job.id.toString()];
 
-    const selectedYearDifferencesByDate = isSelectedYearDifferent
-      ? selectedYearDifferencesByDateByJob[job.id.toString()]
-      : currentYearDifferencesByDateByJob[job.id.toString()];
+    const selectedYearDifferencesByDate =
+      selectedYearDifferencesByDateByJob[job.id.toString()];
 
     const jobAbsences = filter(
       absence => UUID.equals(absence.job.id, job.id),
@@ -427,6 +435,7 @@ export function getAbsenceStatistics(
   language: Language,
   profile: ProfileModel,
   absences: TimeAbsenceEntryListModel[],
+  holidays: TimeHolidayEntryModel[],
 ) {
   const statistics: { [key: string]: TimeStatisticTile[] } = {
     CompensationMonth: [],
@@ -452,40 +461,41 @@ export function getAbsenceStatistics(
   const selectedYearStart = startOfYear(selectedYearDate);
   const selectedYearEnd = endOfYear(selectedYearDate);
 
-  const currentYearAbsencesInRange = filter(
-    absence =>
-      compareAsc(absence.start, currentYearStart) >= 0 &&
-      compareAsc(absence.end, currentYearEnd) <= 0,
-    absences,
-  );
+  const currentYearAbsencesInRange = findAbsencesInRange(
+    currentYearStart,
+    currentYearEnd,
+  )(absences);
 
-  let selectedYearAbsencesInRange: TimeAbsenceEntryListModel[] = [];
+  const currentYearHolidaysInRange = findHolidaysInRange(
+    currentYearStart,
+    currentYearEnd,
+  )(holidays);
+
+  let selectedYearAbsencesInRange = currentYearAbsencesInRange;
+  let selectedYearHolidaysInRange = currentYearHolidaysInRange;
 
   if (isSelectedYearDifferent) {
-    selectedYearAbsencesInRange = filter(
-      absence =>
-        compareAsc(absence.start, selectedYearStart) >= 0 &&
-        compareAsc(absence.end, selectedYearEnd) <= 0,
-      absences,
-    );
+    selectedYearAbsencesInRange = findAbsencesInRange(
+      selectedYearStart,
+      selectedYearEnd,
+    )(absences);
+
+    selectedYearHolidaysInRange = findHolidaysInRange(
+      selectedYearStart,
+      selectedYearEnd,
+    )(holidays);
   }
 
-  let jobsInRange = filter(
-    job =>
-      compareAsc(job.start, currentYearStart) >= 0 && !!job.end
-        ? compareAsc(job.end, currentYearEnd) <= 0
-        : true,
-    profile.jobs,
-  );
+  let jobsInRange = findJobsInRange(
+    currentYearStart,
+    currentYearEnd,
+  )(profile.jobs);
 
   if (isSelectedYearDifferent) {
-    const selectedYearJobs = filter(
-      job =>
-        compareAsc(job.start, selectedYearStart) >= 0 && !!job.end
-          ? compareAsc(job.end, selectedYearEnd) <= 0
-          : true,
-      profile.jobs,
-    );
+    const selectedYearJobs = findJobsInRange(
+      selectedYearStart,
+      selectedYearEnd,
+    )(profile.jobs);
 
     jobsInRange = unionWith(
       (j1, j2) => j1.id === j2.id,
@@ -502,9 +512,7 @@ export function getAbsenceStatistics(
 
     const selectedYearJobAbsences = filter(
       absence => UUID.equals(absence.job.id, job.id),
-      isSelectedYearDifferent
-        ? selectedYearAbsencesInRange
-        : currentYearAbsencesInRange,
+      selectedYearAbsencesInRange,
     );
 
     const averageWorkingHours = JobModel.getAverageWorkingHours(job);
@@ -516,6 +524,7 @@ export function getAbsenceStatistics(
       endOfMonth(now),
       job,
       currentYearJobAbsences,
+      currentYearHolidaysInRange,
     );
 
     statistics['CompensationMonth'].push({
@@ -564,6 +573,7 @@ export function getAbsenceStatistics(
       selectedYearEnd,
       job,
       selectedYearJobAbsences,
+      selectedYearHolidaysInRange,
     );
 
     statistics['CompensationYear'].push({
@@ -662,29 +672,16 @@ function buildJobHoursForRange(
   const days = eachDayOfInterval({ start, end });
 
   for (const day of days) {
-    const absencesInDate = filter(
-      absence =>
-        isWithinInterval(day, {
-          start: startOfDay(absence.start),
-          end: endOfDay(absence.end),
-        }),
-      absences,
-    );
-
-    const holidayInDate = find(
-      holiday =>
-        isWithinInterval(day, {
-          start: startOfDay(holiday.when),
-          end: endOfDay(holiday.when),
-        }),
-      holidays,
-    );
+    const absencesInDay = findAbsencesInDay(day)(absences);
+    const holidaysInDay = findHolidaysInDay(day)(holidays);
 
     let remainingHours = new Decimal(0);
     let workedHours = new Decimal(0);
     let overtimeHours = new Decimal(0);
-    if (!holidayInDate) {
-      const absenceHours = sum(getDiffHoursFromAbsences(job)(absencesInDate));
+    if (!holidaysInDay.length) {
+      const absenceHours = sum(
+        getDiffHoursFromAbsences(job, [])(absencesInDay),
+      );
       const difference = !!differencesByDate
         ? differencesByDate[getUnixTime(day)]
         : 0;
@@ -712,6 +709,7 @@ function buildAbsencesForRange(
   end: Date,
   job: JobModel,
   absences: TimeAbsenceEntryListModel[],
+  holidays: TimeHolidayEntryModel[],
 ) {
   const results: {
     compensationHours: Decimal;
@@ -725,19 +723,14 @@ function buildAbsencesForRange(
     permitHours: new Decimal(0),
   };
 
-  const absencesInDate = filter(
-    absence =>
-      compareAsc(absence.start, start) >= 0 &&
-      compareAsc(absence.end, end) <= 0,
-    absences,
-  );
+  const absencesInDate = findAbsencesInRange(start, end)(absences);
 
   const diffByTypes = reduce<
     TimeAbsenceEntryListModel,
     { [key: string]: number[] }
   >(
     (acc, absence) => {
-      const diff = getDiffHoursFromAbsence(job)(absence);
+      const diff = getDiffHoursFromAbsence(job, holidays)(absence);
 
       if (!acc[absence.type]) {
         acc[absence.type] = [];
