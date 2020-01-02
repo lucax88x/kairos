@@ -27,10 +27,6 @@ msgstr "Absence Created"
 msgid "Absence Deleted"
 msgstr "Absence Deleted"
 
-#: src/navigator/Navigator.tsx:188
-msgid "Absence Types"
-msgstr "Absence Types"
-
 #: src/edit-time-absence-entry/update-time-absence-entry.ts:20
 #: src/edit-time-absence-entry/update-time-absence-entry.ts:20
 msgid "Absence Updated"
@@ -39,7 +35,7 @@ msgstr "Absence Updated"
 #: src/App.tsx:302
 #: src/bulk-insert/BulkInsert.tsx:35
 #: src/bulk-insert/BulkTimeAbsenceEntryInsert.tsx:101
-#: src/dashboard/TimeStatistics.tsx:70
+#: src/dashboard/TimeStatistics.tsx:77
 #: src/export/Export.tsx:33
 #: src/time-absence-entries/TimeAbsenceEntries.tsx:26
 msgid "Absences"
@@ -50,11 +46,11 @@ msgstr "Absences"
 msgid "Absences exported"
 msgstr "Absences exported"
 
-#: src/dashboard/TimeEntriesCalendar.tsx:101
+#: src/dashboard/TimeEntriesCalendar.tsx:105
 msgid "Agenda"
 msgstr "Agenda"
 
-#: src/dashboard/TimeEntriesCalendar.tsx:103
+#: src/dashboard/TimeEntriesCalendar.tsx:107
 msgid "All day"
 msgstr "All day"
 
@@ -77,7 +73,7 @@ msgstr "Are you sure you want to delete the selected holidays?"
 msgid "Are you sure?"
 msgstr "Are you sure?"
 
-#: src/dashboard/TimeEntriesCalendar.tsx:97
+#: src/dashboard/TimeEntriesCalendar.tsx:100
 msgid "Back"
 msgstr "Back"
 
@@ -93,15 +89,11 @@ msgstr "Bulk Insert"
 msgid "Compensation"
 msgstr "Compensation"
 
-#: src/code/calculator.ts:264
+#: src/code/calculator.ts:245
 msgid "Compensation Month: {jobName}"
 msgstr "Compensation Month: {jobName}"
 
-#: src/code/calculator.ts:238
-msgid "Compensation Today: {jobName}"
-msgstr "Compensation Today: {jobName}"
-
-#: src/code/calculator.ts:290
+#: src/code/calculator.ts:271
 msgid "Compensation Year: {jobName}"
 msgstr "Compensation Year: {jobName}"
 
@@ -146,7 +138,7 @@ msgstr "Custom"
 msgid "Dashboard"
 msgstr "Dashboard"
 
-#: src/dashboard/TimeEntriesCalendar.tsx:95
+#: src/dashboard/TimeEntriesCalendar.tsx:98
 msgid "Day"
 msgstr "Day"
 
@@ -205,10 +197,6 @@ msgstr "Entry Created"
 msgid "Entry Deleted"
 msgstr "Entry Deleted"
 
-#: src/navigator/Navigator.tsx:180
-msgid "Entry Types"
-msgstr "Entry Types"
-
 #: src/edit-time-entry/update-time-entry.ts:20
 #: src/edit-time-entry/update-time-entry.ts:20
 msgid "Entry Updated"
@@ -253,7 +241,7 @@ msgstr "Filters"
 msgid "Friday"
 msgstr "Friday"
 
-#: src/navigator/Navigator.tsx:201
+#: src/navigator/Navigator.tsx:190
 msgid "Holiday"
 msgstr "Holiday"
 
@@ -288,15 +276,11 @@ msgstr "Holidays"
 msgid "Illness"
 msgstr "Illness"
 
-#: src/code/calculator.ts:270
+#: src/code/calculator.ts:251
 msgid "Illness Month: {jobName}"
 msgstr "Illness Month: {jobName}"
 
-#: src/code/calculator.ts:244
-msgid "Illness Today: {jobName}"
-msgstr "Illness Today: {jobName}"
-
-#: src/code/calculator.ts:296
+#: src/code/calculator.ts:277
 msgid "Illness Year: {jobName}"
 msgstr "Illness Year: {jobName}"
 
@@ -304,6 +288,10 @@ msgstr "Illness Year: {jobName}"
 #: src/models/time-entry.model.tsx:46
 msgid "In"
 msgstr "In"
+
+#: src/bulk-insert/BulkTimeAbsenceEntryInsert.tsx:151
+msgid "Invalid Absences"
+msgstr "Invalid Absences"
 
 #: src/bulk-insert/BulkTimeAbsenceEntryInsert.tsx:65
 #: src/bulk-insert/BulkTimeAbsenceEntryInsert.tsx:66
@@ -329,13 +317,14 @@ msgstr "In"
 msgid "Invalid Date"
 msgstr "Invalid Date"
 
-#: src/bulk-insert/BulkTimeAbsenceEntryInsert.tsx:151
 #: src/bulk-insert/BulkTimeEntryInsert.tsx:128
-#: src/bulk-insert/BulkTimeHolidayEntryInsert.tsx:93
-#: src/bulk-insert/BulkTimeHolidayEntryInsert.tsx:103
 #: src/bulk-insert/BulkTimeHolidayEntryInsert.tsx:111
 msgid "Invalid Entries"
 msgstr "Invalid Entries"
+
+#: src/bulk-insert/BulkTimeHolidayEntryInsert.tsx:103
+msgid "Invalid Holidays"
+msgstr "Invalid Holidays"
 
 #: src/bulk-insert/BulkTimeAbsenceEntryInsert.tsx:70
 #: src/bulk-insert/BulkTimeAbsenceEntryInsert.tsx:81
@@ -393,11 +382,11 @@ msgstr "Logout"
 msgid "Monday"
 msgstr "Monday"
 
-#: src/dashboard/TimeEntriesCalendar.tsx:93
+#: src/dashboard/TimeEntriesCalendar.tsx:96
 msgid "Month"
 msgstr "Month"
 
-#: src/dashboard/TimeEntriesCalendar.tsx:104
+#: src/dashboard/TimeEntriesCalendar.tsx:108
 msgid "More {more}"
 msgstr "More {more}"
 
@@ -413,15 +402,15 @@ msgstr "Navigator"
 msgid "New content is available and will be used when all tabs for this page are closed."
 msgstr "New content is available and will be used when all tabs for this page are closed."
 
-#: src/dashboard/TimeEntriesCalendar.tsx:98
+#: src/dashboard/TimeEntriesCalendar.tsx:101
 msgid "Next"
 msgstr "Next"
 
-#: src/navigator/Navigator.tsx:233
+#: src/navigator/Navigator.tsx:221
 msgid "No Entries for this range"
 msgstr "No Entries for this range"
 
-#: src/dashboard/TimeEntriesCalendar.tsx:102
+#: src/dashboard/TimeEntriesCalendar.tsx:106
 msgid "No Events In Range"
 msgstr "No Events In Range"
 
@@ -478,15 +467,11 @@ msgstr "Percentual values (0.5 is 30 minutes)"
 msgid "Permit"
 msgstr "Permit"
 
-#: src/code/calculator.ts:282
+#: src/code/calculator.ts:263
 msgid "Permit Month: {jobName}"
 msgstr "Permit Month: {jobName}"
 
-#: src/code/calculator.ts:256
-msgid "Permit Today: {jobName}"
-msgstr "Permit Today: {jobName}"
-
-#: src/code/calculator.ts:308
+#: src/code/calculator.ts:289
 msgid "Permit Year: {jobName}"
 msgstr "Permit Year: {jobName}"
 
@@ -557,11 +542,11 @@ msgstr "Sign in"
 msgid "Start"
 msgstr "Start"
 
-#: src/dashboard/TimeStatistics.tsx:73
+#: src/dashboard/TimeStatistics.tsx:80
 msgid "Summary of your absences"
 msgstr "Summary of your absences"
 
-#: src/dashboard/TimeStatistics.tsx:58
+#: src/dashboard/TimeStatistics.tsx:65
 msgid "Summary of your working hours"
 msgstr "Summary of your working hours"
 
@@ -583,7 +568,7 @@ msgstr "Thursday"
 msgid "Time Entries"
 msgstr "Time Entries"
 
-#: src/dashboard/TimeEntriesCalendar.tsx:96
+#: src/dashboard/TimeEntriesCalendar.tsx:99
 msgid "Today"
 msgstr "Today"
 
@@ -596,6 +581,10 @@ msgstr "Today"
 #: src/time-entries/TimeEntries.tsx:32
 msgid "Type"
 msgstr "Type"
+
+#: src/navigator/Navigator.tsx:180
+msgid "Types"
+msgstr "Types"
 
 #: src/services/graphql.service.ts:42
 #: src/services/graphql.service.ts:49
@@ -633,15 +622,11 @@ msgstr "Update holidays from country"
 msgid "Vacation"
 msgstr "Vacation"
 
-#: src/code/calculator.ts:276
+#: src/code/calculator.ts:257
 msgid "Vacation Month: {jobName}"
 msgstr "Vacation Month: {jobName}"
 
-#: src/code/calculator.ts:250
-msgid "Vacation Today: {jobName}"
-msgstr "Vacation Today: {jobName}"
-
-#: src/code/calculator.ts:302
+#: src/code/calculator.ts:283
 msgid "Vacation Year: {jobName}"
 msgstr "Vacation Year: {jobName}"
 
@@ -665,12 +650,13 @@ msgstr "Version {0}"
 msgid "Wednesday"
 msgstr "Wednesday"
 
-#: src/dashboard/TimeEntriesCalendar.tsx:99
+#: src/dashboard/TimeEntriesCalendar.tsx:102
 msgid "Week"
 msgstr "Week"
 
 #: src/bulk-insert/BulkTimeEntryInsert.tsx:112
 #: src/bulk-insert/BulkTimeEntryInsert.tsx:137
+#: src/bulk-insert/BulkTimeHolidayEntryInsert.tsx:93
 #: src/shared/TimeEntryForm.tsx:104
 #: src/shared/TimeHolidayEntryForm.tsx:50
 #: src/time-entries/TimeEntries.tsx:39
@@ -678,15 +664,15 @@ msgstr "Week"
 msgid "When"
 msgstr "When"
 
-#: src/dashboard/TimeEntriesCalendar.tsx:100
+#: src/dashboard/TimeEntriesCalendar.tsx:104
 msgid "Work Week"
 msgstr "Work Week"
 
-#: src/dashboard/TimeStatistics.tsx:55
+#: src/dashboard/TimeStatistics.tsx:62
 msgid "Working Hours"
 msgstr "Working Hours"
 
-#: src/dashboard/TimeEntriesCalendar.tsx:94
+#: src/dashboard/TimeEntriesCalendar.tsx:97
 msgid "Yesterday"
 msgstr "Yesterday"
 

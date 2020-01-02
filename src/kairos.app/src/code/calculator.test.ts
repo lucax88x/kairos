@@ -450,11 +450,13 @@ describe('statistics', () => {
         );
       });
 
-      it('build correct remaining overtime with multi-day absence', () => {
+      it.only('build correct remaining & overtime with multi-day absence', () => {
         // given
         const timeEntries = [
-          buildTimeEntry(jobId, TimeEntryTypes.IN, 'January 1 2019 13:25'),
+          buildTimeEntry(jobId, TimeEntryTypes.IN, 'January 1 2019 08:30'),
+          buildTimeEntry(jobId, TimeEntryTypes.OUT, 'January 1 2019 17:00'),
         ];
+
         const timeAbsenceEntries = [
           buildTimeAbsenceEntry(
             jobId,
@@ -475,6 +477,12 @@ describe('statistics', () => {
         );
 
         // then
+        expect(result['RemainingWeek'][0]).toEqual(
+          expect.objectContaining({
+            subtitle: 'December 30 - January 05',
+            text: '01wd',
+          }),
+        );
         expect(result['OvertimeWeek'][0]).toEqual(
           expect.objectContaining({
             subtitle: 'December 30 - January 05',
