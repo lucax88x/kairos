@@ -11,6 +11,7 @@ import {
   getUnixTime,
   isEqual,
   setMonth,
+  setYear,
   startOfDay,
   startOfMonth,
 } from 'date-fns';
@@ -28,7 +29,7 @@ const useStyles = makeStyles(theme => ({
   container: {
     width: '100%',
     display: 'grid',
-    gridGap: theme.spacing(1)
+    gridGap: theme.spacing(1),
   },
   header: {
     display: 'grid',
@@ -69,6 +70,7 @@ const useStyles = makeStyles(theme => ({
 export interface TimeEntriesByRangeInputs {
   profile: ProfileModel;
   selectedLanguage: Language;
+  selectedYear: number;
   timeEntries: TimeEntryListModel[];
   isGetTimeEntriesBusy: boolean;
 }
@@ -86,12 +88,16 @@ export const TimeEntriesByRangeComponent: React.FC<TimeEntriesByRangeProps> = me
 
     const {
       selectedLanguage,
+      selectedYear,
       timeEntries,
       profile,
       isGetTimeEntriesBusy,
     } = props;
 
-    const [currentMonth, setCurrentMonth] = useState(getMonth(new Date()));
+    const selectedYearDate = setYear(new Date(), selectedYear);
+    const [currentMonth, setCurrentMonth] = useState(
+      getMonth(selectedYearDate),
+    );
 
     const handlePreviousMonth = useCallback(
       () => setCurrentMonth(currentMonth - 1),
@@ -143,8 +149,8 @@ export const TimeEntriesByRangeComponent: React.FC<TimeEntriesByRangeProps> = me
 
         return map<JobModel, JSX.Element | null>(job => {
           const humanDifferencesByRange =
-          humanDifferencesByRangeByJob[job.id.toString()];
-          
+            humanDifferencesByRangeByJob[job.id.toString()];
+
           if (!humanDifferencesByRange) {
             return null;
           }
@@ -172,12 +178,14 @@ export const TimeEntriesByRangeComponent: React.FC<TimeEntriesByRangeProps> = me
     );
 
     const headerCells = useMemo(
-      () => currentMonthDaysToHeaderCells(setMonth(new Date(), currentMonth)),
-      [currentMonthDaysToHeaderCells, currentMonth],
+      () =>
+        currentMonthDaysToHeaderCells(setMonth(selectedYearDate, currentMonth)),
+      [currentMonthDaysToHeaderCells, selectedYearDate, currentMonth],
     );
     const bodyCells = useMemo(
-      () => currentMonthDaysToBodyCells(setMonth(new Date(), currentMonth)),
-      [currentMonthDaysToBodyCells, currentMonth],
+      () =>
+        currentMonthDaysToBodyCells(setMonth(selectedYearDate, currentMonth)),
+      [currentMonthDaysToBodyCells, selectedYearDate, currentMonth],
     );
 
     return (
@@ -186,7 +194,7 @@ export const TimeEntriesByRangeComponent: React.FC<TimeEntriesByRangeProps> = me
           <div className={classes.header}>
             <div className={classes.actionButtons}>
               <span>
-                {format(setMonth(new Date(), currentMonth), 'MMMM', {
+                {format(setMonth(selectedYearDate, currentMonth), 'MMMM yyyy', {
                   locale: dateFormatterLocales[selectedLanguage],
                 })}
               </span>
