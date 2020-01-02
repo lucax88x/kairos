@@ -65,7 +65,7 @@ namespace Kairos.Application.TimeAbsenceEntry
             var absences = await _timeAbsenceEntryReadRepository.Get(_authProvider.GetUser(), request.From, request.To);
 
             foreach (var absence in absences)
-                sb.AppendLine($"{absence.Start:yyyy-MM-ddTHH:mmZ},{absence.End:yyyy-MM-ddTHH:mmZ},{((TimeAbsenceEntryType) absence.Type).ToString()},{absence.Job.Name},{absence.Description}");
+                sb.AppendLine($"{absence.Start:yyyy-MM-ddTHH:mm:ssZ},{absence.End:yyyy-MM-ddTHH:mm:ssZ},{((TimeAbsenceEntryType) absence.Type).ToString()},{absence.Job.Name},{absence.Description}");
 
             var stream = new MemoryStream(Encoding.UTF8.GetBytes(sb.ToString()));
 

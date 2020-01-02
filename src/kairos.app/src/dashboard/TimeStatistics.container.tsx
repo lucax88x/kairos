@@ -4,9 +4,11 @@ import { Dispatch } from 'redux';
 import { Actions } from '../actions';
 import { TimeEntryListModel } from '../models/time-entry-list.model';
 import { selectProfile } from '../profile/selectors';
+import { RouteMatcher } from '../routes';
 import {
   selectIsGetTimeEntriesBusy,
   selectSelectedLanguage,
+  selectSelectedYear,
   selectTimeAbsenceEntries,
   selectTimeEntries,
   selectTimeHolidayEntries,
@@ -17,9 +19,9 @@ import {
   TimeStatisticsDispatches,
   TimeStatisticsInputs,
 } from './TimeStatistics';
-import { RouteMatcher } from '../routes';
 
 const mapStateToProps = (state: State): TimeStatisticsInputs => ({
+  selectedYear: selectSelectedYear(state),
   selectedLanguage: selectSelectedLanguage(state),
   profile: selectProfile(state),
   timeEntries: selectTimeEntries(state),
@@ -28,8 +30,13 @@ const mapStateToProps = (state: State): TimeStatisticsInputs => ({
   isGetTimeEntriesBusy: selectIsGetTimeEntriesBusy(state),
 });
 
-const mapDispatchToProps = (dispatch: Dispatch<Actions>): TimeStatisticsDispatches => ({
-  onUpdate: (model: TimeEntryListModel) => dispatch(push(RouteMatcher.EditTimeEntry.replace(':id', model.id.toString()))),
+const mapDispatchToProps = (
+  dispatch: Dispatch<Actions>,
+): TimeStatisticsDispatches => ({
+  onUpdate: (model: TimeEntryListModel) =>
+    dispatch(
+      push(RouteMatcher.EditTimeEntry.replace(':id', model.id.toString())),
+    ),
 });
 
 export const TimeStatistics = connect(
