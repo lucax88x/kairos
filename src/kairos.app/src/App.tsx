@@ -67,7 +67,7 @@ import { TimeHolidayEntries } from './time-holiday-entries/TimeHolidayEntries.co
 import version from './version.json';
 
 const drawerWidth = 240;
-const transitionSpeedInMs = 750;
+const transitionSpeedInMs = 100;
 const transitionSpeedInS = `${transitionSpeedInMs / 1000}s`;
 
 const currentYear = getYear(new Date());
