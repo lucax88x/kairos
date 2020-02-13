@@ -24,6 +24,7 @@ import {
   startOfMonth,
   startOfWeek,
   startOfYear,
+  isAfter,
 } from 'date-fns';
 import { Decimal } from 'decimal.js';
 import {
@@ -269,7 +270,9 @@ export function getWorkingHoursStatistics(
     OvertimeToday: [],
     RemainingWeek: [],
     OvertimeWeek: [],
+    RemainingYear: [],
     OvertimeYear: [],
+    PlusMinusYear: [],
   };
 
   const now = startOfDay(new Date());
@@ -416,6 +419,16 @@ export function getWorkingHoursStatistics(
       holidays,
     );
 
+    statistics['RemainingYear'].push({
+      title: i18n._(t`Remaining Year: ${jobName}`),
+      titleValues: { job: job.name },
+      subtitle: selectedYear.toString(),
+      text: humanDifferenceFromHours(
+        yearJobHours.remainingHours.toNumber(),
+        averageWorkingHours,
+      ),
+    });
+
     statistics['OvertimeYear'].push({
       title: i18n._(t`Overtime Year: ${jobName}`),
       titleValues: { job: job.name },
@@ -424,6 +437,26 @@ export function getWorkingHoursStatistics(
         yearJobHours.overtimeHours.toNumber(),
         averageWorkingHours,
       ),
+    });
+
+    let plusMinus = new Decimal(0);
+    let plusMinusIsPositive = true;
+    if (yearJobHours.overtimeHours.greaterThan(yearJobHours.remainingHours)) {
+      plusMinus = yearJobHours.overtimeHours.minus(yearJobHours.remainingHours);
+      plusMinusIsPositive = true;
+    } else {
+      plusMinus = yearJobHours.remainingHours.minus(yearJobHours.overtimeHours);
+      plusMinusIsPositive = false;
+    }
+
+    statistics['PlusMinusYear'].push({
+      title: i18n._(t`PlusMinus Year: ${jobName}`),
+      titleValues: { job: job.name },
+      subtitle: selectedYear.toString(),
+      text: `${plusMinusIsPositive ? '+' : '-'}${humanDifferenceFromHours(
+        plusMinus.toNumber(),
+        averageWorkingHours,
+      )}`,
     });
   }
 
@@ -668,6 +701,12 @@ function buildJobHoursForRange(
     remainingHours: new Decimal(0),
     overtimeHours: new Decimal(0),
   };
+
+  const today = new Date();
+
+  if (isAfter(end, today)) {
+    end = today;
+  }
 
   const days = eachDayOfInterval({ start, end });
 
