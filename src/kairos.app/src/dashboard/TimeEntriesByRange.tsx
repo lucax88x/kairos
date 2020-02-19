@@ -15,15 +15,19 @@ import {
   startOfDay,
   startOfMonth,
 } from 'date-fns';
-import { map } from 'ramda';
+import { map, keys } from 'ramda';
 import React, { memo, useCallback, useMemo, useState } from 'react';
-import { getHumanDifferencesByRange } from '../code/calculator';
+import {
+  getDifferencesByRangeByJobAndDate,
+  getHumanDifferencesByRange,
+} from '../code/calculator';
 import { dateFormatterLocales } from '../code/formatters';
 import Spinner from '../components/Spinner';
 import { JobModel } from '../models/job.model';
 import { Language } from '../models/language-model';
 import { ProfileModel } from '../models/profile.model';
 import { TimeEntryListModel } from '../models/time-entry-list.model';
+import { humanDifference } from '../code/humanDifference';
 
 const useStyles = makeStyles(theme => ({
   container: {
@@ -129,8 +133,9 @@ export const TimeEntriesByRangeComponent: React.FC<TimeEntriesByRangeProps> = me
         ))(days);
 
         return [
-          <div key={'job'} className={classes.headerCell}></div>,
+          <div key="job" className={classes.headerCell}></div>,
           ...dateCells,
+          <div key="total" className={classes.headerCell}></div>,
         ];
       },
       [classes],
@@ -141,6 +146,14 @@ export const TimeEntriesByRangeComponent: React.FC<TimeEntriesByRangeProps> = me
         const start = startOfMonth(date);
         const end = endOfMonth(date);
 
+        const differencesByRangeByJobAndDate = getDifferencesByRangeByJobAndDate(
+          timeEntries,
+          {
+            start,
+            end,
+          },
+        );
+
         const humanDifferencesByRangeByJob = getHumanDifferencesByRange(
           timeEntries,
           { start, end },
@@ -148,12 +161,21 @@ export const TimeEntriesByRangeComponent: React.FC<TimeEntriesByRangeProps> = me
         const days = eachDayOfInterval({ start, end });
 
         return map<JobModel, JSX.Element | null>(job => {
+          const differencesByRangeAndDate =
+            differencesByRangeByJobAndDate[job.id.toString()];
           const humanDifferencesByRange =
             humanDifferencesByRangeByJob[job.id.toString()];
 
-          if (!humanDifferencesByRange) {
+          if (!humanDifferencesByRange || !differencesByRangeAndDate) {
             return null;
           }
+
+          let total = 0;
+          for (const unix in differencesByRangeAndDate) {
+            total += differencesByRangeAndDate[unix];
+          }
+
+          const humanTotal = humanDifference(new Date(0), new Date(total));
 
           const dayCells = map<Date, JSX.Element>(day => {
             const unixTime = getUnixTime(day);
@@ -170,6 +192,7 @@ export const TimeEntriesByRangeComponent: React.FC<TimeEntriesByRangeProps> = me
               <div className={classes.line} />
               <div className={classes.headerCell}>{job.name}</div>
               {dayCells}
+              <div className={classes.headerCell}>{humanTotal}</div>
             </React.Fragment>
           );
         }, profile.jobs);

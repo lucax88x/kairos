@@ -15,7 +15,7 @@ import { join, map } from 'ramda';
 import React, { useCallback, useEffect, useState } from 'react';
 import { Calendar, Event, Messages, momentLocalizer } from 'react-big-calendar';
 import { getTimeEntryPairsByJob } from '../code/calculator';
-import { findAbsencesInRange, findHolidaysInRange } from '../code/functions';
+import { findAbsencesInRange, findHolidaysInRange, maxDate, minDate } from '../code/functions';
 import { Themes } from '../code/variables';
 import Spinner from '../components/Spinner';
 import { i18n } from '../i18nLoader';
@@ -98,12 +98,11 @@ export const TimeEntriesCalendarComponent: React.FC<TimeEntriesCalendarEntryProp
   const [events, setEvents] = useState<Event[]>([]);
 
   useEffect(() => {
-    const selectedYearDate = setYear(new Date(), selectedYear);
-    const start = startOfYear(selectedYearDate);
-    const end = endOfYear(selectedYearDate);
+    const start = minDate;
+    const end = maxDate;
     const pairsByJob = getTimeEntryPairsByJob(timeEntries, {
-      start,
-      end,
+      start: minDate,
+      end: maxDate,
     });
 
     const toSetEvents: Event[] = [];
@@ -152,14 +151,11 @@ export const TimeEntriesCalendarComponent: React.FC<TimeEntriesCalendarEntryProp
     toSetEvents.push(...holidays);
 
     setEvents(toSetEvents);
-  }, [profile, selectedYear, timeEntries, timeAbsenceEntries, timeHolidayEntries]);
+  }, [profile, timeEntries, timeAbsenceEntries, timeHolidayEntries]);
 
   const eventPropGetter = useCallback(
     (
-      event: Event,
-      start: string | Date,
-      end: string | Date,
-      isSelected: boolean,
+      event: Event
     ) => {
       const { type } = event.resource;
       if (type === EventType.Work) {
