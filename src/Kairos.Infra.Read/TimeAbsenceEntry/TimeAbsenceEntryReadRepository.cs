@@ -56,9 +56,9 @@ namespace Kairos.Infra.Read.TimeAbsenceEntry
             var jobs = await _userProfileReadRepository.GetMultipleJobs(dtos.Select(d => d.Job).Distinct());
 
             var indexedJobs = jobs.ToDictionary(job => job.Id, job => job);
-
+            
             return dtos
-                .Where(d => d.Start >= start && d.End <= end)
+                .Where(d => (d.Start >= start && d.Start <= end) || (d.End >= start && d.End <= end))
                 .Where(dto => indexedJobs.ContainsKey(dto.Job))
                 .Select(dto => new TimeAbsenceEntryAggregationReadDto(dto.Id, dto.Description, dto.Start, dto.End,
                     dto.Type, indexedJobs[dto.Job]))
