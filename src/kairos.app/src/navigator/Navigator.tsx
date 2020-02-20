@@ -19,6 +19,7 @@ import {
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 import KeyboardArrowLeftIcon from '@material-ui/icons/KeyboardArrowLeft';
 import KeyboardArrowRightIcon from '@material-ui/icons/KeyboardArrowRight';
+import RefreshIcon from '@material-ui/icons/Refresh';
 import {
   KeyboardDatePicker,
   MuiPickersUtilsProvider,
@@ -83,6 +84,12 @@ const useStyles = makeStyles(theme => ({
     gridAutoFlow: 'column',
     gridGap: theme.spacing(3),
   },
+  head: {
+    display: 'grid',
+    alignItems: 'center',
+    gridTemplateColumns: 'auto min-content',
+    gridGap: theme.spacing(1),
+  },
   rows: {
     display: 'grid',
     justifyContent: 'center',
@@ -106,6 +113,7 @@ export interface NavigatorInputs {
 }
 
 export interface NavigatorDispatches {
+  onRefresh: () => void;
   onChange: (filters: { start: Date; end: Date }) => void;
   onEditTimeEntry: (entry: TimeEntryListModel) => void;
   onEditTimeAbsence: (absence: TimeAbsenceEntryListModel) => void;
@@ -126,6 +134,7 @@ export const NavigatorComponent: React.FC<NavigatorProps> = props => {
     entriesByDate,
     startDate,
     endDate,
+    onRefresh,
     onChange,
     onEditTimeEntry,
     onEditTimeAbsence,
@@ -252,6 +261,8 @@ export const NavigatorComponent: React.FC<NavigatorProps> = props => {
     [setHolidayType],
   );
 
+  const handleRefresh = useCallback(() => onRefresh(), [onRefresh]);
+
   useEffect(() => {
     setStart(startDate);
     setEnd(endDate);
@@ -263,33 +274,44 @@ export const NavigatorComponent: React.FC<NavigatorProps> = props => {
     <div className={classes.root}>
       <Spinner show={isBusy}>
         <div className={classes.rows}>
-          <Select
-            fullWidth
-            value={selectedPreset}
-            onChange={handlePresetChange}
-          >
-            <MenuItem value="custom">
-              <Trans>Custom</Trans>
-            </MenuItem>
-            <MenuItem value="current-week">
-              <Trans>Current Week</Trans>
-            </MenuItem>
-            <MenuItem value="previous-week">
-              <Trans>Previous Week</Trans>
-            </MenuItem>
-            <MenuItem value="current-month">
-              <Trans>Current Month</Trans>
-            </MenuItem>
-            <MenuItem value="previous-month">
-              <Trans>Previous Month</Trans>
-            </MenuItem>
-            <MenuItem value="current-year">
-              <Trans>Current Year</Trans>
-            </MenuItem>
-            <MenuItem value="previous-year">
-              <Trans>Previous Year</Trans>
-            </MenuItem>
-          </Select>
+          <div className={classes.head}>
+            <Select
+              fullWidth
+              value={selectedPreset}
+              onChange={handlePresetChange}
+            >
+              <MenuItem value="custom">
+                <Trans>Custom</Trans>
+              </MenuItem>
+              <MenuItem value="current-week">
+                <Trans>Current Week</Trans>
+              </MenuItem>
+              <MenuItem value="previous-week">
+                <Trans>Previous Week</Trans>
+              </MenuItem>
+              <MenuItem value="current-month">
+                <Trans>Current Month</Trans>
+              </MenuItem>
+              <MenuItem value="previous-month">
+                <Trans>Previous Month</Trans>
+              </MenuItem>
+              <MenuItem value="current-year">
+                <Trans>Current Year</Trans>
+              </MenuItem>
+              <MenuItem value="previous-year">
+                <Trans>Previous Year</Trans>
+              </MenuItem>
+            </Select>
+
+            <Button
+              color="primary"
+              variant="contained"
+              onClick={handleRefresh}
+              autoFocus
+            >
+              <RefreshIcon></RefreshIcon>
+            </Button>
+          </div>
           <MuiPickersUtilsProvider
             utils={DateFnsUtils}
             locale={getDatepickerLocale(selectedLanguage)}

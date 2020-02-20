@@ -20,17 +20,17 @@ import { join } from 'ramda';
 import { padNumber } from '../code/padNumber';
 import { minDate } from './functions';
 
-const MONTHS_IN_YEAR = 12;
-const DAYS_IN_MONTH = 30;
-const HOURS_IN_DAY = 24;
-const MINUTES_IN_HOUR = 60;
+const MONTHS_IN_YEAR = new Decimal(12);
+const DAYS_IN_MONTH = new Decimal(30);
+const HOURS_IN_DAY = new Decimal(24);
+const MINUTES_IN_HOUR = new Decimal(60);
 
-const DAYS_IN_YEAR = DAYS_IN_MONTH * MONTHS_IN_YEAR;
+const DAYS_IN_YEAR = DAYS_IN_MONTH.mul(MONTHS_IN_YEAR);
 
 export const humanDifference = (
   left: Date,
   right: Date,
-  relativeToHours = 24,
+  relativeToHours = new Decimal(24),
 ) => {
   const difference = dateDifference(left, right);
   const totalHours = dateToHours(difference);
@@ -38,17 +38,17 @@ export const humanDifference = (
 };
 
 export const humanDifferenceFromHours = (
-  hours: number,
-  relativeToHours = 24,
+  hours: Decimal,
+  relativeToHours: Decimal = new Decimal(24),
 ) => {
-  const percentualMinutes = hours % 1;
-  hours = hours - percentualMinutes;
-  const minutes = 60 * percentualMinutes;
+  const percentualMinutes = hours.mod(1);
+  hours = hours.minus(percentualMinutes);
+  const minutes = new Decimal(60).mul(percentualMinutes);
 
   let date = new Date(0);
 
-  date = addHours(date, hours);
-  date = addMinutes(date, minutes);
+  date = addHours(date, hours.toNumber());
+  date = addMinutes(date, minutes.toNumber());
 
   return humanDifference(new Date(0), date, relativeToHours);
 };
@@ -67,7 +67,7 @@ const formatWithoutDecimals = (number: Decimal): [string, Decimal] => {
   return [formatNumber(toFormat), remaining];
 };
 
-const hoursToHuman = (totalHours: Decimal, relativeToHours = 24) => {
+const hoursToHuman = (totalHours: Decimal, relativeToHours = new Decimal(24)) => {
   const result = [];
 
   let years = new Decimal(0);

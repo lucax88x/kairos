@@ -2,32 +2,17 @@ import { Button, makeStyles } from '@material-ui/core';
 import KeyboardArrowLeftIcon from '@material-ui/icons/KeyboardArrowLeft';
 import KeyboardArrowRightIcon from '@material-ui/icons/KeyboardArrowRight';
 import clsx from 'clsx';
-import {
-  eachDayOfInterval,
-  endOfMonth,
-  format,
-  getDate,
-  getMonth,
-  getUnixTime,
-  isEqual,
-  setMonth,
-  setYear,
-  startOfDay,
-  startOfMonth,
-} from 'date-fns';
-import { map, keys } from 'ramda';
+import { eachDayOfInterval, endOfMonth, format, getDate, getMonth, getUnixTime, isEqual, setMonth, setYear, startOfDay, startOfMonth } from 'date-fns';
+import { map } from 'ramda';
 import React, { memo, useCallback, useMemo, useState } from 'react';
-import {
-  getDifferencesByRangeByJobAndDate,
-  getHumanDifferencesByRange,
-} from '../code/calculator';
+import { getDifferencesByRangeByJobAndDate, getHumanDifferencesByRange } from '../code/calculator';
 import { dateFormatterLocales } from '../code/formatters';
+import { humanDifference } from '../code/humanDifference';
 import Spinner from '../components/Spinner';
 import { JobModel } from '../models/job.model';
 import { Language } from '../models/language-model';
 import { ProfileModel } from '../models/profile.model';
 import { TimeEntryListModel } from '../models/time-entry-list.model';
-import { humanDifference } from '../code/humanDifference';
 
 const useStyles = makeStyles(theme => ({
   container: {

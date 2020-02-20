@@ -282,7 +282,7 @@ msgstr "Malattie mese: {jobName}"
 
 #: src/code/calculator.ts:277
 msgid "Illness Year: {jobName}"
-msgstr "Malatite anno: {jobName}"
+msgstr "Malattie anno: {jobName}"
 
 #: src/models/time-entry.model.tsx:36
 #: src/models/time-entry.model.tsx:46
