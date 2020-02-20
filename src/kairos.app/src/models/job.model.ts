@@ -3,6 +3,7 @@ import { immerable } from 'immer';
 import { filter } from 'ramda';
 import { average } from '../code/functions';
 import { UUID } from './uuid.model';
+import Decimal from 'decimal.js';
 
 export class JobModel {
   [immerable] = true;
@@ -60,7 +61,7 @@ export class JobModel {
       model.name === JobModel.empty.name
     );
   }
-  static getAverageWorkingHours(model: JobModel) {
+  static getAverageWorkingHours(model: JobModel): Decimal {
     return average(
       filter(wh => wh > 0, [
         model.monday,
@@ -72,6 +73,10 @@ export class JobModel {
         model.sunday,
       ]),
     );
+  }
+  static toWorkingDays(model: JobModel, hours: Decimal) {
+    const averageWorkingHours = this.getAverageWorkingHours(model);
+    return hours.div(averageWorkingHours);
   }
 }
 
@@ -102,7 +107,6 @@ export class JobListModel {
     return UUID.isEmpty(model.id) && !model.name;
   }
 }
-
 
 export interface JobListOutModel {
   id: string;

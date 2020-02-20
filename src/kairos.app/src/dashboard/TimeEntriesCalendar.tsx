@@ -1,21 +1,17 @@
 import { t } from '@lingui/macro';
 import { makeStyles } from '@material-ui/styles';
-import {
-  endOfDay,
-  endOfYear,
-  getDate,
-  getMonth,
-  isEqual,
-  setYear,
-  startOfDay,
-  startOfYear,
-} from 'date-fns';
+import { endOfDay, getDate, getMonth, isEqual, startOfDay } from 'date-fns';
 import moment from 'moment';
 import { join, map } from 'ramda';
 import React, { useCallback, useEffect, useState } from 'react';
 import { Calendar, Event, Messages, momentLocalizer } from 'react-big-calendar';
 import { getTimeEntryPairsByJob } from '../code/calculator';
-import { findAbsencesInRange, findHolidaysInRange, maxDate, minDate } from '../code/functions';
+import {
+  findAbsencesInRange,
+  findHolidaysInRange,
+  maxDate,
+  minDate,
+} from '../code/functions';
 import { Themes } from '../code/variables';
 import Spinner from '../components/Spinner';
 import { i18n } from '../i18nLoader';
@@ -154,9 +150,7 @@ export const TimeEntriesCalendarComponent: React.FC<TimeEntriesCalendarEntryProp
   }, [profile, timeEntries, timeAbsenceEntries, timeHolidayEntries]);
 
   const eventPropGetter = useCallback(
-    (
-      event: Event
-    ) => {
+    (event: Event) => {
       const { type } = event.resource;
       if (type === EventType.Work) {
         return { className: classes.work };

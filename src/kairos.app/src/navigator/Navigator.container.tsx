@@ -22,6 +22,7 @@ import {
   selectStartDate,
 } from './selectors';
 import { setNavigatorFilters } from './set-navigator-filters';
+import { getEntriesAsync } from './get-entries';
 
 const mapStateToProps = (state: State): NavigatorInputs => ({
   selectedLanguage: selectSelectedLanguage(state),
@@ -34,6 +35,7 @@ const mapStateToProps = (state: State): NavigatorInputs => ({
 const mapDispatchToProps = (
   dispatch: Dispatch<Actions>,
 ): NavigatorDispatches => ({
+  onRefresh: () => dispatch(getEntriesAsync.request()),
   onChange: ({ start, end }: { start: Date; end: Date }) =>
     dispatch(setNavigatorFilters(start, end)),
   onEditTimeEntry: entry =>

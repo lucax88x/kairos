@@ -3,10 +3,11 @@ import {
   ExpansionPanel,
   ExpansionPanelDetails,
   ExpansionPanelSummary,
-  GridList,
-  GridListTile,
-  GridListTileBar,
   makeStyles,
+  Table,
+  TableBody,
+  TableCell,
+  TableRow,
   Typography,
 } from '@material-ui/core';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
@@ -15,7 +16,7 @@ import React, { memo, useCallback, useMemo } from 'react';
 import {
   getAbsenceStatistics,
   getWorkingHoursStatistics,
-  TimeStatisticTile,
+  TimeStatisticCell,
 } from '../code/calculator';
 import { mapIndexed } from '../code/ramda.curried';
 import { Themes } from '../code/variables';
@@ -40,21 +41,13 @@ const useStyles = makeStyles(theme => ({
     fontSize: theme.typography.pxToRem(15),
     color: theme.palette.text.secondary,
   },
-  gridList: {
+  table: {
     width: '100%',
     height: '100%',
   },
-  gridTile: {
+  row: {
     width: '100%',
     height: '100%',
-  },
-  gridTileContent: {
-    width: '100%',
-    height: '100%',
-    display: 'grid',
-    paddingTop: '2em',
-    justifyContent: 'center',
-    fontSize: '1.5rem',
   },
 }));
 
@@ -88,7 +81,7 @@ export const TimeStatisticsComponent: React.FC<TimeStatisticsProps> = memo(
       holidays,
     } = props;
 
-    const workingHourTiles: TimeStatisticTile[] = useMemo(
+    const workingHourCells: TimeStatisticCell[] = useMemo(
       () =>
         flatten(
           values(
@@ -112,7 +105,7 @@ export const TimeStatisticsComponent: React.FC<TimeStatisticsProps> = memo(
       ],
     );
 
-    const absenceTiles: TimeStatisticTile[] = useMemo(
+    const absenceCells: TimeStatisticCell[] = useMemo(
       () =>
         flatten(
           values(
@@ -128,19 +121,17 @@ export const TimeStatisticsComponent: React.FC<TimeStatisticsProps> = memo(
       [selectedYear, selectedLanguage, profile, absences, holidays],
     );
 
-    const generateTiles = useCallback(
-      mapIndexed<TimeStatisticTile, JSX.Element>()((tile, index) => (
-        <GridListTile
-          key={tile.title}
-          className={classes.gridTile}
+    const generateCells = useCallback(
+      mapIndexed<TimeStatisticCell, JSX.Element>()((cell, index) => (
+        <TableRow
+          key={cell.title}
+          className={classes.row}
           style={{ ...Themes.getRelativeToIndex(index) }}
         >
-          <div className={classes.gridTileContent}>{tile.text}</div>
-          <GridListTileBar
-            title={i18n._(tile.title, tile.titleValues)}
-            subtitle={tile.subtitle}
-          />
-        </GridListTile>
+          <TableCell>{i18n._(cell.title, cell.titleValues)}</TableCell>
+          <TableCell>{cell.text}</TableCell>
+          <TableCell>{cell.subtitle}</TableCell>
+        </TableRow>
       )),
       [],
     );
@@ -158,12 +149,12 @@ export const TimeStatisticsComponent: React.FC<TimeStatisticsProps> = memo(
               </Typography>
             </ExpansionPanelSummary>
             <ExpansionPanelDetails>
-              <GridList cellHeight={180} className={classes.gridList}>
-                {generateTiles(workingHourTiles)}
-              </GridList>
+              <Table className={classes.table}>
+                <TableBody>{generateCells(workingHourCells)}</TableBody>
+              </Table>
             </ExpansionPanelDetails>
           </ExpansionPanel>
-          {!!absenceTiles.length && (
+          {!!absenceCells.length && (
             <ExpansionPanel>
               <ExpansionPanelSummary expandIcon={<ExpandMoreIcon />}>
                 <Typography className={classes.heading}>
@@ -174,9 +165,9 @@ export const TimeStatisticsComponent: React.FC<TimeStatisticsProps> = memo(
                 </Typography>
               </ExpansionPanelSummary>
               <ExpansionPanelDetails>
-                <GridList cellHeight={180} className={classes.gridList}>
-                  {generateTiles(absenceTiles)}
-                </GridList>
+                <Table className={classes.table}>
+                  <TableBody>{generateCells(absenceCells)}</TableBody>
+                </Table>
               </ExpansionPanelDetails>
             </ExpansionPanel>
           )}
