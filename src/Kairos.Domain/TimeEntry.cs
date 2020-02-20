@@ -25,11 +25,6 @@ namespace Kairos.Domain
             {
                 case TimeEntryAdded added:
                 {
-                    if (added.TimeEntry.Job == Guid.Empty)
-                    {
-                        throw new InvalidJobException();
-                    }
-                    
                     Id = added.TimeEntry.Id;
                     User = added.TimeEntry.User;
                     When = added.TimeEntry.When;
@@ -39,11 +34,6 @@ namespace Kairos.Domain
 
                 case TimeEntryUpdated updated:
                 {
-                    if (updated.TimeEntry.Job == Guid.Empty)
-                    {
-                        throw new InvalidJobException();
-                    }
-                    
                     When = updated.TimeEntry.When;
                     Type = updated.TimeEntry.Type;
                     Job = updated.TimeEntry.Job;
@@ -70,6 +60,11 @@ namespace Kairos.Domain
 
         public static TimeEntry Create(TimeEntryEventDto eventDto)
         {
+            if (eventDto.Job == Guid.Empty)
+            {
+                throw new InvalidJobException();
+            }
+            
             var instance = new TimeEntry();
 
             instance.ApplyChange(new TimeEntryAdded(eventDto));
