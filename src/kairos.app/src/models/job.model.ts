@@ -62,7 +62,7 @@ export class JobModel {
     );
   }
   static getAverageWorkingHours(model: JobModel): Decimal {
-    return average(
+    return new Decimal(average(
       filter(wh => wh > 0, [
         model.monday,
         model.tuesday,
@@ -72,7 +72,7 @@ export class JobModel {
         model.saturday,
         model.sunday,
       ]),
-    );
+    ));
   }
   static toWorkingDays(model: JobModel, hours: Decimal) {
     const averageWorkingHours = this.getAverageWorkingHours(model);

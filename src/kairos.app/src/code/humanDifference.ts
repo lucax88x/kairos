@@ -99,7 +99,7 @@ const hoursToHuman = (totalHours: Decimal, relativeToHours = new Decimal(24)) =>
   if (days.greaterThanOrEqualTo(1)) {
     const [formatted, remaining] = formatWithoutDecimals(days);
     hours = remaining.mul(relativeToHours);
-    const suffix = relativeToHours === HOURS_IN_DAY ? 'd' : 'wd';
+    const suffix = relativeToHours.eq(HOURS_IN_DAY) ? 'd' : 'wd';
     result.push(`${formatted}${suffix}`);
   } else {
     hours = days.mul(relativeToHours);
