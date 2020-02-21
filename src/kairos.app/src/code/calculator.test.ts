@@ -337,7 +337,7 @@ describe('statistics', () => {
         expect(result['RemainingToday'][0]).toEqual(
           expect.objectContaining({
             subtitle: 'January 01 2019',
-            text: '-2:00',
+            text: '-02:00',
           }),
         );
 
@@ -422,7 +422,9 @@ describe('statistics', () => {
     });
 
     describe('complete-week', () => {
-      it.only('build working hour statistics with a complete example', () => {
+      it('build working hour statistics with a complete example', () => {
+        advanceTo(new Date('January 5 2019 23:59'));
+
         // given
         const timeEntries = [
           buildTimeEntry(jobId, TimeEntryTypes.IN, 'January 1 2019 08:30'),
@@ -448,6 +450,8 @@ describe('statistics', () => {
             text: '03wd',
           }),
         );
+
+        clear();
       });
 
       it('build correct remaining & overtime with multi-day absence', () => {
@@ -571,6 +575,8 @@ describe('statistics', () => {
     });
 
     it('get current year overtimes', () => {
+      advanceTo(new Date('January 31 2019 15:00'));
+
       // given
       const timeEntries = [
         buildTimeEntry(jobId, TimeEntryTypes.IN, 'January 1 2019 06:00'),
@@ -608,6 +614,8 @@ describe('statistics', () => {
           text: '07wd 01:30',
         }),
       );
+
+      clear();
     });
   });
 

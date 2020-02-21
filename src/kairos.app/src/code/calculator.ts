@@ -381,9 +381,6 @@ export function getWorkingHoursStatistics(
       holidays,
     );
 
-console.log(weekJobHours.remainingHours);
-console.log(averageWorkingHours);
-
     statistics['RemainingWeek'].push({
       title: i18n._(t`Remaining Week: ${jobName}`),
       titleValues: { job: job.name },
@@ -757,8 +754,6 @@ function buildJobHoursForRange(
     }
     results.workedHours = results.workedHours.add(workedHours);
     results.remainingHours = results.remainingHours.add(remainingHours);
-    console.log(workedHours);
-    console.log(remainingHours);
     results.overtimeHours = results.overtimeHours.add(overtimeHours);
   }
   return results;

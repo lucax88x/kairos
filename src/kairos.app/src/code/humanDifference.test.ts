@@ -1,8 +1,13 @@
-import { humanDifferenceFromHours } from './humanDifference';
+import {
+  humanDifferenceFromHours,
+  humanDifference,
+  formatHoursToTime,
+  formatUnixToTime,
+} from './humanDifference';
 import { Decimal } from 'decimal.js';
 
 describe('humanDifference', () => {
-  test.only.each`
+  test.each`
     hours   | expected
     ${1}    | ${'01:00'}
     ${1.5}  | ${'01:30'}
@@ -84,9 +89,18 @@ describe('humanDifference', () => {
     },
   );
 
-  it('build correct remaining & overtime with multi-day absence', () => {
-    // GIVEN
-    // WHEN
-    // THEN
-  });
+  test.each`
+    start                        | end                          | expected
+    ${'January 1 2019 00:00:00'} | ${'January 2 2019 00:00:00'} | ${'01d'}
+    ${'January 1 2019 00:00:00'} | ${'January 1 2019 06:00:00'} | ${'06:00'}
+    ${'January 1 2019 00:00:00'} | ${'January 2 2019 06:00:00'} | ${'01d 06:00'}
+    ${'January 1 2019 00:00:00'} | ${'January 5 2019 00:00:00'} | ${'04d'}
+    ${'January 2 2019 00:00:00'} | ${'January 1 2019 00:00:00'} | ${'-01d'}
+  `(
+    'returns $start-$end producing $expected',
+    ({ start, end, expected }) => {
+      // given
+      expect(humanDifference(new Date(start), new Date(end))).toBe(expected);
+    },
+  );
 });

@@ -4,6 +4,8 @@ using System.IO;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
+using Kairos.Application.TimeAbsenceEntry.Commands;
+using Kairos.Application.TimeAbsenceEntry.Dtos;
 using Kairos.Application.TimeEntry.Commands;
 using Kairos.Application.TimeEntry.Dtos;
 using Kairos.Application.UserProfile.Commands;
@@ -33,10 +35,12 @@ namespace Kairos.Console.ScenarioBuilder
 
             var profile = BuildProfile();
             var timeEntries = BuildTimeEntries();
+            var timeAbsenceEntries = BuildTimeAbsenceEntries();
 
             await _mediator.Send(new CreateOrUpdateUserProfile(profile), cancellationToken);
 
             await _mediator.Send(new CreateTimeEntries(timeEntries.ToArray()), cancellationToken);
+            await _mediator.Send(new CreateTimeAbsenceEntries(timeAbsenceEntries.ToArray()), cancellationToken);
 
             await Task.CompletedTask;
         }
@@ -76,7 +80,24 @@ namespace Kairos.Console.ScenarioBuilder
                 var cells = row.Split(",");
                 yield return new TimeEntryModel(
                     DateTimeOffset.Parse(cells[0]),
-                    cells[1] == "IN" ? (int) TimeEntryType.In : (int) TimeEntryType.Out,
+                    (int) (TimeEntryType) Enum.Parse(typeof(TimeEntryType), cells[1]),
+                    _trimanJobId);
+            }
+        }
+        
+        private IEnumerable<TimeAbsenceEntryModel> BuildTimeAbsenceEntries()
+        {
+            var csv = File.ReadAllLines("Data/time-absence-entries.csv");
+
+            foreach (var row in csv)
+            {
+                var cells = row.Split(",");
+
+                yield return new TimeAbsenceEntryModel(
+                    cells[4],
+                    DateTimeOffset.Parse(cells[0]),
+                    DateTimeOffset.Parse(cells[1]),
+                    (int) (TimeAbsenceEntryType) Enum.Parse(typeof(TimeAbsenceEntryType), cells[2]),
                     _trimanJobId);
             }
         }
