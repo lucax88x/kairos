@@ -2,12 +2,27 @@ import { Button, makeStyles } from '@material-ui/core';
 import KeyboardArrowLeftIcon from '@material-ui/icons/KeyboardArrowLeft';
 import KeyboardArrowRightIcon from '@material-ui/icons/KeyboardArrowRight';
 import clsx from 'clsx';
-import { eachDayOfInterval, endOfMonth, format, getDate, getMonth, getUnixTime, isEqual, setMonth, setYear, startOfDay, startOfMonth } from 'date-fns';
+import {
+  eachDayOfInterval,
+  endOfMonth,
+  format,
+  getDate,
+  getMonth,
+  getUnixTime,
+  isEqual,
+  setMonth,
+  setYear,
+  startOfDay,
+  startOfMonth,
+} from 'date-fns';
 import { map } from 'ramda';
 import React, { memo, useCallback, useMemo, useState } from 'react';
-import { getDifferencesByRangeByJobAndDate, getHumanDifferencesByRange } from '../code/calculator';
+import {
+  getDifferencesByRangeByJobAndDate,
+  getHumanDifferencesByRange,
+} from '../code/calculator';
 import { dateFormatterLocales } from '../code/formatters';
-import { humanDifference } from '../code/humanDifference';
+import { formatUnixToTime } from '../code/humanDifference';
 import Spinner from '../components/Spinner';
 import { JobModel } from '../models/job.model';
 import { Language } from '../models/language-model';
@@ -159,8 +174,7 @@ export const TimeEntriesByRangeComponent: React.FC<TimeEntriesByRangeProps> = me
           for (const unix in differencesByRangeAndDate) {
             total += differencesByRangeAndDate[unix];
           }
-
-          const humanTotal = humanDifference(new Date(0), new Date(total));
+          const humanTotal = formatUnixToTime(total);
 
           const dayCells = map<Date, JSX.Element>(day => {
             const unixTime = getUnixTime(day);

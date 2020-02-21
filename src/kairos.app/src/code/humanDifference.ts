@@ -8,7 +8,9 @@ import {
   differenceInHours,
   differenceInMinutes,
   differenceInMonths,
+  differenceInSeconds,
   differenceInYears,
+  isAfter,
   subDays,
   subHours,
   subMinutes,
@@ -20,21 +22,32 @@ import { join } from 'ramda';
 import { padNumber } from '../code/padNumber';
 import { minDate } from './functions';
 
-const MONTHS_IN_YEAR = new Decimal(12);
-const DAYS_IN_MONTH = new Decimal(30);
 const HOURS_IN_DAY = new Decimal(24);
 const MINUTES_IN_HOUR = new Decimal(60);
-
-const DAYS_IN_YEAR = DAYS_IN_MONTH.mul(MONTHS_IN_YEAR);
+const SECONDS_IN_MINUTE = new Decimal(60);
+const SECONDS_IN_HOUR = MINUTES_IN_HOUR.mul(SECONDS_IN_MINUTE);
+const SECONDS_IN_DAY = SECONDS_IN_HOUR.mul(HOURS_IN_DAY);
+const DAYS_IN_YEAR = new Decimal(365);
+const SECONDS_IN_YEAR = SECONDS_IN_DAY.mul(DAYS_IN_YEAR);
 
 export const humanDifference = (
   left: Date,
   right: Date,
   relativeToHours = new Decimal(24),
 ) => {
-  const difference = dateDifference(left, right);
+  let difference: Date;
+  let isPositive = true;
+  if (isAfter(left, right)) {
+    isPositive = false;
+    difference = dateDifference(right, left);
+  } else {
+    isPositive = true;
+    difference = dateDifference(left, right);
+  }
+
   const totalHours = dateToHours(difference);
-  return hoursToHuman(totalHours, relativeToHours);
+  const human = hoursToHuman(totalHours, relativeToHours);
+  return `${!isPositive ? '-' : ''}${human}`;
 };
 
 export const humanDifferenceFromHours = (
@@ -53,89 +66,51 @@ export const humanDifferenceFromHours = (
   return humanDifference(new Date(0), date, relativeToHours);
 };
 
-const withoutDecimals = (number: Decimal): [Decimal, Decimal] => {
-  const remaining = number.mod(1);
-  return [number.minus(remaining).round(), remaining];
-};
-
 const formatNumber = (number: Decimal): string => {
   return padNumber(number.toNumber());
 };
 
-const formatWithoutDecimals = (number: Decimal): [string, Decimal] => {
-  const [toFormat, remaining] = withoutDecimals(number);
-  return [formatNumber(toFormat), remaining];
-};
-
-const hoursToHuman = (totalHours: Decimal, relativeToHours = new Decimal(24)) => {
+const hoursToHuman = (
+  totalHours: Decimal,
+  relativeToHours = new Decimal(24),
+) => {
   const result = [];
+  const totalSeconds = totalHours.mul(SECONDS_IN_HOUR);
 
-  let years = new Decimal(0);
-  let months = new Decimal(0);
-  let days = new Decimal(0);
-  let hours = new Decimal(0);
-  let minutes = new Decimal(0);
+  const secondsInDay = SECONDS_IN_HOUR.mul(relativeToHours);
+  const secondsInYear = secondsInDay.mul(DAYS_IN_YEAR);
+  const years = totalSeconds.div(secondsInYear).floor();
+  const days = totalSeconds
+    .mod(secondsInYear)
+    .div(secondsInDay)
+    .floor();
+  const hours = totalSeconds
+    .mod(secondsInYear)
+    .mod(secondsInDay)
+    .div(SECONDS_IN_HOUR)
+    .floor();
+  const minutes = totalSeconds
+    .mod(SECONDS_IN_YEAR)
+    .mod(secondsInDay)
+    .mod(SECONDS_IN_HOUR)
+    .div(SECONDS_IN_MINUTE)
+    .floor();
 
-  const totalDays = totalHours.div(relativeToHours);
-
-  years = totalDays.div(DAYS_IN_YEAR);
+  // const numSeconds = totalSeconds
+  //   .mod(SECONDS_IN_YEAR)
+  //   .mod(SECONDS_IN_DAY)
+  //   .mod(SECONDS_IN_HOUR)
+  //   .mod(SECONDS_IN_MINUTE);
 
   if (years.greaterThanOrEqualTo(1)) {
-    const [formatted, remaining] = formatWithoutDecimals(years);
-    months = remaining.mul(MONTHS_IN_YEAR);
-    result.push(`${formatted}y`);
-  } else {
-    months = years.mul(MONTHS_IN_YEAR);
+    result.push(`${formatNumber(years)}y`);
   }
-
-  if (months.greaterThanOrEqualTo(1)) {
-    const [formatted, remaining] = formatWithoutDecimals(months);
-    days = remaining.mul(DAYS_IN_MONTH);
-    result.push(`${formatted}m`);
-  } else {
-    days = months.mul(DAYS_IN_MONTH);
-  }
-
   if (days.greaterThanOrEqualTo(1)) {
-    const [formatted, remaining] = formatWithoutDecimals(days);
-    hours = remaining.mul(relativeToHours);
-    const suffix = relativeToHours === HOURS_IN_DAY ? 'd' : 'wd';
-    result.push(`${formatted}${suffix}`);
-  } else {
-    hours = days.mul(relativeToHours);
+    const suffix = relativeToHours.eq(HOURS_IN_DAY) ? 'd' : 'wd';
+    result.push(`${formatNumber(days)}${suffix}`);
   }
 
-  let toFormatHours = new Decimal(0);
-  if (hours.greaterThanOrEqualTo(1)) {
-    const [toFormatHoursTemp, remaining] = withoutDecimals(hours);
-    toFormatHours = toFormatHoursTemp;
-    minutes = remaining.mul(MINUTES_IN_HOUR);
-  } else {
-    minutes = hours.mul(MINUTES_IN_HOUR);
-  }
-
-  let time = '00:00';
-  if (minutes.greaterThanOrEqualTo(1)) {
-    if (minutes.lessThanOrEqualTo(7)) {
-      minutes = new Decimal(0);
-    } else if (minutes.lessThanOrEqualTo(22)) {
-      minutes = new Decimal(15);
-    } else if (minutes.lessThanOrEqualTo(37)) {
-      minutes = new Decimal(30);
-    } else if (minutes.lessThanOrEqualTo(52)) {
-      minutes = new Decimal(45);
-    } else {
-      toFormatHours = toFormatHours.plus(1);
-      minutes = new Decimal(0);
-    }
-
-    const formattedHours = formatNumber(toFormatHours);
-    const formattedMinutes = formatNumber(minutes);
-    time = `${formattedHours}:${formattedMinutes}`;
-  } else {
-    const formattedHours = formatNumber(toFormatHours);
-    time = `${formattedHours}:00`;
-  }
+  const time = formatHoursRoundedTo15(hours, minutes);
 
   if (time !== '00:00') {
     result.push(time);
@@ -149,6 +124,46 @@ const hoursToHuman = (totalHours: Decimal, relativeToHours = new Decimal(24)) =>
 
   return str;
 };
+
+function formatHoursRoundedTo15(hours: Decimal, minutes: Decimal) {
+  let time = '00:00';
+  if (minutes.greaterThanOrEqualTo(1)) {
+    if (minutes.lessThanOrEqualTo(7)) {
+      minutes = new Decimal(0);
+    } else if (minutes.lessThanOrEqualTo(22)) {
+      minutes = new Decimal(15);
+    } else if (minutes.lessThanOrEqualTo(37)) {
+      minutes = new Decimal(30);
+    } else if (minutes.lessThanOrEqualTo(52)) {
+      minutes = new Decimal(45);
+    } else {
+      hours = hours.plus(1);
+      minutes = new Decimal(0);
+    }
+    const formattedHours = formatNumber(hours);
+    const formattedMinutes = formatNumber(minutes);
+    time = `${formattedHours}:${formattedMinutes}`;
+  } else {
+    const formattedHours = formatNumber(hours);
+    time = `${formattedHours}:00`;
+  }
+  return time;
+}
+
+export function formatUnixToTime(unix: number) {
+  const totalSeconds = new Decimal(
+    differenceInSeconds(new Date(unix), new Date(0)),
+  );
+
+  const hours = totalSeconds.div(SECONDS_IN_HOUR).floor();
+
+  const minutes = totalSeconds
+    .mod(SECONDS_IN_HOUR)
+    .div(SECONDS_IN_MINUTE)
+    .floor();
+
+  return formatHoursRoundedTo15(hours, minutes);
+}
 
 const dateToHours = (date: Date): Decimal => {
   let totalHours = new Decimal(0);

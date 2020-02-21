@@ -53,7 +53,6 @@ class VirtualizedListImpl<T> extends React.PureComponent<
     const { rowGetter } = this.props;
 
     const row = rowGetter(rowProps);
-    console.log(row);
 
     return <div>todo</div>;
   };
