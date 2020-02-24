@@ -174,7 +174,9 @@ export const TimeEntriesByRangeComponent: React.FC<TimeEntriesByRangeProps> = me
           for (const unix in differencesByRangeAndDate) {
             total += differencesByRangeAndDate[unix];
           }
-          const humanTotal = formatUnixToTime(total);
+          const humanTotal = formatUnixToTime(total, {
+            roundToNearest15: false,
+          });
 
           const dayCells = map<Date, JSX.Element>(day => {
             const unixTime = getUnixTime(day);

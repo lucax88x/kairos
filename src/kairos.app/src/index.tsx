@@ -63,6 +63,9 @@ const theme = createMuiTheme({
       root: {
         '&$focused': {
           backgroundColor: Themes.First.backgroundColor,
+        },        
+        '&$disabled': {
+          opacity: 1,
         },
       },
     },

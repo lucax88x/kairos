@@ -30,11 +30,10 @@ import { Decimal } from 'decimal.js';
 import {
   ascend,
   filter,
+  forEach,
   groupBy,
   map,
-  reduce,
   sortWith,
-  sum,
   unionWith,
 } from 'ramda';
 import { JobModel } from '../models/job.model';
@@ -57,6 +56,7 @@ import {
   findJobsInRange,
 } from './functions';
 import { humanDifference, humanDifferenceFromHours } from './humanDifference';
+import { sumDecimal } from './ramda.curried';
 
 export interface TimeEntryPair {
   enterId: UUID;
@@ -68,31 +68,33 @@ export interface TimeEntryPair {
 const getDiffHoursFromAbsence = (
   job: JobModel,
   holidays: TimeHolidayEntryModel[],
-) => (absence: TimeAbsenceEntryListModel) => {
+) => (absence: TimeAbsenceEntryListModel): Decimal => {
   const days = eachDayOfInterval({ start: absence.start, end: absence.end });
 
-  let hourDiff = 0;
+  let hourDiff = new Decimal(0);
   for (const day of days) {
     const holidaysInDay = findHolidaysInDay(day)(holidays);
     if (!!holidaysInDay.length) {
       continue;
     }
 
-    let dayHourDifference = 0;
+    let dayHourDifference = new Decimal(0);
 
     const dayWorkingHours = getDayWorkingHours(day, job);
     if (compareAsc(day, absence.end) <= 0) {
-      dayHourDifference = differenceInMinutes(absence.end, absence.start) / 60;
+      dayHourDifference = new Decimal(
+        differenceInMinutes(absence.end, absence.start),
+      ).div(60);
 
       // difference cannot be more than day working hours!
-      if (dayHourDifference > dayWorkingHours) {
+      if (dayHourDifference.greaterThan(dayWorkingHours)) {
         dayHourDifference = dayWorkingHours;
       }
     } else {
-      dayHourDifference += dayWorkingHours;
+      dayHourDifference = dayHourDifference.plus(dayWorkingHours);
     }
 
-    hourDiff += dayHourDifference;
+    hourDiff = hourDiff.plus(dayHourDifference);
   }
 
   return hourDiff;
@@ -102,7 +104,7 @@ export const getDiffHoursFromAbsences = (
   job: JobModel,
   holidays: TimeHolidayEntryModel[],
 ) =>
-  map<TimeAbsenceEntryListModel, number>(
+  map<TimeAbsenceEntryListModel, Decimal>(
     getDiffHoursFromAbsence(job, holidays),
   );
 
@@ -226,6 +228,7 @@ export function getHumanDifferencesByRange(
       humanDifferencesByJobAndDate[job][date] = humanDifference(
         new Date(0),
         new Date(!!difference ? difference : 0),
+        { roundToNearest15: true },
       );
     }
   }
@@ -255,6 +258,7 @@ export interface TimeStatisticCell {
   titleValues: { [key: string]: string };
   subtitle?: string;
   text: string;
+  details: DateDetails[];
 }
 
 export function getWorkingHoursStatistics(
@@ -357,8 +361,10 @@ export function getWorkingHoursStatistics(
       subtitle: formatDate(now, language, 'MMMM dd yyyy'),
       text: humanDifferenceFromHours(
         todayJobHours.remainingHours,
+        { roundToNearest15: false },
         averageWorkingHours,
       ),
+      details: [],
     });
 
     statistics['OvertimeToday'].push({
@@ -367,8 +373,10 @@ export function getWorkingHoursStatistics(
       subtitle: formatDate(now, language, 'MMMM dd yyyy'),
       text: humanDifferenceFromHours(
         todayJobHours.overtimeHours,
+        { roundToNearest15: false },
         averageWorkingHours,
       ),
+      details: [],
     });
 
     // week
@@ -391,8 +399,10 @@ export function getWorkingHoursStatistics(
       )} - ${formatDate(endOfWeek(now), language, 'MMMM dd yyyy')}`,
       text: humanDifferenceFromHours(
         weekJobHours.remainingHours,
+        { roundToNearest15: false },
         averageWorkingHours,
       ),
+      details: weekJobHours.details.remainingHours,
     });
 
     statistics['OvertimeWeek'].push({
@@ -405,8 +415,10 @@ export function getWorkingHoursStatistics(
       )} - ${formatDate(endOfWeek(now), language, 'MMMM dd yyyy')}`,
       text: humanDifferenceFromHours(
         weekJobHours.overtimeHours,
+        { roundToNearest15: false },
         averageWorkingHours,
       ),
+      details: weekJobHours.details.overtimeHours,
     });
 
     // year
@@ -425,8 +437,10 @@ export function getWorkingHoursStatistics(
       subtitle: selectedYear.toString(),
       text: humanDifferenceFromHours(
         yearJobHours.remainingHours,
+        { roundToNearest15: false },
         averageWorkingHours,
       ),
+      details: yearJobHours.details.remainingHours,
     });
 
     statistics['OvertimeYear'].push({
@@ -435,8 +449,10 @@ export function getWorkingHoursStatistics(
       subtitle: selectedYear.toString(),
       text: humanDifferenceFromHours(
         yearJobHours.overtimeHours,
+        { roundToNearest15: false },
         averageWorkingHours,
       ),
+      details: yearJobHours.details.overtimeHours,
     });
 
     let plusMinus = new Decimal(0);
@@ -455,8 +471,10 @@ export function getWorkingHoursStatistics(
       subtitle: selectedYear.toString(),
       text: `${plusMinusIsPositive ? '+' : '-'}${humanDifferenceFromHours(
         plusMinus,
+        { roundToNearest15: false },
         averageWorkingHours,
       )}`,
+      details: [],
     });
   }
 
@@ -567,8 +585,10 @@ export function getAbsenceStatistics(
       subtitle: formatDate(now, language, 'MMMM yyyy'),
       text: humanDifferenceFromHours(
         monthAbsences.compensationHours,
+        { roundToNearest15: false },
         averageWorkingHours,
       ),
+      details: monthAbsences.details.compensationHours,
     });
 
     statistics['IllnessMonth'].push({
@@ -577,8 +597,10 @@ export function getAbsenceStatistics(
       subtitle: formatDate(now, language, 'MMMM yyyy'),
       text: humanDifferenceFromHours(
         monthAbsences.illnessHours,
+        { roundToNearest15: false },
         averageWorkingHours,
       ),
+      details: monthAbsences.details.illnessHours,
     });
 
     statistics['VacationMonth'].push({
@@ -587,8 +609,10 @@ export function getAbsenceStatistics(
       subtitle: formatDate(now, language, 'MMMM yyyy'),
       text: humanDifferenceFromHours(
         monthAbsences.vacationHours,
+        { roundToNearest15: false },
         averageWorkingHours,
       ),
+      details: monthAbsences.details.vacationHours,
     });
 
     statistics['PermitMonth'].push({
@@ -597,8 +621,10 @@ export function getAbsenceStatistics(
       subtitle: formatDate(now, language, 'MMMM yyyy'),
       text: humanDifferenceFromHours(
         monthAbsences.permitHours,
+        { roundToNearest15: false },
         averageWorkingHours,
       ),
+      details: monthAbsences.details.permitHours,
     });
 
     // year
@@ -616,8 +642,10 @@ export function getAbsenceStatistics(
       subtitle: selectedYear.toString(),
       text: humanDifferenceFromHours(
         selectedYearAbsences.compensationHours,
+        { roundToNearest15: false },
         averageWorkingHours,
       ),
+      details: selectedYearAbsences.details.compensationHours,
     });
 
     statistics['IllnessYear'].push({
@@ -626,8 +654,10 @@ export function getAbsenceStatistics(
       subtitle: selectedYear.toString(),
       text: humanDifferenceFromHours(
         selectedYearAbsences.illnessHours,
+        { roundToNearest15: false },
         averageWorkingHours,
       ),
+      details: selectedYearAbsences.details.illnessHours,
     });
 
     statistics['VacationYear'].push({
@@ -636,8 +666,10 @@ export function getAbsenceStatistics(
       subtitle: selectedYear.toString(),
       text: humanDifferenceFromHours(
         selectedYearAbsences.vacationHours,
+        { roundToNearest15: false },
         averageWorkingHours,
       ),
+      details: selectedYearAbsences.details.vacationHours,
     });
 
     statistics['PermitYear'].push({
@@ -646,8 +678,10 @@ export function getAbsenceStatistics(
       subtitle: selectedYear.toString(),
       text: humanDifferenceFromHours(
         selectedYearAbsences.permitHours,
+        { roundToNearest15: false },
         averageWorkingHours,
       ),
+      details: selectedYearAbsences.details.permitHours,
     });
 
     statistics['RemainingVacationYear'].push({
@@ -656,36 +690,38 @@ export function getAbsenceStatistics(
       subtitle: selectedYear.toString(),
       text: humanDifferenceFromHours(
         selectedYearAbsences.remainingVacationHours,
+        { roundToNearest15: false },
         averageWorkingHours,
       ),
+      details: [],
     });
   }
   return statistics;
 }
 
-function getDayWorkingHours(day: Date, job: JobModel): number {
+function getDayWorkingHours(day: Date, job: JobModel): Decimal {
   if (isMonday(day)) {
-    return job.monday;
+    return new Decimal(job.monday);
   }
   if (isTuesday(day)) {
-    return job.tuesday;
+    return new Decimal(job.tuesday);
   }
   if (isWednesday(day)) {
-    return job.wednesday;
+    return new Decimal(job.wednesday);
   }
   if (isThursday(day)) {
-    return job.thursday;
+    return new Decimal(job.thursday);
   }
   if (isFriday(day)) {
-    return job.friday;
+    return new Decimal(job.friday);
   }
   if (isSaturday(day)) {
-    return job.saturday;
+    return new Decimal(job.saturday);
   }
   if (isSunday(day)) {
-    return job.sunday;
+    return new Decimal(job.sunday);
   }
-  return 0;
+  return new Decimal(0);
 }
 
 function roundHours(hours: Decimal) {
@@ -693,6 +729,11 @@ function roundHours(hours: Decimal) {
     .mul(100)
     .ceil()
     .div(100);
+}
+
+interface DateDetails {
+  range: { start: Date; end: Date };
+  hours: Decimal;
 }
 
 function buildJobHoursForRange(
@@ -707,10 +748,20 @@ function buildJobHoursForRange(
     workedHours: Decimal;
     remainingHours: Decimal;
     overtimeHours: Decimal;
+    details: {
+      workedHours: DateDetails[];
+      remainingHours: DateDetails[];
+      overtimeHours: DateDetails[];
+    };
   } = {
     workedHours: new Decimal(0),
     remainingHours: new Decimal(0),
     overtimeHours: new Decimal(0),
+    details: {
+      workedHours: [],
+      remainingHours: [],
+      overtimeHours: [],
+    },
   };
 
   const today = new Date();
@@ -732,7 +783,7 @@ function buildJobHoursForRange(
       const workingHours = new Decimal(getDayWorkingHours(day, job));
 
       let absenceHours = new Decimal(
-        sum(getDiffHoursFromAbsences(job, [])(absencesInDay)),
+        sumDecimal(getDiffHoursFromAbsences(job, holidays)(absencesInDay)),
       );
 
       if (absenceHours.greaterThanOrEqualTo(workingHours)) {
@@ -746,11 +797,29 @@ function buildJobHoursForRange(
       );
 
       workedHours = unixToHours(difference);
-
       remainingHours = workingHours.minus(workedHours.plus(absenceHours));
       overtimeHours = remainingHours.lessThan(0)
         ? remainingHours.abs()
         : new Decimal(0);
+
+      if (workedHours.greaterThan(0)) {
+        results.details.workedHours.push({
+          range: { start: day, end: day },
+          hours: workedHours,
+        });
+      }
+      if (remainingHours.greaterThan(0)) {
+        results.details.remainingHours.push({
+          range: { start: day, end: day },
+          hours: remainingHours,
+        });
+      }
+      if (overtimeHours.greaterThan(0)) {
+        results.details.overtimeHours.push({
+          range: { start: day, end: day },
+          hours: overtimeHours,
+        });
+      }
     }
     results.workedHours = results.workedHours.add(workedHours);
     results.remainingHours = results.remainingHours.add(remainingHours);
@@ -776,63 +845,74 @@ function buildAbsencesForRange(
     vacationHours: Decimal;
     remainingVacationHours: Decimal;
     permitHours: Decimal;
+    details: {
+      compensationHours: DateDetails[];
+      illnessHours: DateDetails[];
+      vacationHours: DateDetails[];
+      permitHours: DateDetails[];
+    };
   } = {
     compensationHours: new Decimal(0),
     illnessHours: new Decimal(0),
     vacationHours: new Decimal(0),
     remainingVacationHours: new Decimal(0),
     permitHours: new Decimal(0),
+    details: {
+      compensationHours: [],
+      illnessHours: [],
+      vacationHours: [],
+      permitHours: [],
+    },
   };
 
   const absencesInDate = findAbsencesInRange(start, end)(absences);
 
-  const diffByTypes = reduce<
-    TimeAbsenceEntryListModel,
-    { [key: string]: number[] }
-  >(
-    (acc, absence) => {
-      const diff = getDiffHoursFromAbsence(job, holidays)(absence);
+  forEach(absence => {
+    const diff = getDiffHoursFromAbsence(job, holidays)(absence);
 
-      if (!acc[absence.type]) {
-        acc[absence.type] = [];
+    switch (absence.type) {
+      case TimeAbsenceEntryTypes.ILLNESS: {
+        results.illnessHours = results.illnessHours.plus(diff);
+        results.details.illnessHours.push({
+          range: { start: absence.start, end: absence.end },
+          hours: diff,
+        });
+        break;
       }
+      case TimeAbsenceEntryTypes.COMPENSATION: {
+        results.compensationHours = results.compensationHours.plus(diff);
+        results.details.compensationHours.push({
+          range: { start: absence.start, end: absence.end },
+          hours: diff,
+        });
+        break;
+      }
+      case TimeAbsenceEntryTypes.VACATION: {
+        results.vacationHours = results.vacationHours.plus(diff);
+        results.details.vacationHours.push({
+          range: { start: absence.start, end: absence.end },
+          hours: diff,
+        });
 
-      acc[absence.type].push(diff);
-
-      return acc;
-    },
-
-    {},
-    absencesInDate,
-  );
-
-  if (!!diffByTypes[TimeAbsenceEntryTypes.COMPENSATION]) {
-    results.compensationHours = new Decimal(
-      sum(diffByTypes[TimeAbsenceEntryTypes.COMPENSATION]),
-    );
-  }
-
-  if (!!diffByTypes[TimeAbsenceEntryTypes.ILLNESS]) {
-    results.illnessHours = new Decimal(
-      sum(diffByTypes[TimeAbsenceEntryTypes.ILLNESS]),
-    );
-  }
-
-  if (!!diffByTypes[TimeAbsenceEntryTypes.VACATION]) {
-    results.vacationHours = new Decimal(
-      sum(diffByTypes[TimeAbsenceEntryTypes.VACATION]),
-    );
-
-    const averageWorkingHours = JobModel.getAverageWorkingHours(job);
-    const holidaysPerYearHours = new Decimal(job.holidaysPerYear).mul(averageWorkingHours);
-    results.remainingVacationHours = holidaysPerYearHours.minus(results.vacationHours);
-  }
-
-  if (!!diffByTypes[TimeAbsenceEntryTypes.PERMIT]) {
-    results.permitHours = new Decimal(
-      sum(diffByTypes[TimeAbsenceEntryTypes.PERMIT]),
-    );
-  }
+        const averageWorkingHours = JobModel.getAverageWorkingHours(job);
+        const holidaysPerYearHours = new Decimal(job.holidaysPerYear).mul(
+          averageWorkingHours,
+        );
+        results.remainingVacationHours = holidaysPerYearHours.minus(
+          results.vacationHours,
+        );
+        break;
+      }
+      case TimeAbsenceEntryTypes.PERMIT: {
+        results.permitHours = results.permitHours.plus(diff);
+        results.details.permitHours.push({
+          range: { start: absence.start, end: absence.end },
+          hours: diff,
+        });
+        break;
+      }
+    }
+  }, absencesInDate);
 
   return results;
 }

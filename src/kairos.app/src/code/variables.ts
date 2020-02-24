@@ -10,7 +10,7 @@ export class Themes {
   static Second = { backgroundColor: '#53A2BE', color: '#333' };
   static Third = { backgroundColor: '#1D84B5', color: 'white' };
   static Fourth = { backgroundColor: '#132E32', color: 'white' };
-  static Fifth = { backgroundColor: '#176087', color: '#333' };
+  static Fifth = { backgroundColor: '#176087', color: '#white' };
 
   static Wheel = [Themes.First, Themes.Second, Themes.Third, Themes.Fourth, Themes.Fifth];
 
