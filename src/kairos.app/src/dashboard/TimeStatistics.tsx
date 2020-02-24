@@ -140,12 +140,10 @@ export const TimeStatisticsComponent: React.FC<TimeStatisticsProps> = memo(
             expandIcon={cell.details.length > 0 && <ExpandMoreIcon />}
           >
             <Typography className={classes.heading}>
-              <Trans>
-                {i18n._(cell.title, cell.titleValues)} ({cell.subtitle})
-              </Trans>
+              {i18n._(cell.title, cell.titleValues)} ({cell.subtitle})
             </Typography>
             <Typography className={classes.secondaryHeading}>
-              <Trans>{cell.text}</Trans>
+              {cell.text}
             </Typography>
           </ExpansionPanelSummary>
           <ExpansionPanelDetails>

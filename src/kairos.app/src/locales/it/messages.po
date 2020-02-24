@@ -35,7 +35,7 @@ msgstr "Assenza aggiornata"
 #: src/App.tsx:302
 #: src/bulk-insert/BulkInsert.tsx:35
 #: src/bulk-insert/BulkTimeAbsenceEntryInsert.tsx:101
-#: src/dashboard/TimeStatistics.tsx:77
+#: src/dashboard/TimeStatistics.tsx:100
 #: src/export/Export.tsx:33
 #: src/time-absence-entries/TimeAbsenceEntries.tsx:26
 msgid "Absences"
@@ -46,11 +46,11 @@ msgstr "Assenze"
 msgid "Absences exported"
 msgstr "Assenze esportate"
 
-#: src/dashboard/TimeEntriesCalendar.tsx:105
+#: src/dashboard/TimeEntriesCalendar.tsx:108
 msgid "Agenda"
 msgstr "Agenda"
 
-#: src/dashboard/TimeEntriesCalendar.tsx:107
+#: src/dashboard/TimeEntriesCalendar.tsx:110
 msgid "All day"
 msgstr "Tutto il giorno"
 
@@ -73,7 +73,7 @@ msgstr "Sei sicuro di voler cancellare le festività selezionate?"
 msgid "Are you sure?"
 msgstr "Sei sicuro?"
 
-#: src/dashboard/TimeEntriesCalendar.tsx:100
+#: src/dashboard/TimeEntriesCalendar.tsx:103
 msgid "Back"
 msgstr "Indietro"
 
@@ -89,11 +89,11 @@ msgstr "Inserimento multiplo"
 msgid "Compensation"
 msgstr "Compensazione"
 
-#: src/code/calculator.ts:245
+#: src/code/calculator.ts:278
 msgid "Compensation Month: {jobName}"
 msgstr "Compensazioni mese: {jobName}"
 
-#: src/code/calculator.ts:271
+#: src/code/calculator.ts:308
 msgid "Compensation Year: {jobName}"
 msgstr "Compensazioni anno: {jobName}"
 
@@ -102,7 +102,7 @@ msgstr "Compensazioni anno: {jobName}"
 msgid "Confirm"
 msgstr "Conferma"
 
-#: src/index.tsx:203
+#: src/index.tsx:206
 msgid "Content is cached for offline use."
 msgstr "Il contenuto è stato memorizzato nella cache per l'utilizzo offline."
 
@@ -118,19 +118,19 @@ msgstr "Crea Festività"
 msgid "Current Date"
 msgstr "Data attuale"
 
-#: src/navigator/Navigator.tsx:147
+#: src/navigator/Navigator.tsx:156
 msgid "Current Month"
 msgstr "Mese corrente"
 
-#: src/navigator/Navigator.tsx:141
+#: src/navigator/Navigator.tsx:150
 msgid "Current Week"
 msgstr "Settimana corrente"
 
-#: src/navigator/Navigator.tsx:153
+#: src/navigator/Navigator.tsx:162
 msgid "Current Year"
 msgstr "Anno corrente"
 
-#: src/navigator/Navigator.tsx:138
+#: src/navigator/Navigator.tsx:147
 msgid "Custom"
 msgstr "Personalizzato"
 
@@ -138,7 +138,7 @@ msgstr "Personalizzato"
 msgid "Dashboard"
 msgstr "Dashboard"
 
-#: src/dashboard/TimeEntriesCalendar.tsx:98
+#: src/dashboard/TimeEntriesCalendar.tsx:101
 msgid "Day"
 msgstr "Giorno"
 
@@ -169,7 +169,7 @@ msgstr "Descrizione"
 #: src/bulk-insert/BulkTimeAbsenceEntryInsert.tsx:172
 #: src/export/ExportTimeAbsenceEntries.tsx:45
 #: src/export/ExportTimeEntries.tsx:45
-#: src/navigator/Navigator.tsx:165
+#: src/navigator/Navigator.tsx:179
 #: src/profile/ProfileJobForm.tsx:141
 #: src/shared/TimeAbsenceEntryForm.tsx:97
 #: src/time-absence-entries/TimeAbsenceEntries.tsx:42
@@ -233,7 +233,7 @@ msgstr "Esporta ingressi"
 msgid "Feel free to request for new bugfixes / features with any link in the footer."
 msgstr "Sentitevi liberi di richiedere nuovi bugfixes / features con qualsiasi link nel piè di pagina."
 
-#: src/navigator/Navigator.tsx:174
+#: src/navigator/Navigator.tsx:188
 msgid "Filters"
 msgstr "Filtri"
 
@@ -241,7 +241,7 @@ msgstr "Filtri"
 msgid "Friday"
 msgstr "Venerdì"
 
-#: src/navigator/Navigator.tsx:190
+#: src/navigator/Navigator.tsx:204
 msgid "Holiday"
 msgstr "Festività"
 
@@ -276,11 +276,11 @@ msgstr "Festività"
 msgid "Illness"
 msgstr "Malattia"
 
-#: src/code/calculator.ts:251
+#: src/code/calculator.ts:285
 msgid "Illness Month: {jobName}"
 msgstr "Malattie mese: {jobName}"
 
-#: src/code/calculator.ts:277
+#: src/code/calculator.ts:315
 msgid "Illness Year: {jobName}"
 msgstr "Malattie anno: {jobName}"
 
@@ -306,8 +306,8 @@ msgstr "Assenze invalide"
 #: src/export/ExportTimeAbsenceEntries.tsx:45
 #: src/export/ExportTimeEntries.tsx:44
 #: src/export/ExportTimeEntries.tsx:45
-#: src/navigator/Navigator.tsx:164
-#: src/navigator/Navigator.tsx:165
+#: src/navigator/Navigator.tsx:178
+#: src/navigator/Navigator.tsx:179
 #: src/profile/ProfileJobForm.tsx:140
 #: src/profile/ProfileJobForm.tsx:141
 #: src/shared/TimeAbsenceEntryForm.tsx:96
@@ -382,11 +382,11 @@ msgstr "Esci"
 msgid "Monday"
 msgstr "Lunedì"
 
-#: src/dashboard/TimeEntriesCalendar.tsx:96
+#: src/dashboard/TimeEntriesCalendar.tsx:99
 msgid "Month"
 msgstr "Mese"
 
-#: src/dashboard/TimeEntriesCalendar.tsx:108
+#: src/dashboard/TimeEntriesCalendar.tsx:111
 msgid "More {more}"
 msgstr "Mostra {more}"
 
@@ -398,19 +398,19 @@ msgstr "Nome"
 msgid "Navigator"
 msgstr "Navigatore"
 
-#: src/index.tsx:206
+#: src/index.tsx:209
 msgid "New content is available and will be used when all tabs for this page are closed."
 msgstr "Il nuovo contenuto è disponibile e verrà utilizzato quando tutte le schede di questa pagina sono chiuse."
 
-#: src/dashboard/TimeEntriesCalendar.tsx:101
+#: src/dashboard/TimeEntriesCalendar.tsx:104
 msgid "Next"
 msgstr "Prossimo"
 
-#: src/navigator/Navigator.tsx:221
+#: src/navigator/Navigator.tsx:235
 msgid "No Entries for this range"
 msgstr "Nessuna entrata per questo range"
 
-#: src/dashboard/TimeEntriesCalendar.tsx:106
+#: src/dashboard/TimeEntriesCalendar.tsx:109
 msgid "No Events In Range"
 msgstr "Nessun evento"
 
@@ -443,15 +443,15 @@ msgstr "Inserisci ingresso"
 msgid "Out"
 msgstr "Uscita"
 
-#: src/code/calculator.ts:175
+#: src/code/calculator.ts:179
 msgid "Overtime Today: {jobName}"
 msgstr "Straordinari oggi: {jobName}"
 
-#: src/code/calculator.ts:189
+#: src/code/calculator.ts:195
 msgid "Overtime Week: {jobName}"
 msgstr "Straordinari settimana: {jobName}"
 
-#: src/code/calculator.ts:197
+#: src/code/calculator.ts:211
 msgid "Overtime Year: {jobName}"
 msgstr "Straordinari anno: {jobName}"
 
@@ -467,23 +467,27 @@ msgstr "Valori percentuali (0.5 sono 30 minuti)"
 msgid "Permit"
 msgstr "Permesso"
 
-#: src/code/calculator.ts:263
+#: src/code/calculator.ts:299
 msgid "Permit Month: {jobName}"
 msgstr "Permessi mese: {jobName}"
 
-#: src/code/calculator.ts:289
+#: src/code/calculator.ts:329
 msgid "Permit Year: {jobName}"
 msgstr "Permessi anno: {jobName}"
 
-#: src/navigator/Navigator.tsx:150
+#: src/code/calculator.ts:228
+msgid "PlusMinus Year: {jobName}"
+msgstr "PlusMinus anno: {jobName}"
+
+#: src/navigator/Navigator.tsx:159
 msgid "Previous Month"
 msgstr "Mese precedente"
 
-#: src/navigator/Navigator.tsx:144
+#: src/navigator/Navigator.tsx:153
 msgid "Previous Week"
 msgstr "Settimana precedente"
 
-#: src/navigator/Navigator.tsx:156
+#: src/navigator/Navigator.tsx:165
 msgid "Previous Year"
 msgstr "Anno precedente"
 
@@ -496,13 +500,21 @@ msgstr "Profilo"
 msgid "Profile Saved"
 msgstr "Profilo salvato"
 
-#: src/code/calculator.ts:169
+#: src/code/calculator.ts:172
 msgid "Remaining Today: {jobName}"
 msgstr "Rimanenti oggi: {jobName}"
 
-#: src/code/calculator.ts:183
+#: src/code/calculator.ts:336
+msgid "Remaining Vacation Year: {jobName}"
+msgstr "Vacanze rimanenti anno: {jobName}"
+
+#: src/code/calculator.ts:188
 msgid "Remaining Week: {jobName}"
 msgstr "Rimanenti settimana: {jobName}"
+
+#: src/code/calculator.ts:204
+msgid "Remaining Year: {jobName}"
+msgstr "Rimanenti anno: {jobName}"
 
 #: src/profile/ProfileJobForm.tsx:165
 msgid "Saturday"
@@ -535,18 +547,18 @@ msgstr "Accedi"
 #: src/bulk-insert/BulkTimeAbsenceEntryInsert.tsx:165
 #: src/export/ExportTimeAbsenceEntries.tsx:44
 #: src/export/ExportTimeEntries.tsx:44
-#: src/navigator/Navigator.tsx:164
+#: src/navigator/Navigator.tsx:178
 #: src/profile/ProfileJobForm.tsx:140
 #: src/shared/TimeAbsenceEntryForm.tsx:96
 #: src/time-absence-entries/TimeAbsenceEntries.tsx:35
 msgid "Start"
 msgstr "Inizio"
 
-#: src/dashboard/TimeStatistics.tsx:80
+#: src/dashboard/TimeStatistics.tsx:103
 msgid "Summary of your absences"
 msgstr "Riassunto delle tue assenze"
 
-#: src/dashboard/TimeStatistics.tsx:65
+#: src/dashboard/TimeStatistics.tsx:90
 msgid "Summary of your working hours"
 msgstr "Riassunto dei tuoi orari lavorativi"
 
@@ -568,7 +580,7 @@ msgstr "Giovedì"
 msgid "Time Entries"
 msgstr "Ingressi"
 
-#: src/dashboard/TimeEntriesCalendar.tsx:99
+#: src/dashboard/TimeEntriesCalendar.tsx:102
 msgid "Today"
 msgstr "Oggi"
 
@@ -582,7 +594,7 @@ msgstr "Oggi"
 msgid "Type"
 msgstr "Tipo"
 
-#: src/navigator/Navigator.tsx:180
+#: src/navigator/Navigator.tsx:194
 msgid "Types"
 msgstr "Tipi"
 
@@ -622,11 +634,11 @@ msgstr "Salva festività col paese"
 msgid "Vacation"
 msgstr "Ferie"
 
-#: src/code/calculator.ts:257
+#: src/code/calculator.ts:292
 msgid "Vacation Month: {jobName}"
 msgstr "Ferie mese: {jobName}"
 
-#: src/code/calculator.ts:283
+#: src/code/calculator.ts:322
 msgid "Vacation Year: {jobName}"
 msgstr "Ferie anno: {jobName}"
 
@@ -650,7 +662,7 @@ msgstr "Versione {0}"
 msgid "Wednesday"
 msgstr "Mercoledì"
 
-#: src/dashboard/TimeEntriesCalendar.tsx:102
+#: src/dashboard/TimeEntriesCalendar.tsx:105
 msgid "Week"
 msgstr "Settimana"
 
@@ -664,15 +676,15 @@ msgstr "Settimana"
 msgid "When"
 msgstr "Quando"
 
-#: src/dashboard/TimeEntriesCalendar.tsx:104
+#: src/dashboard/TimeEntriesCalendar.tsx:107
 msgid "Work Week"
 msgstr "Settimana lavorativa"
 
-#: src/dashboard/TimeStatistics.tsx:62
+#: src/dashboard/TimeStatistics.tsx:87
 msgid "Working Hours"
 msgstr "Ore lavorative"
 
-#: src/dashboard/TimeEntriesCalendar.tsx:97
+#: src/dashboard/TimeEntriesCalendar.tsx:100
 msgid "Yesterday"
 msgstr "Ieri"
 
