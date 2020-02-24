@@ -89,11 +89,11 @@ msgstr "Bulk Insert"
 msgid "Compensation"
 msgstr "Compensation"
 
-#: src/code/calculator.ts:278
+#: src/code/calculator.ts:276
 msgid "Compensation Month: {jobName}"
 msgstr "Compensation Month: {jobName}"
 
-#: src/code/calculator.ts:308
+#: src/code/calculator.ts:306
 msgid "Compensation Year: {jobName}"
 msgstr "Compensation Year: {jobName}"
 
@@ -276,11 +276,11 @@ msgstr "Holidays"
 msgid "Illness"
 msgstr "Illness"
 
-#: src/code/calculator.ts:285
+#: src/code/calculator.ts:283
 msgid "Illness Month: {jobName}"
 msgstr "Illness Month: {jobName}"
 
-#: src/code/calculator.ts:315
+#: src/code/calculator.ts:313
 msgid "Illness Year: {jobName}"
 msgstr "Illness Year: {jobName}"
 
@@ -443,15 +443,15 @@ msgstr "Open time entry"
 msgid "Out"
 msgstr "Out"
 
-#: src/code/calculator.ts:179
+#: src/code/calculator.ts:180
 msgid "Overtime Today: {jobName}"
 msgstr "Overtime Today: {jobName}"
 
-#: src/code/calculator.ts:195
+#: src/code/calculator.ts:196
 msgid "Overtime Week: {jobName}"
 msgstr "Overtime Week: {jobName}"
 
-#: src/code/calculator.ts:211
+#: src/code/calculator.ts:219
 msgid "Overtime Year: {jobName}"
 msgstr "Overtime Year: {jobName}"
 
@@ -467,15 +467,19 @@ msgstr "Percentual values (0.5 is 30 minutes)"
 msgid "Permit"
 msgstr "Permit"
 
-#: src/code/calculator.ts:299
+#: src/code/calculator.ts:297
 msgid "Permit Month: {jobName}"
 msgstr "Permit Month: {jobName}"
 
-#: src/code/calculator.ts:329
+#: src/code/calculator.ts:327
 msgid "Permit Year: {jobName}"
 msgstr "Permit Year: {jobName}"
 
-#: src/code/calculator.ts:228
+#: src/code/calculator.ts:203
+msgid "PlusMinus Week: {jobName}"
+msgstr "PlusMinus Week: {jobName}"
+
+#: src/code/calculator.ts:226
 msgid "PlusMinus Year: {jobName}"
 msgstr "PlusMinus Year: {jobName}"
 
@@ -500,19 +504,19 @@ msgstr "Profile"
 msgid "Profile Saved"
 msgstr "Profile Saved"
 
-#: src/code/calculator.ts:172
+#: src/code/calculator.ts:173
 msgid "Remaining Today: {jobName}"
 msgstr "Remaining Today: {jobName}"
 
-#: src/code/calculator.ts:336
+#: src/code/calculator.ts:334
 msgid "Remaining Vacation Year: {jobName}"
 msgstr "Remaining Vacation Year: {jobName}"
 
-#: src/code/calculator.ts:188
+#: src/code/calculator.ts:189
 msgid "Remaining Week: {jobName}"
 msgstr "Remaining Week: {jobName}"
 
-#: src/code/calculator.ts:204
+#: src/code/calculator.ts:212
 msgid "Remaining Year: {jobName}"
 msgstr "Remaining Year: {jobName}"
 
@@ -634,11 +638,11 @@ msgstr "Update holidays from country"
 msgid "Vacation"
 msgstr "Vacation"
 
-#: src/code/calculator.ts:292
+#: src/code/calculator.ts:290
 msgid "Vacation Month: {jobName}"
 msgstr "Vacation Month: {jobName}"
 
-#: src/code/calculator.ts:322
+#: src/code/calculator.ts:320
 msgid "Vacation Year: {jobName}"
 msgstr "Vacation Year: {jobName}"
 
