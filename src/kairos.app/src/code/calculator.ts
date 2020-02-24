@@ -274,6 +274,7 @@ export function getWorkingHoursStatistics(
     OvertimeToday: [],
     RemainingWeek: [],
     OvertimeWeek: [],
+    PlusMinusWeek: [],
     RemainingYear: [],
     OvertimeYear: [],
     PlusMinusYear: [],
@@ -421,6 +422,24 @@ export function getWorkingHoursStatistics(
       details: weekJobHours.details.overtimeHours,
     });
 
+    statistics['PlusMinusWeek'].push({
+      title: i18n._(t`PlusMinus Week: ${jobName}`),
+      titleValues: { job: job.name },
+      subtitle: `${formatDate(
+        startOfWeek(now),
+        language,
+        'MMMM dd yyyy',
+      )} - ${formatDate(endOfWeek(now), language, 'MMMM dd yyyy')}`,
+      text: `${
+        weekJobHours.plusMinusIsPositive ? '+' : '-'
+      }${humanDifferenceFromHours(
+        weekJobHours.plusMinusHours,
+        { roundToNearest15: false },
+        averageWorkingHours,
+      )}`,
+      details: [],
+    });
+
     // year
     const yearJobHours = buildJobHoursForRange(
       selectedYearStart,
@@ -455,22 +474,14 @@ export function getWorkingHoursStatistics(
       details: yearJobHours.details.overtimeHours,
     });
 
-    let plusMinus = new Decimal(0);
-    let plusMinusIsPositive = true;
-    if (yearJobHours.overtimeHours.greaterThan(yearJobHours.remainingHours)) {
-      plusMinus = yearJobHours.overtimeHours.minus(yearJobHours.remainingHours);
-      plusMinusIsPositive = true;
-    } else {
-      plusMinus = yearJobHours.remainingHours.minus(yearJobHours.overtimeHours);
-      plusMinusIsPositive = false;
-    }
-
     statistics['PlusMinusYear'].push({
       title: i18n._(t`PlusMinus Year: ${jobName}`),
       titleValues: { job: job.name },
       subtitle: selectedYear.toString(),
-      text: `${plusMinusIsPositive ? '+' : '-'}${humanDifferenceFromHours(
-        plusMinus,
+      text: `${
+        yearJobHours.plusMinusIsPositive ? '+' : '-'
+      }${humanDifferenceFromHours(
+        yearJobHours.plusMinusHours,
         { roundToNearest15: false },
         averageWorkingHours,
       )}`,
@@ -748,6 +759,8 @@ function buildJobHoursForRange(
     workedHours: Decimal;
     remainingHours: Decimal;
     overtimeHours: Decimal;
+    plusMinusHours: Decimal;
+    plusMinusIsPositive: boolean;
     details: {
       workedHours: DateDetails[];
       remainingHours: DateDetails[];
@@ -757,6 +770,8 @@ function buildJobHoursForRange(
     workedHours: new Decimal(0),
     remainingHours: new Decimal(0),
     overtimeHours: new Decimal(0),
+    plusMinusHours: new Decimal(0),
+    plusMinusIsPositive: false,
     details: {
       workedHours: [],
       remainingHours: [],
@@ -779,52 +794,66 @@ function buildJobHoursForRange(
     let remainingHours = new Decimal(0);
     let workedHours = new Decimal(0);
     let overtimeHours = new Decimal(0);
-    if (!holidaysInDay.length) {
-      const workingHours = new Decimal(getDayWorkingHours(day, job));
-
-      let absenceHours = new Decimal(
-        sumDecimal(getDiffHoursFromAbsences(job, holidays)(absencesInDay)),
-      );
-
-      if (absenceHours.greaterThanOrEqualTo(workingHours)) {
-        absenceHours = workingHours;
-      }
-
-      const difference = new Decimal(
-        !!differencesByDate && !!differencesByDate[getUnixTime(day)]
-          ? differencesByDate[getUnixTime(day)]
-          : 0,
-      );
-
-      workedHours = unixToHours(difference);
-      remainingHours = workingHours.minus(workedHours.plus(absenceHours));
-      overtimeHours = remainingHours.lessThan(0)
-        ? remainingHours.abs()
-        : new Decimal(0);
-
-      if (workedHours.greaterThan(0)) {
-        results.details.workedHours.push({
-          range: { start: day, end: day },
-          hours: workedHours,
-        });
-      }
-      if (remainingHours.greaterThan(0)) {
-        results.details.remainingHours.push({
-          range: { start: day, end: day },
-          hours: remainingHours,
-        });
-      }
-      if (overtimeHours.greaterThan(0)) {
-        results.details.overtimeHours.push({
-          range: { start: day, end: day },
-          hours: overtimeHours,
-        });
-      }
+    if (holidaysInDay.length) {
+      continue;
     }
-    results.workedHours = results.workedHours.add(workedHours);
-    results.remainingHours = results.remainingHours.add(remainingHours);
-    results.overtimeHours = results.overtimeHours.add(overtimeHours);
+    const workingHours = new Decimal(getDayWorkingHours(day, job));
+
+    let absenceHours = new Decimal(
+      sumDecimal(getDiffHoursFromAbsences(job, holidays)(absencesInDay)),
+    );
+
+    if (absenceHours.greaterThanOrEqualTo(workingHours)) {
+      absenceHours = workingHours;
+    }
+
+    const difference = new Decimal(
+      !!differencesByDate && !!differencesByDate[getUnixTime(day)]
+        ? differencesByDate[getUnixTime(day)]
+        : 0,
+    );
+
+    workedHours = unixToHours(difference);
+    remainingHours = workingHours.minus(workedHours.plus(absenceHours));
+    overtimeHours = remainingHours.lessThan(0)
+      ? remainingHours.abs()
+      : new Decimal(0);
+
+    if (workedHours.greaterThan(0)) {
+      results.workedHours = results.workedHours.plus(workedHours);
+      results.details.workedHours.push({
+        range: { start: day, end: day },
+        hours: workedHours,
+      });
+    }
+    if (remainingHours.greaterThan(0)) {
+      results.remainingHours = results.remainingHours.plus(remainingHours);
+      results.details.remainingHours.push({
+        range: { start: day, end: day },
+        hours: remainingHours,
+      });
+    }
+    if (overtimeHours.greaterThan(0)) {
+      results.overtimeHours = results.overtimeHours.plus(overtimeHours);
+      results.details.overtimeHours.push({
+        range: { start: day, end: day },
+        hours: overtimeHours,
+      });
+    }
   }
+
+  if (results.overtimeHours.greaterThan(results.remainingHours)) {
+    results.plusMinusHours = results.overtimeHours.minus(
+      results.remainingHours,
+    );
+    results.plusMinusIsPositive = true;
+  } else {
+    results.plusMinusHours = results.remainingHours.minus(
+      results.overtimeHours,
+    );
+    results.plusMinusIsPositive = false;
+  }
+
   return results;
 }
 
