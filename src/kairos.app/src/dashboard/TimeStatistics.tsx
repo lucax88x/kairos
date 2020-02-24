@@ -10,14 +10,20 @@ import {
   TableRow,
   Typography,
 } from '@material-ui/core';
+
+import SyncAltIcon from '@material-ui/icons/SyncAlt';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
-import { flatten, values } from 'ramda';
+import { getDate, getMonth, getUnixTime } from 'date-fns';
+import { flatten, map, values } from 'ramda';
 import React, { memo, useCallback, useMemo } from 'react';
+import { Link } from 'react-router-dom';
 import {
   getAbsenceStatistics,
   getWorkingHoursStatistics,
   TimeStatisticCell,
 } from '../code/calculator';
+import { dateFormatter } from '../code/formatters';
+import { humanDifferenceFromHours } from '../code/humanDifference';
 import { mapIndexed } from '../code/ramda.curried';
 import { Themes } from '../code/variables';
 import Spinner from '../components/Spinner';
@@ -27,6 +33,7 @@ import { ProfileModel } from '../models/profile.model';
 import { TimeAbsenceEntryListModel } from '../models/time-absence-entry-list.model';
 import { TimeEntryListModel } from '../models/time-entry-list.model';
 import { TimeHolidayEntryModel } from '../models/time-holiday-entry.model';
+import { buildNavigatorRoute } from '../routes';
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -34,20 +41,20 @@ const useStyles = makeStyles(theme => ({
   },
   heading: {
     fontSize: theme.typography.pxToRem(15),
-    flexBasis: '33.33%',
+    flexBasis: '50.00%',
     flexShrink: 0,
   },
   secondaryHeading: {
     fontSize: theme.typography.pxToRem(15),
     color: theme.palette.text.secondary,
   },
-  table: {
+  panelsContainer: {
     width: '100%',
-    height: '100%',
+    display: 'grid',
   },
-  row: {
-    width: '100%',
-    height: '100%',
+  link: {
+    color: 'inherit',
+    textDecoration: 'none',
   },
 }));
 
@@ -121,17 +128,62 @@ export const TimeStatisticsComponent: React.FC<TimeStatisticsProps> = memo(
       [selectedYear, selectedLanguage, profile, absences, holidays],
     );
 
-    const generateCells = useCallback(
+    const generatePanels = useCallback(
       mapIndexed<TimeStatisticCell, JSX.Element>()((cell, index) => (
-        <TableRow
+        <ExpansionPanel
           key={cell.title}
-          className={classes.row}
           style={{ ...Themes.getRelativeToIndex(index) }}
+          disabled={cell.details.length === 0}
+          TransitionProps={{ unmountOnExit: true }}
         >
-          <TableCell>{i18n._(cell.title, cell.titleValues)}</TableCell>
-          <TableCell>{cell.text}</TableCell>
-          <TableCell>{cell.subtitle}</TableCell>
-        </TableRow>
+          <ExpansionPanelSummary
+            expandIcon={cell.details.length > 0 && <ExpandMoreIcon />}
+          >
+            <Typography className={classes.heading}>
+              <Trans>
+                {i18n._(cell.title, cell.titleValues)} ({cell.subtitle})
+              </Trans>
+            </Typography>
+            <Typography className={classes.secondaryHeading}>
+              <Trans>{cell.text}</Trans>
+            </Typography>
+          </ExpansionPanelSummary>
+          <ExpansionPanelDetails>
+            <Table>
+              <TableBody>
+                {map(
+                  detail => (
+                    <TableRow key={getUnixTime(detail.range.start)}>
+                      <TableCell>
+                        {`${dateFormatter(
+                          detail.range.start,
+                        )} - ${dateFormatter(detail.range.end)}`}
+                      </TableCell>
+                      <TableCell>
+                        {humanDifferenceFromHours(detail.hours, {
+                          roundToNearest15: false,
+                        })}
+                      </TableCell>
+                      <TableCell>
+                        <Link
+                          className={classes.link}
+                          to={buildNavigatorRoute(
+                            selectedYear,
+                            getMonth(detail.range.start) + 1,
+                            getDate(detail.range.start),
+                          )}
+                        >
+                          <SyncAltIcon />
+                        </Link>
+                      </TableCell>
+                    </TableRow>
+                  ),
+                  cell.details,
+                )}
+              </TableBody>
+            </Table>
+          </ExpansionPanelDetails>
+        </ExpansionPanel>
       )),
       [],
     );
@@ -139,7 +191,7 @@ export const TimeStatisticsComponent: React.FC<TimeStatisticsProps> = memo(
     return (
       <Spinner show={isGetTimeEntriesBusy}>
         <div className={classes.root}>
-          <ExpansionPanel>
+          <ExpansionPanel TransitionProps={{ unmountOnExit: true }}>
             <ExpansionPanelSummary expandIcon={<ExpandMoreIcon />}>
               <Typography className={classes.heading}>
                 <Trans>Working Hours</Trans>
@@ -148,14 +200,12 @@ export const TimeStatisticsComponent: React.FC<TimeStatisticsProps> = memo(
                 <Trans>Summary of your working hours</Trans>
               </Typography>
             </ExpansionPanelSummary>
-            <ExpansionPanelDetails>
-              <Table className={classes.table}>
-                <TableBody>{generateCells(workingHourCells)}</TableBody>
-              </Table>
+            <ExpansionPanelDetails className={classes.panelsContainer}>
+              {generatePanels(workingHourCells)}
             </ExpansionPanelDetails>
           </ExpansionPanel>
           {!!absenceCells.length && (
-            <ExpansionPanel>
+            <ExpansionPanel TransitionProps={{ unmountOnExit: true }}>
               <ExpansionPanelSummary expandIcon={<ExpandMoreIcon />}>
                 <Typography className={classes.heading}>
                   <Trans>Absences</Trans>
@@ -164,10 +214,8 @@ export const TimeStatisticsComponent: React.FC<TimeStatisticsProps> = memo(
                   <Trans>Summary of your absences</Trans>
                 </Typography>
               </ExpansionPanelSummary>
-              <ExpansionPanelDetails>
-                <Table className={classes.table}>
-                  <TableBody>{generateCells(absenceCells)}</TableBody>
-                </Table>
+              <ExpansionPanelDetails className={classes.panelsContainer}>
+                {generatePanels(absenceCells)}
               </ExpansionPanelDetails>
             </ExpansionPanel>
           )}

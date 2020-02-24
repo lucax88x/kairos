@@ -1,10 +1,5 @@
-import {
-  humanDifferenceFromHours,
-  humanDifference,
-  formatHoursToTime,
-  formatUnixToTime,
-} from './humanDifference';
 import { Decimal } from 'decimal.js';
+import { humanDifference, humanDifferenceFromHours } from './humanDifference';
 
 describe('humanDifference', () => {
   test.each`
@@ -19,7 +14,11 @@ describe('humanDifference', () => {
     'returns $expected when we get human hours of $hours',
     ({ hours, expected }) => {
       // given
-      expect(humanDifferenceFromHours(new Decimal(hours))).toBe(expected);
+      expect(
+        humanDifferenceFromHours(new Decimal(hours), {
+          roundToNearest15: true,
+        }),
+      ).toBe(expected);
     },
   );
 
@@ -35,9 +34,13 @@ describe('humanDifference', () => {
     'returns $expected when we get human hours of $hours relative to working day',
     ({ hours, expected }) => {
       // given
-      expect(humanDifferenceFromHours(new Decimal(hours), new Decimal(8))).toBe(
-        expected,
-      );
+      expect(
+        humanDifferenceFromHours(
+          new Decimal(hours),
+          { roundToNearest15: true },
+          new Decimal(8),
+        ),
+      ).toBe(expected);
     },
   );
 
@@ -59,9 +62,13 @@ describe('humanDifference', () => {
     'returns $expected rounded to nearest 15th minutes',
     ({ hours, expected }) => {
       // given
-      expect(humanDifferenceFromHours(new Decimal(hours), new Decimal(8))).toBe(
-        expected,
-      );
+      expect(
+        humanDifferenceFromHours(
+          new Decimal(hours),
+          { roundToNearest15: true },
+          new Decimal(8),
+        ),
+      ).toBe(expected);
     },
   );
 
@@ -83,9 +90,13 @@ describe('humanDifference', () => {
     'returns $expected rounded to nearest 15th minutes',
     ({ hours, expected }) => {
       // given
-      expect(humanDifferenceFromHours(new Decimal(hours), new Decimal(8))).toBe(
-        expected,
-      );
+      expect(
+        humanDifferenceFromHours(
+          new Decimal(hours),
+          { roundToNearest15: true },
+          new Decimal(8),
+        ),
+      ).toBe(expected);
     },
   );
 
@@ -96,11 +107,12 @@ describe('humanDifference', () => {
     ${'January 1 2019 00:00:00'} | ${'January 2 2019 06:00:00'} | ${'01d 06:00'}
     ${'January 1 2019 00:00:00'} | ${'January 5 2019 00:00:00'} | ${'04d'}
     ${'January 2 2019 00:00:00'} | ${'January 1 2019 00:00:00'} | ${'-01d'}
-  `(
-    'returns $start-$end producing $expected',
-    ({ start, end, expected }) => {
-      // given
-      expect(humanDifference(new Date(start), new Date(end))).toBe(expected);
-    },
-  );
+  `('returns $start-$end producing $expected', ({ start, end, expected }) => {
+    // given
+    expect(
+      humanDifference(new Date(start), new Date(end), {
+        roundToNearest15: true,
+      }),
+    ).toBe(expected);
+  });
 });

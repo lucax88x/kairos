@@ -33,6 +33,7 @@ const SECONDS_IN_YEAR = SECONDS_IN_DAY.mul(DAYS_IN_YEAR);
 export const humanDifference = (
   left: Date,
   right: Date,
+  formatTimeOptions: FormatTimeOptions,
   relativeToHours = new Decimal(24),
 ) => {
   let difference: Date;
@@ -46,12 +47,13 @@ export const humanDifference = (
   }
 
   const totalHours = dateToHours(difference);
-  const human = hoursToHuman(totalHours, relativeToHours);
+  const human = hoursToHuman(totalHours, formatTimeOptions, relativeToHours);
   return `${!isPositive ? '-' : ''}${human}`;
 };
 
 export const humanDifferenceFromHours = (
   hours: Decimal,
+  formatTimeOptions: FormatTimeOptions,
   relativeToHours: Decimal = new Decimal(24),
 ) => {
   const percentualMinutes = hours.mod(1);
@@ -63,7 +65,7 @@ export const humanDifferenceFromHours = (
   date = addHours(date, hours.toNumber());
   date = addMinutes(date, minutes.toNumber());
 
-  return humanDifference(new Date(0), date, relativeToHours);
+  return humanDifference(new Date(0), date, formatTimeOptions, relativeToHours);
 };
 
 const formatNumber = (number: Decimal): string => {
@@ -72,6 +74,7 @@ const formatNumber = (number: Decimal): string => {
 
 const hoursToHuman = (
   totalHours: Decimal,
+  formatTimeOptions: FormatTimeOptions,
   relativeToHours = new Decimal(24),
 ) => {
   const result = [];
@@ -110,7 +113,7 @@ const hoursToHuman = (
     result.push(`${formatNumber(days)}${suffix}`);
   }
 
-  const time = formatHoursRoundedTo15(hours, minutes);
+  const time = formatTime(hours, minutes, formatTimeOptions);
 
   if (time !== '00:00') {
     result.push(time);
@@ -125,20 +128,30 @@ const hoursToHuman = (
   return str;
 };
 
-function formatHoursRoundedTo15(hours: Decimal, minutes: Decimal) {
+interface FormatTimeOptions {
+  roundToNearest15: boolean;
+}
+
+function formatTime(
+  hours: Decimal,
+  minutes: Decimal,
+  formatTimeOptions: FormatTimeOptions = { roundToNearest15: true },
+) {
   let time = '00:00';
   if (minutes.greaterThanOrEqualTo(1)) {
-    if (minutes.lessThanOrEqualTo(7)) {
-      minutes = new Decimal(0);
-    } else if (minutes.lessThanOrEqualTo(22)) {
-      minutes = new Decimal(15);
-    } else if (minutes.lessThanOrEqualTo(37)) {
-      minutes = new Decimal(30);
-    } else if (minutes.lessThanOrEqualTo(52)) {
-      minutes = new Decimal(45);
-    } else {
-      hours = hours.plus(1);
-      minutes = new Decimal(0);
+    if (formatTimeOptions.roundToNearest15) {
+      if (minutes.lessThanOrEqualTo(7)) {
+        minutes = new Decimal(0);
+      } else if (minutes.lessThanOrEqualTo(22)) {
+        minutes = new Decimal(15);
+      } else if (minutes.lessThanOrEqualTo(37)) {
+        minutes = new Decimal(30);
+      } else if (minutes.lessThanOrEqualTo(52)) {
+        minutes = new Decimal(45);
+      } else {
+        hours = hours.plus(1);
+        minutes = new Decimal(0);
+      }
     }
     const formattedHours = formatNumber(hours);
     const formattedMinutes = formatNumber(minutes);
@@ -150,7 +163,7 @@ function formatHoursRoundedTo15(hours: Decimal, minutes: Decimal) {
   return time;
 }
 
-export function formatUnixToTime(unix: number) {
+export function formatUnixToTime(unix: number, options: FormatTimeOptions) {
   const totalSeconds = new Decimal(
     differenceInSeconds(new Date(unix), new Date(0)),
   );
@@ -162,7 +175,7 @@ export function formatUnixToTime(unix: number) {
     .div(SECONDS_IN_MINUTE)
     .floor();
 
-  return formatHoursRoundedTo15(hours, minutes);
+  return formatTime(hours, minutes);
 }
 
 const dateToHours = (date: Date): Decimal => {

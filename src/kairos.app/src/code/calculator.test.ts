@@ -725,7 +725,7 @@ describe('getHoursFromAbsences', () => {
     const hours = getDiffHoursFromAbsences(job, [])(timeAbsenceEntries);
 
     // then
-    expect(hours).toEqual([4]);
+    expect(hours[0].toNumber()).toEqual(4);
   });
 
   it(`should get reduced hour differences when they exceed job times`, () => {
@@ -743,7 +743,7 @@ describe('getHoursFromAbsences', () => {
     const hours = getDiffHoursFromAbsences(job, [])(timeAbsenceEntries);
 
     // then
-    expect(hours).toEqual([6]);
+    expect(hours[0].toNumber()).toEqual(6);
   });
 
   it(`should get reduced hour differences when they exceed job times for each day`, () => {
@@ -761,7 +761,7 @@ describe('getHoursFromAbsences', () => {
     const hours = getDiffHoursFromAbsences(job, [])(timeAbsenceEntries);
 
     // then
-    expect(hours).toEqual([21]);
+    expect(hours[0].toNumber()).toEqual(21);
   });
 
   it(`should exclude holidays`, () => {
@@ -784,7 +784,7 @@ describe('getHoursFromAbsences', () => {
     )(timeAbsenceEntries);
 
     // then
-    expect(hours).toEqual([0]);
+    expect(hours[0].toNumber()).toEqual(0);
   });
 });
 
