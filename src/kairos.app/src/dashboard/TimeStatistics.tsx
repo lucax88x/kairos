@@ -1,39 +1,27 @@
 import { Trans } from '@lingui/macro';
-import {
-  ExpansionPanel,
-  ExpansionPanelDetails,
-  ExpansionPanelSummary,
-  makeStyles,
-  Table,
-  TableBody,
-  TableCell,
-  TableRow,
-  Typography,
-} from '@material-ui/core';
-
-import SyncAltIcon from '@material-ui/icons/SyncAlt';
+import { ExpansionPanel, ExpansionPanelDetails, ExpansionPanelSummary, makeStyles, Table, TableBody, TableCell, TableRow, Typography } from '@material-ui/core';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
+import SyncAltIcon from '@material-ui/icons/SyncAlt';
 import { getDate, getMonth, getUnixTime } from 'date-fns';
+import Decimal from 'decimal.js';
 import { flatten, map, values } from 'ramda';
 import React, { memo, useCallback, useMemo } from 'react';
 import { Link } from 'react-router-dom';
-import {
-  getAbsenceStatistics,
-  getWorkingHoursStatistics,
-  TimeStatisticCell,
-} from '../code/calculator';
+import { getAbsenceStatistics, getWorkingHoursStatistics, TimeStatisticCell } from '../code/calculator';
 import { dateFormatter } from '../code/formatters';
 import { humanDifferenceFromHours } from '../code/humanDifference';
 import { mapIndexed } from '../code/ramda.curried';
 import { Themes } from '../code/variables';
 import Spinner from '../components/Spinner';
 import { i18n } from '../i18nLoader';
+import { JobModel } from '../models/job.model';
 import { Language } from '../models/language-model';
 import { ProfileModel } from '../models/profile.model';
 import { TimeAbsenceEntryListModel } from '../models/time-absence-entry-list.model';
 import { TimeEntryListModel } from '../models/time-entry-list.model';
 import { TimeHolidayEntryModel } from '../models/time-holiday-entry.model';
 import { buildNavigatorRoute } from '../routes';
+
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -158,9 +146,15 @@ export const TimeStatisticsComponent: React.FC<TimeStatisticsProps> = memo(
                         )} - ${dateFormatter(detail.range.end)}`}
                       </TableCell>
                       <TableCell>
-                        {humanDifferenceFromHours(detail.hours, {
-                          roundToNearest15: false,
-                        })}
+                        {humanDifferenceFromHours(
+                          detail.hours,
+                          {
+                            roundToNearest15: false,
+                          },
+                          new Decimal(
+                            JobModel.getAverageWorkingHours(cell.job),
+                          ),
+                        )}
                       </TableCell>
                       <TableCell>
                         <Link
