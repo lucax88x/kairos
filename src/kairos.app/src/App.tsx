@@ -189,6 +189,19 @@ const useStyles = makeStyles(theme => ({
     height: '100%',
     paddingTop: theme.spacing(4),
     paddingBottom: theme.spacing(4),
+
+    paddingLeft: theme.spacing(1),
+    paddingRight: theme.spacing(1),
+
+    [theme.breakpoints.up('md')]: {
+      paddingLeft: theme.spacing(2),
+      paddingRight: theme.spacing(2),
+    },
+
+    [theme.breakpoints.up('lg')]: {
+      paddingLeft: theme.spacing(4),
+      paddingRight: theme.spacing(4),
+    },
   },
   container: {
     height: '100%',
