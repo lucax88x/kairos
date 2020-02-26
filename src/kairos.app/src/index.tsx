@@ -40,6 +40,11 @@ const theme = createMuiTheme({
     },
   },
   overrides: {
+    MuiTableCell: {
+      body: {
+        color: 'inherit'
+      }
+    },
     MuiButton: {
       textPrimary: {
         color: Themes.First.color,
