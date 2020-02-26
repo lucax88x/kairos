@@ -444,12 +444,8 @@ describe('statistics', () => {
         );
 
         // then
-        expect(result['RemainingWeek'][0]).toEqual(
-          expect.objectContaining({
-            subtitle: 'December 30 2018 - January 05 2019',
-            text: '03wd 01:00',
-          }),
-        );
+        expect(result['RemainingWeek'][0].subtitle).toBe('December 30 2018 - January 05 2019')
+        expect(result['RemainingWeek'][0].text).toBe('03wd 01:00')
 
         clear();
       });
@@ -481,18 +477,10 @@ describe('statistics', () => {
         );
 
         // then
-        expect(result['RemainingWeek'][0]).toEqual(
-          expect.objectContaining({
-            subtitle: 'December 30 2018 - January 05 2019',
-            text: '01wd',
-          }),
-        );
-        expect(result['OvertimeWeek'][0]).toEqual(
-          expect.objectContaining({
-            subtitle: 'December 30 2018 - January 05 2019',
-            text: '-',
-          }),
-        );
+        expect(result['RemainingWeek'][0].subtitle).toBe('December 30 2018 - January 05 2019')
+        expect(result['RemainingWeek'][0].text).toBe('01wd')
+        expect(result['OvertimeWeek'][0].subtitle).toBe('December 30 2018 - January 05 2019')
+        expect(result['OvertimeWeek'][0].text).toBe('-')
       });
     });
 
@@ -722,7 +710,7 @@ describe('getHoursFromAbsences', () => {
     ];
 
     // when
-    const hours = getDiffHoursFromAbsences(job, [])(timeAbsenceEntries);
+    const hours = getDiffHoursFromAbsences(job, 2019, [])(timeAbsenceEntries);
 
     // then
     expect(hours[0].toNumber()).toEqual(4);
@@ -740,7 +728,7 @@ describe('getHoursFromAbsences', () => {
     ];
 
     // when
-    const hours = getDiffHoursFromAbsences(job, [])(timeAbsenceEntries);
+    const hours = getDiffHoursFromAbsences(job, 2019, [])(timeAbsenceEntries);
 
     // then
     expect(hours[0].toNumber()).toEqual(6);
@@ -758,7 +746,7 @@ describe('getHoursFromAbsences', () => {
     ];
 
     // when
-    const hours = getDiffHoursFromAbsences(job, [])(timeAbsenceEntries);
+    const hours = getDiffHoursFromAbsences(job, 2019, [])(timeAbsenceEntries);
 
     // then
     expect(hours[0].toNumber()).toEqual(21);
@@ -780,6 +768,7 @@ describe('getHoursFromAbsences', () => {
     // when
     const hours = getDiffHoursFromAbsences(
       job,
+      2019,
       timeHolidayEntries,
     )(timeAbsenceEntries);
 

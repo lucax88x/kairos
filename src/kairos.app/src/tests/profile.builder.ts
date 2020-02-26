@@ -12,7 +12,7 @@ export class ProfileBuilder {
       new JobModel(
         this.id,
         'test-job',
-        new Date('January 1 2019 00:00'),
+        new Date('October 30 2018 00:00'),
         new Date('March 31 2019 23:59'),
         20,
         8.5,

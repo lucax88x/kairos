@@ -822,9 +822,8 @@ function buildJobHoursForRange(
   };
 
   const today = new Date();
-
-  if (isBefore(start, today)) {
-    start = today;
+  if (isBefore(start, job.start)) {
+    start = job.start;
   }
 
   if (isAfter(end, today)) {
