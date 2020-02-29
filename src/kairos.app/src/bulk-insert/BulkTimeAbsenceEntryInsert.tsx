@@ -94,9 +94,9 @@ export const BulkTimeAbsenceEntryInsertComponent: React.FC<BulkTimeAbsenceEntryI
         if (cells.length >= 4) {
           const start = parseISO(cells[0]);
           const end = parseISO(cells[1]);
-          const description = cells[2];
-          const type = cells[3];
-          const jobName = cells[4];
+          const type = cells[2];
+          const jobName = cells[3];
+          const description = cells[4];
 
           const job = indexedJobsByName[jobName.toString()];
 
@@ -178,7 +178,7 @@ export const BulkTimeAbsenceEntryInsertComponent: React.FC<BulkTimeAbsenceEntryI
       </Grid>
       <Grid item>
         <TextField
-          placeholder="START(yyyy-mm-ddThh:MMZ),END(yyyy-mm-ddThh:MMZ),DESCRIPTION,TYPE(VACATION/ILLNESS),JOB"
+          placeholder="START(yyyy-mm-ddThh:MMZ),END(yyyy-mm-ddThh:MMZ),TYPE(VACATION/ILLNESS),JOB,DESCRIPTION"
           multiline
           variant="filled"
           rows={4}

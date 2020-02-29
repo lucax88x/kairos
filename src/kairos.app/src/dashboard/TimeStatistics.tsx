@@ -12,7 +12,7 @@ import {
 } from '@material-ui/core';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 import SyncAltIcon from '@material-ui/icons/SyncAlt';
-import { getDate, getMonth, getUnixTime } from 'date-fns';
+import { getDate, getMonth, getUnixTime, getDay } from 'date-fns';
 import Decimal from 'decimal.js';
 import { flatten, map, values } from 'ramda';
 import React, { memo, useCallback, useMemo } from 'react';
@@ -146,6 +146,17 @@ export const TimeStatisticsComponent: React.FC<TimeStatisticsProps> = memo(
       [selectedYear, selectedLanguage, profile, absences, holidays],
     );
 
+    const renderRange = useCallback(
+      ({ start, end }: { start: Date; end: Date }) => {
+        if (getDay(start) === getDay(end)) {
+          return dateFormatter(start);
+        } else {
+          return `${dateFormatter(start)} - ${dateFormatter(end)}`;
+        }
+      },
+      [],
+    );
+
     const generatePanels = useCallback(
       mapIndexed<TimeStatisticCell, JSX.Element>()((cell, index) => (
         <ExpansionPanel
@@ -166,16 +177,12 @@ export const TimeStatisticsComponent: React.FC<TimeStatisticsProps> = memo(
           <ExpansionPanelDetails>
             <div className={classes.detailsContainer}>
               <Typography>{cell.subtitle}</Typography>
-              <Table>
+              <Table padding="none">
                 <TableBody>
                   {map(
                     detail => (
                       <TableRow key={getUnixTime(detail.range.start)}>
-                        <TableCell>
-                          {`${dateFormatter(
-                            detail.range.start,
-                          )} - ${dateFormatter(detail.range.end)}`}
-                        </TableCell>
+                        <TableCell>{renderRange(detail.range)}</TableCell>
                         <TableCell align="center">
                           {humanDifferenceFromHours(
                             detail.hours,

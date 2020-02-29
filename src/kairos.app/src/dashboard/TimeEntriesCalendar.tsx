@@ -1,6 +1,14 @@
 import { t } from '@lingui/macro';
 import { makeStyles } from '@material-ui/styles';
-import { endOfDay, getDate, getMonth, isEqual, startOfDay } from 'date-fns';
+import {
+  endOfDay,
+  endOfYear,
+  getDate,
+  getMonth,
+  isEqual,
+  startOfDay,
+  startOfYear,
+} from 'date-fns';
 import moment from 'moment';
 import { join, map } from 'ramda';
 import React, { useCallback, useEffect, useState } from 'react';
@@ -149,6 +157,9 @@ export const TimeEntriesCalendarComponent: React.FC<TimeEntriesCalendarEntryProp
     setEvents(toSetEvents);
   }, [profile, timeEntries, timeAbsenceEntries, timeHolidayEntries]);
 
+  const selectedYearStart = startOfYear(selectedYear);
+  const selectedYearEnd = endOfYear(selectedYear);
+
   const eventPropGetter = useCallback(
     (event: Event) => {
       const { type } = event.resource;
@@ -213,6 +224,8 @@ export const TimeEntriesCalendarComponent: React.FC<TimeEntriesCalendarEntryProp
         events={events}
         eventPropGetter={eventPropGetter}
         messages={messages}
+        min={selectedYearStart}
+        max={selectedYearEnd}
         onDoubleClickEvent={handleOnDoubleClick}
       />
     </Spinner>

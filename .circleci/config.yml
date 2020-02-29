@@ -8,33 +8,33 @@ executors:
     docker:
       - image: circleci/buildpack-deps:stretch
 jobs:
-  # build:
-  #   machine:
-  #     image: lucax88x/dotnetcore-yarn-docker-compose:latest
+  build:
+    machine:
+      image: lucax88x/dotnetcore-yarn-docker-compose:latest
 
-  #   steps:
-  #     - checkout
+    steps:
+      - checkout
 
-  #     # - setup_remote_docker
+      # - setup_remote_docker
 
-  #     - restore_cache:
-  #         keys:
-  #           - root-node_modules-{{ checksum "package.json" }}
-  #           - root-node_modules-
+      - restore_cache:
+          keys:
+            - root-node_modules-{{ checksum "package.json" }}
+            - root-node_modules-
 
-  #     - run: yarn
+      - run: yarn
 
-  #     - save_cache:
-  #         paths:
-  #           - node_modules
-  #           - src/kairos.app/node_modules
-  #         key: root-node_modules-{{ checksum "package.json" }}
+      - save_cache:
+          paths:
+            - node_modules
+            - src/kairos.app/node_modules
+          key: root-node_modules-{{ checksum "package.json" }}
 
-  #     # - run: yarn docker:start
-  #     # - run: yarn backend:test
-  #     - run: yarn frontend:lint
-  #     - run: yarn frontend:prettier
-  #     - run: yarn frontend:test
+      # - run: yarn docker:start
+      # - run: yarn backend:test
+      - run: yarn frontend:lint
+      - run: yarn frontend:prettier
+      - run: yarn frontend:test
   deploy:
     executor: docker-publisher
     steps:

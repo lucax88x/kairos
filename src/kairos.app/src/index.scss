@@ -15,15 +15,20 @@ body {
 
 // Custom scrollbar on webkit
 ::-webkit-scrollbar {
-  width: 5px;
+  width: 2px;
   height: 5px;
 }
+@media (hover: hover) {
+  ::-webkit-scrollbar {
+    width: 5px;
+  }
+}
 ::-webkit-scrollbar-track {
-  background: #53A2BE; 
+  background: #53a2be;
 }
 ::-webkit-scrollbar-thumb {
-  background: #176087; 
+  background: #176087;
 }
 ::-webkit-scrollbar-thumb:hover {
-  background: #1D84B5; 
+  background: #1d84b5;
 }
