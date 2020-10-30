@@ -49,7 +49,7 @@ jobs:
           command: docker login registry.kairos.rocks --username $DOCKER_USERNAME --password $DOCKER_PASSWORD
       - run:
           name: Write version
-          command: sh ./scripts/version.write.sh $CIRCLE_BUILD_NUM      
+          command: sh ./scripts/version.write.sh $CIRCLE_BUILD_NUM
       - run:
           name: Build Docker Images
           command: sh ./scripts/docker.build.sh $CIRCLE_BUILD_NUM PROD $FONTAWESOME_AUTH_TOKEN
@@ -64,7 +64,7 @@ workflows:
   build-and-deploy:
     jobs:
       - deploy:
-          filters: 
+          filters:
             branches:
-              only:  # only branches matching the below regex filters will run
+              only: # only branches matching the below regex filters will run
                 - master
