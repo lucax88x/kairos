@@ -4,16 +4,9 @@ import { JobModel } from '../models/job.model';
 import { TimeAbsenceEntryTypes } from '../models/time-absence-entry.model';
 import { TimeEntryTypes } from '../models/time-entry.model';
 import { UUID } from '../models/uuid.model';
-import { TimeAbsenceEntryBuilder } from '../tests/time-absence-entry.builder';
-import { TimeEntryBuilder } from '../tests/time-entry.builder';
-import { TimeHolidayEntryBuilder } from '../tests/time-holiday-entry.builder';
+import { buildTimeAbsenceEntry, buildTimeEntry, buildTimeHolidayEntry } from '../tests/test.helper';
 import { ProfileBuilder } from './../tests/profile.builder';
-import {
-  getAbsenceStatistics,
-  getDiffHoursFromAbsences,
-  getHumanDifferencesByRange,
-  getWorkingHoursStatistics,
-} from './calculator';
+import { getAbsenceStatistics, getDiffHoursFromAbsences, getHumanDifferencesByRange, getWorkingHoursStatistics } from './calculator';
 
 describe('calculations', () => {
   it('should get differences with only 2 entries', () => {
@@ -776,29 +769,3 @@ describe('getHoursFromAbsences', () => {
     expect(hours[0].toNumber()).toEqual(0);
   });
 });
-
-function buildTimeEntry(jobId: string, type: TimeEntryTypes, date: string) {
-  return new TimeEntryBuilder()
-    .withJob(new UUID(jobId))
-    .withType(type)
-    .withDate(date)
-    .build();
-}
-
-function buildTimeAbsenceEntry(
-  jobId: string,
-  start: string,
-  end: string,
-  type = TimeAbsenceEntryTypes.COMPENSATION,
-) {
-  return new TimeAbsenceEntryBuilder()
-    .withJob(new UUID(jobId))
-    .withType(type)
-    .withStart(start)
-    .withEnd(end)
-    .build();
-}
-
-function buildTimeHolidayEntry(when: string) {
-  return new TimeHolidayEntryBuilder().withWhen(when).build();
-}

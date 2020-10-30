@@ -22,6 +22,7 @@ import BeachAccessIcon from '@material-ui/icons/BeachAccess';
 import SyncAltIcon from '@material-ui/icons/SyncAlt';
 import ChevronLeftIcon from '@material-ui/icons/ChevronLeft';
 import ChevronRightIcon from '@material-ui/icons/ChevronRight';
+import ChartIcon from '@material-ui/icons/BarChart';
 import DashboardIcon from '@material-ui/icons/Dashboard';
 import LogoutIcon from '@material-ui/icons/ExitToApp';
 import FastForwardIcon from '@material-ui/icons/FastForward';
@@ -53,6 +54,7 @@ import { IsOnline } from './IsOnline.container';
 import { Language, Languages } from './models/language-model';
 import { UserModel } from './models/user.model';
 import { Navigator } from './navigator/Navigator.container';
+import { Chart } from './chart/Chart.container';
 import { NotFound } from './NotFound';
 import { Profile } from './profile/Profile.container';
 import {
@@ -493,6 +495,19 @@ export const AppComponent: React.FC<AppProps> = props => {
                 <SyncAltIcon />
               </ListItemIcon>
               <ListItemText primary={<Trans>Navigator</Trans>} />
+            </ListItem>            
+            <ListItem
+              button
+              to={buildPrivateRouteWithYear(
+                RouteMatcher.Chart,
+                selectedYear,
+              )}
+              component={Link}
+            >
+              <ListItemIcon>
+                <ChartIcon />
+              </ListItemIcon>
+              <ListItemText primary={<Trans>Chart</Trans>} />
             </ListItem>
             <Divider />
             <ListItem
@@ -564,6 +579,7 @@ export const AppComponent: React.FC<AppProps> = props => {
                   component={Navigator}
                 />
                 <Route path={RouteMatcher.Navigator} component={Navigator} />
+                <Route path={RouteMatcher.Chart} component={Chart} />
                 <Route path={RouteMatcher.Profile} component={Profile} />
                 <Route
                   path={RouteMatcher.TimeEntries}

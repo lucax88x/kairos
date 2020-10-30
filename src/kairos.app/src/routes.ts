@@ -18,6 +18,10 @@ export class RouteMatcher {
   static Navigator = buildRouteMatcher(
     RouteMatcher.PrivateWithYear,
     '/navigator/:month/:day',
+  );  
+  static Chart = buildRouteMatcher(
+    RouteMatcher.PrivateWithYear,
+    '/chart',
   );
   static TimeEntries = buildRouteMatcher(
     RouteMatcher.PrivateWithYear,

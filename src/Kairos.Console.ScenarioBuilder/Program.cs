@@ -30,6 +30,7 @@ namespace Kairos.Console.ScenarioBuilder
                             .AddEnvironmentVariables("Kairos_")
                             .Build();
                     })
+                    
                     .ConfigureContainer((ContainerBuilder builder) =>
                         builder.RegisterModule(new Ioc.Module(_configuration!))
                     )
