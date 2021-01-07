@@ -33,7 +33,7 @@ const BulkInsertComponent: React.FC<BulkInsertInputs> = props => {
 
   const [tab, setTab] = useState(0);
   const handleChangeTab = useCallback(
-    (event: React.ChangeEvent<{}>, newTab: number) => setTab(newTab),
+    (_, newTab: number) => setTab(newTab),
     [setTab],
   );
 

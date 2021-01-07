@@ -10,24 +10,24 @@ namespace Kairos.Test.Common.Infra.Scenario
     public class UserProfileScenarioBuilder
     {
         private readonly IMediator _mediator;
-        public static readonly Guid Job1 = new Guid("45870add-326d-4b5c-9e99-c47f8bf01876");
+        public static readonly Guid Job1 = new("45870add-326d-4b5c-9e99-c47f8bf01876");
         public UserProfileScenarioBuilder(IMediator mediator)
         {
             _mediator = mediator;
         }
 
-        public async Task<string> WithEmptyProfile()
+        public async Task<string?> WithEmptyProfile()
         {
             return await _mediator.Send(new CreateOrUpdateUserProfile(new UserProfileModel()));
         }
 
-        public async Task<string> WithProfile()
+        public async Task<string?> WithProfile()
         {
             return await _mediator.Send(new CreateOrUpdateUserProfile(new UserProfileModel
             {
                 Jobs = new List<UserJobModel>
                 {
-                    new UserJobModel
+                    new()
                     {
                         Id = Job1,
                         Name = "Job1",

@@ -16,16 +16,16 @@ import { profileReducers } from './profile/reducers';
 import { sharedReducers } from './shared/reducers';
 import { State } from './state';
 
-const replacer = (key: string, value: any) =>
+const replacer = (_: unknown, value: unknown) =>
   value instanceof Date ? value.toISOString() : value;
-const reviver = (key: string, value: any) =>
+const reviver = (_: unknown, value: unknown) =>
   typeof value === 'string' &&
   value.match(/^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}/)
     ? new Date(value)
     : value;
-export const encode = (toDeshydrate: any) =>
+export const encode = (toDeshydrate: unknown) =>
   JSON.stringify(toDeshydrate, replacer);
-export const decode = (toRehydrate: any) => JSON.parse(toRehydrate, reviver);
+export const decode = (toRehydrate: string) => JSON.parse(toRehydrate, reviver);
 
 const basePersistConfig = {
   storage: localforage,
@@ -49,7 +49,7 @@ const profilePersistConfig = {
   whitelist: ['profile'],
 };
 
-// tslint:disable-next-line: no-any
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 export const rootReducers = (history: History<any>) =>
   combineReducers<State>({
     router: connectRouter(history),

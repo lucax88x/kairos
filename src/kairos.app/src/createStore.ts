@@ -21,7 +21,7 @@ const sagaMiddleware = createSagaMiddleware();
 
 const middlewares = [sagaMiddleware, routerMiddleware(history), logger];
 
-export const store: Store<State, Actions> = createStore<State, Actions, {}, {}>(
+export const store: Store<State, Actions> = createStore<State, Actions, Record<string, unknown>, Record<string, unknown>>(
   rootReducers(history),
   composeWithDevTools(applyMiddleware(...middlewares)),
 );

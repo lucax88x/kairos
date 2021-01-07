@@ -114,14 +114,14 @@ export const TimeEntriesCalendarComponent: React.FC<TimeEntriesCalendarEntryProp
     for (const job of profile.jobs) {
       const entries = !!pairsByJob[job.id.toString()]
         ? map(
-            ({ enter, exit, job, enterId }) => ({
-              start: enter,
-              end: exit,
-              title: job,
-              resource: { type: EventType.Work },
-            }),
-            pairsByJob[job.id.toString()],
-          )
+          ({ enter, exit, job, enterId }) => ({
+            start: enter,
+            end: exit,
+            title: job,
+            resource: { type: EventType.Work },
+          }),
+          pairsByJob[job.id.toString()],
+        )
         : [];
 
       toSetEvents.push(...entries);
@@ -186,12 +186,11 @@ export const TimeEntriesCalendarComponent: React.FC<TimeEntriesCalendarEntryProp
     previous: i18n._(t`Back`),
     next: i18n._(t`Next`),
     week: i18n._(t`Week`),
-    // eslint-disable-next-line @typescript-eslint/camelcase
     work_week: i18n._(t`Work Week`),
     agenda: i18n._(t`Agenda`),
     noEventsInRange: i18n._(t`No Events In Range`),
     allDay: i18n._(t`All day`),
-    showMore: more => i18n._(t`More ${more}`),
+    showMore: (more: number) => i18n._(t`More ${more}`),
   };
 
   const handleOnDoubleClick = useCallback(

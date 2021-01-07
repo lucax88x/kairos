@@ -159,7 +159,7 @@ export const Autocomplete: React.FC<AutocompleteProps> = props => {
                   fullWidth: true,
                   classes,
                   label,
-                  // tslint:disable-next-line: no-any
+                  // eslint-disable-next-line @typescript-eslint/no-explicit-any
                   InputLabelProps: getLabelProps({ shrink: true } as any),
                   InputProps: { onBlur, onFocus },
                   inputProps,

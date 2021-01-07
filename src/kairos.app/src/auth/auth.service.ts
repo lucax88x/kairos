@@ -7,7 +7,7 @@ const domain = 'kairos.eu.auth0.com';
 const clientId = 'saJwYatwe1Fr2R0bmmGeTPk477XVgp1c';
 
 class AuthService {
-  initOptions: Auth0ClientOptions = {
+  initOptions = {
     domain,
     client_id: clientId,
     redirect_uri: window.location.origin,
@@ -28,7 +28,10 @@ class AuthService {
 
       const authenticated = await auth0Client.isAuthenticated();
       if (authenticated) {
-        const user: Auth0UserModel = await auth0Client.getUser();
+        const user: Auth0UserModel | undefined = await auth0Client.getUser();
+        if (!user) {
+          throw new Error('no user');
+        }
         return new UserModel(user);
       }
     } catch (error) {
@@ -45,7 +48,10 @@ class AuthService {
     const authenticated = await auth0Client.isAuthenticated();
 
     if (authenticated) {
-      const user: Auth0UserModel = await auth0Client.getUser();
+      const user: Auth0UserModel | undefined = await auth0Client.getUser();
+      if (!user) {
+        throw new Error('no user');
+      }
       return new UserModel(user);
     }
 

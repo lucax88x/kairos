@@ -26,7 +26,7 @@ function* doRefreshOnOtherActions() {
   const dashboardRoute: Route = yield select(selectDashboardRoute);
 
   if (!!dashboardRoute) {
-    yield put(refreshAction());
+    // yield put(refreshAction());
   }
 }
 

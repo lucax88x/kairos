@@ -1,8 +1,11 @@
 import { Catalogs, setupI18n } from '@lingui/core';
 import { I18nProvider } from '@lingui/react';
 import React from 'react';
+import { connect } from 'react-redux';
 import enCatalog from './locales/en/messages';
 import itCatalog from './locales/it/messages';
+import { selectSelectedLanguage } from './shared/selectors';
+import { State } from './state';
 
 export const i18n = setupI18n();
 
@@ -13,10 +16,22 @@ export interface I18nLoaderState {
   catalogs: Catalogs;
 }
 
-export class I18nLoaderComponent extends React.Component<
+const I18nLoaderComponent = (props) => {
+  return props.children;
+};
+
+function mapStateToProps(state: State) {
+  return {
+    language: selectSelectedLanguage(state),
+  };
+}
+
+export const I18nLoader = connect(mapStateToProps)(I18nLoaderComponent);
+
+export class I18nLoaderComponent2 extends React.Component<
   I18nLoaderProps,
   I18nLoaderState
-> {
+  > {
   state: I18nLoaderState = {
     catalogs: {
       it: itCatalog,

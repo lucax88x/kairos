@@ -84,14 +84,14 @@ export const LoginFormComponent: React.FC<LoginProps> = props => {
             </ul>
             <br />
             <Trans>
-              Thanks to this and some other informations it's easy to calculate
+              Thanks to this and some other informations it &apos;s easy to calculate
               your extra-times, vacation, holidays, illness, etc.
             </Trans>
             <br />
             <br />
             <strong>
               <Trans>
-                It's a PWA, it means it can be also installed on your pc, on your
+                It$apos;s a PWA, it means it can be also installed on your pc, on your
                 smartphone and also works offline.
               </Trans>
             </strong>

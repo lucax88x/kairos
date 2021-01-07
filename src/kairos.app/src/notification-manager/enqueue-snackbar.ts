@@ -17,7 +17,8 @@ export const enqueueSnackbarReducer = (
   produce(state, draft => {
     switch (action.type) {
       case ENQUEUE_SNACKBAR:
-        draft.notifications.push(action.payload);
+        console.error('todo');
+        // draft.notifications.push(action.payload);
         break;
     }
   });
