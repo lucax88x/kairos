@@ -1,16 +1,17 @@
 import React from 'react';
+import { PropsWithChildren } from 'react';
 
-export interface ErrorBoundaryProps {}
 export interface ErrorBoundaryState {
   hasError: boolean;
 }
 
-export class ErrorBoundary extends React.Component<ErrorBoundaryProps, ErrorBoundaryState> {
-  constructor(props: ErrorBoundaryProps) {
+export class ErrorBoundary extends React.Component<PropsWithChildren<unknown>, ErrorBoundaryState> {
+  constructor(props: PropsWithChildren<unknown>) {
     super(props);
     this.state = { hasError: false };
   }
 
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   componentDidCatch(error: any, info: any) {
     this.setState({ hasError: true });
     console.error(error, info);

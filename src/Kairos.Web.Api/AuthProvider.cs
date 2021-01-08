@@ -16,7 +16,7 @@ namespace Kairos.Web.Api
         
         public string GetUser()
         {
-            if (!(_httpContextAccessor.HttpContext.User.Identity is ClaimsIdentity identity))
+            if (!(_httpContextAccessor.HttpContext?.User.Identity is ClaimsIdentity identity))
                 throw new NotAuthorizedException();
 
             var userId = identity.FindFirst(ClaimTypes.NameIdentifier);

@@ -50,7 +50,7 @@ export interface TimeEntryOutModel {
 }
 
 export function getTextFromEntryType(type: TimeEntryTypes) {
-  switch (type) {
+  switch (type.toUpperCase()) {
     case TimeEntryTypes.IN:
       return i18n._(t`In`);
     case TimeEntryTypes.OUT:
@@ -74,9 +74,9 @@ export function getTransFromEntryType(type: TimeEntryTypes) {
 export function getIconFromEntryType(type: TimeEntryTypes, iconProps?: Partial<FontAwesomeIconProps>) {
   switch (type) {
     case TimeEntryTypes.IN:
-      return <FontAwesomeIcon icon={['fad', 'portal-enter']} {...iconProps} />;
+      return <FontAwesomeIcon icon="play" {...iconProps} />;
     case TimeEntryTypes.OUT:
-      return <FontAwesomeIcon icon={['fad', 'portal-exit']} {...iconProps} />;
+      return <FontAwesomeIcon icon="stop" {...iconProps} />;
     default:
       return <Trans>Invalid Type</Trans>;
   }

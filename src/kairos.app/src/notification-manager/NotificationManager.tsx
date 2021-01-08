@@ -37,7 +37,7 @@ class NotificationManager extends React.PureComponent<
     return null;
   }
 
-  componentWillReceiveProps(nextProps: NotificationManagerProps) {
+  UNSAFE_componentWillReceiveProps(nextProps: NotificationManagerProps) {
     const { notifications, enqueueSnackbar } = nextProps;
 
     forEach(notification => {

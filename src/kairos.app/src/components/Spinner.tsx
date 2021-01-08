@@ -8,7 +8,7 @@ export interface SpinnerProps {
   show: boolean;
 }
 
-const useStyles = makeStyles(theme => ({
+const useStyles = makeStyles(() => ({
   container: {
     width: '100%',
     height: '100%',

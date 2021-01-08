@@ -1,7 +1,7 @@
 import { connect } from 'react-redux';
 import { Dispatch } from 'redux';
 import { Actions } from '../actions';
-import { refreshAction } from '../shared/refresh';
+import { refreshAction } from '../shared/actions';
 import {
   selectIsOnline,
   selectIsRefreshBusy,

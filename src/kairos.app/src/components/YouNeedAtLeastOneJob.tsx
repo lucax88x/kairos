@@ -7,7 +7,7 @@ import { RouteMatcher } from '../routes';
 export const YouNeedAtLeastOneJob: React.FC = () => {
   return (
     <Typography color="inherit">
-      <Trans id="You need at least one job, connect to <0>Profile</0>" components={[<Link to={RouteMatcher.Profile}></Link>]} />
+      <Trans id="You need at least one job, connect to <0>Profile</0>" components={[<Link to={RouteMatcher.Profile} key="profile"></Link>]} />
     </Typography>
   );
 };

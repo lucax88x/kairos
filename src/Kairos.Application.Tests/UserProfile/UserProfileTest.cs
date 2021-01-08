@@ -32,7 +32,7 @@ namespace Kairos.Application.Tests.UserProfile
             // THEN
             _sandbox.Should!.Mediator!.Be("CreateOrUpdateUserProfile -> UserProfileAdded");
 
-            await _sandbox.Should!.Redis!.Exists.Set("user-profile", user);
+            await _sandbox.Should!.Redis!.Exists.Set("user-profile", user!);
         }
 
         [Fact]
@@ -50,7 +50,7 @@ namespace Kairos.Application.Tests.UserProfile
             // THEN
             _sandbox.Should!.Mediator!.Be("CreateOrUpdateUserProfile -> UserProfileUpdated");
 
-            await _sandbox.Should!.Redis!.Exists.Set("user-profile", user);
+            await _sandbox.Should!.Redis!.Exists.Set("user-profile", user!);
         }
 
         [Fact(Skip = "TODO")]

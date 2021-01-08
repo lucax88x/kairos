@@ -159,7 +159,7 @@ export const Autocomplete: React.FC<AutocompleteProps> = props => {
                   fullWidth: true,
                   classes,
                   label,
-                  // tslint:disable-next-line: no-any
+                  // eslint-disable-next-line @typescript-eslint/no-explicit-any
                   InputLabelProps: getLabelProps({ shrink: true } as any),
                   InputProps: { onBlur, onFocus },
                   inputProps,
@@ -167,7 +167,7 @@ export const Autocomplete: React.FC<AutocompleteProps> = props => {
                 <div {...getMenuProps()}>
                   {isOpen && (
                     <Paper className={classes.paper} square>
-                      {getSuggestions(data, inputValue!).map((suggestion, index) =>
+                      {getSuggestions(data, !!inputValue ? inputValue : '').map((suggestion, index) =>
                         renderSuggestion({
                           suggestion,
                           index,

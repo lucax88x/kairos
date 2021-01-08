@@ -1,10 +1,10 @@
 import { immerable } from 'immer';
-import uuidv4 from 'uuid/v4';
+import { v4 as uuidv4, NIL } from 'uuid';
 
 export class UUID {
   [immerable] = true;
 
-  public static Empty = '00000000-0000-0000-0000-000000000000';
+  public static Empty = NIL;
 
   public static Generate(): UUID {
     return new UUID(uuidv4());

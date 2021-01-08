@@ -19,7 +19,7 @@ import {
   getTextFromEntryType,
 } from '../models/time-entry.model';
 
-const useStyles = makeStyles(theme => ({
+const useStyles = makeStyles(() => ({
   container: {
     borderRadius: '5px',
     backgroundColor: Themes.First.backgroundColor,

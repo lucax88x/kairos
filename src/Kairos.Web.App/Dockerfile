@@ -1,4 +1,4 @@
-FROM node:11.14.0-alpine as app-compiler
+FROM node:14-alpine as app-compiler
 
 COPY . /build
 
@@ -8,18 +8,13 @@ RUN yarn
 
 WORKDIR /build/src/kairos.app
 
-ARG FONTAWESOME_AUTH_TOKEN
-
-RUN npm config set "@fortawesome:registry" https://npm.fontawesome.com/
-RUN npm config set "//npm.fontawesome.com/:_authToken" ${FONTAWESOME_AUTH_TOKEN}
-
 RUN yarn
 
 WORKDIR /build
 
 RUN yarn frontend:publish
 
-FROM mcr.microsoft.com/dotnet/core/sdk:3.0 AS server-compiler
+FROM mcr.microsoft.com/dotnet/sdk:5.0 AS server-compiler
     
 COPY --from=app-compiler /build ./build
 
@@ -28,7 +23,7 @@ WORKDIR /build/src/Kairos.Web.App
 RUN dotnet restore
 RUN dotnet publish --no-restore -c Release -o out
 
-FROM mcr.microsoft.com/dotnet/core/aspnet:3.0
+FROM mcr.microsoft.com/dotnet/aspnet:5.0
 
 COPY --from=server-compiler /build/src/Kairos.Web.App/out ./Kairos.Web.App
 

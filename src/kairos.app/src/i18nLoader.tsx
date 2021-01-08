@@ -1,59 +1,48 @@
 import { Catalogs, setupI18n } from '@lingui/core';
 import { I18nProvider } from '@lingui/react';
-import React from 'react';
+import { PropsWithChildren, useCallback, useEffect, useMemo } from 'react';
+import { connect } from 'react-redux';
 import enCatalog from './locales/en/messages';
 import itCatalog from './locales/it/messages';
+import { selectSelectedLanguage } from './shared/selectors';
+import { State } from './state';
 
 export const i18n = setupI18n();
 
 export interface I18nLoaderProps {
   language: string;
 }
-export interface I18nLoaderState {
-  catalogs: Catalogs;
-}
 
-export class I18nLoaderComponent extends React.Component<
-  I18nLoaderProps,
-  I18nLoaderState
-> {
-  state: I18nLoaderState = {
-    catalogs: {
-      it: itCatalog,
-      en: enCatalog,
-    },
-  };
+const I18nLoaderComponent = (props: PropsWithChildren<I18nLoaderProps>) => {
+  const { language, children } = props;
 
-  setCatalog = (language: string) => {
+  const catalogs = useMemo<Catalogs>(() => ({
+    it: itCatalog,
+    en: enCatalog,
+  }), []);
+
+  const setCatalog = useCallback((language: string) => {
     i18n.load({
-      [language]: this.state.catalogs[language],
+      [language]: catalogs[language],
     });
     i18n.activate(language);
+  }, [catalogs]);
+
+  useEffect(() => {
+    setCatalog(language)
+  }, [language, setCatalog]);
+
+  return (
+    <I18nProvider i18n={i18n} language={language}>
+      {children}
+    </I18nProvider>
+  )
+};
+
+function mapStateToProps(state: State) {
+  return {
+    language: selectSelectedLanguage(state),
   };
-
-  componentDidMount() {
-    const { language } = this.props;
-    this.setCatalog(language);
-  }
-
-  shouldComponentUpdate(nextProps: I18nLoaderProps) {
-    const { language } = nextProps;
-
-    if (language !== this.props.language) {
-      this.setCatalog(language);
-      return false;
-    }
-
-    return true;
-  }
-
-  render() {
-    const { children, language } = this.props;
-
-    return (
-      <I18nProvider i18n={i18n} language={language}>
-        {children}
-      </I18nProvider>
-    );
-  }
 }
+
+export const I18nLoader = connect(mapStateToProps)(I18nLoaderComponent);
