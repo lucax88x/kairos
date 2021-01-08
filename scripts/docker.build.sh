@@ -1,8 +1,9 @@
 #!/bin/bash
 
-VERSION=${1:-'0.0.0'}
-ENVIRONMENT=${2:-'LOCAL'}
-FONTAWESOME_AUTH_TOKEN=${3}
+ENVIRONMENT=${1:-'LOCAL'}
+BUILD_ID=${2:-'dev'}
+
+VERSION=$(./scripts/version.read.sh $BUILD_ID)
 
 case $ENVIRONMENT in
     LOCAL)

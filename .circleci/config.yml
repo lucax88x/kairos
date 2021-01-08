@@ -52,13 +52,13 @@ jobs:
           command: sh ./scripts/version.write.sh $CIRCLE_BUILD_NUM      
       - run:
           name: Build Docker Images
-          command: sh ./scripts/docker.build.sh $CIRCLE_BUILD_NUM PROD
+          command: sh ./scripts/docker.build.sh PROD $CIRCLE_BUILD_NUM
       - run:
           name: Push Docker Images
-          command: sh ./scripts/docker.push.sh $CIRCLE_BUILD_NUM PROD
+          command: sh ./scripts/docker.push.sh PROD $CIRCLE_BUILD_NUM
       - run:
           name: Deploying on k8s
-          command: sh ./scripts/k8s.deploy.sh $CIRCLE_BUILD_NUM PROD
+          command: sh ./scripts/k8s.deploy.sh PROD $CIRCLE_BUILD_NUM
 
 workflows:
   build-and-deploy:
