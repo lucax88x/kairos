@@ -1,7 +1,7 @@
 version: '3'
 services:
   redis:
-    image: eqalpha/keydb:latest
+    image: eqalpha/keydb:x86_64_v5.1.0
     restart: always
     container_name: kairos-redis
     ports:
@@ -10,7 +10,7 @@ services:
        - redis-data:/data
     
   eventstore:
-    image: 'eventstore/eventstore'
+    image: eventstore/eventstore:5.0.9-xenial
     restart: always
     container_name: kairos-eventstore
     ports:

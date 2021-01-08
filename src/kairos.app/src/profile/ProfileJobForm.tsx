@@ -1,9 +1,9 @@
 import DateFnsUtils from '@date-io/date-fns';
 import { t, Trans } from '@lingui/macro';
 import {
-  ExpansionPanel,
-  ExpansionPanelDetails,
-  ExpansionPanelSummary,
+  Accordion,
+  AccordionDetails,
+  AccordionSummary,
   IconButton,
   makeStyles,
   TextField,
@@ -193,8 +193,8 @@ export const ProfileJobForm: React.FC<ProfileJobFormProps> = props => {
   const timeTooltip = <Trans>Percentual values (0.5 is 30 minutes)</Trans>;
 
   return (
-    <ExpansionPanel expanded={expanded} onChange={handleExpanded}>
-      <ExpansionPanelSummary expandIcon={<ExpandMoreIcon />}>
+    <Accordion expanded={expanded} onChange={handleExpanded}>
+      <AccordionSummary expandIcon={<ExpandMoreIcon />}>
         <div className={clsx(classes.columns, classes.between)}>
           <div className={classes.heading}>
             {expanded ? (
@@ -229,8 +229,8 @@ export const ProfileJobForm: React.FC<ProfileJobFormProps> = props => {
             <DeleteIcon />
           </IconButton>
         </div>
-      </ExpansionPanelSummary>
-      <ExpansionPanelDetails>
+      </AccordionSummary>
+      <AccordionDetails>
         <div className={classes.rows}>
           <div className={classes.responsiveColumns}>
             <MuiPickersUtilsProvider
@@ -343,7 +343,7 @@ export const ProfileJobForm: React.FC<ProfileJobFormProps> = props => {
             </Tooltip>
           </div>
         </div>
-      </ExpansionPanelDetails>
-    </ExpansionPanel>
+      </AccordionDetails>
+    </Accordion>
   );
 };

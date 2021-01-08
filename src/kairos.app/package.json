@@ -5,7 +5,7 @@
   "proxy": "http://localhost:6000",
   "dependencies": {
     "@auth0/auth0-spa-js": "^1.1.0",
-    "@date-io/date-fns": "^2.10.6",
+    "@date-io/date-fns": "^1.3.13",
     "@fortawesome/fontawesome-svg-core": "^1.2.26",
     "@fortawesome/free-solid-svg-icons": "^5.15.1",
     "@fortawesome/react-fontawesome": "^0.1.8",

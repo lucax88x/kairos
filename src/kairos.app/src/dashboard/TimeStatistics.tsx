@@ -1,8 +1,8 @@
 import { Trans } from '@lingui/macro';
 import {
-  ExpansionPanel,
-  ExpansionPanelDetails,
-  ExpansionPanelSummary,
+  Accordion,
+  AccordionDetails,
+  AccordionSummary,
   makeStyles,
   Table,
   TableBody,
@@ -159,12 +159,12 @@ export const TimeStatisticsComponent: React.FC<TimeStatisticsProps> = memo(
 
     const generatePanels = useCallback(
       mapIndexed<TimeStatisticCell, JSX.Element>()((cell, index) => (
-        <ExpansionPanel
+        <Accordion
           key={cell.title}
           style={{ ...Themes.getRelativeToIndex(index) }}
           TransitionProps={{ unmountOnExit: true }}
         >
-          <ExpansionPanelSummary expandIcon={<ExpandMoreIcon />}>
+          <AccordionSummary expandIcon={<ExpandMoreIcon />}>
             <div className={classes.container}>
               <Typography className={classes.heading}>
                 {i18n._(cell.title, cell.titleValues)}
@@ -173,8 +173,8 @@ export const TimeStatisticsComponent: React.FC<TimeStatisticsProps> = memo(
                 {cell.text}
               </Typography>
             </div>
-          </ExpansionPanelSummary>
-          <ExpansionPanelDetails>
+          </AccordionSummary>
+          <AccordionDetails>
             <div className={classes.detailsContainer}>
               <Typography>{cell.subtitle}</Typography>
               <Table padding="none">
@@ -213,8 +213,8 @@ export const TimeStatisticsComponent: React.FC<TimeStatisticsProps> = memo(
                 </TableBody>
               </Table>
             </div>
-          </ExpansionPanelDetails>
-        </ExpansionPanel>
+          </AccordionDetails>
+        </Accordion>
       )),
       [],
     );
@@ -222,8 +222,8 @@ export const TimeStatisticsComponent: React.FC<TimeStatisticsProps> = memo(
     return (
       <Spinner show={isGetTimeEntriesBusy}>
         <div className={classes.root}>
-          <ExpansionPanel TransitionProps={{ unmountOnExit: true }}>
-            <ExpansionPanelSummary expandIcon={<ExpandMoreIcon />}>
+          <Accordion TransitionProps={{ unmountOnExit: true }}>
+            <AccordionSummary expandIcon={<ExpandMoreIcon />}>
               <div className={classes.container}>
                 <Typography className={classes.heading}>
                   <Trans>Working Hours</Trans>
@@ -232,14 +232,14 @@ export const TimeStatisticsComponent: React.FC<TimeStatisticsProps> = memo(
                   <Trans>Summary of your working hours</Trans>
                 </Typography>
               </div>
-            </ExpansionPanelSummary>
-            <ExpansionPanelDetails className={classes.panelsContainer}>
+            </AccordionSummary>
+            <AccordionDetails className={classes.panelsContainer}>
               {generatePanels(workingHourCells)}
-            </ExpansionPanelDetails>
-          </ExpansionPanel>
+            </AccordionDetails>
+          </Accordion>
           {!!absenceCells.length && (
-            <ExpansionPanel TransitionProps={{ unmountOnExit: true }}>
-              <ExpansionPanelSummary expandIcon={<ExpandMoreIcon />}>
+            <Accordion TransitionProps={{ unmountOnExit: true }}>
+              <AccordionSummary expandIcon={<ExpandMoreIcon />}>
                 <div className={classes.container}>
                   <Typography className={classes.heading}>
                     <Trans>Absences</Trans>
@@ -248,11 +248,11 @@ export const TimeStatisticsComponent: React.FC<TimeStatisticsProps> = memo(
                     <Trans>Summary of your absences</Trans>
                   </Typography>
                 </div>
-              </ExpansionPanelSummary>
-              <ExpansionPanelDetails className={classes.panelsContainer}>
+              </AccordionSummary>
+              <AccordionDetails className={classes.panelsContainer}>
                 {generatePanels(absenceCells)}
-              </ExpansionPanelDetails>
-            </ExpansionPanel>
+              </AccordionDetails>
+            </Accordion>
           )}
         </div>
       </Spinner>

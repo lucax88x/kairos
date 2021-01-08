@@ -4,6 +4,7 @@ import {
   getDate,
   isWithinInterval,
   startOfDay,
+  isAfter,
 } from 'date-fns';
 import { converge, divide, filter, groupBy, length, sum } from 'ramda';
 import { JobModel } from '../models/job.model';
@@ -39,11 +40,11 @@ export const findHolidaysInDay = (day: Date) =>
       end: endOfDay(holiday.when),
     }),
   );
-  // (d.Start >= start && d.Start <= end) || (d.End >= start && d.End <= end)
+
 export const findAbsencesInRange = (start: Date, end: Date) =>
   filter<TimeAbsenceEntryListModel>(
     absence =>
-      (compareAsc(absence.start, start) >= 0 && compareAsc(absence.start, end) <=0) || 
+      (compareAsc(absence.start, start) >= 0 && compareAsc(absence.start, end) <= 0) ||
       (compareAsc(absence.end, start) >= 0 && compareAsc(absence.end, end) <= 0) ,
   );
 
@@ -55,8 +56,15 @@ export const findHolidaysInRange = (start: Date, end: Date) =>
   );
 
 export const findJobsInRange = (start: Date, end: Date) =>
-  filter<JobModel>(job =>
-    (compareAsc(job.start, start) >= 0 && compareAsc(job.start, end) <=0) && !!job.end
+  filter<JobModel>(job => {
+
+    const now = startOfDay(new Date());
+    
+    if (isAfter(job.start, now)) {
+      return false;
+    }
+
+    return (compareAsc(job.start, start) >= 0 && compareAsc(job.start, end) <= 0) && !!job.end
       ? (compareAsc(job.end, start) >= 0 && compareAsc(job.end, end) <= 0)
-      : true,
-  );
+      : true
+  })

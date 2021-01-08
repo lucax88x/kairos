@@ -64,7 +64,7 @@ const theme = createMuiTheme({
         },
       },
     },
-    MuiExpansionPanelSummary: {
+    MuiAccordionSummary: {
       root: {
         '&$focused': {
           backgroundColor: Themes.First.backgroundColor,

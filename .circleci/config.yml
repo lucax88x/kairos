@@ -52,7 +52,7 @@ jobs:
           command: sh ./scripts/version.write.sh $CIRCLE_BUILD_NUM      
       - run:
           name: Build Docker Images
-          command: sh ./scripts/docker.build.sh $CIRCLE_BUILD_NUM PROD $FONTAWESOME_AUTH_TOKEN
+          command: sh ./scripts/docker.build.sh $CIRCLE_BUILD_NUM PROD
       - run:
           name: Push Docker Images
           command: sh ./scripts/docker.push.sh $CIRCLE_BUILD_NUM PROD

@@ -1,6 +1,7 @@
 import { connect } from 'react-redux';
 import { Dispatch } from 'redux';
 import { Actions } from '../actions';
+import { refreshAction } from '../shared/actions';
 import {
   selectIsOnline,
   selectIsRefreshBusy,
@@ -24,8 +25,7 @@ const mapStateToProps = (state: State): DashboardHeaderInputs => ({
 const mapDispatchToProps = (
   dispatch: Dispatch<Actions>,
 ): DashboardHeaderDispatches => ({
-  refresh: () => console.error('todo'),
-  // refresh: () => dispatch(refreshAction()),
+  refresh: () => dispatch(refreshAction()),
 });
 
 export const DashboardHeader = connect(
