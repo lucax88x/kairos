@@ -33,7 +33,7 @@ interface TimeAbsenceEntryInvalidModel {
   job: UUID | string;
 }
 
-const useStyles = makeStyles(theme => ({
+const useStyles = makeStyles(() => ({
   center: {
     display: 'grid',
     justifyContent: 'center',

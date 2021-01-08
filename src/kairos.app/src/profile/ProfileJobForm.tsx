@@ -158,24 +158,31 @@ export const ProfileJobForm: React.FC<ProfileJobFormProps> = props => {
     [onJobDayChange, job],
   );
 
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   const handleMondayChange = useCallback(handleJobDayChange('monday'), [
     handleJobDayChange,
   ]);
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   const handleTuesdayChange = useCallback(handleJobDayChange('tuesday'), [
     handleJobDayChange,
   ]);
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   const handleWednesdayChange = useCallback(handleJobDayChange('wednesday'), [
     handleJobDayChange,
   ]);
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   const handleThursdayChange = useCallback(handleJobDayChange('thursday'), [
     handleJobDayChange,
   ]);
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   const handleFridayChange = useCallback(handleJobDayChange('friday'), [
     handleJobDayChange,
   ]);
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   const handleSaturdayChange = useCallback(handleJobDayChange('saturday'), [
     handleJobDayChange,
   ]);
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   const handleSundayChange = useCallback(handleJobDayChange('sunday'), [
     handleJobDayChange,
   ]);

@@ -167,7 +167,7 @@ export const Autocomplete: React.FC<AutocompleteProps> = props => {
                 <div {...getMenuProps()}>
                   {isOpen && (
                     <Paper className={classes.paper} square>
-                      {getSuggestions(data, inputValue!).map((suggestion, index) =>
+                      {getSuggestions(data, !!inputValue ? inputValue : '').map((suggestion, index) =>
                         renderSuggestion({
                           suggestion,
                           index,

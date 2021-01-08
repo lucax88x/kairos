@@ -157,6 +157,7 @@ export const TimeStatisticsComponent: React.FC<TimeStatisticsProps> = memo(
       [],
     );
 
+    // eslint-disable-next-line react-hooks/exhaustive-deps
     const generatePanels = useCallback(
       mapIndexed<TimeStatisticCell, JSX.Element>()((cell, index) => (
         <Accordion

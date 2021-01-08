@@ -163,7 +163,7 @@ function formatTime(
   return time;
 }
 
-export function formatUnixToTime(unix: number, options: FormatTimeOptions) {
+export function formatUnixToTime(unix: number) {
   const totalSeconds = new Decimal(
     differenceInSeconds(new Date(unix), new Date(0)),
   );

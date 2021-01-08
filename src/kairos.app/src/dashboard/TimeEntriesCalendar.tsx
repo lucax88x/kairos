@@ -114,7 +114,7 @@ export const TimeEntriesCalendarComponent: React.FC<TimeEntriesCalendarEntryProp
     for (const job of profile.jobs) {
       const entries = !!pairsByJob[job.id.toString()]
         ? map(
-          ({ enter, exit, job, enterId }) => ({
+          ({ enter, exit, job }) => ({
             start: enter,
             end: exit,
             title: job,
