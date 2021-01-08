@@ -1,6 +1,14 @@
 import { t } from '@lingui/macro';
 import { makeStyles } from '@material-ui/styles';
-import { endOfDay, getDate, getMonth, isEqual, startOfDay } from 'date-fns';
+import {
+  endOfDay,
+  endOfYear,
+  getDate,
+  getMonth,
+  isEqual,
+  startOfDay,
+  startOfYear,
+} from 'date-fns';
 import moment from 'moment';
 import { join, map } from 'ramda';
 import React, { useCallback, useEffect, useState } from 'react';
@@ -106,14 +114,14 @@ export const TimeEntriesCalendarComponent: React.FC<TimeEntriesCalendarEntryProp
     for (const job of profile.jobs) {
       const entries = !!pairsByJob[job.id.toString()]
         ? map(
-            ({ enter, exit, job, enterId }) => ({
-              start: enter,
-              end: exit,
-              title: job,
-              resource: { type: EventType.Work },
-            }),
-            pairsByJob[job.id.toString()],
-          )
+          ({ enter, exit, job }) => ({
+            start: enter,
+            end: exit,
+            title: job,
+            resource: { type: EventType.Work },
+          }),
+          pairsByJob[job.id.toString()],
+        )
         : [];
 
       toSetEvents.push(...entries);
@@ -149,6 +157,9 @@ export const TimeEntriesCalendarComponent: React.FC<TimeEntriesCalendarEntryProp
     setEvents(toSetEvents);
   }, [profile, timeEntries, timeAbsenceEntries, timeHolidayEntries]);
 
+  const selectedYearStart = startOfYear(selectedYear);
+  const selectedYearEnd = endOfYear(selectedYear);
+
   const eventPropGetter = useCallback(
     (event: Event) => {
       const { type } = event.resource;
@@ -175,12 +186,11 @@ export const TimeEntriesCalendarComponent: React.FC<TimeEntriesCalendarEntryProp
     previous: i18n._(t`Back`),
     next: i18n._(t`Next`),
     week: i18n._(t`Week`),
-    // eslint-disable-next-line @typescript-eslint/camelcase
     work_week: i18n._(t`Work Week`),
     agenda: i18n._(t`Agenda`),
     noEventsInRange: i18n._(t`No Events In Range`),
     allDay: i18n._(t`All day`),
-    showMore: more => i18n._(t`More ${more}`),
+    showMore: (more: number) => i18n._(t`More ${more}`),
   };
 
   const handleOnDoubleClick = useCallback(
@@ -213,6 +223,8 @@ export const TimeEntriesCalendarComponent: React.FC<TimeEntriesCalendarEntryProp
         events={events}
         eventPropGetter={eventPropGetter}
         messages={messages}
+        min={selectedYearStart}
+        max={selectedYearEnd}
         onDoubleClickEvent={handleOnDoubleClick}
       />
     </Spinner>

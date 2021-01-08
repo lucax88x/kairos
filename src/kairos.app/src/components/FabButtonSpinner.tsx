@@ -1,6 +1,7 @@
 import { CircularProgress, Fab, makeStyles, PropTypes } from '@material-ui/core';
-import React from 'react';
+import React, { ReactElement } from 'react';
 import './Spinner.scss';
+import { PropsWithChildren } from 'react';
 
 export interface ButtonSpinnerProps {
   isBusy: boolean;
@@ -30,7 +31,7 @@ const useStyles = makeStyles(theme => ({
   },
 }));
 
-const FabButtonSpinner: React.FC<ButtonSpinnerProps> = props => {
+const FabButtonSpinner = (props: PropsWithChildren<ButtonSpinnerProps>) => {
   const classes = useStyles(props);
 
   const { children, disabled, isBusy, onClick, color } = props;
@@ -43,7 +44,7 @@ const FabButtonSpinner: React.FC<ButtonSpinnerProps> = props => {
           onClick={onClick}
           disabled={isBusy || disabled}
         >
-          {children}
+          {children as ReactElement}
         </Fab>
         {isBusy && (
           <CircularProgress

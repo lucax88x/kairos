@@ -16,7 +16,7 @@ import { formatAsDate } from '../code/constants';
 import { Themes } from '../code/variables';
 import { TimeHolidayEntryModel } from '../models/time-holiday-entry.model';
 
-const useStyles = makeStyles(theme => ({
+const useStyles = makeStyles(() => ({
   container: {
     borderRadius: '5px',
     backgroundColor: Themes.Third.backgroundColor,

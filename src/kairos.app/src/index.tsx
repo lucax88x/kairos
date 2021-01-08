@@ -17,7 +17,7 @@ import { SimpleIcon } from './components/SimpleIcon';
 import { SpinnerIcon } from './components/SpinnerIcon';
 import { history, persistor, store } from './createStore';
 import { i18n } from './i18nLoader';
-import { I18nLoader } from './i18nLoader.container';
+import { I18nLoader } from './i18nLoader';
 import './index.scss';
 import { NotFound } from './NotFound';
 import { enqueueSnackbarAction } from './notification-manager/enqueue-snackbar';
@@ -64,7 +64,7 @@ const theme = createMuiTheme({
         },
       },
     },
-    MuiExpansionPanelSummary: {
+    MuiAccordionSummary: {
       root: {
         '&$focused': {
           backgroundColor: Themes.First.backgroundColor,
@@ -324,7 +324,7 @@ serviceWorker.register({
         {
           variant: 'warning',
           action: (
-            <Button onClick={() => window.location.reload(true)}>
+            <Button onClick={() => window.location.reload()}>
               <CloseIcon />
             </Button>
           ),

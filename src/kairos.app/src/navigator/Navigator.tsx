@@ -3,9 +3,9 @@ import { Trans } from '@lingui/macro';
 import {
   Button,
   Checkbox,
-  ExpansionPanel,
-  ExpansionPanelDetails,
-  ExpansionPanelSummary,
+  Accordion,
+  AccordionDetails,
+  AccordionSummary,
   FormControl,
   FormControlLabel,
   FormGroup,
@@ -344,8 +344,8 @@ export const NavigatorComponent: React.FC<NavigatorProps> = props => {
               </Button>
             </div>
           </MuiPickersUtilsProvider>
-          <ExpansionPanel>
-            <ExpansionPanelSummary
+          <Accordion>
+            <AccordionSummary
               expandIcon={<ExpandMoreIcon />}
               aria-controls="filters-content"
               id="filters-header"
@@ -353,8 +353,8 @@ export const NavigatorComponent: React.FC<NavigatorProps> = props => {
               <Typography>
                 <Trans>Filters</Trans>
               </Typography>
-            </ExpansionPanelSummary>
-            <ExpansionPanelDetails>
+            </AccordionSummary>
+            <AccordionDetails>
               <FormControl component="fieldset">
                 <FormLabel component="legend">
                   <Trans>Types</Trans>
@@ -409,8 +409,8 @@ export const NavigatorComponent: React.FC<NavigatorProps> = props => {
                   />
                 </FormGroup>
               </FormControl>
-            </ExpansionPanelDetails>
-          </ExpansionPanel>
+            </AccordionDetails>
+          </Accordion>
 
           <div className={classes.entryRows}>
             {!!dates && !!dates.length ? (

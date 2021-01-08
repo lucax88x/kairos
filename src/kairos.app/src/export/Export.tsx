@@ -31,7 +31,7 @@ export const ExportComponent: React.FC<ExportInputs> = props => {
 
   const [tab, setTab] = useState(0);
   const handleChangeTab = useCallback(
-    (event: React.ChangeEvent<{}>, newTab: number) => setTab(newTab),
+    (_: unknown, newTab: number) => setTab(newTab),
     [setTab],
   );
 

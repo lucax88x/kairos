@@ -1,6 +1,6 @@
 {
   "name": "kairos",
-  "version": "1.0.0",
+  "version": "0.0.33",
   "main": "index.js",
   "author": "lucatrazzi <lucax88x@gmail.com>",
   "license": "MIT",
@@ -20,12 +20,9 @@
     "docker:logs": "docker-compose -f docker-compose.dev.yml logs",
     "docker:logs:watch": "docker-compose -f docker-compose.dev.yml logs -f -t",
     "docker:build": "sh ./scripts/docker.build.sh",
-    "registry:login": "sh ./scripts/registry.login.sh",
     "docker:push": "sh ./scripts/docker.push.sh",
-    "deploy:ssh": "ssh lucatrazzi@kairos.rocks",
     "k8s:deploy": "sh ./scripts/k8s.deploy.sh",
-    "flow:deploy": "sh ./scripts/flow.deploy.sh",
-    "k8s:dashboard": "http://127.0.0.1:8001/api/v1/namespaces/kubernetes-dashboard/services/https%3Akubernetes-dashboard%3A/proxy/",
-    "k8s:token": "kubectl -n kube-system describe secret $(kubectl -n kube-system get secret | grep admin-user | awk '{print $1}')"
+    "version:update": "sh ./scripts/version.update.sh",
+    "deploy:create": "sh ./scripts/deploy.create.sh"
   }
 }

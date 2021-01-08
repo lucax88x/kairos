@@ -1,8 +1,3 @@
-interface Theme {
-  backgroundColor: string;
-  color: string;
-}
-
 export class Themes {
   // https://coolors.co/0a2239-53a2be-1d84b5-132e32-176087
 

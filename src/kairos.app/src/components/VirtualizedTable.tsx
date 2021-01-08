@@ -80,7 +80,7 @@ interface MuiVirtualizedTableState {
 class MuiVirtualizedTable<T> extends React.PureComponent<
   MuiVirtualizedTableProps<T>,
   MuiVirtualizedTableState
-> {
+  > {
   constructor(props: MuiVirtualizedTableProps<T>) {
     super(props);
     this.state = { selectedIds: [] };
@@ -110,7 +110,7 @@ class MuiVirtualizedTable<T> extends React.PureComponent<
     });
   };
 
-  handleSelectAll = (event: ChangeEvent<HTMLInputElement>) => {
+  handleSelectAll = () => {
     let selectedIds: string[] = [];
     if (this.state.selectedIds.length !== this.props.rowIds.length) {
       selectedIds = this.props.rowIds;
@@ -165,7 +165,7 @@ class MuiVirtualizedTable<T> extends React.PureComponent<
     );
   };
 
-  selectCellRenderer: TableCellRenderer = ({ cellData, rowData, columnIndex }) => {
+  selectCellRenderer: TableCellRenderer = ({ rowData, columnIndex }) => {
     const { columns, classes, rowHeight, onRowClick } = this.props;
     const { selectedIds } = this.state;
 
@@ -274,8 +274,8 @@ class MuiVirtualizedTable<T> extends React.PureComponent<
               <Table
                 height={height}
                 width={width}
-                rowHeight={rowHeight!}
-                headerHeight={headerHeight!}
+                rowHeight={!!rowHeight ? rowHeight : 0}
+                headerHeight={!!headerHeight ? headerHeight : 0}
                 {...tableProps}
                 rowClassName={this.getRowClassName}
               >

@@ -18,7 +18,7 @@ namespace Kairos.Web.Api.Filters
 
         public async Task Invoke(HttpContext context)
         {
-            if (context.Request.Path == "/graphql" && !context.User.Identity.IsAuthenticated)
+            if (context.User.Identity != null && context.Request.Path == "/graphql" && !context.User.Identity.IsAuthenticated)
             {
                 if (_environment.IsDevelopment())
                 {

@@ -18,7 +18,7 @@ import { TimeAbsenceEntryListModel } from '../models/time-absence-entry-list.mod
 import { getTextFromAbsenceType } from '../models/time-absence-entry.model';
 import { join, filter } from 'ramda';
 
-const useStyles = makeStyles(theme => ({
+const useStyles = makeStyles(() => ({
   container: {
     borderRadius: '5px',
     backgroundColor: Themes.Second.backgroundColor,

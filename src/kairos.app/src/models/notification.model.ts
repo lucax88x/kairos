@@ -8,7 +8,7 @@ export class NotificationModel {
   
   public key: UUID;
 
-  constructor(public message: string, public options?: OptionsObject) {
+  constructor(public message: string, public readonly options?: OptionsObject) {
     this.key = UUID.Generate();
   }
 }

@@ -17,7 +17,8 @@ export const enqueueSnackbarReducer = (
   produce(state, draft => {
     switch (action.type) {
       case ENQUEUE_SNACKBAR:
-        draft.notifications.push(action.payload);
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        draft.notifications.push(action.payload as any);
         break;
     }
   });

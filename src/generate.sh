@@ -16,7 +16,7 @@ dotnet add src/Kairos.$PROJECT_NAME package Autofac -v 4.9.2
 
 dotnet new xunit \
 -n "Kairos.$PROJECT_NAME.Tests" \
--f netcoreapp2.2 \
+-f net5.0 \
 -o src/Kairos.$PROJECT_NAME.Tests
 
 dotnet add src/Kairos.$PROJECT_NAME.Tests package Autofac -v 4.9.2

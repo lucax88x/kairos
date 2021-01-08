@@ -1,3 +1,0 @@
-- every job has projects with percentual allocation (when we create a job we have 1 default with 100%)
-- I can have multiple job in same time, the sum of hours must not exceed 24 between projects
-- on time-entry, set the job & project in case of multiple
