@@ -20,8 +20,9 @@
     "docker:logs": "docker-compose -f docker-compose.dev.yml logs",
     "docker:logs:watch": "docker-compose -f docker-compose.dev.yml logs -f -t",
     "docker:build": "sh ./scripts/docker.build.sh",
-    "registry:login": "sh ./scripts/registry.login.sh",
     "docker:push": "sh ./scripts/docker.push.sh",
-    "k8s:deploy": "sh ./scripts/k8s.deploy.sh"
+    "k8s:deploy": "sh ./scripts/k8s.deploy.sh",
+    "version:update": "sh ./scripts/version.update.sh",
+    "deploy:create": "sh ./scripts/deploy.create.sh"
   }
 }
