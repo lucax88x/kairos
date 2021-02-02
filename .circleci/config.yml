@@ -38,11 +38,9 @@ jobs:
   deploy:
     executor: docker-publisher
     steps:
-      - run:
-          name: test
-          command: echo $K8S_CONFIG
       - setup_remote_docker
       - kubernetes/install-kubectl
+      # base64 -w 0 ~/.kube/config
       - kubernetes/install-kubeconfig:
           kubeconfig: K8S_CONFIG
 
