@@ -4,11 +4,11 @@ COPY . /build
 
 WORKDIR /build
 
-RUN yarn
+RUN yarn --frozen-lockfile
 
 WORKDIR /build/src/kairos.app
 
-RUN yarn
+RUN yarn --frozen-lockfile
 
 WORKDIR /build
 
