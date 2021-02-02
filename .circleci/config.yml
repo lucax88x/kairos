@@ -28,7 +28,9 @@ jobs:
     executor: docker-publisher
     steps:
       - setup_remote_docker:
-          version: 19.01.13
+          version: 19.03.13
+          docker_layer_caching: false     
+          
       - kubernetes/install-kubectl
       # base64 -w 0 ~/.kube/config
       - kubernetes/install-kubeconfig:
