@@ -17,18 +17,7 @@ jobs:
 
       # - setup_remote_docker
 
-      - restore_cache:
-          keys:
-            - root-node_modules-{{ checksum "package.json" }}
-            - root-node_modules-
-
       - run: yarn
-
-      - save_cache:
-          paths:
-            - node_modules
-            - src/kairos.app/node_modules
-          key: root-node_modules-{{ checksum "package.json" }}
 
       # - run: yarn docker:start
       # - run: yarn backend:test
